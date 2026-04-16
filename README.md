@@ -1,86 +1,70 @@
-# ResultBoxUnion (Preview)
+# CSharpUnionPlayground
 
 **English** | [日本語](README_JA.md)
 
-> **Preview Notice:** This library is built on C# 15 union types, which are currently in preview (.NET 11 Preview 3). The union syntax and behavior may change before the official release. Do not use in production until unions are stable.
+A playground for testing and exploring **C# 15 Union Types** (.NET 11 Preview 3+).
 
-Railway-oriented programming library for C# using **C# 15 Union Types** (.NET 11).
+## What's This?
 
-A reimagination of [ResultBoxes](https://github.com/J-Tech-Japan/ResultBoxes) built entirely on the `union` keyword.
+This repository contains experiments to test the capabilities and limitations of the new `union` keyword in C# 15, including:
 
-## Core Concept
+- Large union stress tests (100 and 500 case types)
+- `System.Text.Json` serialization/deserialization behavior
+- `[JsonDerivedType]` polymorphic JSON round-trip patterns
 
-```csharp
-// ResultBox<TValue> is a union: either a TValue or an Exception
-public union ResultBox<TValue>(TValue, Exception) where TValue : notnull;
-```
-
-No more `IsSuccess` flag checks with internal nullable fields — the type itself **is** the value or the error.
-
-## Quick Start
+## Union Type Basics
 
 ```csharp
-using ResultBoxUnion;
+// Declare a union
+public union Shape(Circle, Rectangle, Triangle);
 
-// Create results
-ResultBox<int> success = 42;                              // implicit from value
-ResultBox<int> failure = new Exception("something wrong"); // implicit from exception
+public record Circle(double Radius);
+public record Rectangle(double Width, double Height);
+public record Triangle(double A, double B, double C);
 
-// Pattern matching (exhaustive!)
-var message = success switch
+// Exhaustive pattern matching
+string describe = shape switch
 {
-    int value    => $"Got {value}",
-    Exception ex => $"Error: {ex.Message}",
+    Circle c    => $"Circle r={c.Radius}",
+    Rectangle r => $"Rect {r.Width}x{r.Height}",
+    Triangle t  => $"Triangle",
 };
-
-// Railway chaining
-var result = ResultBox.FromValue(10)
-    .Remap(x => x * 2)                    // 20
-    .Conveyor(x => ResultBox.Ok(x + 5))   // 25
-    .Verify(x => x > 0
-        ? ExceptionOrNone.None
-        : new ArgumentException("must be positive"));
 ```
 
-## Railway Pipeline Example
+## JSON Serialization Findings
 
-```csharp
-// Combine multiple values
-var result = ResultBox.FromValue("hello")
-    .Combine(greeting => ResultBox.Ok(greeting.Length))  // TwoValues<string, int>
-    .Remap((greeting, len) => $"{greeting} has {len} chars");
+| Approach | Serialize | Deserialize |
+|----------|-----------|-------------|
+| Union type directly | OK | FAIL (Value is null — no type discriminator) |
+| Via `abstract record` base with `[JsonDerivedType]` | OK | OK |
+| Via `interface` with `[JsonDerivedType]` | OK | OK |
+| Via concrete child type | OK | OK |
 
-// Async pipeline
-var asyncResult = await ResultBox.Start
-    .Conveyor(_ => FetchUserAsync(userId))
-    .Combine(user => LoadOrdersAsync(user.Id))
-    .Remap((user, orders) => new UserSummary(user.Name, orders.Count));
+**Key finding:** Union types are structs, so `[JsonDerivedType]` cannot be applied directly. Use a base type or interface with `[JsonPolymorphic]`/`[JsonDerivedType]`, then wrap back into the union after deserialization.
 
-// Error recovery with Rescue
-var rescued = ResultBox<int>.Error(new TimeoutException())
-    .Rescue(ex => ex is TimeoutException
-        ? ValueOrException<int>.FromValue(0)   // recover with default
-        : ValueOrException<int>.Exception);     // keep the error
+## Project Structure
 
-// Side effects with Scan/Do
-var logged = ResultBox.FromValue(42)
-    .Scan(v => Console.WriteLine($"Value: {v}"))
-    .Do(v => Console.WriteLine($"Processing: {v}"));
 ```
-
-## Union Types Used
-
-| Type | Declaration | Purpose |
-|------|------------|---------|
-| `ResultBox<T>` | `union(T, Exception)` | Success or failure |
-| `ExceptionOrNone` | `union(Exception, UnitValue)` | Optional exception |
-| `OptionalValue<T>` | `union(T, NoneValue)` | Optional value |
-| `ValueOrException<T>` | `union(T, ExceptionMarker)` | Recovery helper |
+src/
+  UnionTest/          # Console app with all tests
+    Union100.cs       # 100-case union stress test
+    Union500.cs       # 500-case union stress test
+    UnionJsonTest.cs  # Basic JSON serialization tests
+    UnionJsonDerivedTest.cs  # JsonDerivedType tests
+    Program.cs        # Test runner
+```
 
 ## Requirements
 
 - .NET 11 Preview 3+
 - C# 15 (`LangVersion preview`)
+
+## Run
+
+```bash
+cd src/UnionTest
+dotnet run
+```
 
 ## License
 

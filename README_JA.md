@@ -1,97 +1,70 @@
-# ResultBoxUnion (Preview)
+# CSharpUnionPlayground
 
 [English](README.md) | **日本語**
 
-> **プレビュー版について:** 本ライブラリは C# 15 の union 型を使用しており、現在プレビュー段階 (.NET 11 Preview 3) です。正式リリースまでに union の記法や動作が変更される可能性があります。union が安定するまで本番環境での使用は推奨しません。
+**C# 15 Union 型** (.NET 11 Preview 3+) の機能と制限を検証するプレイグラウンドです。
 
-C# 15 の **Union 型** を使った Railway-oriented programming ライブラリ (.NET 11)。
+## 概要
 
-[ResultBoxes](https://github.com/J-Tech-Japan/ResultBoxes) を `union` キーワードで全面的に再構築したものです。
+C# 15 で導入された `union` キーワードの動作を実験・検証するリポジトリです:
 
-## コアコンセプト
+- 大量ケースのストレステスト (100ケース、500ケース)
+- `System.Text.Json` によるシリアライズ/デシリアライズの動作検証
+- `[JsonDerivedType]` を使ったポリモーフィックJSONラウンドトリップパターン
 
-```csharp
-// ResultBox<TValue> は union: TValue か Exception のどちらか
-public union ResultBox<TValue>(TValue, Exception) where TValue : notnull;
-```
-
-内部の nullable フィールドや `IsSuccess` フラグは不要 — 型そのものが値またはエラーを表現します。
-
-## クイックスタート
+## Union 型の基本
 
 ```csharp
-using ResultBoxUnion;
+// union の宣言
+public union Shape(Circle, Rectangle, Triangle);
 
-// 結果の作成
-ResultBox<int> success = 42;                              // 値からの暗黙変換
-ResultBox<int> failure = new Exception("something wrong"); // 例外からの暗黙変換
+public record Circle(double Radius);
+public record Rectangle(double Width, double Height);
+public record Triangle(double A, double B, double C);
 
-// パターンマッチング（網羅的！）
-var message = success switch
+// 網羅的パターンマッチング
+string describe = shape switch
 {
-    int value    => $"値: {value}",
-    Exception ex => $"エラー: {ex.Message}",
+    Circle c    => $"円 r={c.Radius}",
+    Rectangle r => $"四角 {r.Width}x{r.Height}",
+    Triangle t  => $"三角形",
 };
-
-// Railway チェーン
-var result = ResultBox.FromValue(10)
-    .Remap(x => x * 2)                    // 20
-    .Conveyor(x => ResultBox.Ok(x + 5))   // 25
-    .Verify(x => x > 0
-        ? ExceptionOrNone.None
-        : new ArgumentException("正の値が必要です"));
 ```
 
-## Railway パイプライン例
+## JSON シリアライズの検証結果
 
-```csharp
-// 複数の値を結合
-var result = ResultBox.FromValue("hello")
-    .Combine(greeting => ResultBox.Ok(greeting.Length))  // TwoValues<string, int>
-    .Remap((greeting, len) => $"{greeting} は {len} 文字");
+| アプローチ | シリアライズ | デシリアライズ |
+|-----------|------------|--------------|
+| union 型を直接 | OK | NG (Value が null — 型判別子なし) |
+| `abstract record` 基底型 + `[JsonDerivedType]` 経由 | OK | OK |
+| `interface` + `[JsonDerivedType]` 経由 | OK | OK |
+| 具象子型を直接 | OK | OK |
 
-// 非同期パイプライン
-var asyncResult = await ResultBox.Start
-    .Conveyor(_ => FetchUserAsync(userId))
-    .Combine(user => LoadOrdersAsync(user.Id))
-    .Remap((user, orders) => new UserSummary(user.Name, orders.Count));
+**結論:** union 型は struct なので `[JsonDerivedType]` を直接付与できません。基底型や interface に `[JsonPolymorphic]`/`[JsonDerivedType]` を付与し、デシリアライズ後に union に再代入する方法で対応可能です。
 
-// Rescue でエラーから復帰
-var rescued = ResultBox<int>.Error(new TimeoutException())
-    .Rescue(ex => ex is TimeoutException
-        ? ValueOrException<int>.FromValue(0)   // デフォルト値で復帰
-        : ValueOrException<int>.Exception);     // エラーを維持
+## プロジェクト構成
 
-// Scan/Do で副作用
-var logged = ResultBox.FromValue(42)
-    .Scan(v => Console.WriteLine($"値: {v}"))
-    .Do(v => Console.WriteLine($"処理中: {v}"));
 ```
-
-## 使用している Union 型
-
-| 型 | 宣言 | 用途 |
-|---|------|------|
-| `ResultBox<T>` | `union(T, Exception)` | 成功または失敗 |
-| `ExceptionOrNone` | `union(Exception, UnitValue)` | 例外の有無 |
-| `OptionalValue<T>` | `union(T, NoneValue)` | オプショナル値 |
-| `ValueOrException<T>` | `union(T, ExceptionMarker)` | エラー復帰ヘルパー |
-
-## 従来の ResultBoxes との違い
-
-| 観点 | ResultBoxes (従来) | ResultBoxUnion (本ライブラリ) |
-|------|-------------------|---------------------------|
-| コア型 | `record ResultBox<T>` | `union ResultBox<T>(T, Exception)` |
-| 成功判定 | `IsSuccess` プロパティ (内部フラグ) | `this is TValue` (パターンマッチ) |
-| 値の格納 | nullable フィールド + Exception フィールド | union の Value プロパティ (どちらか一方) |
-| 暗黙変換 | `implicit operator` を手動定義 | union が自動提供 |
-| パターンマッチ | `{ IsSuccess: true }` パターン | `case TValue v =>` / `case Exception e =>` |
-| ターゲット | .NET 8 / 9 / 10 | .NET 11+ のみ |
+src/
+  UnionTest/          # テスト用コンソールアプリ
+    Union100.cs       # 100ケース union ストレステスト
+    Union500.cs       # 500ケース union ストレステスト
+    UnionJsonTest.cs  # 基本 JSON シリアライズテスト
+    UnionJsonDerivedTest.cs  # JsonDerivedType テスト
+    Program.cs        # テストランナー
+```
 
 ## 要件
 
 - .NET 11 Preview 3+
 - C# 15 (`LangVersion preview`)
+
+## 実行方法
+
+```bash
+cd src/UnionTest
+dotnet run
+```
 
 ## ライセンス
 
