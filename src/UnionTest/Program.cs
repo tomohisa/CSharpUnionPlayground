@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using UnionTest;
 
 Console.WriteLine("=== C# 15 Union Type Stress Test ===");
@@ -311,6 +312,387 @@ if (test6.Value is Case1000 { Value: 1000 }) verified500++;
 
 sw500.Stop();
 Console.WriteLine($"  Sample cases verified: {verified500}/6 ({sw500.ElapsedMilliseconds}ms)");
+Console.WriteLine();
+
+// ================================================================
+// JSON シリアライズ / デシリアライズ テスト
+// ================================================================
+Console.WriteLine("=== JSON Serialization Tests ===");
+Console.WriteLine();
+
+var jsonOptions = new JsonSerializerOptions
+{
+    WriteIndented = true,
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+};
+
+int serializePass = 0;
+int serializeFail = 0;
+int deserializePass = 0;
+int deserializeFail = 0;
+
+void TestJson<TUnion>(string label, TUnion original, Func<TUnion, bool> verify)
+{
+    Console.Write($"  [{label}] ");
+    try
+    {
+        // シリアライズ
+        var json = JsonSerializer.Serialize(original, jsonOptions);
+        var compactJson = json.ReplaceLineEndings("").Replace("  ", "");
+        Console.WriteLine($"Serialize: OK");
+        Console.WriteLine($"    JSON: {compactJson}");
+        serializePass++;
+
+        // デシリアライズ
+        try
+        {
+            var deserialized = JsonSerializer.Deserialize<TUnion>(json, jsonOptions);
+            if (deserialized is not null && verify(deserialized))
+            {
+                Console.WriteLine($"    Deserialize: OK (round-trip verified)");
+                deserializePass++;
+            }
+            else
+            {
+                var valueProp = deserialized?.GetType().GetProperty("Value");
+                var innerVal = valueProp?.GetValue(deserialized);
+                var innerType = innerVal?.GetType().FullName ?? "null";
+                Console.WriteLine($"    Deserialize: FAIL (Value is {innerType}: {innerVal})");
+                deserializeFail++;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"    Deserialize: EXCEPTION ({ex.GetType().Name}: {ex.Message})");
+            deserializeFail++;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Serialize: EXCEPTION ({ex.GetType().Name}: {ex.Message})");
+        serializeFail++;
+        deserializeFail++;
+    }
+    Console.WriteLine();
+}
+
+// --- パターン1: プリミティブ型のプロパティが異なる子型 ---
+Console.WriteLine("--- Pattern 1: Different primitive properties ---");
+
+PersonInfo p1 = new PersonName("Taro", "Yamada");
+TestJson("PersonName", p1, d => d.Value is PersonName { First: "Taro", Last: "Yamada" });
+
+PersonInfo p2 = new Age(30);
+TestJson("Age", p2, d => d.Value is Age { Years: 30 });
+
+PersonInfo p3 = new Email("test@example.com");
+TestJson("Email", p3, d => d.Value is Email { Address: "test@example.com" });
+
+// --- パターン2: コレクション・ネスト型を含む子型 ---
+Console.WriteLine("--- Pattern 2: Collections and nested types ---");
+
+ComplexData c1 = new StringTagList(["alpha", "beta", "gamma"]);
+TestJson("StringTagList", c1, d => d.Value is StringTagList t && t.Tags.Count == 3 && t.Tags[0] == "alpha");
+
+ComplexData c2 = new Coordinate(1.5, 2.5, 3.5);
+TestJson("Coordinate", c2, d => d.Value is Coordinate { X: 1.5, Y: 2.5, Z: 3.5 });
+
+ComplexData c3 = new Metadata(new Dictionary<string, string> { ["key1"] = "val1", ["key2"] = "val2" });
+TestJson("Metadata", c3, d => d.Value is Metadata m && m.Properties.Count == 2 && m.Properties["key1"] == "val1");
+
+// --- パターン3: record class vs record struct の混在 ---
+Console.WriteLine("--- Pattern 3: record class vs record struct ---");
+
+MixedUnion m1 = new ClassRecord("Alice", 42);
+TestJson("ClassRecord", m1, d => d.Value is ClassRecord { Name: "Alice", Id: 42 });
+
+MixedUnion m2 = new StructRecord(3.14, true);
+TestJson("StructRecord", m2, d => d.Value is StructRecord { Value: 3.14, Flag: true });
+
+MixedUnion m3 = new NullableRecord(null, null);
+TestJson("NullableRecord(null,null)", m3, d => d.Value is NullableRecord { Label: null, Count: null });
+
+MixedUnion m4 = new NullableRecord("Hello", 99);
+TestJson("NullableRecord(values)", m4, d => d.Value is NullableRecord { Label: "Hello", Count: 99 });
+
+// --- パターン4: 継承を含む record 型 ---
+Console.WriteLine("--- Pattern 4: Inherited records ---");
+
+AnimalUnion a1 = new BaseAnimal("Generic");
+TestJson("BaseAnimal", a1, d => d.Value is BaseAnimal { Name: "Generic" });
+
+AnimalUnion a2 = new DogAnimal("Rex", "Labrador");
+TestJson("DogAnimal", a2, d => d.Value is DogAnimal { Name: "Rex", Breed: "Labrador" });
+
+AnimalUnion a3 = new CatAnimal("Whiskers", true);
+TestJson("CatAnimal", a3, d => d.Value is CatAnimal { Name: "Whiskers", Indoor: true });
+
+// --- パターン5: 空・単一・多数プロパティの子型 ---
+Console.WriteLine("--- Pattern 5: Empty, single, many properties ---");
+
+VariedUnion v1 = new EmptyRecord();
+TestJson("EmptyRecord", v1, d => d.Value is EmptyRecord);
+
+VariedUnion v2 = new SingleProp("only");
+TestJson("SingleProp", v2, d => d.Value is SingleProp { Solo: "only" });
+
+var guid = Guid.Parse("12345678-1234-1234-1234-123456789abc");
+var dt = new DateTime(2025, 6, 15, 10, 30, 0, DateTimeKind.Utc);
+VariedUnion v3 = new ManyProps("aaa", 123, 4.56, true, dt, guid);
+TestJson("ManyProps", v3, d => d.Value is ManyProps mp
+    && mp.A == "aaa" && mp.B == 123 && mp.C == 4.56 && mp.D == true && mp.E == dt && mp.F == guid);
+
+// --- パターン6: ジェネリック型を含む子型 ---
+Console.WriteLine("--- Pattern 6: Generic-like types ---");
+
+ResultUnion r1 = new StringResult("hello");
+TestJson("StringResult", r1, d => d.Value is StringResult { Value: "hello" });
+
+ResultUnion r2 = new IntResult(42);
+TestJson("IntResult", r2, d => d.Value is IntResult { Value: 42 });
+
+ResultUnion r3 = new ListResult([10, 20, 30]);
+TestJson("ListResult", r3, d => d.Value is ListResult l && l.Items.Count == 3 && l.Items[1] == 20);
+
+// --- サマリー ---
+Console.WriteLine("=== JSON Test Summary ===");
+Console.WriteLine($"  Serialize:   PASS={serializePass}, FAIL={serializeFail}");
+Console.WriteLine($"  Deserialize: PASS={deserializePass}, FAIL={deserializeFail}");
+Console.WriteLine();
+
+// ================================================================
+// JsonDerivedType テスト
+// ================================================================
+Console.WriteLine("=== JsonDerivedType Tests ===");
+Console.WriteLine();
+
+int jdPass = 0;
+int jdFail = 0;
+
+void TestJsonDerived<TUnion, TBase>(string approach, string label, TUnion original, Func<string, TBase?> deserializeBase, Func<TBase, TUnion> toUnion, Func<TUnion, bool> verify)
+{
+    Console.Write($"  [{approach}: {label}] ");
+    try
+    {
+        // 1. Union をシリアライズ
+        var json = JsonSerializer.Serialize(original, jsonOptions);
+        var compact = json.ReplaceLineEndings("").Replace("  ", "");
+        Console.WriteLine($"Serialize union: {compact}");
+
+        // 2. 子型/基底型としてデシリアライズ
+        var baseObj = deserializeBase(json);
+        if (baseObj is null)
+        {
+            Console.WriteLine($"    Deserialize as base: null");
+            jdFail++;
+            Console.WriteLine();
+            return;
+        }
+
+        // 3. デシリアライズした値を union に再代入
+        var restored = toUnion(baseObj);
+        if (verify(restored))
+        {
+            Console.WriteLine($"    Deserialize + re-wrap: OK (round-trip verified)");
+            jdPass++;
+        }
+        else
+        {
+            Console.WriteLine($"    Deserialize + re-wrap: FAIL (value mismatch)");
+            jdFail++;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"EXCEPTION: {ex.GetType().Name}: {ex.Message}");
+        jdFail++;
+    }
+    Console.WriteLine();
+}
+
+// === アプローチ2: abstract record 基底 + JsonDerivedType ===
+Console.WriteLine("--- Approach 2: abstract record base with [JsonDerivedType] ---");
+
+// Union としてシリアライズ → Payment 基底型でデシリアライズ
+PaymentUnion pay1 = new PayCash(100.50m);
+TestJsonDerived<PaymentUnion, Payment>(
+    "A2", "PayCash",
+    pay1,
+    json => JsonSerializer.Deserialize<Payment>(json, jsonOptions),  // unionのJSONを直接Paymentとして
+    p => p switch { PayCash c => new PaymentUnion(c), PayCard c => new PaymentUnion(c), PayCrypto c => new PaymentUnion(c), _ => throw new() },
+    u => u.Value is PayCash { Amount: 100.50m }
+);
+
+PaymentUnion pay2 = new PayCard("4111-1111-1111-1111", 250.00m);
+TestJsonDerived<PaymentUnion, Payment>(
+    "A2", "PayCard",
+    pay2,
+    json => JsonSerializer.Deserialize<Payment>(json, jsonOptions),
+    p => p switch { PayCash c => new PaymentUnion(c), PayCard c => new PaymentUnion(c), PayCrypto c => new PaymentUnion(c), _ => throw new() },
+    u => u.Value is PayCard { CardNumber: "4111-1111-1111-1111", Amount: 250.00m }
+);
+
+PaymentUnion pay3 = new PayCrypto("0xABC123", 0.5m, "ETH");
+TestJsonDerived<PaymentUnion, Payment>(
+    "A2", "PayCrypto",
+    pay3,
+    json => JsonSerializer.Deserialize<Payment>(json, jsonOptions),
+    p => p switch { PayCash c => new PaymentUnion(c), PayCard c => new PaymentUnion(c), PayCrypto c => new PaymentUnion(c), _ => throw new() },
+    u => u.Value is PayCrypto { WalletAddress: "0xABC123", Amount: 0.5m, Currency: "ETH" }
+);
+
+// === 子型を直接 Payment としてシリアライズしてからデシリアライズ ===
+Console.WriteLine("--- Approach 2b: Serialize as base type Payment, Deserialize as Payment ---");
+
+void TestPaymentViaBase(string label, Payment original, Func<PaymentUnion, bool> verify)
+{
+    Console.Write($"  [A2b: {label}] ");
+    try
+    {
+        var json = JsonSerializer.Serialize<Payment>(original, jsonOptions);
+        var compact = json.ReplaceLineEndings("").Replace("  ", "");
+        Console.WriteLine($"Serialize as Payment: {compact}");
+
+        var deserialized = JsonSerializer.Deserialize<Payment>(json, jsonOptions);
+        if (deserialized is null)
+        {
+            Console.WriteLine($"    Deserialize: null");
+            jdFail++;
+        }
+        else
+        {
+            PaymentUnion u = deserialized switch
+            {
+                PayCash c => new PaymentUnion(c),
+                PayCard c => new PaymentUnion(c),
+                PayCrypto c => new PaymentUnion(c),
+                _ => throw new InvalidOperationException()
+            };
+            if (verify(u))
+            {
+                Console.WriteLine($"    Deserialize as Payment → union: OK");
+                jdPass++;
+            }
+            else
+            {
+                Console.WriteLine($"    Deserialize: value mismatch");
+                jdFail++;
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"EXCEPTION: {ex.GetType().Name}: {ex.Message}");
+        jdFail++;
+    }
+    Console.WriteLine();
+}
+
+TestPaymentViaBase("PayCash", new PayCash(99.99m), u => u.Value is PayCash { Amount: 99.99m });
+TestPaymentViaBase("PayCard", new PayCard("5500-0000-0000-0004", 500m), u => u.Value is PayCard { Amount: 500m });
+TestPaymentViaBase("PayCrypto", new PayCrypto("0xDEF", 1.23m, "BTC"), u => u.Value is PayCrypto { Currency: "BTC" });
+
+// === アプローチ3: interface + JsonDerivedType ===
+Console.WriteLine("--- Approach 3: interface with [JsonDerivedType] ---");
+
+void TestMessageViaInterface(string label, IMessage original, Func<MessageUnion, bool> verify)
+{
+    Console.Write($"  [A3: {label}] ");
+    try
+    {
+        var json = JsonSerializer.Serialize<IMessage>(original, jsonOptions);
+        var compact = json.ReplaceLineEndings("").Replace("  ", "");
+        Console.WriteLine($"Serialize as IMessage: {compact}");
+
+        var deserialized = JsonSerializer.Deserialize<IMessage>(json, jsonOptions);
+        if (deserialized is null)
+        {
+            Console.WriteLine($"    Deserialize: null");
+            jdFail++;
+        }
+        else
+        {
+            MessageUnion u = deserialized switch
+            {
+                MsgText t => new MessageUnion(t),
+                MsgImage i => new MessageUnion(i),
+                MsgFile f => new MessageUnion(f),
+                _ => throw new InvalidOperationException()
+            };
+            if (verify(u))
+            {
+                Console.WriteLine($"    Deserialize as IMessage → union: OK");
+                jdPass++;
+            }
+            else
+            {
+                Console.WriteLine($"    Deserialize: value mismatch");
+                jdFail++;
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"EXCEPTION: {ex.GetType().Name}: {ex.Message}");
+        jdFail++;
+    }
+    Console.WriteLine();
+}
+
+TestMessageViaInterface("MsgText", new MsgText("Alice", "Hello!"), u => u.Value is MsgText { Sender: "Alice", Body: "Hello!" });
+TestMessageViaInterface("MsgImage", new MsgImage("Bob", "https://img.example.com/1.png", 800, 600), u => u.Value is MsgImage { Sender: "Bob", Width: 800 });
+TestMessageViaInterface("MsgFile", new MsgFile("Charlie", "report.pdf", 1024000), u => u.Value is MsgFile { FileName: "report.pdf", SizeBytes: 1024000 });
+
+// === アプローチ4: 子型を直接シリアライズ/デシリアライズ ===
+Console.WriteLine("--- Approach 4: Serialize/Deserialize concrete child type directly ---");
+
+void TestDirectChildType<TChild>(string label, TChild original, Func<TChild, OrderStatusUnion> toUnion, Func<OrderStatusUnion, bool> verify)
+    where TChild : class
+{
+    Console.Write($"  [A4: {label}] ");
+    try
+    {
+        var json = JsonSerializer.Serialize(original, jsonOptions);
+        var compact = json.ReplaceLineEndings("").Replace("  ", "");
+        Console.WriteLine($"Serialize child: {compact}");
+
+        var deserialized = JsonSerializer.Deserialize<TChild>(json, jsonOptions);
+        if (deserialized is null)
+        {
+            Console.WriteLine($"    Deserialize: null");
+            jdFail++;
+        }
+        else
+        {
+            var u = toUnion(deserialized);
+            if (verify(u))
+            {
+                Console.WriteLine($"    Deserialize child → union: OK");
+                jdPass++;
+            }
+            else
+            {
+                Console.WriteLine($"    Deserialize: value mismatch");
+                jdFail++;
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"EXCEPTION: {ex.GetType().Name}: {ex.Message}");
+        jdFail++;
+    }
+    Console.WriteLine();
+}
+
+TestDirectChildType("OrderNew", new OrderNew(1, "Laptop", 2), c => new OrderStatusUnion(c), u => u.Value is OrderNew { OrderId: 1, Product: "Laptop", Quantity: 2 });
+TestDirectChildType("OrderShipped", new OrderShipped(1, new DateTime(2025, 7, 1), "TRACK123"), c => new OrderStatusUnion(c), u => u.Value is OrderShipped { TrackingNumber: "TRACK123" });
+TestDirectChildType("OrderDelivered", new OrderDelivered(1, new DateTime(2025, 7, 5)), c => new OrderStatusUnion(c), u => u.Value is OrderDelivered { OrderId: 1 });
+
+// --- JsonDerived サマリー ---
+Console.WriteLine("=== JsonDerivedType Test Summary ===");
+Console.WriteLine($"  PASS: {jdPass}");
+Console.WriteLine($"  FAIL: {jdFail}");
 Console.WriteLine();
 
 Console.WriteLine("=== All tests completed ===");
