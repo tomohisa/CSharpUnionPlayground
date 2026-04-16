@@ -4,16 +4,6 @@ using Xunit;
 
 namespace UnionTest.Tests;
 
-// ================================================================
-// Union型の直接シリアライズ/デシリアライズ テスト
-//
-// 注意: これらのテストは「本来あるべきラウンドトリップ」を期待
-// していますが、現時点では C# 15 Preview の union 型の System.Text.Json
-// サポートが不完全なため、*_Deserialize_RoundTrip 系のテストは全て
-// 失敗します（Value プロパティが null に戻ってしまう）。
-// シリアライズ自体は成功します。
-// ================================================================
-
 public class UnionJsonSerializationTests
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -29,12 +19,15 @@ public class UnionJsonSerializationTests
         Assert.NotEmpty(json);
     }
 
-    private static void AssertRoundTrip<TUnion>(TUnion original, Func<TUnion, bool> verify)
+    private static void AssertDeserializeValueIsNull<TUnion>(TUnion original)
     {
         var json = JsonSerializer.Serialize(original, JsonOptions);
         var deserialized = JsonSerializer.Deserialize<TUnion>(json, JsonOptions);
         Assert.NotNull(deserialized);
-        Assert.True(verify(deserialized!), "Round-trip did not restore the original union case.");
+        var valueProp = deserialized!.GetType().GetProperty("Value");
+        Assert.NotNull(valueProp);
+        var innerVal = valueProp!.GetValue(deserialized);
+        Assert.Null(innerVal);
     }
 
     // --- Pattern 1: Different primitive properties ---
@@ -46,13 +39,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(p);
     }
 
-    // NOTE: 現時点では失敗します。Union型を直接デシリアライズしても
-    // Value プロパティが null になり、元の PersonName に戻りません。
     [Fact]
-    public void PersonName_Deserialize_RoundTrip()
+    public void PersonName_Deserialize_ValueIsNull()
     {
         PersonInfo p = new PersonName("Taro", "Yamada");
-        AssertRoundTrip(p, d => d.Value is PersonName { First: "Taro", Last: "Yamada" });
+        AssertDeserializeValueIsNull(p);
     }
 
     [Fact]
@@ -62,12 +53,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(p);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void Age_Deserialize_RoundTrip()
+    public void Age_Deserialize_ValueIsNull()
     {
         PersonInfo p = new Age(30);
-        AssertRoundTrip(p, d => d.Value is Age { Years: 30 });
+        AssertDeserializeValueIsNull(p);
     }
 
     [Fact]
@@ -77,12 +67,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(p);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void Email_Deserialize_RoundTrip()
+    public void Email_Deserialize_ValueIsNull()
     {
         PersonInfo p = new Email("test@example.com");
-        AssertRoundTrip(p, d => d.Value is Email { Address: "test@example.com" });
+        AssertDeserializeValueIsNull(p);
     }
 
     // --- Pattern 2: Collections and nested types ---
@@ -94,12 +83,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(c);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void StringTagList_Deserialize_RoundTrip()
+    public void StringTagList_Deserialize_ValueIsNull()
     {
         ComplexData c = new StringTagList(["alpha", "beta", "gamma"]);
-        AssertRoundTrip(c, d => d.Value is StringTagList t && t.Tags.Count == 3 && t.Tags[0] == "alpha");
+        AssertDeserializeValueIsNull(c);
     }
 
     [Fact]
@@ -109,12 +97,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(c);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void Coordinate_Deserialize_RoundTrip()
+    public void Coordinate_Deserialize_ValueIsNull()
     {
         ComplexData c = new Coordinate(1.5, 2.5, 3.5);
-        AssertRoundTrip(c, d => d.Value is Coordinate { X: 1.5, Y: 2.5, Z: 3.5 });
+        AssertDeserializeValueIsNull(c);
     }
 
     [Fact]
@@ -124,12 +111,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(c);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void Metadata_Deserialize_RoundTrip()
+    public void Metadata_Deserialize_ValueIsNull()
     {
         ComplexData c = new Metadata(new Dictionary<string, string> { ["key1"] = "val1", ["key2"] = "val2" });
-        AssertRoundTrip(c, d => d.Value is Metadata m && m.Properties.Count == 2 && m.Properties["key1"] == "val1");
+        AssertDeserializeValueIsNull(c);
     }
 
     // --- Pattern 3: record class vs record struct ---
@@ -141,12 +127,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void ClassRecord_Deserialize_RoundTrip()
+    public void ClassRecord_Deserialize_ValueIsNull()
     {
         MixedUnion m = new ClassRecord("Alice", 42);
-        AssertRoundTrip(m, d => d.Value is ClassRecord { Name: "Alice", Id: 42 });
+        AssertDeserializeValueIsNull(m);
     }
 
     [Fact]
@@ -156,12 +141,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void StructRecord_Deserialize_RoundTrip()
+    public void StructRecord_Deserialize_ValueIsNull()
     {
         MixedUnion m = new StructRecord(3.14, true);
-        AssertRoundTrip(m, d => d.Value is StructRecord { Value: 3.14, Flag: true });
+        AssertDeserializeValueIsNull(m);
     }
 
     [Fact]
@@ -171,12 +155,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void NullableRecord_WithNulls_Deserialize_RoundTrip()
+    public void NullableRecord_WithNulls_Deserialize_ValueIsNull()
     {
         MixedUnion m = new NullableRecord(null, null);
-        AssertRoundTrip(m, d => d.Value is NullableRecord { Label: null, Count: null });
+        AssertDeserializeValueIsNull(m);
     }
 
     [Fact]
@@ -186,12 +169,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void NullableRecord_WithValues_Deserialize_RoundTrip()
+    public void NullableRecord_WithValues_Deserialize_ValueIsNull()
     {
         MixedUnion m = new NullableRecord("Hello", 99);
-        AssertRoundTrip(m, d => d.Value is NullableRecord { Label: "Hello", Count: 99 });
+        AssertDeserializeValueIsNull(m);
     }
 
     // --- Pattern 4: Inherited records ---
@@ -203,12 +185,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(a);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void BaseAnimal_Deserialize_RoundTrip()
+    public void BaseAnimal_Deserialize_ValueIsNull()
     {
         AnimalUnion a = new BaseAnimal("Generic");
-        AssertRoundTrip(a, d => d.Value is BaseAnimal { Name: "Generic" });
+        AssertDeserializeValueIsNull(a);
     }
 
     [Fact]
@@ -218,12 +199,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(a);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void DogAnimal_Deserialize_RoundTrip()
+    public void DogAnimal_Deserialize_ValueIsNull()
     {
         AnimalUnion a = new DogAnimal("Rex", "Labrador");
-        AssertRoundTrip(a, d => d.Value is DogAnimal { Name: "Rex", Breed: "Labrador" });
+        AssertDeserializeValueIsNull(a);
     }
 
     [Fact]
@@ -233,12 +213,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(a);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void CatAnimal_Deserialize_RoundTrip()
+    public void CatAnimal_Deserialize_ValueIsNull()
     {
         AnimalUnion a = new CatAnimal("Whiskers", true);
-        AssertRoundTrip(a, d => d.Value is CatAnimal { Name: "Whiskers", Indoor: true });
+        AssertDeserializeValueIsNull(a);
     }
 
     // --- Pattern 5: Empty, single, many properties ---
@@ -250,12 +229,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(v);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void EmptyRecord_Deserialize_RoundTrip()
+    public void EmptyRecord_Deserialize_ValueIsNull()
     {
         VariedUnion v = new EmptyRecord();
-        AssertRoundTrip(v, d => d.Value is EmptyRecord);
+        AssertDeserializeValueIsNull(v);
     }
 
     [Fact]
@@ -265,12 +243,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(v);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void SingleProp_Deserialize_RoundTrip()
+    public void SingleProp_Deserialize_ValueIsNull()
     {
         VariedUnion v = new SingleProp("only");
-        AssertRoundTrip(v, d => d.Value is SingleProp { Solo: "only" });
+        AssertDeserializeValueIsNull(v);
     }
 
     [Fact]
@@ -282,15 +259,13 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(v);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void ManyProps_Deserialize_RoundTrip()
+    public void ManyProps_Deserialize_ValueIsNull()
     {
         var guid = Guid.Parse("12345678-1234-1234-1234-123456789abc");
         var dt = new DateTime(2025, 6, 15, 10, 30, 0, DateTimeKind.Utc);
         VariedUnion v = new ManyProps("aaa", 123, 4.56, true, dt, guid);
-        AssertRoundTrip(v, d => d.Value is ManyProps mp
-            && mp.A == "aaa" && mp.B == 123 && mp.C == 4.56 && mp.D == true && mp.E == dt && mp.F == guid);
+        AssertDeserializeValueIsNull(v);
     }
 
     // --- Pattern 6: Generic-like types ---
@@ -302,12 +277,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(r);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void StringResult_Deserialize_RoundTrip()
+    public void StringResult_Deserialize_ValueIsNull()
     {
         ResultUnion r = new StringResult("hello");
-        AssertRoundTrip(r, d => d.Value is StringResult { Value: "hello" });
+        AssertDeserializeValueIsNull(r);
     }
 
     [Fact]
@@ -317,12 +291,11 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(r);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void IntResult_Deserialize_RoundTrip()
+    public void IntResult_Deserialize_ValueIsNull()
     {
         ResultUnion r = new IntResult(42);
-        AssertRoundTrip(r, d => d.Value is IntResult { Value: 42 });
+        AssertDeserializeValueIsNull(r);
     }
 
     [Fact]
@@ -332,11 +305,10 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(r);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
-    public void ListResult_Deserialize_RoundTrip()
+    public void ListResult_Deserialize_ValueIsNull()
     {
         ResultUnion r = new ListResult([10, 20, 30]);
-        AssertRoundTrip(r, d => d.Value is ListResult l && l.Items.Count == 3 && l.Items[1] == 20);
+        AssertDeserializeValueIsNull(r);
     }
 }

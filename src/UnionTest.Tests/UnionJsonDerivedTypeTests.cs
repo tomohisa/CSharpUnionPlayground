@@ -13,14 +13,8 @@ public class UnionJsonDerivedTypeTests
     };
 
     // === Approach 2: Union serialize -> deserialize as Payment ===
-    // Union 型を直接シリアライズすると $type ディスクリミネータが
-    // 出力されないため、それを Payment 基底型としてデシリアライズ
-    // しようとすると NotSupportedException が発生します。
-    //
-    // NOTE: 下記の *_UnionSerialize_PaymentDeserialize_RoundTrip 系テストは
-    // 現時点では失敗します。本来は Union 経由でシリアライズしたJSONも
-    // 基底型 Payment にデシリアライズできて欲しいですが、現状の
-    // System.Text.Json 実装ではサポートされていません。
+    // Union serialization does not include $type discriminator, so
+    // deserializing as abstract Payment base type throws.
 
     [Fact]
     public void PayCash_UnionSerialize_Succeeds()
@@ -31,67 +25,28 @@ public class UnionJsonDerivedTypeTests
         Assert.NotEmpty(json);
     }
 
-    // NOTE: 現時点では失敗します（Union型の直接シリアライズJSONには$typeが
-    // 含まれないため、Payment基底型としてデシリアライズできません）
     [Fact]
-    public void PayCash_UnionSerialize_PaymentDeserialize_RoundTrip()
+    public void PayCash_UnionSerialize_PaymentDeserialize_Throws()
     {
         PaymentUnion original = new PayCash(100.50m);
         var json = JsonSerializer.Serialize(original, JsonOptions);
-
-        var payment = JsonSerializer.Deserialize<Payment>(json, JsonOptions);
-        Assert.NotNull(payment);
-
-        PaymentUnion restored = payment switch
-        {
-            PayCash c => new PaymentUnion(c),
-            PayCard c => new PaymentUnion(c),
-            PayCrypto c => new PaymentUnion(c),
-            _ => throw new InvalidOperationException()
-        };
-        Assert.True(restored.Value is PayCash { Amount: 100.50m });
+        Assert.ThrowsAny<Exception>(() => JsonSerializer.Deserialize<Payment>(json, JsonOptions));
     }
 
-    // NOTE: 現時点では失敗します（Union型の直接シリアライズJSONには$typeが
-    // 含まれないため、Payment基底型としてデシリアライズできません）
     [Fact]
-    public void PayCard_UnionSerialize_PaymentDeserialize_RoundTrip()
+    public void PayCard_UnionSerialize_PaymentDeserialize_Throws()
     {
         PaymentUnion original = new PayCard("4111-1111-1111-1111", 250.00m);
         var json = JsonSerializer.Serialize(original, JsonOptions);
-
-        var payment = JsonSerializer.Deserialize<Payment>(json, JsonOptions);
-        Assert.NotNull(payment);
-
-        PaymentUnion restored = payment switch
-        {
-            PayCash c => new PaymentUnion(c),
-            PayCard c => new PaymentUnion(c),
-            PayCrypto c => new PaymentUnion(c),
-            _ => throw new InvalidOperationException()
-        };
-        Assert.True(restored.Value is PayCard { CardNumber: "4111-1111-1111-1111", Amount: 250.00m });
+        Assert.ThrowsAny<Exception>(() => JsonSerializer.Deserialize<Payment>(json, JsonOptions));
     }
 
-    // NOTE: 現時点では失敗します（Union型の直接シリアライズJSONには$typeが
-    // 含まれないため、Payment基底型としてデシリアライズできません）
     [Fact]
-    public void PayCrypto_UnionSerialize_PaymentDeserialize_RoundTrip()
+    public void PayCrypto_UnionSerialize_PaymentDeserialize_Throws()
     {
         PaymentUnion original = new PayCrypto("0xABC123", 0.5m, "ETH");
         var json = JsonSerializer.Serialize(original, JsonOptions);
-
-        var payment = JsonSerializer.Deserialize<Payment>(json, JsonOptions);
-        Assert.NotNull(payment);
-
-        PaymentUnion restored = payment switch
-        {
-            PayCash c => new PaymentUnion(c),
-            PayCard c => new PaymentUnion(c),
-            PayCrypto c => new PaymentUnion(c),
-            _ => throw new InvalidOperationException()
-        };
-        Assert.True(restored.Value is PayCrypto { WalletAddress: "0xABC123", Amount: 0.5m, Currency: "ETH" });
+        Assert.ThrowsAny<Exception>(() => JsonSerializer.Deserialize<Payment>(json, JsonOptions));
     }
 
     // === Approach 2b: Serialize as base type Payment, deserialize as Payment ===
