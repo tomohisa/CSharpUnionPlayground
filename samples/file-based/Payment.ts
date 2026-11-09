@@ -37,16 +37,4 @@ const original: Payment = {
 const json = JSON.stringify(original);
 const restored = deserialize(json);
 console.log(json);
-if (restored.$type !== "cash" || restored.amount !== 100 ||
-    restored.next?.$type !== "card" || restored.next.cardNumber !== "4111" ||
-    restored.next.amount !== 250 || restored.next.next !== null)
-  throw new Error("Round trip failed.");
-if (describe(restored) !== "cash:100" || describe(restored.next) !== "card:4111")
-  throw new Error("Case matching failed.");
-console.log(`switch: ${describe(restored)} -> ${describe(restored.next)}`);
-// 内側のケースも検証される。
-let rejected = false;
-try { deserialize('{"$type":"cash","amount":100,"next":{"$type":"unknown"}}'); }
-catch { rejected = true; }
-if (!rejected) throw new Error("Invalid nested Payment was accepted.");
-console.log("PASS");
+console.log(describe(restored));

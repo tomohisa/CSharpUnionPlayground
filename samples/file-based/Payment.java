@@ -28,16 +28,6 @@ class PaymentDemo {
         String json = mapper.writerFor(Payment.class).writeValueAsString(original);
         Payment restored = Objects.requireNonNull(mapper.readValue(json, Payment.class));
         System.out.println(json);
-        if (!original.equals(restored)) throw new AssertionError("Round trip failed.");
-        if (!(restored instanceof Cash cash) || !describe(cash).equals("cash:100")
-                || !describe(cash.next()).equals("card:4111"))
-            throw new AssertionError("Case matching failed.");
-        System.out.println("switch: " + describe(restored) + " -> " + describe(((Cash) restored).next()));
-        boolean rejected = false;
-        try {
-            mapper.readValue("{\"$type\":\"cash\",\"amount\":100,\"next\":{\"$type\":\"unknown\"}}", Payment.class);
-        } catch (com.fasterxml.jackson.core.JsonProcessingException expected) { rejected = true; }
-        if (!rejected) throw new AssertionError("Invalid nested Payment accepted.");
-        System.out.println("PASS");
+        System.out.println(describe(restored));
     }
 }

@@ -4,6 +4,7 @@ from pathlib import Path
 import os
 import subprocess
 import tempfile
+import sys
 import urllib.request
 
 def jackson_classpath(directory):
@@ -17,6 +18,7 @@ def jackson_classpath(directory):
 
 
 if __name__ == '__main__':
-    source = Path(__file__).resolve().parents[1] / 'samples/file-based/Payment.java'
+    source = (Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else
+          Path(__file__).resolve().parents[1] / 'samples/file-based/Payment.java')
     with tempfile.TemporaryDirectory(prefix='cupj-payment-java-') as directory:
         subprocess.run(['java', '--class-path', jackson_classpath(directory), str(source)], check=True)

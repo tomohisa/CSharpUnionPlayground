@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 
 root = Path(__file__).resolve().parents[1]
-source = (root / 'samples/file-based/ClosedInferredJson.cs').read_text()
+source = (root / 'samples/file-based/with-verification/ClosedInferredJson.cs').read_text()
 added = source + '\npublic sealed record Crypto(string Wallet) : Payment;\n'
 handled = added.replace('    Card card => $"card:{card.CardNumber}"',
                         '    Card card => $"card:{card.CardNumber}",\n    Crypto crypto => $"crypto:{crypto.Wallet}"')
