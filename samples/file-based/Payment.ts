@@ -4,6 +4,18 @@ type Payment =
   | { $type: "cash"; amount: number; next: Payment | null }
   | { $type: "card"; cardNumber: string; amount: number; next: Payment | null };
 
+// never makes missing/added cases fail tsc, even though a default arm exists.
+function describe(payment: Payment): string {
+  switch (payment.$type) {
+    case "cash": return `cash:${payment.amount}`;
+    case "card": return `card:${payment.cardNumber}`;
+    default: {
+      const exhaustive: never = payment;
+      throw new Error(`Unhandled Payment: ${exhaustive}`);
+    }
+  }
+}
+
 function isPayment(value: unknown): value is Payment {
   if (typeof value !== "object" || value === null) return false;
   const p = value as Record<string, unknown>;
@@ -29,6 +41,9 @@ if (restored.$type !== "cash" || restored.amount !== 100 ||
     restored.next?.$type !== "card" || restored.next.cardNumber !== "4111" ||
     restored.next.amount !== 250 || restored.next.next !== null)
   throw new Error("Round trip failed.");
+if (describe(restored) !== "cash:100" || describe(restored.next) !== "card:4111")
+  throw new Error("Case matching failed.");
+console.log(`switch: ${describe(restored)} -> ${describe(restored.next)}`);
 // 内側のケースも検証される。
 let rejected = false;
 try { deserialize('{"$type":"cash","amount":100,"next":{"$type":"unknown"}}'); }
