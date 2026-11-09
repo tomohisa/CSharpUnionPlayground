@@ -1,19 +1,23 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using UnionTest;
 using Xunit;
 
 namespace UnionTest.Tests;
 
-// RC3: 標準設定では複数の object ケースを判別できず JsonException になります。
-// RoundTrip テストは期待する動作を引き続き検証するため、失敗を残しています。
-// 型判別器を設定した成功例は UnionRc3Tests を参照してください。
+// RC3: 構造判別器・必須コンストラクター引数・未知プロパティ拒否を設定。
+// 同一プロパティ名のケースは構造判別できないため、期待動作テストの失敗を維持。
+// 段階別の結果と対応方法は README を参照してください。
 
 public class UnionJsonSerializationTests
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        RespectRequiredConstructorParameters = true,
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
+        TypeClassifiers = { new JsonUnionTypeStructuralClassifier() }
     };
 
     private static void AssertSerializeSucceeds<TUnion>(TUnion original)

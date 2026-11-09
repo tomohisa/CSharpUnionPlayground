@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using UnionTest;
 using Xunit;
 
@@ -9,12 +10,15 @@ public class UnionJsonDerivedTypeTests
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        RespectRequiredConstructorParameters = true,
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
+        TypeClassifiers = { new JsonUnionTypeStructuralClassifier() }
     };
 
     // === Approach 2: Union serialize -> deserialize as Payment ===
     // Union 型を直接シリアライズすると $type ディスクリミネータが
-    // 出力されないため、それを Payment 基底型としてデシリアライズ
+    // 出力されないため、構造判別器を設定しても Payment 基底型としてデシリアライズ
     // しようとすると NotSupportedException が発生します。
     //
     // NOTE: 下記の *_UnionSerialize_PaymentDeserialize_RoundTrip 系テストは

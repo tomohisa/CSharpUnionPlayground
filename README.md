@@ -41,9 +41,32 @@ SDK `11.0.100-rc.3.26522.148` is pinned in `global.json`. The runtime now suppli
 - `JsonUnionTypeStructuralClassifier` restores object cases by property names, including unions inside a parent object's list with camelCase naming. See `UnionRc3Tests`.
 - Union JSON still cannot be deserialized as an abstract polymorphic base without a discriminator. Serialize as the base type to use `[JsonDerivedType]`.
 
-The original desired-behavior tests remain intentionally failing to track the default-setting limitations; they are not skipped or weakened. No Preview 3 rerun was performed for this verification.
+The initial results below used default settings; see the next section for current classifier settings and results. No Preview 3 rerun was performed for this verification.
 
 Verified result: **81 tests, 54 passed / 27 failed / 0 skipped**. All 7 new RC3 tests pass. The 27 failures comprise 19 direct object-union round trips, 5 container round trips, and 3 union-to-abstract-base conversions.
+
+## Applying structural classification to existing tests
+
+Existing assertions are unchanged. All three JSON test classes now use the structural classifier, `RespectRequiredConstructorParameters = true`, and `UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow`, with camelCase naming.
+
+| Configuration | Original 27 failures fixed | Previously passing tests now failing | Original 81 tests: pass / fail |
+|---|---:|---:|---:|
+| RC3 defaults | 0 | 0 | 54 / 27 |
+| Structural classifier only | 14 | 11 | 57 / 24 |
+| Classifier + strict settings (current) | 21 | 3 | 72 / 9 |
+
+With five additional remedy checks: **86 tests, 77 passed / 9 failed / 0 skipped**. All five remedy checks pass.
+
+The classifier alone restores PersonInfo, ComplexData, MixedUnion (10 round trips), and four non-Payment containers. Animal, Varied, and Payment cases have overlapping property sets. Requiring constructor arguments and rejecting unknown properties makes another seven original round trips pass. These stricter settings reject missing required arguments and extra JSON properties, changing input compatibility. Contract validation runs during serialization too, so an invalid classifier configuration can break writes.
+
+Remaining failures:
+
+- **ResultUnion: 6 tests** (3 original read failures and 3 new write failures). StringResult and IntResult both recognize `value`; the structural classifier does not examine property values. Even ListResult fails because the whole union contract is rejected. Use a custom `JsonTypeClassifierFactory` that inspects value tokens, a converter, or distinct JSON property names. Separate write-only options without the classifier avoid the write failures but do not solve reads.
+- **Union JSON to abstract Payment: 3 tests**. Union serialization emits no `$type`; the classifier does not add polymorphic base metadata. Serialize explicitly as `Payment` (existing passing tests), deserialize as `PaymentUnion` (verified with strict settings), or define a shared JSON contract in a converter.
+
+`UnionStructuralRemedyTests` verifies the strict settings and remaining limitations. No tests were skipped or assertions weakened. Custom classifiers, converters, and renamed properties were not implemented.
+
+Reference: [Microsoft union serialization documentation](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/libraries#union-serialization).
 
 ## Run
 
