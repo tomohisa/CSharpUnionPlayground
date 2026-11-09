@@ -2,7 +2,7 @@
 
 **English** | [日本語](README_JA.md)
 
-A playground for testing and exploring **C# 15 Union Types** (.NET 11 Preview 3+).
+A playground for testing and exploring **C# 15 Union Types** (.NET 11 RC3).
 
 ## What's This?
 
@@ -31,39 +31,25 @@ string describe = shape switch
 };
 ```
 
-## JSON Serialization Findings
+## JSON serialization: RC3 verification
 
-| Approach | Serialize | Deserialize |
-|----------|-----------|-------------|
-| Union type directly | OK | FAIL (Value is null — no type discriminator) |
-| Via `abstract record` base with `[JsonDerivedType]` | OK | OK |
-| Via `interface` with `[JsonDerivedType]` | OK | OK |
-| Via concrete child type | OK | OK |
+SDK `11.0.100-rc.3.26522.148` is pinned in `global.json`. The runtime now supplies `UnionAttribute` and `IUnion`; the Preview 3 polyfill has been removed.
 
-**Key finding:** Union types are structs, so `[JsonDerivedType]` cannot be applied directly. Use a base type or interface with `[JsonPolymorphic]`/`[JsonDerivedType]`, then wrap back into the union after deserialization.
+- Distinct JSON token kinds (`int`, `string`, `bool`) round-trip automatically.
+- The active case is serialized directly, without a `Value` wrapper or `$type` discriminator. A default union round-trips as `null`.
+- Multiple object cases still need a classifier: default deserialization now throws `JsonException` instead of silently returning an empty union.
+- `JsonUnionTypeStructuralClassifier` restores object cases by property names, including unions inside a parent object's list with camelCase naming. See `UnionRc3Tests`.
+- Union JSON still cannot be deserialized as an abstract polymorphic base without a discriminator. Serialize as the base type to use `[JsonDerivedType]`.
 
-## Project Structure
+The original desired-behavior tests remain intentionally failing to track the default-setting limitations; they are not skipped or weakened. No Preview 3 rerun was performed for this verification.
 
-```
-src/
-  UnionTest/          # Console app with all tests
-    Union100.cs       # 100-case union stress test
-    Union500.cs       # 500-case union stress test
-    UnionJsonTest.cs  # Basic JSON serialization tests
-    UnionJsonDerivedTest.cs  # JsonDerivedType tests
-    Program.cs        # Test runner
-```
-
-## Requirements
-
-- .NET 11 Preview 3+
-- C# 15 (`LangVersion preview`)
+Verified result: **81 tests, 54 passed / 27 failed / 0 skipped**. All 7 new RC3 tests pass. The 27 failures comprise 19 direct object-union round trips, 5 container round trips, and 3 union-to-abstract-base conversions.
 
 ## Run
 
 ```bash
-cd src/UnionTest
-dotnet run
+dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj
+dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj --filter FullyQualifiedName~UnionRc3Tests
 ```
 
 ## License

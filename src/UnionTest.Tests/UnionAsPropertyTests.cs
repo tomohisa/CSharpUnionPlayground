@@ -4,19 +4,9 @@ using Xunit;
 
 namespace UnionTest.Tests;
 
-// ================================================================
-// Union型をプロパティとして保持する親クラスのJSONシリアライズテスト
-//
-// 親クラスに union 型のプロパティが含まれる場合も、その union 型を
-// 直接シリアライズするのと同じ制約を受けます:
-//   - シリアライズは成功する
-//   - デシリアライズすると union プロパティの Value が null になる
-//     （＝元の子ケースに戻らない）
-//
-// NOTE: 下記の *_Deserialize_RoundTrip 系テストは現時点では失敗します。
-// 本来は親クラスごとラウンドトリップしてほしいですが、union 型の
-// System.Text.Json サポートが不完全なためです。
-// ================================================================
+// RC3: 標準設定では複数の object ケースを判別できず JsonException になります。
+// RoundTrip テストは期待する動作を引き続き検証するため、失敗を残しています。
+// 型判別器を設定した成功例は UnionRc3Tests を参照してください。
 
 // --- テスト用モデル（親クラスが union 型プロパティを持つ） ---
 
@@ -96,8 +86,6 @@ public class UnionAsPropertyTests
 
     // --- ラウンドトリップ: 親クラスのデシリアライズ後も子 union の Value が復元されるべき ---
 
-    // NOTE: 現時点では失敗します。親クラスのデシリアライズ自体は成功しますが、
-    // union プロパティ (Info) の Value が null になり、元の PersonName に戻りません。
     [Fact]
     public void ContainerSingle_Deserialize_RoundTrip()
     {
@@ -112,7 +100,6 @@ public class UnionAsPropertyTests
             "Container's union property did not round-trip to PersonName.");
     }
 
-    // NOTE: 現時点では失敗します（複数の union プロパティどちらも Value が null になります）
     [Fact]
     public void ContainerMultiple_Deserialize_RoundTrip()
     {
@@ -131,7 +118,6 @@ public class UnionAsPropertyTests
             "Data union property did not round-trip to Coordinate.");
     }
 
-    // NOTE: 現時点では失敗します（ネストされた親クラス内の union も Value が null になります）
     [Fact]
     public void ContainerNested_Deserialize_RoundTrip()
     {
@@ -147,7 +133,6 @@ public class UnionAsPropertyTests
             "Nested container's union property did not round-trip to Email.");
     }
 
-    // NOTE: 現時点では失敗します（List 内の各 union 要素の Value も null になります）
     [Fact]
     public void ContainerList_Deserialize_RoundTrip()
     {
@@ -168,8 +153,6 @@ public class UnionAsPropertyTests
         Assert.True(deserialized.People[2].Value is Email { Address: "c@d.com" });
     }
 
-    // NOTE: 現時点では失敗します（PaymentUnion も同じく Value が null になります。
-    // $type ディスクリミネータが出力されないため Payment 基底型でのデシリアライズもできません）
     [Fact]
     public void ContainerWithPayment_Deserialize_RoundTrip()
     {
