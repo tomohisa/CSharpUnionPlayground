@@ -75,6 +75,12 @@ TypeClassifiers = { new JsonUnionTypeStructuralClassifier() }
 
 仕様: [Microsoft の union serialization ドキュメント](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/libraries#union-serialization)。
 
+## 実験版: 属性からJSONコンバーターを生成
+
+標準と区別するため `CSharpUnionPlayground.Experimental.Json` 名前空間の `PlaygroundTaggedUnion` / `PlaygroundUnionCase` 属性を使う Source Generator を追加しました。共通の親型・手書きコンバーターなしで、型判別子付きJSONを往復できます。
+
+macOS arm64 の Native AOT 実行で19チェック成功（動的コード・JSONリフレクション無効）、コンパイル診断6件も成功しました。正式版ではありません。利用者側で生成コンバーターの登録と `JsonSerializerContext` の定義が必要です。[使用例・再現手順・制限](docs/experimental-tagged-json.md)。
+
 ## 実行方法
 
 ```bash

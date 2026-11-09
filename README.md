@@ -68,6 +68,10 @@ Remaining failures:
 
 Reference: [Microsoft union serialization documentation](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/libraries#union-serialization).
 
+## Experimental attribute-driven converter generation
+
+An unreleased Source Generator prototype supports tagged union JSON without a common base class. Native AOT publish/run verified on macOS arm64: 19 smoke checks pass with JSON reflection and dynamic code disabled; 6 compiler diagnostic fixtures pass. See [usage, verification and limitations](docs/experimental-tagged-json.md).
+
 ## Run
 
 ```bash
