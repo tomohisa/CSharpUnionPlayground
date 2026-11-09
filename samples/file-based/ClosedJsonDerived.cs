@@ -21,6 +21,7 @@ if (args.Contains("--require-native") && RuntimeFeature.IsDynamicCodeSupported)
     throw new Exception("Native AOT execution is required.");
 if (JsonSerializer.IsReflectionEnabledByDefault)
     throw new Exception("JSON reflection must be disabled.");
+Console.WriteLine($"switch: {Describe(restored)} -> {Describe(((Cash)restored).Next!)}");
 Console.WriteLine("PASS");
 
 // closedによって全ケースを認識する。_ や null の分岐は不要（入力は非nullable）。
