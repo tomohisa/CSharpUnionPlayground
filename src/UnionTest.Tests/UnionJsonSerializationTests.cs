@@ -4,15 +4,9 @@ using Xunit;
 
 namespace UnionTest.Tests;
 
-// ================================================================
-// Union型の直接シリアライズ/デシリアライズ テスト
-//
-// 注意: これらのテストは「本来あるべきラウンドトリップ」を期待
-// していますが、現時点では C# 15 Preview の union 型の System.Text.Json
-// サポートが不完全なため、*_Deserialize_RoundTrip 系のテストは全て
-// 失敗します（Value プロパティが null に戻ってしまう）。
-// シリアライズ自体は成功します。
-// ================================================================
+// RC3: 標準設定では複数の object ケースを判別できず JsonException になります。
+// RoundTrip テストは期待する動作を引き続き検証するため、失敗を残しています。
+// 型判別器を設定した成功例は UnionRc3Tests を参照してください。
 
 public class UnionJsonSerializationTests
 {
@@ -46,8 +40,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(p);
     }
 
-    // NOTE: 現時点では失敗します。Union型を直接デシリアライズしても
-    // Value プロパティが null になり、元の PersonName に戻りません。
     [Fact]
     public void PersonName_Deserialize_RoundTrip()
     {
@@ -62,7 +54,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(p);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void Age_Deserialize_RoundTrip()
     {
@@ -77,7 +68,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(p);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void Email_Deserialize_RoundTrip()
     {
@@ -94,7 +84,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(c);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void StringTagList_Deserialize_RoundTrip()
     {
@@ -109,7 +98,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(c);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void Coordinate_Deserialize_RoundTrip()
     {
@@ -124,7 +112,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(c);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void Metadata_Deserialize_RoundTrip()
     {
@@ -141,7 +128,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void ClassRecord_Deserialize_RoundTrip()
     {
@@ -156,7 +142,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void StructRecord_Deserialize_RoundTrip()
     {
@@ -171,7 +156,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void NullableRecord_WithNulls_Deserialize_RoundTrip()
     {
@@ -186,7 +170,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(m);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void NullableRecord_WithValues_Deserialize_RoundTrip()
     {
@@ -203,7 +186,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(a);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void BaseAnimal_Deserialize_RoundTrip()
     {
@@ -218,7 +200,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(a);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void DogAnimal_Deserialize_RoundTrip()
     {
@@ -233,7 +214,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(a);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void CatAnimal_Deserialize_RoundTrip()
     {
@@ -250,7 +230,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(v);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void EmptyRecord_Deserialize_RoundTrip()
     {
@@ -265,7 +244,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(v);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void SingleProp_Deserialize_RoundTrip()
     {
@@ -282,7 +260,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(v);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void ManyProps_Deserialize_RoundTrip()
     {
@@ -302,7 +279,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(r);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void StringResult_Deserialize_RoundTrip()
     {
@@ -317,7 +293,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(r);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void IntResult_Deserialize_RoundTrip()
     {
@@ -332,7 +307,6 @@ public class UnionJsonSerializationTests
         AssertSerializeSucceeds(r);
     }
 
-    // NOTE: 現時点では失敗します（Union型直接デシリアライズの既知の制約）
     [Fact]
     public void ListResult_Deserialize_RoundTrip()
     {
