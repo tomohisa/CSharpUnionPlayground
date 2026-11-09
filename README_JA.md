@@ -83,6 +83,8 @@ macOS arm64 の Native AOT 実行で40チェック成功（`--require-native`指
 
 ## 実行方法
 
+ネストしたPaymentを比較する、C# 3方式・Rust・TypeScriptの各1ファイルサンプルは [こちら](samples/file-based/README.md)。
+
 ```bash
 dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj
 dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj --filter FullyQualifiedName~UnionRc3Tests
