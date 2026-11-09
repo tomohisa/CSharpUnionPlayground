@@ -70,7 +70,7 @@ Reference: [Microsoft union serialization documentation](https://learn.microsoft
 
 ## Experimental attribute-driven converter generation
 
-An unreleased Source Generator prototype supports tagged union JSON without a common base class. Native AOT publish/run verified on macOS arm64: 19 smoke checks pass with JSON reflection and dynamic code disabled; 6 compiler diagnostic fixtures pass. See [usage, verification and limitations](docs/experimental-tagged-json.md).
+An unreleased Source Generator prototype supports tagged union JSON without a common base class. Native AOT publish/run verified on macOS arm64: 40 smoke checks pass (`--require-native`), including all four combinations of nested unions using `$type` at both levels with JSON reflection and dynamic code disabled; 6 compiler diagnostic fixtures pass. See [usage, verification and limitations](docs/experimental-tagged-json.md).
 
 ## Run
 
