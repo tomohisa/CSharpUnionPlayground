@@ -5,8 +5,14 @@ using CSharpUnionPlayground.Experimental.Json;
 
 namespace CSharpUnionPlayground.Experimental.Smoke;
 
-public record Cash(decimal Amount);
-public record Card(string CardNumber, decimal Amount);
+public record Cash(decimal Amount)
+{
+    public AmbiguousValue Detail { get; init; }
+}
+public record Card(string CardNumber, decimal Amount)
+{
+    public AmbiguousValue Detail { get; init; }
+}
 public record TextValue(string Value);
 public record struct NumberValue(int Value);
 
@@ -15,7 +21,7 @@ public record struct NumberValue(int Value);
 [PlaygroundUnionCase(typeof(Card), "card")]
 public union CheckoutPayment(Cash, Card);
 
-[PlaygroundTaggedUnion(Discriminator = "kind")]
+[PlaygroundTaggedUnion]
 [PlaygroundUnionCase(typeof(TextValue), "text")]
 [PlaygroundUnionCase(typeof(NumberValue), "number")]
 public union AmbiguousValue(TextValue, NumberValue);
@@ -43,14 +49,18 @@ internal static class Program
         checks++;
     }
 
-    public static void Main()
+    public static void Main(string[] args)
     {
         Check(!JsonSerializer.IsReflectionEnabledByDefault, "JSON reflection must be disabled.");
+        if (args.Contains("--require-native"))
+            Check(!RuntimeFeature.IsDynamicCodeSupported, "Native AOT execution is required.");
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         options.Converters.Add(new CheckoutPaymentPlaygroundJsonConverter());
         options.Converters.Add(new AmbiguousValuePlaygroundJsonConverter());
         options.TypeInfoResolver = SmokeJsonContext.Default;
         var context = new SmokeJsonContext(options);
+
+        NestedUnionSample.VerifyRoundTrips(context, Check);
 
         foreach (CheckoutPayment payment in new CheckoutPayment[] { new Cash(100m), new Card("4111", 250m) })
         {
