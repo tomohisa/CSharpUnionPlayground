@@ -1,6 +1,6 @@
 # Payment JSON: 1ファイルずつの比較
 
-すべて「Cash(100) の Next に Card(4111, 250)」を持つ例です。各ファイルに、型定義・オブジェクト生成・シリアライズ・デシリアライズ・復元結果の確認をまとめています。タグは内外とも `$type`。成功時はJSONと `PASS` を表示します。
+すべて「Cash(100) の Next に Card(4111, 250)」を持つ例です。各ファイルに、型定義・オブジェクト生成・シリアライズ・デシリアライズ・復元結果の確認をまとめています。タグは内外とも `$type`。成功時はJSONと `PASS` を表示します。C#の各ファイルはswitch式による外側・内側のケース処理と、その結果も表示します。
 
 | ファイル | 方法 | 共通基底型 | 手書きコンバーター |
 |---|---|---|---|
@@ -68,7 +68,59 @@ dotnet publish samples/file-based/SourceGenerated.cs -c Release -r osx-arm64 -o 
 
 短い比較サンプルであり、全方式の入力検証ルールを同一にしたものではありません。手書きConverterは最小例で、Generator版の重複フィールド拒否などをすべて再実装していません。金額の数値表現も言語ごとに異なります（decimal / u64 / number）。
 
-## closed継承モデルとswitchの網羅性
+## switch式の比較
+
+4つのC#サンプルに同じ `Describe(Payment)` を置きました。JSONの変換方式とswitchの網羅性は別の仕組みです。
+
+**通常の基底型（JsonDerived.cs）:** Cash/Card以外も継承できるため、`_` の受け皿が必要です。
+
+```csharp
+static string Describe(Payment payment) => payment switch
+{
+    Cash cash => $"cash:{cash.Amount}",
+    Card card => $"card:{card.CardNumber}",
+    _ => throw new InvalidOperationException("Unknown payment case.")
+};
+```
+
+**closed階層（ClosedJsonDerived.cs）:** 非nullableなPaymentなら全ケースを列挙するだけです。
+
+```csharp
+static string Describe(Payment payment) => payment switch
+{
+    Cash cash => $"cash:{cash.Amount}",
+    Card card => $"card:{card.CardNumber}"
+};
+```
+
+**union（CustomConverter.cs / SourceGenerated.cs）:** `payment.Value` ではなくunion自体にswitchを書きます。`null` はunion内部の空のdefault値を扱います。`_` は置かないため、ケース追加時の警告を維持できます。
+
+```csharp
+static string Describe(Payment payment) => payment switch
+{
+    Cash cash => $"cash:{cash.Amount}",
+    Card card => $"card:{card.CardNumber}",
+    null => "empty"
+};
+```
+
+union版は `Describe(default)` が `"empty"` になることも実行確認します。非nullableケースのみのunionではコンパイラーがnull分岐の省略を警告しない場合がありますが、実際の空のdefault状態を安全に処理するため、ここでは明示しています。
+
+| 方式 | Card分岐を削除 | Cryptoケースを追加してswitch未更新 | 空の扱い |
+|---|---|---|---|
+| 通常の基底型＋`_` | ビルド成功（`_`に入る） | ビルド成功（`_`に入る） | 参照のnullも`_`に入る |
+| closed＋ケース列挙 | CS8509 | CS8509 | 入力がPayment?ならnull分岐も必要 |
+| union＋ケース列挙＋null | CS8509 | CS8509 | defaultはnull分岐で処理 |
+
+実サンプルを一時コピーして、全4方式の通常ビルド・分岐削除・ケース追加、および通常基底型のdiscard削除を検証します。13パターンすべて期待どおりでした。各サンプルではCS8509 / CS8655をエラーとして扱います。
+
+```bash
+python3 scripts/verify_payment_switch_comparison.py
+```
+
+なお、手書きコンバーター内のタグ文字列のswitchや生成コード内のswitchは、ここで比較する利用側の `Describe(Payment)` とは別です。未知のJSONタグを拒否するための分岐は引き続き必要です。
+
+## closed継承モデルの追加検証
 
 RC3の正しい構文は `public closed record Payment;` です。**closedは暗黙にabstractであり、`abstract closed` を併記するとCS9384になります。** ケースは `sealed record Cash(...) : Payment` / `sealed record Card(...) : Payment` と定義します。
 
