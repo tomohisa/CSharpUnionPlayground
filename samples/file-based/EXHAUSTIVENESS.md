@@ -1,6 +1,8 @@
 # Paymentのswitch / matchと網羅性の比較
 
-各ソースは、Cashの中にCardを持つPaymentをJSONから復元し、外側・内側を `describe` / `Describe` で処理します。JSONの型復元と、分岐の網羅性チェックは別の仕組みです。
+通常サンプルは利用コードだけを示し、assert・不正入力テストは [with-verification](with-verification/README.md) に分離しています。
+
+通常版は、Cashの中にCardを持つPaymentをJSONから復元し、`describe` / `Describe` の分岐結果を表示します。検証版では外側・内側の型・値や分岐結果も確認します。JSONの型復元と、分岐の網羅性チェックは別の仕組みです。
 
 ## 実測した比較
 
@@ -104,10 +106,10 @@ JSONのinterfaceを自動で具象型に復元できないため、標準encodin
 
 ```bash
 # JSON往復・内側と外側の分岐・不正な内側タグの拒否
-python3 scripts/run_payment_rust.py
-node samples/file-based/Payment.ts
-python3 scripts/run_payment_java.py
-go run samples/file-based/Payment.go
+python3 scripts/run_payment_rust.py samples/file-based/with-verification/Payment.rs
+node samples/file-based/with-verification/Payment.ts
+python3 scripts/run_payment_java.py samples/file-based/with-verification/Payment.java
+go run samples/file-based/with-verification/Payment.go
 
 # 実ソースを一時コピーして分岐漏れ・ケース追加・catch-allの影響を検証
 python3 scripts/verify_cross_language_payment_switches.py

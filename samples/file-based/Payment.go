@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"reflect"
 )
 
 // A marker interface groups cases; Go does not make it an exhaustive sum type.
@@ -95,15 +94,5 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(string(data))
-	if !reflect.DeepEqual(original, restored) {
-		panic("round trip failed")
-	}
-	if describe(restored) != "cash:100" || describe(restored.(Cash).Next) != "card:4111" {
-		panic("case matching failed")
-	}
-	fmt.Println("switch:", describe(restored), "->", describe(restored.(Cash).Next))
-	if _, err := unmarshal([]byte(`{"$type":"cash","amount":100,"next":{"$type":"unknown","next":null}}`)); err == nil {
-		panic("invalid nested Payment accepted")
-	}
-	fmt.Println("PASS")
+	fmt.Println(describe(restored))
 }

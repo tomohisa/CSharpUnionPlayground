@@ -74,6 +74,9 @@ An unreleased Source Generator prototype supports tagged union JSON without a co
 
 ## Run
 
+Default examples contain usage code only; assertions and runtime verification live in [with-verification](samples/file-based/with-verification/README.md).
+
+
 For nine independent single-source Payment examples (five C# approaches, Rust, TypeScript, Java, and Go), see [file-based samples](samples/file-based/README.md). See [switch/match exhaustiveness analysis](samples/file-based/EXHAUSTIVENESS.md) for compiler-verified comparisons, including sixteen Rust/TypeScript/Java/Go mutation fixtures. The C# closed hierarchy examples also verify Native AOT round trips, including standard InferClosedTypePolymorphism without JsonDerivedType case lists.
 
 ```bash

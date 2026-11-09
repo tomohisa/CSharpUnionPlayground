@@ -4,8 +4,10 @@ from pathlib import Path
 import json
 import subprocess
 import tempfile
+import sys
 
-source = Path(__file__).resolve().parents[1] / 'samples/file-based/Payment.rs'
+source = (Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else
+          Path(__file__).resolve().parents[1] / 'samples/file-based/Payment.rs')
 with tempfile.TemporaryDirectory(prefix='cupj-payment-rust-') as directory:
     manifest = Path(directory) / 'Cargo.toml'
     manifest.write_text('''[package]
