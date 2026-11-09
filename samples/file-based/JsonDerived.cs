@@ -1,0 +1,26 @@
+#:property TargetFramework=net11.0
+#:property LangVersion=preview
+#:property JsonSerializerIsReflectionEnabledByDefault=false
+
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+// 共通基底型 + 標準属性。内側のPaymentにも$typeが付く。
+Payment original = new Cash(100m, new Card("4111", 250m));
+string json = JsonSerializer.Serialize(original, PaymentContext.Default.Payment);
+Payment restored = JsonSerializer.Deserialize(json, PaymentContext.Default.Payment)!;
+Console.WriteLine(json);
+if (restored is not Cash { Amount: 100m, Next: Card { CardNumber: "4111", Amount: 250m } })
+    throw new Exception("Round trip failed.");
+Console.WriteLine("PASS");
+
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
+[JsonDerivedType(typeof(Cash), "cash")]
+[JsonDerivedType(typeof(Card), "card")]
+public abstract record Payment;
+public record Cash(decimal Amount, Payment? Next = null) : Payment;
+public record Card(string CardNumber, decimal Amount, Payment? Next = null) : Payment;
+
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSerializable(typeof(Payment))]
+internal partial class PaymentContext : JsonSerializerContext;

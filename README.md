@@ -74,6 +74,8 @@ An unreleased Source Generator prototype supports tagged union JSON without a co
 
 ## Run
 
+For five independent single-source Payment examples (three C# approaches, Rust, and TypeScript), see [file-based samples](samples/file-based/README.md).
+
 ```bash
 dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj
 dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj --filter FullyQualifiedName~UnionRc3Tests
