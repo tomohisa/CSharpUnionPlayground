@@ -9,6 +9,14 @@ enum Payment {
     Card { card_number: String, amount: u64, next: Option<Box<Payment>> },
 }
 
+// No wildcard: adding a variant or omitting an arm is a compiler error (E0004).
+fn describe(payment: &Payment) -> String {
+    match payment {
+        Payment::Cash { amount, .. } => format!("cash:{amount}"),
+        Payment::Card { card_number, .. } => format!("card:{card_number}"),
+    }
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let original = Payment::Cash {
         amount: 100,
@@ -20,6 +28,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let restored: Payment = serde_json::from_str(&json)?;
     println!("{json}");
     assert_eq!(original, restored);
+    let Payment::Cash { next: Some(ref inner), .. } = restored else { panic!("Expected nested Cash/Card") };
+    assert_eq!(describe(&restored), "cash:100");
+    assert_eq!(describe(inner), "card:4111");
+    println!("match: {} -> {}", describe(&restored), describe(inner));
     // Serdeは内側のケースも検証する。
     assert!(serde_json::from_str::<Payment>(
         r#"{"$type":"cash","amount":100,"next":{"$type":"unknown"}}"#

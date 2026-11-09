@@ -74,7 +74,7 @@ An unreleased Source Generator prototype supports tagged union JSON without a co
 
 ## Run
 
-For six independent single-source Payment examples (four C# approaches including closed hierarchies, Rust, and TypeScript), see [file-based samples](samples/file-based/README.md). The closed hierarchy example includes Native AOT round-trip verification and seven compiler exhaustiveness fixtures.
+For eight independent single-source Payment examples (four C# approaches, Rust, TypeScript, Java, and Go), see [file-based samples](samples/file-based/README.md). See [switch/match exhaustiveness analysis](samples/file-based/EXHAUSTIVENESS.md) for compiler-verified comparisons, including sixteen Rust/TypeScript/Java/Go mutation fixtures. The C# closed hierarchy example also includes Native AOT round-trip verification.
 
 ```bash
 dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj
