@@ -6,6 +6,7 @@
 |---|---|---|---|
 | [JsonDerived.cs](JsonDerived.cs) | 標準の JsonPolymorphic / JsonDerivedType | 必要 | 不要 |
 | [ClosedJsonDerived.cs](ClosedJsonDerived.cs) | closed 継承モデル + JsonDerivedType + switch網羅性 | 必要 | 不要 |
+| [ClosedInferredJson.cs](ClosedInferredJson.cs) | closed派生型の自動推論（ケース列挙不要） | 必要 | 不要 |
 | [CustomConverter.cs](CustomConverter.cs) | C# union + 専用コンバーター | 不要 | 必要（同ファイル内） |
 | [SourceGenerated.cs](SourceGenerated.cs) | C# union + 実験版Generator | 不要 | 不要 |
 | [Payment.rs](Payment.rs) | Rust enum + Serde | 不要 | 不要 |
@@ -22,6 +23,7 @@
 ```bash
 dotnet run --file samples/file-based/JsonDerived.cs
 dotnet run --file samples/file-based/ClosedJsonDerived.cs
+dotnet run --file samples/file-based/ClosedInferredJson.cs
 dotnet run --file samples/file-based/CustomConverter.cs
 dotnet run --file samples/file-based/SourceGenerated.cs
 python3 scripts/run_payment_rust.py
@@ -30,7 +32,7 @@ python3 scripts/run_payment_java.py
 go run samples/file-based/Payment.go
 ```
 
-C#は固定済みの.NET 11 RC3を使います。各 `.cs` はfile-based appで、専用 `.csproj` は不要です。Generator版だけは `#:project` で既存のGeneratorをAnalyzer参照します（外部配布版ではありません）。JSONリフレクションは全4方式で無効にしています。
+C#は固定済みの.NET 11 RC3を使います。各 `.cs` はfile-based appで、専用 `.csproj` は不要です。Generator版だけは `#:project` で既存のGeneratorをAnalyzer参照します（外部配布版ではありません）。JSONリフレクションは全5方式で無効にしています。
 
 Rustは安定版CargoとSerdeを使用します。補助スクリプトが一時ディレクトリに依存用 `Cargo.toml` を作り、リポジトリの `Payment.rs` を直接ビルドします。ソース本体は1ファイルで、Cargoプロジェクトをリポジトリに追加する必要はありません。初回は依存のダウンロードが必要です。再帰enumのサイズを有限にするため `Box<Payment>` を使用します。
 
@@ -56,7 +58,7 @@ JsonDerived / ClosedJsonDerived / Rust / TypeScript / Java / Go は、型判別�
 
 ## Native AOTでの確認
 
-C# 4ファイルすべてでmacOS arm64へのNative AOT発行・ネイティブ実行を確認し、各 `PASS` を確認しました。file-based appはNative AOT発行が既定です。
+C# 5ファイルすべてでmacOS arm64へのNative AOT発行・ネイティブ実行を確認し、各 `PASS` を確認しました。file-based appはNative AOT発行が既定です。
 
 ```bash
 dotnet publish samples/file-based/JsonDerived.cs -c Release -r osx-arm64 -o /tmp/payment-derived
@@ -64,6 +66,9 @@ dotnet publish samples/file-based/JsonDerived.cs -c Release -r osx-arm64 -o /tmp
 
 dotnet publish samples/file-based/ClosedJsonDerived.cs -c Release -r osx-arm64 -o /tmp/payment-closed
 /tmp/payment-closed/ClosedJsonDerived --require-native
+
+dotnet publish samples/file-based/ClosedInferredJson.cs -c Release -r osx-arm64 -o /tmp/payment-inferred
+/tmp/payment-inferred/ClosedInferredJson --require-native
 
 dotnet publish samples/file-based/CustomConverter.cs -c Release -r osx-arm64 -o /tmp/payment-converter
 /tmp/payment-converter/CustomConverter
@@ -76,9 +81,52 @@ dotnet publish samples/file-based/SourceGenerated.cs -c Release -r osx-arm64 -o 
 
 短い比較サンプルであり、全方式の入力検証ルールを同一にしたものではありません。手書きConverterは最小例で、Generator版の重複フィールド拒否などをすべて再実装していません。金額の数値表現も言語ごとに異なります（decimal / u64 / number / long / int64）。
 
+## closed派生型を自動登録する標準機能
+
+[ClosedInferredJson.cs](ClosedInferredJson.cs) は、既存のClosedJsonDerived版から `JsonDerivedType` のリストを削除し、次の属性だけで派生ケースを登録します。独自Generatorや専用Converterは不要です。
+
+```csharp
+[JsonPolymorphic(InferClosedTypePolymorphism = true)]
+public closed record Payment;
+public sealed record Cash(decimal Amount, Payment? Next = null) : Payment;
+public sealed record Card(string CardNumber, decimal Amount, Payment? Next = null) : Payment;
+
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSerializable(typeof(Payment))]
+internal partial class PaymentContext : JsonSerializerContext;
+```
+
+**Native AOTでも使用できました。** macOS arm64向けRelease発行・ネイティブ実行でPASSし、動的コード生成・JSONリフレクションともに無効であることを確認しています。標準のSystem.Text.Jsonソース生成が、基底型から派生型のメタデータを作ります。contextへのCash/Cardの個別登録も不要です。通常のJSON呼び出しは他のサンプル同様、生成済み `PaymentContext.Default.Payment` を渡します。
+
+自動判別子は型の単純名で、camelCase設定でも変更されません:
+
+```json
+{"$type":"Cash","amount":100,"next":{"$type":"Card","cardNumber":"4111","amount":250,"next":null}}
+```
+
+明示登録版の `"cash"` / `"card"` と自動推論版の `"Cash"` / `"Card"` は異なる契約です。型名をDebitCardに変えると判別子も `"DebitCard"` になります。長期保存や外部APIでタグの安定性が必要なら、明示的な `JsonDerivedType` を選びます。同名の型がある場合も自動判別子の衝突を考慮します。
+
+検証スクリプト:
+
+```bash
+python3 scripts/verify_closed_inferred_json.py
+```
+
+5パターンすべて成功しました:
+
+1. 型レベルの `JsonPolymorphic(InferClosedTypePolymorphism = true)` で往復。
+2. 型属性の代わりに `JsonSourceGenerationOptions(InferClosedTypePolymorphism = true)` でも往復。
+3. Cryptoケースを追加してswitch未更新ならCS8509。
+4. switchを更新すればCryptoもJSON登録・context登録の追加なしで往復。
+5. 型名をCardからDebitCardへ変更すると自動判別子も変更。
+
+型レベルの属性がない場合、実行時の `JsonSerializerOptions` だけで推論を有効にしても、AOT用の派生メタデータは後から追加されません。標準ソース生成に認識される型属性または `JsonSourceGenerationOptions` を使います。明示的な `JsonDerivedType` の登録は推論リストに追加されるのではなく、その階層の推論を置き換えます。
+
+公式資料: [Infer polymorphism from a closed hierarchy](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/polymorphism#infer-polymorphism-from-a-closed-hierarchy)。
+
 ## switch式の比較
 
-4つのC#サンプルに同じ `Describe(Payment)` を置きました。JSONの変換方式とswitchの網羅性は別の仕組みです。
+5つのC#サンプルに同じ `Describe(Payment)` を置きました。JSONの変換方式とswitchの網羅性は別の仕組みです。
 
 **通常の基底型（JsonDerived.cs）:** Cash/Card以外も継承できるため、`_` の受け皿が必要です。
 
