@@ -7,7 +7,7 @@
 | 型・サンプル | 分岐 | Cardの分岐削除 | Cryptoケース追加・分岐未更新 | catch-allの影響 |
 |---|---|---|---|---|
 | C# 通常のabstract＋JsonDerived | switch式＋`_` | ビルド成功 | ビルド成功 | `_`が漏れを隠す |
-| C# closed＋JsonDerived | switch式、`_`なし | CS8509 | CS8509 | `_`を追加すれば漏れを隠す |
+| C# closed＋JsonDerived／自動推論 | switch式、`_`なし | CS8509 | CS8509 | `_`を追加すれば漏れを隠す |
 | C# union（手書き／生成Converter） | union自体のswitch式＋`null` | CS8509 | CS8509 | nullだけなら新ケースのチェックを維持 |
 | Rust enum | `match`、ワイルドカードなし | E0004 | E0004 | `_`を追加すれば漏れを隠す |
 | TypeScript union | switch＋`never`への代入 | TS2322 | TS2322 | 普通のdefaultでは隠れるが、never検証なら検出 |
@@ -15,6 +15,8 @@
 | Go marker interface | type switch＋default | ビルド成功 | ビルド成功 | コンパイラーは実装型の網羅性を検査しない |
 
 C#のCS8509は本来警告ですが、サンプルではエラー扱いです。Rust/TypeScript/Javaは上記構成で型チェックのエラーになります。いずれも型定義を変更して利用側も再コンパイルした結果です。配布済みバイナリーへ新ケースが来る場合の保証とは異なります。
+
+[ClosedInferredJson.cs](ClosedInferredJson.cs) の `InferClosedTypePolymorphism` はJSONの登録を自動化しますが、switchの網羅性は同じclosed階層の機能です。新ケース追加時はswitchの更新が必要です。自動JSON登録・ケース追加・型名変更については `python3 scripts/verify_closed_inferred_json.py` の5パターンで検証しています。
 
 ## Rust: enumとmatchが直接対応
 
