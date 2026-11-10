@@ -45,6 +45,8 @@ def render_index(destination):
         projection_name = 'projection-wasi' if suite == 'wasi' else 'projection'
         if suite in ['projection', 'wasi'] and (destination / (projection_name + '-domain.json')).exists():
             report = read(destination / (projection_name + '-domain.json'))
+            if suite == 'projection':
+                lines += ['`typescript-native` is the simple projection. `typescript-zod-native` additionally validates/clones payload data only for matching handlers; this cost is included in projection time. Unknown event kinds are still ignored. No JSON parsing is included in this projection test.', '']
             if suite == 'wasi':
                 lines += ['C# native is speed-optimized Native AOT; C# WASI is LLVMOnly AOT with SIMD/-O3, with no interpreter fallback. Rust uses optimized release/LTO with native ISA or Wasm SIMD. Wasmtime RSS includes the host runtime, not just guest memory.', '']
             lines += [f'[Domain details]({projection_name}-domain.md) / [Fanout details]({projection_name}-fanout.md).', '',
@@ -61,6 +63,23 @@ def render_index(destination):
                 copied = f"{c['projectionSeconds']:.3f}" if c['status'] == 'ok' else c['status']
                 rss = f"{a['peakRssMiB']:.1f}" if a['status'] == 'ok' else '—'
                 lines.append(f'| {name} | {seconds} | {copied} | {rss} |')
+            fanout_path = destination / (projection_name + '-fanout.json')
+            if fanout_path.exists():
+                fanout = read(fanout_path)
+                lines += ['', 'One million events, sequential fanout, indexed-append:', '',
+                          '| implementation | dense seconds | wide seconds | dense RSS MiB | wide RSS MiB |',
+                          '|---|---:|---:|---:|---:|']
+                for name in fanout['commands']:
+                    cases = {r['profile']: r for r in fanout['results'] if r['implementation'] == name
+                             and r['events'] == 1000000 and r['mode'] == 'indexed-append'}
+                    if not cases:
+                        continue
+                    times, memory = [], []
+                    for profile in ['dense', 'wide']:
+                        row = cases.get(profile, {'status': 'not-measured'})
+                        times.append(f"{row['projectionSeconds']:.3f}" if row['status'] == 'ok' else row['status'])
+                        memory.append(f"{row['peakRssMiB']:.1f}" if row['status'] == 'ok' else '—')
+                    lines.append(f'| {name} | {times[0]} | {times[1]} | {memory[0]} | {memory[1]} |')
             lines += ['', '`timeout` means the 25s process budget expired. `not-run-after-budget` means '
                       'an earlier smaller size exceeded a budget and this point was not run. '
                       'The projection stopping budget is 8s.', '']

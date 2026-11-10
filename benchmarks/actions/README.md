@@ -15,7 +15,7 @@ gh workflow run benchmarks-intel.yml -f suite=json -f json_roots=200000 -F publi
 gh workflow run benchmarks-intel.yml -f suite=all -f json_roots=200000 -F publish=true
 ```
 
-Projection runs the fanout dense/wide sweep up to one million events and the domain/dense append/copy sweep up to ten million. Both use two samples, a 25s process timeout and an 8s projection-time stopping budget. A timeout in an intentionally slow mode is recorded as an observation. Unexpected runtime errors, unavailable host implementations and incorrect results fail the job and prevent publication.
+Projection includes simple TypeScript and TypeScript with Zod payload validation, alongside the other five languages. It runs the fanout dense/wide sweep up to one million events and the domain/dense append/copy sweep up to ten million. Both use two samples, a 25s process timeout and an 8s projection-time stopping budget. A timeout in an intentionally slow mode is recorded as an observation. Unexpected runtime errors, unavailable host implementations and incorrect results fail the job and prevent publication.
 
 The JSON suite uses five large batches and a configurable fixed root count (default 200,000); it does not calibrate to ten seconds on this 14GB runner. Set 729,000 explicitly to request the same root count as the ARM run, considering that peak memory and runtime may be considerably higher. Counts are saved with the results. The host-only suites omit WASI; the dedicated wasi suite below retains paired AOT results separately.
 
@@ -34,3 +34,5 @@ gh workflow run benchmarks-intel.yml -f suite=wasi -f wasi_json_roots=200000 -F 
 Projectionは既存と同じサイズ、fanout/domain配送、モード、予算です。JSONは両バックエンドとも20万ルート×5回で、既存Intelと同じ件数です。C#の処理本体をLLVMOnly AOTでWasmへコンパイルし、SIMD・clang -O3を有効にします。通常実行もNative AOT Speed/ホスト命令セット、Rustは両方LTOとターゲット向け最適化です。`wasi_json_roots`で増やせます。1プロセスのJSONタイムアウトは30分、ジョブ上限は180分です。タイムアウトを完了時間として扱いません。
 
 結果は`union100-wasi.md` / `.json`、`projection-wasi-fanout.md` / `.json`、`projection-wasi-domain.md` / `.json`、`environment-wasi.json`です。通常のJSON・Projection結果を保持して追加します。ホストのC#はNative AOT、WASIはLLVMOnly AOTであり、WASI RSSはWasmtimeのコンパイル・ランタイムも含みます。
+
+Different suites may measure on separate Intel runner VMs concurrently. Same-suite runs and result publication are serialized; updates retain the other suites. Projection event handlers themselves remain sequential.
