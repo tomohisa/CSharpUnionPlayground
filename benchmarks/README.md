@@ -6,3 +6,5 @@
 どちらもコマンドラインで起動でき、処理時間、最大RSS、起動・準備・終了時間を保存します。`--quick`は動作確認用です。実測は各ディレクトリの`observed/`にあります。ハードウェア・ランタイム・具体的な実装に依存する結果で、言語全体の優劣を示すものではありません。
 
 Intel実行とデータ更新は[GitHub Actionsの手順](actions/README.md)を参照してください。Mac ARMの計測とは別のスナップショットに保存します。
+
+Intelの[結果一覧](observed/macos-intel-actions/README.md)から、[UNION JSON往復](observed/macos-intel-actions/union100.md)と[Projection](observed/macos-intel-actions/projection-domain.md)を参照できます。

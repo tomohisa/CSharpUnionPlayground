@@ -81,12 +81,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - name: Replace the previous Intel snapshot
-        run: rm -rf benchmarks/observed/macos-intel-actions
       - uses: actions/download-artifact@v4
         with:
           name: intel-benchmark-results
-          path: benchmarks/observed/macos-intel-actions/
+          path: ${{ runner.temp }}/intel-benchmark-results/
+      - name: Merge the completed suite and retain other results
+        run: python3 benchmarks/actions/publish_intel.py "$RUNNER_TEMP/intel-benchmark-results" benchmarks/observed/macos-intel-actions
       - name: Commit measured results
         run: |
           git config user.name 'github-actions[bot]'
