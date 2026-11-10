@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "885c6a55cbfaf8a4f00331ae2cf02c96def9fc89",
+  "sourceCommit": "6c092405388c3b5b937b19ae93e75f3f6013977f",
   "suite": "projection",
   "files": {
     "projection": {
@@ -14,6 +14,10 @@
       "typescript-native": {
         "path": "code/projection/typescript/projection.ts",
         "sha256": "406e2a09ee321e8204c8562d90c5c96b7f6542bf3733c12bb30be469f3974d59"
+      },
+      "typescript-zod-native": {
+        "path": "code/projection/typescript-zod/projection-zod.ts",
+        "sha256": "6a4907b3c35970c153d099da088f17417df3a5a1109b7fd9cd27db752beeca67"
       },
       "java-native": {
         "path": "code/projection/java/Projection.java",
