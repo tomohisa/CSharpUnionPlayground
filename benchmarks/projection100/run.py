@@ -53,7 +53,7 @@ def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,
         print('Building '+language,flush=True)
         if language=='csharp':
             if 'native' in engines:
-                extra=harness.jit_publish_args(sources/'Projection.csproj') if csharp_mode=='jit-pgo' else (['-p:OptimizationPreference=Speed','-p:IlcInstructionSet=native'] if 'wasi' in engines else [])
+                extra=harness.jit_publish_args(sources/'Projection.csproj') if csharp_mode=='jit-pgo' else ['-p:OptimizationPreference=Speed','-p:IlcInstructionSet=native']
                 harness.run(['dotnet','publish',sources/'Projection.csproj','-c','Release','-r',rid,'-o',out]+extra)
                 commands['csharp-native']=harness.jit_command(out,'Projection') if csharp_mode=='jit-pgo' else [str(out/'Projection')]
             if 'wasi' in engines:

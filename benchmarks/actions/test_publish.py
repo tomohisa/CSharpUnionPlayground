@@ -112,16 +112,20 @@ class MergePublicationTests(unittest.TestCase):
         wasm={**host,'summary':[row(n+'-wasi') for n in names[:6]],'errors':{}}
         self.write(self.source/'union100.json',host)
         self.write(self.source/'union100-wasi.json',wasm)
-        for name in publisher.PROJECTION_FILES+publisher.WASI_FILES:
+        for name in publisher.PROJECTION_FILES+publisher.WASI_FILES+publisher.AOT_FILES:
             if name.startswith('union100'):continue
             if name.endswith('.json'):self.write(self.source/name,{'commands':{},'results':[],'nativeConfiguration':{'csharpMode':'jit-pgo'}})
             else:(self.source/name).write_text('projection')
         (self.source/'union100-wasi.md').write_text('WASM only')
-        for suite in ['json','projection','wasi']:
-            kinds=['json','projection'] if suite=='wasi' else [suite]
+        (self.source/'union100-aot.md').write_text('AOT only')
+        self.write(self.source/'union100-aot.json',{**host,'summary':[row(n) for n in names[:5]],'nativeConfiguration':{'csharpMode':'aot','abstractNet10':True}})
+        for name in ['projection-aot-domain.json','projection-aot-fanout.json']:
+            self.write(self.source/name,{'commands':{'csharp-native':[]},'results':[],'nativeConfiguration':{'csharpMode':'aot'}})
+        for suite in ['json','projection','wasi','aot']:
+            kinds=['json','projection'] if suite in ['wasi','aot'] else [suite]
             manifest={'sourceCommit':'abc','files':{}}
             for kind in kinds:
-                items=names if kind=='json' and suite!='wasi' else names[:6] if kind=='json' else ['csharp','rust']
+                items=names[:5] if kind=='json' and suite=='aot' else ['csharp'] if suite=='aot' else names if kind=='json' and suite!='wasi' else names[:6] if kind=='json' else ['csharp','rust']
                 entries=manifest['files'][kind]={}
                 for item in items:
                     key=item+('-wasi' if suite=='wasi' else '-native' if kind=='projection' else '')
@@ -137,7 +141,9 @@ class MergePublicationTests(unittest.TestCase):
         self.assertIn('One combined job / one VM',index)
         self.assertNotIn('Unmatched runs',index)
         self.assertEqual(index.count('| WASM AOT |'),6)
-        for suite in ['json','projection','wasi']:
+        self.assertEqual(index.count('/ Native AOT Speed / native ISA |'),5)
+        self.assertIn('.NET 10 / Native AOT Speed / native ISA',index)
+        for suite in ['json','projection','wasi','aot']:
             self.assertEqual(publisher.read(self.target/f'environment-{suite}.json')['comparisonGroup'],'one-job#1')
 
     def test_combined_count_mismatch_is_rejected_before_writes(self):
@@ -153,6 +159,29 @@ class MergePublicationTests(unittest.TestCase):
         self.write(self.source/'union100.json',report)
         with self.assertRaisesRegex(ValueError,'JIT\+PGO'):publisher.publish(self.source,self.target)
         self.assertFalse((self.target/'union100.json').exists())
+
+    def test_combined_rejects_aot_abstract_on_different_framework(self):
+        self.combined_input()
+        report=publisher.read(self.source/'union100-aot.json');report['nativeConfiguration']['abstractNet10']=False
+        self.write(self.source/'union100-aot.json',report)
+        with self.assertRaisesRegex(ValueError,'AOT abstract'):publisher.publish(self.source,self.target)
+        self.assertFalse((self.target/'union100.json').exists())
+
+    def test_projection_keeps_both_native_modes_in_same_table(self):
+        env={**self.env,'comparisonGroup':'job','runAttempt':'1','sourceCommit':'abc'}
+        for suite in ['projection','aot']:
+            self.write(self.target/f'environment-{suite}.json',env)
+        def projection(mode,seconds):
+            return {'commands':{'csharp-native':[]},'nativeConfiguration':{'csharpMode':mode},
+                    'results':[{'implementation':'csharp-native','events':10000000,'profile':'dense',
+                                'mode':m,'status':'ok','projectionSeconds':seconds,'peakRssMiB':20}
+                               for m in ['indexed-append','indexed-copy']]}
+        self.write(self.target/'projection-domain.json',projection('jit-pgo',1))
+        self.write(self.target/'projection-aot-domain.json',projection('aot',.5))
+        publisher.render_index(self.target)
+        index=(self.target/'README.md').read_text()
+        self.assertIn('| csharp | Native | .NET 11 / Release JIT + Dynamic PGO | 1.000 |',index)
+        self.assertIn('| csharp | Native | .NET 11 / Native AOT Speed / native ISA | 0.500 |',index)
 
     def decoder_input(self):
         import hashlib

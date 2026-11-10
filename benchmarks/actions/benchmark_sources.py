@@ -12,9 +12,11 @@ def capture_sources(destination, suite, source_commit, source_roots):
         shutil.rmtree(code)
     code.mkdir(parents=True)
     manifest = {'sourceCommit': source_commit, 'suite': suite, 'files': {}}
-    kinds = ['json', 'projection'] if suite in ['all', 'wasi'] else [suite]
+    kinds = ['json', 'projection'] if suite in ['all', 'wasi', 'aot'] else [suite]
     for kind in kinds:
         report_name = ('union100' if kind == 'json' else 'projection-domain')
+        if suite == 'aot':
+            report_name = 'union100-aot' if kind == 'json' else 'projection-aot-domain'
         if suite == 'wasi':
             report_name = 'union100-wasi' if kind == 'json' else 'projection-wasi-domain'
         report = json.loads((destination / (report_name + '.json')).read_text())
@@ -35,7 +37,7 @@ def capture_sources(destination, suite, source_commit, source_roots):
                                  'typescript-zod': 'projection-zod.ts', 'java': 'Projection.java',
                                  'go': 'projection.go', 'swift': 'Projection.swift'}[base])
             source = Path(source_roots[kind]) / relative
-            target = code / (kind if suite == 'wasi' else '') / base / source.name
+            target = code / (kind if suite in ['wasi','aot'] else '') / base / source.name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
             entries[implementation] = {'path': target.relative_to(destination).as_posix(),
