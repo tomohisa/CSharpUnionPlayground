@@ -164,3 +164,14 @@ Rust/TypeScript/Java/Goは、各4パターンの計16コンパイル検証がす
 - [Jackson: polymorphic type handling](https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization)
 - [Go: type switches](https://go.dev/ref/spec#Type_switches)
 - [Go: encoding/json](https://pkg.go.dev/encoding/json)
+
+## Zodから導出したTypeScript union
+
+`PaymentZod.ts` でも `z.infer<typeof PaymentSchema>` と同じnever代入を使います。固定したTypeScript 7.0.2 / Zod 4.6.7で、実サンプルから作る3パターンを検証しました。
+
+```bash
+npm ci --prefix samples/file-based
+python3 scripts/verify_zod_payment_switches.py
+```
+
+全ケースは成功、Card分岐削除はTS2322、スキーマへのCrypto追加・switch未更新もTS2322でした。Zodの実行時検証と、TypeScriptコンパイラーの網羅性検査は別です。このスクリプトは後者を検証します。
