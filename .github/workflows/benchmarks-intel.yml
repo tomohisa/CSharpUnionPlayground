@@ -1,0 +1,97 @@
+name: Intel benchmarks
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Benchmark suite
+        type: choice
+        options: [projection, all, json]
+        default: projection
+      json_roots:
+        description: JSON roots (fixed count for the 14 GB runner)
+        type: number
+        default: 200000
+      publish:
+        description: Update tracked Intel results on main after a successful run
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: intel-benchmarks
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: macos-15-intel
+    timeout-minutes: 90
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+      BENCHMARK_SUITE: ${{ inputs.suite }}
+      JSON_ROOTS: ${{ inputs.json_roots }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.4'
+          cache: false
+      - name: Set Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+      - name: Capture Intel host and run benchmarks sequentially
+        run: python3 benchmarks/actions/run_intel.py --suite "$BENCHMARK_SUITE" --json-roots "$JSON_ROOTS"
+      - name: Publish job summary
+        if: always()
+        run: |
+          for report in benchmarks/observed/macos-intel-actions/*.md; do
+            if [ -f "$report" ]; then cat "$report" >> "$GITHUB_STEP_SUMMARY"; fi
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: intel-benchmark-results
+          path: benchmarks/observed/macos-intel-actions/
+          if-no-files-found: warn
+          retention-days: 90
+
+  update-data:
+    needs: benchmark
+    if: inputs.publish && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Replace the previous Intel snapshot
+        run: rm -rf benchmarks/observed/macos-intel-actions
+      - uses: actions/download-artifact@v4
+        with:
+          name: intel-benchmark-results
+          path: benchmarks/observed/macos-intel-actions/
+      - name: Commit measured results
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add benchmarks/observed/macos-intel-actions
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update Intel benchmark observations'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
