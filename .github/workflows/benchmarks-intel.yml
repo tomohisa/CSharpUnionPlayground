@@ -96,6 +96,7 @@ jobs:
           path: |
             benchmarks/observed/macos-intel-actions/*.json
             benchmarks/observed/macos-intel-actions/*.md
+            benchmarks/observed/macos-intel-actions/code/**
           if-no-files-found: warn
           retention-days: 90
 

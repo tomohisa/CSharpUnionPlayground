@@ -141,7 +141,71 @@ RC3 SDKの互換対応として、トリミング済みDLLのみをAOT入力に�
 
 起動にはWasmtimeによるコンパイルも含まれ、RSSはWasmtime全体です。WASIの失敗・時間超過はJSONの`errors`に理由を記録し、成功した計測値として扱いません。20万ルート×5回が標準で、元のIntel JSON比較と同じ件数です。ARMの72.9万ルートの表とは件数が違います。
 
-## TypeScriptの読み込み方式を分ける
+## ts-simple / ts-manual / ts-zod のコードの違い
+
+3方式とも入力・JSON.stringify・switch・件数・回数は同じです。違うのは、JSONを読み込む`parse`の部分です。表示名とCLIの実装IDは次の対応です。
+
+| 表示名 | CLI ID | decodeで行うこと | 計測に使った生成済みソース |
+|---|---|---|---|
+| ts-simple | `typescript-simple` | JSON.parseだけ。型アサーションであり、実行時の型検証なし | [全コード](../observed/macos-intel-actions/code/json/typescript-simple/benchmark-simple.ts) |
+| ts-manual | `typescript` | JSON.parse＋手書きの再帰チェック | [全コード](../observed/macos-intel-actions/code/json/typescript/benchmark.ts) |
+| ts-zod | `typescript-zod` | JSON.parse＋Zodの再帰スキーマ検証・結果オブジェクト生成 | [全コード](../observed/macos-intel-actions/code/json/typescript-zod/benchmark-zod.ts) |
+
+### ts-simple
+
+```typescript
+function parse(json: string): Payment[] {
+  return JSON.parse(json) as Payment[];
+}
+```
+
+`as Payment[]`は型検証を行いません。不正な入力でも、この関数だけでは拒否しません。
+
+### ts-manual
+
+```typescript
+function parse(json: string): Payment[] {
+  const nodes: unknown = JSON.parse(json);
+  function validate(p: any): void {
+    if (!p || typeof p.$type !== "string" || !/^Case\d{3}$/.test(p.$type)
+        || Number(p.$type.slice(4)) >= 100) throw Error("Invalid case");
+    const d = p.data;
+    if (!d || !Number.isInteger(d.id) || typeof d.label !== "string"
+        || !Array.isArray(d.values) || !d.values.every(Number.isInteger)
+        || !d.tags || Array.isArray(d.tags) || typeof d.tags !== "object"
+        || !Object.values(d.tags).every(v => typeof v === "string"))
+      throw Error("Invalid payload");
+    if (d.next !== null) validate(d.next);
+  }
+  if (!Array.isArray(nodes)) throw Error("Invalid batch");
+  nodes.forEach(validate);
+  return nodes as Payment[];
+}
+```
+
+読み込んだオブジェクトを再帰的にチェックし、そのオブジェクトを返します。従来の`typescript`という行はこの方式です。Zodの数値ではありません。
+
+### ts-zod
+
+```typescript
+import { z } from "zod";
+
+const PayloadSchema: z.ZodType<Payload> = z.object({
+  id: z.number().int(), label: z.string(), values: z.array(z.number().int()),
+  tags: z.record(z.string(), z.string()),
+  next: z.lazy(() => PaymentSchema).nullable()
+});
+const PaymentSchema: z.ZodType<Payment> = z.discriminatedUnion("$type", [
+  z.object({ $type: z.literal("Case000"), data: PayloadSchema }),
+  // 実コードではCase001〜Case099も同様に列挙
+]);
+const BatchSchema = z.array(PaymentSchema);
+function parse(json: string): Payment[] {
+  return BatchSchema.parse(JSON.parse(json));
+}
+```
+
+Zodは型判別子とネストした各フィールドを検証し、検証済みのオブジェクトを作ります。この検証・オブジェクト生成もdecode時間とメモリ使用量に含めます。スキーマ構築とパッケージ導入は計測区間外です。Zodの版はサンプルのpackage-lockに固定し、結果のtoolchainsにも記録します。
 
 ```bash
 python3 benchmarks/union100/run.py \
@@ -149,8 +213,4 @@ python3 benchmarks/union100/run.py \
   --roots 200000 --samples 5
 ```
 
-- `typescript-simple`: `JSON.parse`の結果を型アサーションで受け取るだけ。外部入力の型安全性は保証しません。
-- `typescript-zod`: `JSON.parse`の後、Zodの再帰的な`discriminatedUnion`で100ケースと全フィールドを検証し、検証済みオブジェクトを作ります。この処理と割り当てをdecode時間に含めます。
-- `typescript`: 従来の手書き再帰検証。過去の観測値の意味を変えず、比較用に残します。
-
-入力・JSON.stringify・switch・ウォームアップ・回数・結果検証は共通です。Zodのスキーマ構築とパッケージの導入は計測区間外です。Zodの版はサンプルのpackage-lockに固定し、結果のtoolchainsにも記録します。通常の全実装実行にも新しい2方式を含めます。
+[結果一覧](../observed/macos-intel-actions/README.md)の各実装名にも、その計測の生成済みソースへのリンクがあります。単純な2ケースの利用例は[通常TS](../../samples/file-based/Payment.ts) / [Zod版](../../samples/file-based/PaymentZod.ts)です。

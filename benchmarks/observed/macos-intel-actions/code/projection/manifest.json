@@ -1,0 +1,32 @@
+{
+  "sourceCommit": "885c6a55cbfaf8a4f00331ae2cf02c96def9fc89",
+  "suite": "projection",
+  "files": {
+    "projection": {
+      "csharp-native": {
+        "path": "code/projection/csharp/Program.cs",
+        "sha256": "7b3174f2f776386d4285f9c09850bbb4c2f1ea6ef1dcdd260f29369cccfa8d99"
+      },
+      "rust-native": {
+        "path": "code/projection/rust/projection.rs",
+        "sha256": "89b9f8b536bac0d75b84884cb88f8e7db624a77e0b6cda933572713beea580a4"
+      },
+      "typescript-native": {
+        "path": "code/projection/typescript/projection.ts",
+        "sha256": "406e2a09ee321e8204c8562d90c5c96b7f6542bf3733c12bb30be469f3974d59"
+      },
+      "java-native": {
+        "path": "code/projection/java/Projection.java",
+        "sha256": "c0dceb35a0e9c0eb01c68edb288309e29faae96863f53f19e6687db7eb837838"
+      },
+      "go-native": {
+        "path": "code/projection/go/projection.go",
+        "sha256": "cfe2ad79952038812f935d7ef2eb6807994ca17f152c05ebb38cc1cc6090172b"
+      },
+      "swift-native": {
+        "path": "code/projection/swift/Projection.swift",
+        "sha256": "c147396ce0944cd4ee8f329c9d7f30f3e01caf082825402137abebed61b20bda"
+      }
+    }
+  }
+}

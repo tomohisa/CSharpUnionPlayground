@@ -36,3 +36,5 @@ Projectionは既存と同じサイズ、fanout/domain配送、モード、予算
 結果は`union100-wasi.md` / `.json`、`projection-wasi-fanout.md` / `.json`、`projection-wasi-domain.md` / `.json`、`environment-wasi.json`です。通常のJSON・Projection結果を保持して追加します。ホストのC#はNative AOT、WASIはLLVMOnly AOTであり、WASI RSSはWasmtimeのコンパイル・ランタイムも含みます。
 
 Different suites may measure on separate Intel runner VMs concurrently. Same-suite runs and result publication are serialized; updates retain the other suites. Projection event handlers themselves remain sequential.
+
+表示名は`ts-simple`（検証なし）、`ts-manual`（手書き検証）、`ts-zod`（Zod）です。CLIと生JSONの実装IDは互換性のため従来名を保持します。結果表の実装名から`code/<suite>/`の生成済み実ソースへ移動できます。各計測でコンパイラー／Nodeへ渡したファイルを保存し、コミットとSHA256を`manifest.json`に記録します。C# WASIはAOTの入力ソースSHA256との一致も確認します。実行は元のCLIで行うと、依存・最適化フラグを再現できます。

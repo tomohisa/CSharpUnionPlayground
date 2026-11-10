@@ -8,6 +8,7 @@ from pathlib import Path
 import platform
 import subprocess
 import sys
+from benchmark_sources import capture_sources
 
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / 'benchmarks/observed/macos-intel-actions'
@@ -115,6 +116,14 @@ def main():
     if args.suite in ['json', 'all']:
         run_suite(['benchmarks/union100/run.py', '--roots', str(args.json_roots), '--samples', '5'],
                   OUT / 'union100.json')
+    if args.suite in ['json','projection']:
+        family='union100' if args.suite=='json' else 'projection100'
+        capture_sources(OUT,args.suite,environment['sourceCommit'],{args.suite:REPO/'benchmarks'/family/'.build/sources'})
+    elif args.suite=='all':
+        for selected,family in [('json','union100'),('projection','projection100')]:
+            capture_sources(OUT,selected,environment['sourceCommit'],{selected:REPO/'benchmarks'/family/'.build/sources'})
+    else:
+        capture_sources(OUT,'wasi',environment['sourceCommit'],{'json':REPO/'benchmarks/union100/.build/wasi-comparison/sources','projection':REPO/'benchmarks/projection100/.build/intel-wasi/sources'})
     (OUT / 'environment.json').write_text(json.dumps({**environment, 'completed': True}, indent=2) + '\n')
 
 
