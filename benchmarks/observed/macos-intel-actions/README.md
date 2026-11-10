@@ -12,27 +12,33 @@ The canonical Native rows come from the host report. WASM rows are included only
 
 [Host-only details](union100.md) / [WASM / legacy paired details](union100-wasi.md).
 
-- [json measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880008976): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-json.json).
+- [json measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42904383468): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-json.json).
   [Generated source code](code/json/README.md) / [Source SHA256 manifest](code/json/manifest.json).
-- [wasi measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880014627): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-wasi.json).
+- [wasi measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42904383468): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-wasi.json).
   [Generated source code](code/wasi/README.md) / [Source SHA256 manifest](code/wasi/manifest.json).
 
-**Unmatched runs:** this table shows host Native results only. WASM details are retained at the link above, but are excluded from this ranking until one completed combined job supplies both backends.
+**One combined job / one VM / sequential processes.** C# Native uses JIT + Dynamic PGO (abstract: .NET 10; closed/union: .NET 11). WASM remains .NET 11 LLVMOnly AOT. These comparisons include runtime/version differences, not only the execution backend.
 
 | implementation | execution | build | median batch s | encode s | decode s | peak RSS MiB | measurement |
 |---|---|---|---:|---:|---:|---:|---|
-| [ts-simple](code/json/typescript-simple/benchmark-simple.ts) | Native | Host defaults | 1.870 | 0.485 | 1.075 | 1738.7 | [json](environment-json.json) |
-| [ts-manual](code/json/typescript/benchmark.ts) | Native | Host defaults | 1.874 | 0.461 | 1.216 | 1740.6 | [json](environment-json.json) |
-| [rust](code/json/rust/main.rs) | Native | Host defaults | 2.137 | 0.359 | 1.741 | 1268.6 | [json](environment-json.json) |
-| [csharp-closed-inferred](code/json/csharp-closed-inferred/Program.cs) | Native | Release Native AOT / SDK defaults | 3.700 | 0.748 | 2.807 | 2126.7 | [json](environment-json.json) |
-| [ts-zod](code/json/typescript-zod/benchmark-zod.ts) | Native | Host defaults | 4.015 | 0.451 | 3.176 | 2350.7 | [json](environment-json.json) |
-| [csharp-abstract](code/json/csharp-abstract/Program.cs) | Native | Release Native AOT / SDK defaults | 4.423 | 0.701 | 3.674 | 2122.7 | [json](environment-json.json) |
-| [java](code/json/java/Benchmark.java) | Native | Host defaults | 5.553 | 1.324 | 1.917 | 3341.8 | [json](environment-json.json) |
-| [csharp-union-custom](code/json/csharp-union-custom/Program.cs) | Native | Release Native AOT / SDK defaults | 7.304 | 0.535 | 6.574 | 1990.4 | [json](environment-json.json) |
-| [csharp-closed-explicit](code/json/csharp-closed-explicit/Program.cs) | Native | Release Native AOT / SDK defaults | 7.602 | 1.647 | 6.127 | 2145.2 | [json](environment-json.json) |
-| [csharp-union-generated](code/json/csharp-union-generated/Program.cs) | Native | Release Native AOT / SDK defaults | 8.097 | 0.944 | 6.895 | 2168.7 | [json](environment-json.json) |
-| [go](code/json/go/benchmark.go) | Native | Host defaults | 8.686 | 2.517 | 5.960 | 1586.7 | [json](environment-json.json) |
-| [swift](code/json/swift/Benchmark.swift) | Native | Host defaults | 34.980 | 18.099 | 16.089 | 2118.2 | [json](environment-json.json) |
+| [ts-simple](code/json/typescript-simple/benchmark-simple.ts) | Native | Host defaults | 1.676 | 0.414 | 0.985 | 1739.1 | [json](environment-json.json) |
+| [rust](code/wasi/json/rust/main.rs) | WASM AOT | Release / LTO / SIMD | 1.762 | 0.441 | 1.290 | 902.6 | [wasi](environment-wasi.json) |
+| [ts-manual](code/json/typescript/benchmark.ts) | Native | Host defaults | 1.787 | 0.453 | 1.157 | 1740.2 | [json](environment-json.json) |
+| [rust](code/json/rust/main.rs) | Native | Host defaults | 2.021 | 0.465 | 1.574 | 1144.9 | [json](environment-json.json) |
+| [java](code/json/java/Benchmark.java) | Native | Host defaults | 3.163 | 0.984 | 1.492 | 3375.5 | [json](environment-json.json) |
+| [ts-zod](code/json/typescript-zod/benchmark-zod.ts) | Native | Host defaults | 3.561 | 0.393 | 2.789 | 2358.1 | [json](environment-json.json) |
+| [csharp-closed-inferred](code/json/csharp-closed-inferred/Program.cs) | Native | .NET 11 / Release JIT + Dynamic PGO | 3.647 | 0.698 | 2.832 | 2331.8 | [json](environment-json.json) |
+| [csharp-abstract](code/json/csharp-abstract/Program.cs) | Native | .NET 10 / Release JIT + Dynamic PGO | 3.911 | 0.687 | 3.237 | 2815.1 | [json](environment-json.json) |
+| [csharp-union-custom](code/json/csharp-union-custom/Program.cs) | Native | .NET 11 / Release JIT + Dynamic PGO | 5.669 | 0.507 | 5.098 | 2358.9 | [json](environment-json.json) |
+| [csharp-union-generated](code/json/csharp-union-generated/Program.cs) | Native | .NET 11 / Release JIT + Dynamic PGO | 6.889 | 0.801 | 5.962 | 2364.8 | [json](environment-json.json) |
+| [go](code/json/go/benchmark.go) | Native | Host defaults | 8.662 | 2.531 | 6.065 | 1734.9 | [json](environment-json.json) |
+| [csharp-closed-explicit](code/json/csharp-closed-explicit/Program.cs) | Native | .NET 11 / Release JIT + Dynamic PGO | 11.338 | 3.031 | 8.638 | 2307.7 | [json](environment-json.json) |
+| [csharp-closed-inferred](code/wasi/json/csharp-closed-inferred/Program.cs) | WASM AOT | LLVMOnly AOT / SIMD / -O3 | 15.323 | 2.211 | 10.086 | 2170.8 | [wasi](environment-wasi.json) |
+| [csharp-closed-explicit](code/wasi/json/csharp-closed-explicit/Program.cs) | WASM AOT | LLVMOnly AOT / SIMD / -O3 | 15.684 | 2.119 | 10.849 | 2137.7 | [wasi](environment-wasi.json) |
+| [csharp-abstract](code/wasi/json/csharp-abstract/Program.cs) | WASM AOT | LLVMOnly AOT / SIMD / -O3 | 18.351 | 2.485 | 12.332 | 2115.9 | [wasi](environment-wasi.json) |
+| [swift](code/json/swift/Benchmark.swift) | Native | Host defaults | 29.790 | 14.120 | 14.521 | 2138.0 | [json](environment-json.json) |
+| [csharp-union-generated](code/wasi/json/csharp-union-generated/Program.cs) | WASM AOT | LLVMOnly AOT / SIMD / -O3 | 30.126 | 7.423 | 20.027 | 2208.4 | [wasi](environment-wasi.json) |
+| [csharp-union-custom](code/wasi/json/csharp-union-custom/Program.cs) | WASM AOT | LLVMOnly AOT / SIMD / -O3 | 30.358 | 2.811 | 24.084 | 2374.4 | [wasi](environment-wasi.json) |
 
 Median batch time includes encode, decode and switch traversal. TypeScript runtime validation differs by variant; wire representations differ between some implementations. See the source and raw reports.
 
@@ -46,36 +52,38 @@ Median batch time includes encode, decode and switch traversal. TypeScript runti
 
 [Host domain details](projection-domain.md) / [Host fanout details](projection-fanout.md) / [WASM domain details](projection-wasi-domain.md) / [WASM fanout details](projection-wasi-fanout.md).
 
-- [projection measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880008976): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-projection.json).
+- [projection measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42904383468): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-projection.json).
   [Generated source code](code/projection/README.md) / [Source SHA256 manifest](code/projection/manifest.json).
-- [wasi measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880014627): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-wasi.json).
+- [wasi measurement](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42904383468): Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz, 14 GiB; [environment](environment-wasi.json).
   [Generated source code](code/wasi/README.md) / [Source SHA256 manifest](code/wasi/manifest.json).
-
-**Unmatched runs:** only host Native rows are ranked here. Separate WASM measurements remain in the detail reports.
 
 ### Domain routing: ten million events, dense
 
 | implementation | execution | build | append s | copy s | append RSS MiB | measurement |
 |---|---|---|---:|---|---:|---|
-| [csharp](code/projection/csharp/Program.cs) | Native | Release Native AOT / SDK defaults | 1.067 | not-run-after-budget | 24.8 | [projection](environment-projection.json) |
-| [rust](code/projection/rust/projection.rs) | Native | Host defaults | 2.692 | timeout | 15.3 | [projection](environment-projection.json) |
-| [ts-simple](code/projection/typescript/projection.ts) | Native | Host defaults | 2.345 | timeout | 169.4 | [projection](environment-projection.json) |
-| [ts-zod](code/projection/typescript-zod/projection-zod.ts) | Native | Host defaults | 3.192 | timeout | 176.1 | [projection](environment-projection.json) |
-| [java](code/projection/java/Projection.java) | Native | Host defaults | 1.116 | not-run-after-budget | 310.1 | [projection](environment-projection.json) |
-| [go](code/projection/go/projection.go) | Native | Host defaults | 1.475 | timeout | 27.0 | [projection](environment-projection.json) |
-| [swift](code/projection/swift/Projection.swift) | Native | Host defaults | 8.939 | timeout | 18.8 | [projection](environment-projection.json) |
+| [csharp](code/projection/csharp/Program.cs) | Native | .NET 11 / Release JIT + Dynamic PGO | 1.188 | timeout | 45.5 | [projection](environment-projection.json) |
+| [rust](code/projection/rust/projection.rs) | Native | Host defaults | 2.373 | timeout | 15.3 | [projection](environment-projection.json) |
+| [ts-simple](code/projection/typescript/projection.ts) | Native | Host defaults | 1.374 | timeout | 169.1 | [projection](environment-projection.json) |
+| [ts-zod](code/projection/typescript-zod/projection-zod.ts) | Native | Host defaults | 2.844 | timeout | 180.9 | [projection](environment-projection.json) |
+| [java](code/projection/java/Projection.java) | Native | Host defaults | 1.086 | timeout | 274.0 | [projection](environment-projection.json) |
+| [go](code/projection/go/projection.go) | Native | Host defaults | 1.275 | timeout | 23.2 | [projection](environment-projection.json) |
+| [swift](code/projection/swift/Projection.swift) | Native | Host defaults | 7.607 | timeout | 18.9 | [projection](environment-projection.json) |
+| [csharp](code/wasi/projection/csharp/Program.cs) | WASM AOT | LLVMOnly AOT / SIMD / -O3 | 1.988 | not-run-after-budget | 154.3 | [wasi](environment-wasi.json) |
+| [rust](code/wasi/projection/rust/projection.rs) | WASM AOT | Release / LTO / SIMD | 2.356 | timeout | 20.6 | [wasi](environment-wasi.json) |
 
 ### Sequential fanout: one million events, indexed-append
 
 | implementation | execution | build | dense s | wide s | dense RSS MiB | wide RSS MiB | measurement |
 |---|---|---|---:|---:|---:|---:|---|
-| [csharp](code/projection/csharp/Program.cs) | Native | Release Native AOT / SDK defaults | 0.370 | 0.923 | 11.3 | 64.9 | [projection](environment-projection.json) |
-| [rust](code/projection/rust/projection.rs) | Native | Host defaults | 2.289 | 2.331 | 2.7 | 54.3 | [projection](environment-projection.json) |
-| [ts-simple](code/projection/typescript/projection.ts) | Native | Host defaults | 0.508 | 1.506 | 97.8 | 223.8 | [projection](environment-projection.json) |
-| [ts-zod](code/projection/typescript-zod/projection-zod.ts) | Native | Host defaults | 0.586 | 0.873 | 100.6 | 266.0 | [projection](environment-projection.json) |
-| [java](code/projection/java/Projection.java) | Native | Host defaults | 0.939 | 1.006 | 90.9 | 163.0 | [projection](environment-projection.json) |
-| [go](code/projection/go/projection.go) | Native | Host defaults | 0.383 | 0.429 | 7.6 | 49.0 | [projection](environment-projection.json) |
-| [swift](code/projection/swift/Projection.swift) | Native | Host defaults | 8.128 | 8.514 | 2.6 | 29.9 | [projection](environment-projection.json) |
+| [csharp](code/projection/csharp/Program.cs) | Native | .NET 11 / Release JIT + Dynamic PGO | 1.304 | 1.722 | 32.5 | 86.2 | [projection](environment-projection.json) |
+| [rust](code/projection/rust/projection.rs) | Native | Host defaults | 2.068 | 2.113 | 2.6 | 54.3 | [projection](environment-projection.json) |
+| [ts-simple](code/projection/typescript/projection.ts) | Native | Host defaults | 0.514 | 0.735 | 97.2 | 223.8 | [projection](environment-projection.json) |
+| [ts-zod](code/projection/typescript-zod/projection-zod.ts) | Native | Host defaults | 1.082 | 3.641 | 101.8 | 264.8 | [projection](environment-projection.json) |
+| [java](code/projection/java/Projection.java) | Native | Host defaults | 0.775 | 0.789 | 91.4 | 145.2 | [projection](environment-projection.json) |
+| [go](code/projection/go/projection.go) | Native | Host defaults | 0.394 | 0.515 | 7.5 | 50.6 | [projection](environment-projection.json) |
+| [swift](code/projection/swift/Projection.swift) | Native | Host defaults | 6.564 | 6.829 | 2.5 | 29.9 | [projection](environment-projection.json) |
+| [csharp](code/wasi/projection/csharp/Program.cs) | WASM AOT | LLVMOnly AOT / SIMD / -O3 | 0.568 | 0.770 | 144.8 | 193.2 | [wasi](environment-wasi.json) |
+| [rust](code/wasi/projection/rust/projection.rs) | WASM AOT | Release / LTO / SIMD | 2.907 | 3.187 | 11.1 | 40.4 | [wasi](environment-wasi.json) |
 
 `timeout` means the 25s process budget expired. `not-run-after-budget` means an earlier smaller size exceeded a budget and this point was not run. The projection stopping budget is 8s.
 

@@ -1,28 +1,8 @@
 {
-  "sourceCommit": "3644b562c6f88fda499e9fcf2bf4ed00575d1f9a",
+  "sourceCommit": "40d0491be56402aaacf71433d12c06a43411ec01",
   "suite": "wasi",
   "files": {
     "json": {
-      "csharp-abstract-native": {
-        "path": "code/wasi/json/csharp-abstract/Program.cs",
-        "sha256": "7cc53a787ac430b0661bb2aef1e2dcae00a282f7a55a440c852ee995a9383a94"
-      },
-      "csharp-closed-explicit-native": {
-        "path": "code/wasi/json/csharp-closed-explicit/Program.cs",
-        "sha256": "07706af589cdca22c854154a685466764bb4c7caa35b51a19ba79f6bd46f2433"
-      },
-      "csharp-closed-inferred-native": {
-        "path": "code/wasi/json/csharp-closed-inferred/Program.cs",
-        "sha256": "54af59539e6537153d8b07865dd6220b218283a71bc73dd81e8f7ee204346aec"
-      },
-      "csharp-union-custom-native": {
-        "path": "code/wasi/json/csharp-union-custom/Program.cs",
-        "sha256": "815263b15d0f88f563305214a9b0c21b7776e74b8119a1006d5046c88cbeda04"
-      },
-      "csharp-union-generated-native": {
-        "path": "code/wasi/json/csharp-union-generated/Program.cs",
-        "sha256": "3b9257ffbef9bcda2d755d95ee87750cc7153d511eed6019252f4ece8ca57c00"
-      },
       "csharp-abstract-wasi": {
         "path": "code/wasi/json/csharp-abstract/Program.cs",
         "sha256": "7cc53a787ac430b0661bb2aef1e2dcae00a282f7a55a440c852ee995a9383a94"
@@ -43,27 +23,15 @@
         "path": "code/wasi/json/csharp-union-generated/Program.cs",
         "sha256": "3b9257ffbef9bcda2d755d95ee87750cc7153d511eed6019252f4ece8ca57c00"
       },
-      "rust-native": {
-        "path": "code/wasi/json/rust/main.rs",
-        "sha256": "62e98b83fcd73f4212b38d204206edf8433179eb7d96c50db93d28211e51f4fd"
-      },
       "rust-wasi": {
         "path": "code/wasi/json/rust/main.rs",
         "sha256": "62e98b83fcd73f4212b38d204206edf8433179eb7d96c50db93d28211e51f4fd"
       }
     },
     "projection": {
-      "csharp-native": {
-        "path": "code/wasi/projection/csharp/Program.cs",
-        "sha256": "7b3174f2f776386d4285f9c09850bbb4c2f1ea6ef1dcdd260f29369cccfa8d99"
-      },
       "csharp-wasi": {
         "path": "code/wasi/projection/csharp/Program.cs",
         "sha256": "7b3174f2f776386d4285f9c09850bbb4c2f1ea6ef1dcdd260f29369cccfa8d99"
-      },
-      "rust-native": {
-        "path": "code/wasi/projection/rust/projection.rs",
-        "sha256": "89b9f8b536bac0d75b84884cb88f8e7db624a77e0b6cda933572713beea580a4"
       },
       "rust-wasi": {
         "path": "code/wasi/projection/rust/projection.rs",

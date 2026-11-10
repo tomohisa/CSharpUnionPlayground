@@ -1,33 +1,22 @@
 | implementation | batch s | encode s | decode s | switch s | JSON MiB | RSS MiB |
 |---|---:|---:|---:|---:|---:|---:|
-| [csharp-abstract-native](code/wasi/json/csharp-abstract/Program.cs) | 5.4782 | 0.9014 | 3.9746 | 0.2541 | 82.59 | 2159.6 |
-| [csharp-closed-explicit-native](code/wasi/json/csharp-closed-explicit/Program.cs) | 5.1850 | 0.7896 | 3.9793 | 0.2548 | 82.59 | 2153.4 |
-| [csharp-closed-inferred-native](code/wasi/json/csharp-closed-inferred/Program.cs) | 5.4088 | 0.7772 | 4.1071 | 0.2658 | 82.59 | 2153.4 |
-| [csharp-union-custom-native](code/wasi/json/csharp-union-custom/Program.cs) | 8.7118 | 0.6297 | 7.5614 | 0.2151 | 87.74 | 2220.4 |
-| [csharp-union-generated-native](code/wasi/json/csharp-union-generated/Program.cs) | 10.0446 | 1.2950 | 8.6835 | 0.2457 | 87.74 | 2181.5 |
-| [csharp-abstract-wasi](code/wasi/json/csharp-abstract/Program.cs) | 25.8395 | 3.7001 | 17.5894 | 4.6672 | 82.59 | 2152.4 |
-| [csharp-closed-explicit-wasi](code/wasi/json/csharp-closed-explicit/Program.cs) | 25.9352 | 3.0779 | 17.3763 | 4.7848 | 82.59 | 2148.8 |
-| [csharp-closed-inferred-wasi](code/wasi/json/csharp-closed-inferred/Program.cs) | 21.4608 | 3.5034 | 13.8141 | 3.6782 | 82.59 | 2116.0 |
-| [csharp-union-custom-wasi](code/wasi/json/csharp-union-custom/Program.cs) | 41.1980 | 4.0011 | 32.8157 | 4.8411 | 87.74 | 2367.6 |
-| [csharp-union-generated-wasi](code/wasi/json/csharp-union-generated/Program.cs) | 56.7815 | 12.8219 | 37.8872 | 4.3354 | 87.74 | 2244.7 |
-| [rust-native](code/wasi/json/rust/main.rs) | 3.1166 | 0.4347 | 2.5921 | 0.0417 | 82.59 | 1210.7 |
-| [rust-wasi](code/wasi/json/rust/main.rs) | 2.5655 | 0.6681 | 1.8844 | 0.0360 | 82.59 | 902.7 |
+| [csharp-abstract-wasi](code/wasi/json/csharp-abstract/Program.cs) | 18.3505 | 2.4854 | 12.3320 | 3.2840 | 82.59 | 2115.9 |
+| [csharp-closed-explicit-wasi](code/wasi/json/csharp-closed-explicit/Program.cs) | 15.6843 | 2.1188 | 10.8490 | 2.8379 | 82.59 | 2137.7 |
+| [csharp-closed-inferred-wasi](code/wasi/json/csharp-closed-inferred/Program.cs) | 15.3234 | 2.2110 | 10.0861 | 2.9412 | 82.59 | 2170.8 |
+| [csharp-union-custom-wasi](code/wasi/json/csharp-union-custom/Program.cs) | 30.3576 | 2.8108 | 24.0843 | 3.2245 | 87.74 | 2374.4 |
+| [csharp-union-generated-wasi](code/wasi/json/csharp-union-generated/Program.cs) | 30.1255 | 7.4230 | 20.0273 | 2.8455 | 87.74 | 2208.4 |
+| [rust-wasi](code/wasi/json/rust/main.rs) | 1.7618 | 0.4414 | 1.2896 | 0.0295 | 82.59 | 902.6 |
 
 | implementation | startup s | preparation s | exit s | wall s |
 |---|---:|---:|---:|---:|
-| [csharp-abstract-native](code/wasi/json/csharp-abstract/Program.cs) | 0.0504 | 1.4889 | 0.2751 | 37.073 |
-| [csharp-closed-explicit-native](code/wasi/json/csharp-closed-explicit/Program.cs) | 0.0492 | 1.7691 | 0.1540 | 28.053 |
-| [csharp-closed-inferred-native](code/wasi/json/csharp-closed-inferred/Program.cs) | 0.0716 | 1.4280 | 0.2012 | 29.260 |
-| [csharp-union-custom-native](code/wasi/json/csharp-union-custom/Program.cs) | 0.0768 | 1.5317 | 0.1501 | 52.537 |
-| [csharp-union-generated-native](code/wasi/json/csharp-union-generated/Program.cs) | 0.0763 | 1.5706 | 0.1562 | 54.008 |
-| [csharp-abstract-wasi](code/wasi/json/csharp-abstract/Program.cs) | 14.1132 | 7.7604 | 3.1284 | 158.298 |
-| [csharp-closed-explicit-wasi](code/wasi/json/csharp-closed-explicit/Program.cs) | 18.9308 | 8.0259 | 3.1736 | 159.311 |
-| [csharp-closed-inferred-wasi](code/wasi/json/csharp-closed-inferred/Program.cs) | 13.0935 | 7.1203 | 2.1723 | 134.227 |
-| [csharp-union-custom-wasi](code/wasi/json/csharp-union-custom/Program.cs) | 9.5112 | 6.1845 | 3.0798 | 227.125 |
-| [csharp-union-generated-wasi](code/wasi/json/csharp-union-generated/Program.cs) | 14.5925 | 7.2521 | 3.7452 | 314.225 |
-| [rust-native](code/wasi/json/rust/main.rs) | 0.0550 | 0.9784 | 0.5449 | 19.984 |
-| [rust-wasi](code/wasi/json/rust/main.rs) | 0.3122 | 0.4368 | 0.1660 | 15.963 |
+| [csharp-abstract-wasi](code/wasi/json/csharp-abstract/Program.cs) | 9.3747 | 4.9437 | 2.1848 | 110.497 |
+| [csharp-closed-explicit-wasi](code/wasi/json/csharp-closed-explicit/Program.cs) | 10.2552 | 4.9935 | 1.7348 | 101.546 |
+| [csharp-closed-inferred-wasi](code/wasi/json/csharp-closed-inferred/Program.cs) | 7.3119 | 4.2957 | 2.3484 | 94.765 |
+| [csharp-union-custom-wasi](code/wasi/json/csharp-union-custom/Program.cs) | 10.2821 | 5.2954 | 1.8730 | 168.833 |
+| [csharp-union-generated-wasi](code/wasi/json/csharp-union-generated/Program.cs) | 9.5143 | 4.8279 | 1.8150 | 181.655 |
+| [rust-wasi](code/wasi/json/rust/main.rs) | 0.1659 | 0.3182 | 0.1309 | 10.679 |
 
+WASM-only measurements. Native results belong to the separate host report; combine only when job/attempt metadata matches. C# WASM uses .NET 11 AOT even when the Native abstract implementation uses .NET 10 JIT.
 Native and WASI use the same generated Program.cs/main.rs and payloads, warm-up, validation and timed phases.
 C# native is Native AOT Speed/native ISA; C# WASI is LLVMOnly AOT with SIMD and clang -O3, no interpreter fallback. Rust uses optimized release/LTO with host native ISA or Wasm SIMD.
 WASI peak RSS includes Wasmtime compilation/runtime and is not guest heap usage. Startup includes Wasmtime compilation.

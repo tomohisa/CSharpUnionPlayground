@@ -1,82 +1,82 @@
 | implementation | mode | profile | events | seconds | ns/event | peak RSS MiB | max history | growth p | status |
 |---|---|---|---:|---:|---:|---:|---:|---:|---|
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.0137 | 137.0 | 9.6 | 1000 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 0.0998 | 99.8 | 11.3 | 10000 | 0.86 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000000 | 1.0669 | 106.7 | 24.8 | 100000 | 1.03 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.2318 | 2318.2 | 9.9 | 1000 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 22.8036 | 22803.6 | 16.2 | 10000 | 1.99 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 10000000 | — | — | — | — | — | not-run-after-budget |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.0287 | 286.9 | 0.8 | 1000 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 0.2646 | 264.6 | 2.6 | 10000 | 0.96 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000000 | 2.6918 | 269.2 | 15.3 | 100000 | 1.01 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.0292 | 292.5 | 1.0 | 1000 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 0.8977 | 897.7 | 5.6 | 10000 | 1.49 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.0512 | 512.0 | 30.1 | 1000 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 0.1807 | 180.7 | 31.9 | 10000 | 0.55 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000000 | 1.1884 | 118.8 | 45.5 | 100000 | 0.82 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.0624 | 623.9 | 30.3 | 1000 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 0.9854 | 985.4 | 32.4 | 10000 | 1.20 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 10000000 | — | — | — | — | — | timeout |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.0237 | 237.5 | 0.8 | 1000 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 0.2489 | 248.9 | 2.6 | 10000 | 1.02 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000000 | 2.3730 | 237.3 | 15.3 | 100000 | 0.98 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.0248 | 248.4 | 1.0 | 1000 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 0.7454 | 745.4 | 5.2 | 10000 | 1.48 | ok |
 | [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 10000000 | — | — | — | — | — | timeout |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.1571 | 1571.3 | 82.4 | 1000 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.3664 | 366.4 | 97.4 | 10000 | 0.37 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000000 | 2.3447 | 234.5 | 169.4 | 100000 | 0.81 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.0989 | 989.2 | 82.7 | 1000 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 4.3117 | 4311.7 | 208.3 | 10000 | 1.64 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.0346 | 346.4 | 82.1 | 1000 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.1651 | 165.1 | 97.2 | 10000 | 0.68 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000000 | 1.3743 | 137.4 | 169.1 | 100000 | 0.92 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.0813 | 813.0 | 82.9 | 1000 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 3.1329 | 3132.9 | 205.0 | 10000 | 1.59 | ok |
 | [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 10000000 | — | — | — | — | — | timeout |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.0703 | 703.2 | 92.6 | 1000 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 0.3796 | 379.6 | 101.4 | 10000 | 0.73 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000000 | 3.1924 | 319.2 | 176.1 | 100000 | 0.92 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.1007 | 1006.8 | 91.9 | 1000 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 3.9440 | 3944.0 | 215.8 | 10000 | 1.59 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.0648 | 648.5 | 90.4 | 1000 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 0.3205 | 320.5 | 104.0 | 10000 | 0.69 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000000 | 2.8435 | 284.4 | 180.9 | 100000 | 0.95 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.1234 | 1234.1 | 91.7 | 1000 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 3.5866 | 3586.6 | 213.7 | 10000 | 1.46 | ok |
 | [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 10000000 | — | — | — | — | — | timeout |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.2226 | 2226.3 | 55.1 | 1000 | — | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.3181 | 318.1 | 90.0 | 10000 | 0.15 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000000 | 1.1164 | 111.6 | 310.1 | 100000 | 0.55 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 0.2853 | 2852.9 | 86.6 | 1000 | — | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 10.0426 | 10042.6 | 1358.6 | 10000 | 1.55 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 10000000 | — | — | — | — | — | not-run-after-budget |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0162 | 162.1 | 6.3 | 1000 | — | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.1561 | 156.1 | 7.5 | 10000 | 0.98 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000000 | 1.4749 | 147.5 | 27.0 | 100000 | 0.98 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0503 | 502.5 | 8.1 | 1000 | — | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 2.4908 | 2490.8 | 32.2 | 10000 | 1.70 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.2439 | 2439.1 | 54.9 | 1000 | — | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.3372 | 337.2 | 89.5 | 10000 | 0.14 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000000 | 1.0865 | 108.6 | 274.0 | 100000 | 0.51 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 0.2252 | 2252.1 | 86.6 | 1000 | — | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 4.1632 | 4163.2 | 1223.8 | 10000 | 1.27 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 10000000 | — | — | — | — | — | timeout |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0276 | 276.2 | 6.4 | 1000 | — | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.1425 | 142.5 | 7.8 | 10000 | 0.71 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000000 | 1.2749 | 127.5 | 23.2 | 100000 | 0.95 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0255 | 254.9 | 7.8 | 1000 | — | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 2.3832 | 2383.2 | 24.1 | 10000 | 1.97 | ok |
 | [go-native](code/projection/go/projection.go) | indexed-copy | dense | 10000000 | — | — | — | — | — | timeout |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.0826 | 825.9 | 1.0 | 1000 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 0.8354 | 835.4 | 2.5 | 10000 | 1.00 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000000 | 8.9390 | 893.9 | 18.8 | 100000 | 1.03 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 0.1031 | 1031.5 | 1.0 | 1000 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 1.3346 | 1334.6 | 3.0 | 10000 | 1.11 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.0756 | 755.9 | 1.1 | 1000 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 0.7308 | 730.8 | 2.5 | 10000 | 0.99 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000000 | 7.6071 | 760.7 | 18.9 | 100000 | 1.02 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 0.0791 | 790.9 | 1.0 | 1000 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 1.0171 | 1017.1 | 2.7 | 10000 | 1.11 | ok |
 | [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 10000000 | — | — | — | — | — | timeout |
 
 | implementation | mode | profile | events | startup s | preparation s | exit s | process wall s |
 |---|---|---|---:|---:|---:|---:|---:|
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.0196 | 0.0031 | 0.0026 | 0.0392 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 0.0181 | 0.0017 | 0.0026 | 0.1218 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000000 | 0.0289 | 0.0015 | 0.0027 | 1.1010 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.0160 | 0.0012 | 0.0020 | 0.2512 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 0.0188 | 0.0015 | 0.0021 | 22.8262 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.0148 | 0.0000 | 0.0009 | 0.0445 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 0.0106 | 0.0000 | 0.0009 | 0.2762 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000000 | 0.0132 | 0.0000 | 0.0018 | 2.7074 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.0112 | 0.0000 | 0.0008 | 0.0412 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 0.0119 | 0.0000 | 0.0015 | 0.9110 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.7299 | 0.0005 | 0.0491 | 0.9442 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.1871 | 0.0004 | 0.0129 | 0.5690 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000000 | 0.1928 | 0.0005 | 0.0214 | 2.5767 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.1689 | 0.0003 | 0.0139 | 0.2830 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 0.1871 | 0.0004 | 0.0221 | 4.5243 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.2547 | 0.0003 | 0.0134 | 0.3394 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 0.2236 | 0.0002 | 0.0107 | 0.6167 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000000 | 0.2633 | 0.0003 | 0.0213 | 3.4937 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.2399 | 0.0002 | 0.0153 | 0.3570 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 0.2236 | 0.0001 | 0.0193 | 4.1886 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.1351 | 0.0220 | 0.0453 | 0.4676 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.1275 | 0.0197 | 0.0547 | 0.5651 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000000 | 0.1338 | 0.0196 | 0.0851 | 1.4162 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 0.1401 | 0.0166 | 0.0610 | 0.5537 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 0.2273 | 0.0177 | 0.1082 | 10.4910 |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0236 | 0.0000 | 0.0010 | 0.0412 |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.0153 | 0.0000 | 0.0015 | 0.1732 |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000000 | 0.0182 | 0.0000 | 0.0023 | 1.4961 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0142 | 0.0000 | 0.0017 | 0.0662 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 0.0131 | 0.0000 | 0.0032 | 2.5073 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.0113 | 0.0000 | 0.0008 | 0.0948 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 0.0109 | 0.0000 | 0.0008 | 0.8475 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000000 | 0.0113 | 0.0000 | 0.0021 | 8.9536 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 0.0135 | 0.0000 | 0.0008 | 0.1177 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 0.0126 | 0.0000 | 0.0017 | 1.3492 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.0677 | 0.0052 | 0.0043 | 0.1335 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 0.0484 | 0.0036 | 0.0044 | 0.2417 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000000 | 0.0640 | 0.0043 | 0.0061 | 1.2704 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.0549 | 0.0037 | 0.0049 | 0.1314 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 0.0616 | 0.0044 | 0.0059 | 1.0634 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.0113 | 0.0000 | 0.0009 | 0.0359 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 0.0119 | 0.0000 | 0.0011 | 0.2620 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000000 | 0.0125 | 0.0000 | 0.0020 | 2.3882 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.0089 | 0.0000 | 0.0007 | 0.0344 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 0.0088 | 0.0000 | 0.0010 | 0.7553 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.1317 | 0.0002 | 0.0101 | 0.1774 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.1230 | 0.0002 | 0.0074 | 0.2977 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000000 | 0.1227 | 0.0002 | 0.0185 | 1.5315 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.1547 | 0.0003 | 0.0105 | 0.2475 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 0.1310 | 0.0002 | 0.0146 | 3.2806 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.2384 | 0.0004 | 0.0131 | 0.3176 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 0.2130 | 0.0003 | 0.0094 | 0.5456 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000000 | 0.2676 | 0.0002 | 0.0264 | 3.1529 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.2805 | 0.0002 | 0.0154 | 0.4204 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 0.2234 | 0.0002 | 0.0203 | 3.8329 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.1526 | 0.0240 | 0.0463 | 0.5059 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.1328 | 0.0164 | 0.0354 | 0.5724 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000000 | 0.1299 | 0.0166 | 0.0328 | 1.3331 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 0.1114 | 0.0147 | 0.0155 | 0.4013 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 0.1431 | 0.0181 | 0.0805 | 4.4589 |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0264 | 0.0000 | 0.0013 | 0.0580 |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.0155 | 0.0000 | 0.0016 | 0.1599 |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000000 | 0.0123 | 0.0000 | 0.0017 | 1.2898 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0104 | 0.0000 | 0.0013 | 0.0374 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 0.0114 | 0.0000 | 0.0018 | 2.3970 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.0093 | 0.0000 | 0.0012 | 0.0863 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 0.0089 | 0.0000 | 0.0010 | 0.7410 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000000 | 0.0135 | 0.0000 | 0.0013 | 7.6222 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 0.0109 | 0.0000 | 0.0007 | 0.0910 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 0.0107 | 0.0000 | 0.0009 | 1.0290 |

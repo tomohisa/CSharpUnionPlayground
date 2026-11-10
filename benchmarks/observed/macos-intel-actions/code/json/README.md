@@ -1,6 +1,6 @@
 # Generated benchmark sources
 
-Measured source commit: `3644b562c6f88fda499e9fcf2bf4ed00575d1f9a`.
+Measured source commit: `40d0491be56402aaacf71433d12c06a43411ec01`.
 
 These are the generated workload files supplied to the compilers/runtimes. Build through the benchmark CLI to obtain the pinned dependencies and recorded optimization settings.
 
@@ -19,4 +19,4 @@ These are the generated workload files supplied to the compilers/runtimes. Build
 - [go](go/benchmark.go)
 - [swift](swift/Benchmark.swift)
 
-The experimental C# converter generator is implemented in [PlaygroundTaggedJson.Generator](https://github.com/tomohisa/CSharpUnionPlayground/tree/3644b562c6f88fda499e9fcf2bf4ed00575d1f9a/src/PlaygroundTaggedJson.Generator).
+The experimental C# converter generator is implemented in [PlaygroundTaggedJson.Generator](https://github.com/tomohisa/CSharpUnionPlayground/tree/40d0491be56402aaacf71433d12c06a43411ec01/src/PlaygroundTaggedJson.Generator).

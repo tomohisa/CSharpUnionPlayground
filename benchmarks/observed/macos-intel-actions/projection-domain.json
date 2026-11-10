@@ -1,5 +1,5 @@
 {
-  "timestampUtc": "2026-11-10T19:11:41.862277+00:00",
+  "timestampUtc": "2026-11-10T21:38:57.539266+00:00",
   "toolchains": {
     "csharp": "11.0.100",
     "rust": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
@@ -13,6 +13,9 @@
   "timeoutSeconds": 25.0,
   "maxProjectionSeconds": 8.0,
   "buildProofs": {},
+  "nativeConfiguration": {
+    "csharpMode": "jit-pgo"
+  },
   "optimization": "Host defaults",
   "platform": "macOS-15.7.9-x86_64-i386-64bit-Mach-O",
   "routing": "domain",
@@ -23,7 +26,7 @@
   ],
   "samples": 2,
   "buildKey": {
-    "source": "1f65b86e9160f39597fd8a57692b7fe5cf0e60cd52ed231780dfedf9ca8c0733",
+    "source": "16019b5001581beaaeb9a3680c8f17777bba7fe66a1e85609fba64855f1feede",
     "languages": [
       "csharp",
       "rust",
@@ -39,12 +42,20 @@
     "rid": "osx-x64",
     "swiftSdk": "swift-6.3.1-RELEASE_wasm",
     "swiftToolchain": "6.3.1",
+    "csharpMode": "jit-pgo",
     "wasiDotnet": "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/dotnet/dotnet",
     "wasiSdk": "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/tools/wasi-sdk-33.0-arm64-macos"
   },
   "commands": {
     "csharp-native": [
-      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/bin/csharp/Projection"
+      "env",
+      "DOTNET_TieredCompilation=1",
+      "DOTNET_TieredPGO=1",
+      "DOTNET_TC_QuickJit=1",
+      "DOTNET_TC_QuickJitForLoops=1",
+      "DOTNET_ReadyToRun=1",
+      "dotnet",
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/bin/csharp/Projection.dll"
     ],
     "rust-native": [
       "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/bin/rust/projection"
@@ -81,14 +92,14 @@
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.013698100000000001,
-      "eventsPerSecond": 7300282.520933559,
-      "nsPerEvent": 136.981,
-      "peakRssMiB": 9.5859375,
-      "startupSeconds": 0.019564232999982778,
-      "preparationSeconds": 0.00314410650003083,
-      "wallSeconds": 0.03917162850001432,
-      "exitSeconds": 0.0026413240000238147,
+      "projectionSeconds": 0.051199999999999996,
+      "eventsPerSecond": 1953125.0000000002,
+      "nsPerEvent": 511.99999999999994,
+      "peakRssMiB": 30.0625,
+      "startupSeconds": 0.06768502749991967,
+      "preparationSeconds": 0.005199655500064182,
+      "wallSeconds": 0.13350467749990003,
+      "exitSeconds": 0.004326283500063255,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -105,17 +116,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.0164995,
-              "totalSeconds": 0.0164995,
+              "switchSeconds": 0.0543206,
+              "totalSeconds": 0.0543206,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.025567375000036918,
-          "preparationSeconds": 0.005411922999996932,
-          "workAndValidationSeconds": 0.016664473999981055,
-          "exitSeconds": 0.00255939600003785,
-          "wallSeconds": 0.050203168000052756,
-          "peakRssBytes": 10051584
+          "startupSeconds": 0.08832214799986104,
+          "preparationSeconds": 0.006929115000048114,
+          "workAndValidationSeconds": 0.060137497999903644,
+          "exitSeconds": 0.004212388000041756,
+          "wallSeconds": 0.15960114899985456,
+          "peakRssBytes": 31514624
         },
         {
           "roots": 100000,
@@ -129,17 +140,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.0108967,
-              "totalSeconds": 0.0108967,
+              "switchSeconds": 0.0480794,
+              "totalSeconds": 0.0480794,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.013561090999928638,
-          "preparationSeconds": 0.0008762900000647278,
-          "workAndValidationSeconds": 0.010979455999972743,
-          "exitSeconds": 0.0027232520000097793,
-          "wallSeconds": 0.028140088999975887,
-          "peakRssBytes": 10051584
+          "startupSeconds": 0.047047906999978295,
+          "preparationSeconds": 0.00347019600008025,
+          "workAndValidationSeconds": 0.052449923999802195,
+          "exitSeconds": 0.004440179000084754,
+          "wallSeconds": 0.1074082059999455,
+          "peakRssBytes": 31522816
         }
       ]
     },
@@ -149,14 +160,14 @@
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 0.09979850000000001,
-      "eventsPerSecond": 10020190.68422872,
-      "nsPerEvent": 99.79850000000002,
-      "peakRssMiB": 11.265625,
-      "startupSeconds": 0.01806692299999213,
-      "preparationSeconds": 0.0016624094999997396,
-      "wallSeconds": 0.12182601500001056,
-      "exitSeconds": 0.0025533360000054017,
+      "projectionSeconds": 0.18066555,
+      "eventsPerSecond": 5535089.5619004285,
+      "nsPerEvent": 180.66555000000002,
+      "peakRssMiB": 31.87890625,
+      "startupSeconds": 0.048385372499978985,
+      "preparationSeconds": 0.0035635455000146976,
+      "wallSeconds": 0.241742228499902,
+      "exitSeconds": 0.004381404999890037,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -173,17 +184,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.1099234,
-              "totalSeconds": 0.1099234,
+              "switchSeconds": 0.1764978,
+              "totalSeconds": 0.1764978,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.01808801399999993,
-          "preparationSeconds": 0.0023637499999722422,
-          "workAndValidationSeconds": 0.10885264099999858,
-          "exitSeconds": 0.0027248610000469853,
-          "wallSeconds": 0.13202926600001774,
-          "peakRssBytes": 11812864
+          "startupSeconds": 0.04874510400009058,
+          "preparationSeconds": 0.0034817450000446115,
+          "workAndValidationSeconds": 0.1813010690000283,
+          "exitSeconds": 0.004293700999824068,
+          "wallSeconds": 0.23782161899998755,
+          "peakRssBytes": 33427456
         },
         {
           "roots": 1000000,
@@ -197,20 +208,20 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.0896736,
-              "totalSeconds": 0.0896736,
+              "switchSeconds": 0.1848333,
+              "totalSeconds": 0.1848333,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.01804583199998433,
-          "preparationSeconds": 0.000961069000027237,
-          "workAndValidationSeconds": 0.09023405200002799,
-          "exitSeconds": 0.002381810999963818,
-          "wallSeconds": 0.11162276400000337,
-          "peakRssBytes": 11796480
+          "startupSeconds": 0.04802564099986739,
+          "preparationSeconds": 0.0036453459999847837,
+          "workAndValidationSeconds": 0.1895227420000083,
+          "exitSeconds": 0.004469108999956006,
+          "wallSeconds": 0.24566283799981647,
+          "peakRssBytes": 33247232
         }
       ],
-      "growthExponent": 0.8624636814082767
+      "growthExponent": 0.5476053865421362
     },
     {
       "implementation": "csharp-native",
@@ -218,14 +229,14 @@
       "profile": "dense",
       "events": 10000000,
       "status": "ok",
-      "projectionSeconds": 1.06690855,
-      "eventsPerSecond": 9372874.554243661,
-      "nsPerEvent": 106.69085499999998,
-      "peakRssMiB": 24.7578125,
-      "startupSeconds": 0.028941689999953724,
-      "preparationSeconds": 0.0014720164999744156,
-      "wallSeconds": 1.1009858909999366,
-      "exitSeconds": 0.0026582245000099647,
+      "projectionSeconds": 1.1883968,
+      "eventsPerSecond": 8414697.851761296,
+      "nsPerEvent": 118.83968,
+      "peakRssMiB": 45.51953125,
+      "startupSeconds": 0.06399208650009314,
+      "preparationSeconds": 0.004307273999870631,
+      "wallSeconds": 1.2703789035000455,
+      "exitSeconds": 0.006074798500094403,
       "stateCount": 10,
       "retainedItems": 1000000,
       "maxHistoryLength": 100000,
@@ -242,17 +253,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 1.152185,
-              "totalSeconds": 1.152185,
+              "switchSeconds": 1.2098649,
+              "totalSeconds": 1.2098649,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.04156595999995716,
-          "preparationSeconds": 0.0016469959999767525,
-          "workAndValidationSeconds": 1.1531506100000115,
-          "exitSeconds": 0.0029480299999704584,
-          "wallSeconds": 1.1993115959999159,
-          "peakRssBytes": 25956352
+          "startupSeconds": 0.06149983900013467,
+          "preparationSeconds": 0.00393022199978077,
+          "workAndValidationSeconds": 1.2178476090000458,
+          "exitSeconds": 0.006848072000138927,
+          "wallSeconds": 1.2901257420001002,
+          "peakRssBytes": 47611904
         },
         {
           "roots": 10000000,
@@ -266,20 +277,20 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.9816321,
-              "totalSeconds": 0.9816321,
+              "switchSeconds": 1.1669287,
+              "totalSeconds": 1.1669287,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.01631741999995029,
-          "preparationSeconds": 0.0012970369999720788,
-          "workAndValidationSeconds": 0.9826773099999855,
-          "exitSeconds": 0.002368419000049471,
-          "wallSeconds": 1.0026601859999573,
-          "peakRssBytes": 25960448
+          "startupSeconds": 0.0664843340000516,
+          "preparationSeconds": 0.0046843259999604925,
+          "workAndValidationSeconds": 1.1741618799999287,
+          "exitSeconds": 0.005301525000049878,
+          "wallSeconds": 1.2506320649999907,
+          "peakRssBytes": 47730688
         }
       ],
-      "growthExponent": 1.029003181729124
+      "growthExponent": 0.8180861261890437
     },
     {
       "implementation": "csharp-native",
@@ -287,14 +298,14 @@
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.2318238,
-      "eventsPerSecond": 431362.09483236837,
-      "nsPerEvent": 2318.238,
-      "peakRssMiB": 9.89453125,
-      "startupSeconds": 0.016022969499999817,
-      "preparationSeconds": 0.0012014365000254656,
-      "wallSeconds": 0.25118670400001974,
-      "exitSeconds": 0.001993378000008761,
+      "projectionSeconds": 0.062385750000000004,
+      "eventsPerSecond": 1602930.1563257633,
+      "nsPerEvent": 623.8575000000001,
+      "peakRssMiB": 30.33203125,
+      "startupSeconds": 0.05486240849995738,
+      "preparationSeconds": 0.0037418480001178978,
+      "wallSeconds": 0.13141031800000746,
+      "exitSeconds": 0.00494569249997312,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -311,17 +322,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.2196004,
-              "totalSeconds": 0.2196004,
+              "switchSeconds": 0.0612797,
+              "totalSeconds": 0.0612797,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.01589537199993174,
-          "preparationSeconds": 0.0009066570000868523,
-          "workAndValidationSeconds": 0.21976406099997803,
-          "exitSeconds": 0.0018604890000233354,
-          "wallSeconds": 0.23842657900001996,
-          "peakRssBytes": 10375168
+          "startupSeconds": 0.05291399399993679,
+          "preparationSeconds": 0.003690183000117031,
+          "workAndValidationSeconds": 0.06765494899991609,
+          "exitSeconds": 0.0051439119999940885,
+          "wallSeconds": 0.129403037999964,
+          "peakRssBytes": 31805440
         },
         {
           "roots": 100000,
@@ -335,17 +346,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.2440472,
-              "totalSeconds": 0.2440472,
+              "switchSeconds": 0.0634918,
+              "totalSeconds": 0.0634918,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.016150567000067895,
-          "preparationSeconds": 0.001496215999964079,
-          "workAndValidationSeconds": 0.24417377899999337,
-          "exitSeconds": 0.0021262669999941863,
-          "wallSeconds": 0.26394682900001953,
-          "peakRssBytes": 10375168
+          "startupSeconds": 0.05681082299997797,
+          "preparationSeconds": 0.0037935130001187645,
+          "workAndValidationSeconds": 0.06806578900000204,
+          "exitSeconds": 0.0047474729999521514,
+          "wallSeconds": 0.13341759800005093,
+          "peakRssBytes": 31805440
         }
       ]
     },
@@ -355,14 +366,14 @@
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 22.8035879,
-      "eventsPerSecond": 43852.748277388404,
-      "nsPerEvent": 22803.5879,
-      "peakRssMiB": 16.15234375,
-      "startupSeconds": 0.01879877649997752,
-      "preparationSeconds": 0.0015145825000217883,
-      "wallSeconds": 22.82620564849998,
-      "exitSeconds": 0.0020800170000256912,
+      "projectionSeconds": 0.98538955,
+      "eventsPerSecond": 1014827.0803155971,
+      "nsPerEvent": 985.3895499999999,
+      "peakRssMiB": 32.35546875,
+      "startupSeconds": 0.06162546349992226,
+      "preparationSeconds": 0.004355516500027079,
+      "wallSeconds": 1.0634136529999978,
+      "exitSeconds": 0.005850925999993706,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -379,17 +390,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 23.4512167,
-              "totalSeconds": 23.4512167,
+              "switchSeconds": 1.0318367,
+              "totalSeconds": 1.0318367,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.019656011999927614,
-          "preparationSeconds": 0.0015213400000675392,
-          "workAndValidationSeconds": 23.451476056999923,
-          "exitSeconds": 0.001986716000033084,
-          "wallSeconds": 23.47464012499995,
-          "peakRssBytes": 15945728
+          "startupSeconds": 0.05920129899982385,
+          "preparationSeconds": 0.004494347999980164,
+          "workAndValidationSeconds": 1.0374504140002045,
+          "exitSeconds": 0.005399435999834168,
+          "wallSeconds": 1.1065454969998427,
+          "peakRssBytes": 33771520
         },
         {
           "roots": 1000000,
@@ -403,392 +414,42 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 22.1559591,
-              "totalSeconds": 22.1559591,
+              "switchSeconds": 0.9389424,
+              "totalSeconds": 0.9389424,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.017941541000027428,
-          "preparationSeconds": 0.0015078249999760374,
-          "workAndValidationSeconds": 22.156148487999985,
-          "exitSeconds": 0.0021733180000182983,
-          "wallSeconds": 22.177771172000007,
-          "peakRssBytes": 16936960
+          "startupSeconds": 0.06404962800002068,
+          "preparationSeconds": 0.004216685000073994,
+          "workAndValidationSeconds": 0.945713079999905,
+          "exitSeconds": 0.006302416000153244,
+          "wallSeconds": 1.0202818090001529,
+          "peakRssBytes": 33927168
         }
       ],
-      "growthExponent": 1.9928451635531002
+      "growthExponent": 1.198522551765178
     },
     {
       "implementation": "csharp-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "not-run-after-budget"
-    },
-    {
-      "implementation": "rust-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.0286899065,
-      "eventsPerSecond": 3485546.388936471,
-      "nsPerEvent": 286.899065,
-      "peakRssMiB": 0.8046875,
-      "startupSeconds": 0.014824013000009018,
-      "preparationSeconds": 1.8159999513045477e-06,
-      "wallSeconds": 0.04446418649996531,
-      "exitSeconds": 0.0008925949999820659,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.029903897,
-              "totalSeconds": 0.029903897,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.016413997999961794,
-          "preparationSeconds": 1.735999944685318e-06,
-          "workAndValidationSeconds": 0.029959162000068318,
-          "exitSeconds": 0.0009439699999802542,
-          "wallSeconds": 0.04731886599995505,
-          "peakRssBytes": 843776
-        },
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.027475916,
-              "totalSeconds": 0.027475916,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.013234028000056242,
-          "preparationSeconds": 1.8959999579237774e-06,
-          "workAndValidationSeconds": 0.027532362999977522,
-          "exitSeconds": 0.0008412199999838776,
-          "wallSeconds": 0.041609506999975565,
-          "peakRssBytes": 843776
-        }
-      ]
-    },
-    {
-      "implementation": "rust-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 0.2646212925,
-      "eventsPerSecond": 3778985.3966494403,
-      "nsPerEvent": 264.6212925,
-      "peakRssMiB": 2.59375,
-      "startupSeconds": 0.010571951500025989,
-      "preparationSeconds": 2.17699999893739e-06,
-      "wallSeconds": 0.2761732079999888,
-      "exitSeconds": 0.0009159074999729455,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.264104932,
-              "totalSeconds": 0.264104932,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.009701495000058458,
-          "preparationSeconds": 2.0319999975981773e-06,
-          "workAndValidationSeconds": 0.26417162899997493,
-          "exitSeconds": 0.0009074820000023465,
-          "wallSeconds": 0.27478263800003333,
-          "peakRssBytes": 2596864
-        },
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.265137653,
-              "totalSeconds": 0.265137653,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.01144240799999352,
-          "preparationSeconds": 2.322000000276603e-06,
-          "workAndValidationSeconds": 0.2651947150000069,
-          "exitSeconds": 0.0009243329999435446,
-          "wallSeconds": 0.27756377799994425,
-          "peakRssBytes": 2719744
-        }
-      ],
-      "growthExponent": 0.9648956534601578
-    },
-    {
-      "implementation": "rust-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "ok",
-      "projectionSeconds": 2.6917792785,
-      "eventsPerSecond": 3715014.852767766,
-      "nsPerEvent": 269.17792784999995,
-      "peakRssMiB": 15.26953125,
-      "startupSeconds": 0.013161135000018476,
-      "preparationSeconds": 2.3270000042430183e-06,
-      "wallSeconds": 2.707361027499985,
-      "exitSeconds": 0.00181056849999095,
-      "stateCount": 10,
-      "retainedItems": 1000000,
-      "maxHistoryLength": 100000,
-      "samples": [
-        {
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "retainedItems": 1000000,
-          "maxHistoryLength": 100000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 2.658094513,
-              "totalSeconds": 2.658094513,
-              "bytes": 8000000
-            }
-          ],
-          "startupSeconds": 0.012763305000021319,
-          "preparationSeconds": 2.579000010882737e-06,
-          "workAndValidationSeconds": 2.6586326719999533,
-          "exitSeconds": 0.0016943450000326266,
-          "wallSeconds": 2.673092901000018,
-          "peakRssBytes": 16011264
-        },
-        {
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "retainedItems": 1000000,
-          "maxHistoryLength": 100000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 2.7254640439999998,
-              "totalSeconds": 2.7254640439999998,
-              "bytes": 8000000
-            }
-          ],
-          "startupSeconds": 0.013558965000015633,
-          "preparationSeconds": 2.0749999976032996e-06,
-          "workAndValidationSeconds": 2.7261413219999895,
-          "exitSeconds": 0.0019267919999492733,
-          "wallSeconds": 2.741629153999952,
-          "peakRssBytes": 16003072
-        }
-      ],
-      "growthExponent": 1.0074146592255375
-    },
-    {
-      "implementation": "rust-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.0292454775,
-      "eventsPerSecond": 3419332.1001512115,
-      "nsPerEvent": 292.454775,
-      "peakRssMiB": 0.96875,
-      "startupSeconds": 0.011179306500025632,
-      "preparationSeconds": 5.268999984764378e-06,
-      "wallSeconds": 0.041153520000023036,
-      "exitSeconds": 0.0007733605000339594,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.030248504,
-              "totalSeconds": 0.030248504,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.01042444200004411,
-          "preparationSeconds": 4.302999968786025e-06,
-          "workAndValidationSeconds": 0.03017772900000182,
-          "exitSeconds": 0.0007992370000238225,
-          "wallSeconds": 0.041405711000038536,
-          "peakRssBytes": 1015808
-        },
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.028242451,
-              "totalSeconds": 0.028242451,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.011934171000007154,
-          "preparationSeconds": 6.23500000074273e-06,
-          "workAndValidationSeconds": 0.028213438999955542,
-          "exitSeconds": 0.0007474840000440963,
-          "wallSeconds": 0.040901329000007536,
-          "peakRssBytes": 1015808
-        }
-      ]
-    },
-    {
-      "implementation": "rust-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 0.897686557,
-      "eventsPerSecond": 1113974.5740895616,
-      "nsPerEvent": 897.686557,
-      "peakRssMiB": 5.6484375,
-      "startupSeconds": 0.011885447499992097,
-      "preparationSeconds": 1.8664999856810027e-06,
-      "wallSeconds": 0.9109816900000283,
-      "exitSeconds": 0.0014640005000501333,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.90416137,
-              "totalSeconds": 0.90416137,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.012508410000009462,
-          "preparationSeconds": 1.715999928819656e-06,
-          "workAndValidationSeconds": 0.904184870999984,
-          "exitSeconds": 0.0016981770000938923,
-          "wallSeconds": 0.9183931740000162,
-          "peakRssBytes": 5844992
-        },
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.891211744,
-              "totalSeconds": 0.891211744,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.011262484999974731,
-          "preparationSeconds": 2.0170000425423495e-06,
-          "workAndValidationSeconds": 0.8910758800000167,
-          "exitSeconds": 0.0012298240000063743,
-          "wallSeconds": 0.9035702060000403,
-          "peakRssBytes": 5922816
-        }
-      ],
-      "growthExponent": 1.4870660049844964
-    },
-    {
-      "implementation": "rust-native",
       "mode": "indexed-copy",
       "profile": "dense",
       "events": 10000000,
       "status": "timeout"
     },
     {
-      "implementation": "typescript-native",
+      "implementation": "rust-native",
       "mode": "indexed-append",
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.1571308185,
-      "eventsPerSecond": 636412.3916276806,
-      "nsPerEvent": 1571.3081849999999,
-      "peakRssMiB": 82.40234375,
-      "startupSeconds": 0.7298816800000623,
-      "preparationSeconds": 0.0004571489999989353,
-      "wallSeconds": 0.9442448600000262,
-      "exitSeconds": 0.04911455199999182,
+      "projectionSeconds": 0.0237467925,
+      "eventsPerSecond": 4211095.035255814,
+      "nsPerEvent": 237.46792499999998,
+      "peakRssMiB": 0.80859375,
+      "startupSeconds": 0.011343787499981772,
+      "preparationSeconds": 1.7840000055002747e-06,
+      "wallSeconds": 0.03592472050002016,
+      "exitSeconds": 0.0008749035000619187,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -805,17 +466,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.239196999,
-              "totalSeconds": 0.239196999,
+              "switchSeconds": 0.023364404,
+              "totalSeconds": 0.023364404,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 1.2761579090000623,
-          "preparationSeconds": 0.0006226499999684165,
-          "workAndValidationSeconds": 0.2534926280000036,
-          "exitSeconds": 0.08374547099992924,
-          "wallSeconds": 1.6140186579999636,
-          "peakRssBytes": 76668928
+          "startupSeconds": 0.010372797999934846,
+          "preparationSeconds": 1.773000121829682e-06,
+          "workAndValidationSeconds": 0.02333662599994568,
+          "exitSeconds": 0.0007224880000649136,
+          "wallSeconds": 0.03443368500006727,
+          "peakRssBytes": 847872
         },
         {
           "roots": 100000,
@@ -829,34 +490,34 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.07506463799999999,
-              "totalSeconds": 0.07506463799999999,
+              "switchSeconds": 0.024129181,
+              "totalSeconds": 0.024129181,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.1836054510000622,
-          "preparationSeconds": 0.0002916480000294541,
-          "workAndValidationSeconds": 0.0760903299999427,
-          "exitSeconds": 0.014483633000054397,
-          "wallSeconds": 0.27447106200008875,
-          "peakRssBytes": 86405120
+          "startupSeconds": 0.012314777000028698,
+          "preparationSeconds": 1.7949998891708674e-06,
+          "workAndValidationSeconds": 0.02407186499999625,
+          "exitSeconds": 0.0010273190000589238,
+          "wallSeconds": 0.037415755999973044,
+          "peakRssBytes": 847872
         }
       ]
     },
     {
-      "implementation": "typescript-native",
+      "implementation": "rust-native",
       "mode": "indexed-append",
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 0.3664117575,
-      "eventsPerSecond": 2729170.06490983,
-      "nsPerEvent": 366.41175749999996,
-      "peakRssMiB": 97.4375,
-      "startupSeconds": 0.187067749500045,
-      "preparationSeconds": 0.00041984699998920405,
-      "wallSeconds": 0.5690355325000382,
-      "exitSeconds": 0.012877668500038908,
+      "projectionSeconds": 0.248904824,
+      "eventsPerSecond": 4017599.9160225196,
+      "nsPerEvent": 248.904824,
+      "peakRssMiB": 2.55859375,
+      "startupSeconds": 0.011921518500003003,
+      "preparationSeconds": 2.570499987086805e-06,
+      "wallSeconds": 0.26202400300007866,
+      "exitSeconds": 0.0011123540000426146,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -873,17 +534,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.39014196100000004,
-              "totalSeconds": 0.39014196100000004,
+              "switchSeconds": 0.236179533,
+              "totalSeconds": 0.236179533,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.16762847400002556,
-          "preparationSeconds": 0.0008113019999882454,
-          "workAndValidationSeconds": 0.3921563049999577,
-          "exitSeconds": 0.014053726000042843,
-          "wallSeconds": 0.5746498070000143,
-          "peakRssBytes": 99512320
+          "startupSeconds": 0.01115954200008673,
+          "preparationSeconds": 2.156999926228309e-06,
+          "workAndValidationSeconds": 0.23631220600009328,
+          "exitSeconds": 0.0009707009999146976,
+          "wallSeconds": 0.24844460600002094,
+          "peakRssBytes": 2609152
         },
         {
           "roots": 1000000,
@@ -897,35 +558,35 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.342681554,
-              "totalSeconds": 0.342681554,
+              "switchSeconds": 0.261630115,
+              "totalSeconds": 0.261630115,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.20650702500006446,
-          "preparationSeconds": 2.839199999016273e-05,
-          "workAndValidationSeconds": 0.34518422999997256,
-          "exitSeconds": 0.011701611000034973,
-          "wallSeconds": 0.5634212580000622,
-          "peakRssBytes": 102170624
+          "startupSeconds": 0.012683494999919276,
+          "preparationSeconds": 2.984000047945301e-06,
+          "workAndValidationSeconds": 0.26166291399999864,
+          "exitSeconds": 0.0012540070001705317,
+          "wallSeconds": 0.2756034000001364,
+          "peakRssBytes": 2682880
         }
       ],
-      "growthExponent": 0.3677080281883887
+      "growthExponent": 1.020428356321677
     },
     {
-      "implementation": "typescript-native",
+      "implementation": "rust-native",
       "mode": "indexed-append",
       "profile": "dense",
       "events": 10000000,
       "status": "ok",
-      "projectionSeconds": 2.3447106235,
-      "eventsPerSecond": 4264918.62141725,
-      "nsPerEvent": 234.47106235,
-      "peakRssMiB": 169.3828125,
-      "startupSeconds": 0.19276669999999285,
-      "preparationSeconds": 0.0005297354999811432,
-      "wallSeconds": 2.5766858805000084,
-      "exitSeconds": 0.021433942000044226,
+      "projectionSeconds": 2.3730027910000002,
+      "eventsPerSecond": 4214070.054163707,
+      "nsPerEvent": 237.3002791,
+      "peakRssMiB": 15.30859375,
+      "startupSeconds": 0.012468743499880475,
+      "preparationSeconds": 2.790000053209951e-06,
+      "wallSeconds": 2.388190497999858,
+      "exitSeconds": 0.001984779999929742,
       "stateCount": 10,
       "retainedItems": 1000000,
       "maxHistoryLength": 100000,
@@ -942,17 +603,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 2.9075618760000004,
-              "totalSeconds": 2.9075618760000004,
+              "switchSeconds": 2.451661651,
+              "totalSeconds": 2.451661651,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.21821286299996245,
-          "preparationSeconds": 0.000612493999938124,
-          "workAndValidationSeconds": 2.9254707720000397,
-          "exitSeconds": 0.022453283000004376,
-          "wallSeconds": 3.1667494119999446,
-          "peakRssBytes": 176963584
+          "startupSeconds": 0.01200065399984851,
+          "preparationSeconds": 2.1920000108366366e-06,
+          "workAndValidationSeconds": 2.4525875060001,
+          "exitSeconds": 0.0017975119999391609,
+          "wallSeconds": 2.4663878639998984,
+          "peakRssBytes": 15982592
         },
         {
           "roots": 10000000,
@@ -966,35 +627,35 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 1.781859371,
-              "totalSeconds": 1.781859371,
+              "switchSeconds": 2.2943439310000002,
+              "totalSeconds": 2.2943439310000002,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.16732053700002325,
-          "preparationSeconds": 0.0004469770000241624,
-          "workAndValidationSeconds": 1.7984402339999406,
-          "exitSeconds": 0.020414601000084076,
-          "wallSeconds": 1.986622349000072,
-          "peakRssBytes": 177610752
+          "startupSeconds": 0.01293683299991244,
+          "preparationSeconds": 3.3880000955832656e-06,
+          "workAndValidationSeconds": 2.2948808629998894,
+          "exitSeconds": 0.0021720479999203235,
+          "wallSeconds": 2.3099931319998177,
+          "peakRssBytes": 16052224
         }
       ],
-      "growthExponent": 0.8061198502018619
+      "growthExponent": 0.9792649353028208
     },
     {
-      "implementation": "typescript-native",
+      "implementation": "rust-native",
       "mode": "indexed-copy",
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.0989228985,
-      "eventsPerSecond": 1010888.2929668706,
-      "nsPerEvent": 989.228985,
-      "peakRssMiB": 82.68359375,
-      "startupSeconds": 0.16890719599996373,
-      "preparationSeconds": 0.00032632750003358524,
-      "wallSeconds": 0.28301351999999724,
-      "exitSeconds": 0.013934677000065676,
+      "projectionSeconds": 0.024843608,
+      "eventsPerSecond": 4025180.2395207654,
+      "nsPerEvent": 248.43607999999998,
+      "peakRssMiB": 0.97265625,
+      "startupSeconds": 0.008907919999955993,
+      "preparationSeconds": 4.1955000824600575e-06,
+      "wallSeconds": 0.03444058150000728,
+      "exitSeconds": 0.0006954409999480049,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -1011,17 +672,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.10168732800000001,
-              "totalSeconds": 0.10168732800000001,
+              "switchSeconds": 0.024714692,
+              "totalSeconds": 0.024714692,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.16306642600000032,
-          "preparationSeconds": 0.000312076000000161,
-          "workAndValidationSeconds": 0.10267827199993462,
-          "exitSeconds": 0.012939635000066119,
-          "wallSeconds": 0.2789964090000012,
-          "peakRssBytes": 85356544
+          "startupSeconds": 0.00879086300005838,
+          "preparationSeconds": 4.237999974066042e-06,
+          "workAndValidationSeconds": 0.02471792300002562,
+          "exitSeconds": 0.0006939530001091043,
+          "wallSeconds": 0.03420697700016717,
+          "peakRssBytes": 1019904
         },
         {
           "roots": 100000,
@@ -1035,34 +696,34 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.09615846899999998,
-              "totalSeconds": 0.09615846899999998,
+              "switchSeconds": 0.024972524,
+              "totalSeconds": 0.024972524,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.17474796599992715,
-          "preparationSeconds": 0.0003405790000670095,
-          "workAndValidationSeconds": 0.09701236699993387,
-          "exitSeconds": 0.014929719000065234,
-          "wallSeconds": 0.28703063099999326,
-          "peakRssBytes": 86700032
+          "startupSeconds": 0.009024976999853607,
+          "preparationSeconds": 4.1530001908540726e-06,
+          "workAndValidationSeconds": 0.02494812700001603,
+          "exitSeconds": 0.0006969289997869055,
+          "wallSeconds": 0.034674185999847396,
+          "peakRssBytes": 1019904
         }
       ]
     },
     {
-      "implementation": "typescript-native",
+      "implementation": "rust-native",
       "mode": "indexed-copy",
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 4.3116820055,
-      "eventsPerSecond": 231928.05005665903,
-      "nsPerEvent": 4311.6820055,
-      "peakRssMiB": 208.26953125,
-      "startupSeconds": 0.18709449799996491,
-      "preparationSeconds": 0.0004371620000256371,
-      "wallSeconds": 4.524295114999973,
-      "exitSeconds": 0.022091340999963904,
+      "projectionSeconds": 0.7454367755,
+      "eventsPerSecond": 1341495.3928577676,
+      "nsPerEvent": 745.4367755,
+      "peakRssMiB": 5.1875,
+      "startupSeconds": 0.008819334999998318,
+      "preparationSeconds": 1.8434999446981237e-06,
+      "wallSeconds": 0.755264038499945,
+      "exitSeconds": 0.0009535949999417426,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -1079,17 +740,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 4.404960501,
-              "totalSeconds": 4.404960501,
+              "switchSeconds": 0.727499813,
+              "totalSeconds": 0.727499813,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.16900194499999088,
-          "preparationSeconds": 0.00045968300003096374,
-          "workAndValidationSeconds": 4.408381696999982,
-          "exitSeconds": 0.0238714729999856,
-          "wallSeconds": 4.601714797999989,
-          "peakRssBytes": 218386432
+          "startupSeconds": 0.009059077000074467,
+          "preparationSeconds": 1.6199999208765803e-06,
+          "workAndValidationSeconds": 0.7275263280000672,
+          "exitSeconds": 0.0009528999999020016,
+          "wallSeconds": 0.7375399249999646,
+          "peakRssBytes": 5439488
         },
         {
           "roots": 1000000,
@@ -1103,1092 +764,42 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 4.218403509999999,
-              "totalSeconds": 4.218403509999999,
+              "switchSeconds": 0.763373738,
+              "totalSeconds": 0.763373738,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.20518705099993895,
-          "preparationSeconds": 0.00041464100002031046,
-          "workAndValidationSeconds": 4.220962531000055,
-          "exitSeconds": 0.02031120899994221,
-          "wallSeconds": 4.446875431999956,
-          "peakRssBytes": 214011904
-        }
-      ],
-      "growthExponent": 1.639349890377387
-    },
-    {
-      "implementation": "typescript-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "timeout"
-    },
-    {
-      "implementation": "typescript-zod-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.07032045849999999,
-      "eventsPerSecond": 1422061.2625840604,
-      "nsPerEvent": 703.204585,
-      "peakRssMiB": 92.58203125,
-      "startupSeconds": 0.2546557734998487,
-      "preparationSeconds": 0.0002810470000440546,
-      "wallSeconds": 0.33944390449994444,
-      "exitSeconds": 0.013367534000053638,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.08050513099999998,
-              "totalSeconds": 0.08050513099999998,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.2881691999998566,
-          "preparationSeconds": 0.00028388999999151565,
-          "workAndValidationSeconds": 0.08137826400002268,
-          "exitSeconds": 0.013888614000052257,
-          "wallSeconds": 0.38371996799992303,
-          "peakRssBytes": 97026048
-        },
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.060135786,
-              "totalSeconds": 0.060135786,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.2211423469998408,
-          "preparationSeconds": 0.0002782040000965935,
-          "workAndValidationSeconds": 0.060900835999973424,
-          "exitSeconds": 0.012846454000055019,
-          "wallSeconds": 0.29516784099996585,
-          "peakRssBytes": 97079296
-        }
-      ]
-    },
-    {
-      "implementation": "typescript-zod-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 0.37955405,
-      "eventsPerSecond": 2634670.872303958,
-      "nsPerEvent": 379.55404999999996,
-      "peakRssMiB": 101.38671875,
-      "startupSeconds": 0.223551463999911,
-      "preparationSeconds": 0.00024418500004230737,
-      "wallSeconds": 0.6166626560000168,
-      "exitSeconds": 0.010746663000077206,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.41364394399999993,
-              "totalSeconds": 0.41364394399999993,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.21928632100002687,
-          "preparationSeconds": 0.0002658769999470678,
-          "workAndValidationSeconds": 0.4163292000000638,
-          "exitSeconds": 0.010676603000092655,
-          "wallSeconds": 0.6465580010001304,
-          "peakRssBytes": 105885696
-        },
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.345464156,
-              "totalSeconds": 0.345464156,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.2278166069997951,
-          "preparationSeconds": 0.00022249300013754691,
-          "workAndValidationSeconds": 0.3479114879999088,
-          "exitSeconds": 0.010816723000061756,
-          "wallSeconds": 0.5867673109999032,
-          "peakRssBytes": 106311680
-        }
-      ],
-      "growthExponent": 0.7321919361492332
-    },
-    {
-      "implementation": "typescript-zod-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "ok",
-      "projectionSeconds": 3.1924095905,
-      "eventsPerSecond": 3132430.1335762446,
-      "nsPerEvent": 319.24095905,
-      "peakRssMiB": 176.05859375,
-      "startupSeconds": 0.26327031549999447,
-      "preparationSeconds": 0.00032377599995925266,
-      "wallSeconds": 3.4937466154999584,
-      "exitSeconds": 0.021307808999949884,
-      "stateCount": 10,
-      "retainedItems": 1000000,
-      "maxHistoryLength": 100000,
-      "samples": [
-        {
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "retainedItems": 1000000,
-          "maxHistoryLength": 100000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 3.335311742,
-              "totalSeconds": 3.335311742,
-              "bytes": 8000000
-            }
-          ],
-          "startupSeconds": 0.28061454799990315,
-          "preparationSeconds": 0.00035071499996774946,
-          "workAndValidationSeconds": 3.352536791000148,
-          "exitSeconds": 0.022838955999986865,
-          "wallSeconds": 3.6563410100000056,
-          "peakRssBytes": 184610816
-        },
-        {
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "retainedItems": 1000000,
-          "maxHistoryLength": 100000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 3.049507439,
-              "totalSeconds": 3.049507439,
-              "bytes": 8000000
-            }
-          ],
-          "startupSeconds": 0.24592608300008578,
-          "preparationSeconds": 0.00029683699995075585,
-          "workAndValidationSeconds": 3.0651526389999617,
-          "exitSeconds": 0.019776661999912903,
-          "wallSeconds": 3.331152220999911,
-          "peakRssBytes": 184041472
-        }
-      ],
-      "growthExponent": 0.924844976937516
-    },
-    {
-      "implementation": "typescript-zod-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.1006756375,
-      "eventsPerSecond": 993288.9672538701,
-      "nsPerEvent": 1006.756375,
-      "peakRssMiB": 91.91015625,
-      "startupSeconds": 0.23992688900000303,
-      "preparationSeconds": 0.0002410459999282466,
-      "wallSeconds": 0.3570449325000027,
-      "exitSeconds": 0.015260729500027992,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.103341846,
-              "totalSeconds": 0.103341846,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.25040420000004815,
-          "preparationSeconds": 0.00022869499980515684,
-          "workAndValidationSeconds": 0.10411176900015562,
-          "exitSeconds": 0.01394978500002253,
-          "wallSeconds": 0.36869444900003145,
-          "peakRssBytes": 92639232
-        },
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.09800942899999998,
-              "totalSeconds": 0.09800942899999998,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.2294495779999579,
-          "preparationSeconds": 0.00025339700005133636,
-          "workAndValidationSeconds": 0.09912076699993122,
-          "exitSeconds": 0.016571674000033454,
-          "wallSeconds": 0.3453954159999739,
-          "peakRssBytes": 96374784
-        }
-      ]
-    },
-    {
-      "implementation": "typescript-zod-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 3.9439515815,
-      "eventsPerSecond": 253552.80848038982,
-      "nsPerEvent": 3943.9515814999995,
-      "peakRssMiB": 215.76953125,
-      "startupSeconds": 0.2235822024999834,
-      "preparationSeconds": 0.00012804099992536067,
-      "wallSeconds": 4.188592855000024,
-      "exitSeconds": 0.01933612000004814,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 3.703615795,
-              "totalSeconds": 3.703615795,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.2341856389998611,
-          "preparationSeconds": 0.00025452199997744174,
-          "workAndValidationSeconds": 3.7058022960000017,
-          "exitSeconds": 0.020994717000121454,
-          "wallSeconds": 3.9612371739999617,
-          "peakRssBytes": 226250752
-        },
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 4.184287368,
-              "totalSeconds": 4.184287368,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.21297876600010568,
-          "preparationSeconds": 1.5599998732795939e-06,
-          "workAndValidationSeconds": 4.185290687000133,
-          "exitSeconds": 0.017677522999974826,
-          "wallSeconds": 4.415948536000087,
-          "peakRssBytes": 224292864
-        }
-      ],
-      "growthExponent": 1.5930071862868516
-    },
-    {
-      "implementation": "typescript-zod-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "timeout"
-    },
-    {
-      "implementation": "java-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.2226292145,
-      "eventsPerSecond": 449177.3472973377,
-      "nsPerEvent": 2226.292145,
-      "peakRssMiB": 55.05078125,
-      "startupSeconds": 0.13507254449996253,
-      "preparationSeconds": 0.022025640000038038,
-      "wallSeconds": 0.46755602350003755,
-      "exitSeconds": 0.0452696104999859,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.227135589,
-              "totalSeconds": 0.227135589,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.14604205599994202,
-          "preparationSeconds": 0.02671682699997291,
-          "workAndValidationSeconds": 0.2717907720000312,
-          "exitSeconds": 0.07225491999997757,
-          "wallSeconds": 0.5168045749999237,
-          "peakRssBytes": 57532416
-        },
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.21812284,
-              "totalSeconds": 0.21812284,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.12410303299998304,
-          "preparationSeconds": 0.017334453000103167,
-          "workAndValidationSeconds": 0.25858568500007095,
-          "exitSeconds": 0.01828430099999423,
-          "wallSeconds": 0.4183074720001514,
-          "peakRssBytes": 57724928
-        }
-      ]
-    },
-    {
-      "implementation": "java-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 0.3180551915,
-      "eventsPerSecond": 3144108.4023305434,
-      "nsPerEvent": 318.0551915,
-      "peakRssMiB": 89.9921875,
-      "startupSeconds": 0.12747771849990386,
-      "preparationSeconds": 0.019678066000096806,
-      "wallSeconds": 0.5651302434999934,
-      "exitSeconds": 0.05473255549998157,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.320792626,
-              "totalSeconds": 0.320792626,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.13368321999996624,
-          "preparationSeconds": 0.023141126000155054,
-          "workAndValidationSeconds": 0.3666091679999681,
-          "exitSeconds": 0.07838607400003639,
-          "wallSeconds": 0.6018195880001258,
-          "peakRssBytes": 94363648
-        },
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.315317757,
-              "totalSeconds": 0.315317757,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.12127221699984148,
-          "preparationSeconds": 0.016215006000038557,
-          "workAndValidationSeconds": 0.35987463900005423,
-          "exitSeconds": 0.031079036999926757,
-          "wallSeconds": 0.528440898999861,
-          "peakRssBytes": 93605888
-        }
-      ],
-      "growthExponent": 0.15492033480710496
-    },
-    {
-      "implementation": "java-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "ok",
-      "projectionSeconds": 1.116376333,
-      "eventsPerSecond": 8957552.847011134,
-      "nsPerEvent": 111.6376333,
-      "peakRssMiB": 310.10546875,
-      "startupSeconds": 0.13376100049993056,
-      "preparationSeconds": 0.019571416499957195,
-      "wallSeconds": 1.4162139494999337,
-      "exitSeconds": 0.08507614199993441,
-      "stateCount": 10,
-      "retainedItems": 1000000,
-      "maxHistoryLength": 100000,
-      "samples": [
-        {
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "retainedItems": 1000000,
-          "maxHistoryLength": 100000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 1.115751447,
-              "totalSeconds": 1.115751447,
-              "bytes": 8000000
-            }
-          ],
-          "startupSeconds": 0.12618974499991964,
-          "preparationSeconds": 0.016801429999986794,
-          "workAndValidationSeconds": 1.1728063210000528,
-          "exitSeconds": 0.088103313999909,
-          "wallSeconds": 1.4039008099998682,
-          "peakRssBytes": 325169152
-        },
-        {
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "retainedItems": 1000000,
-          "maxHistoryLength": 100000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 1.117001219,
-              "totalSeconds": 1.117001219,
-              "bytes": 8000000
-            }
-          ],
-          "startupSeconds": 0.14133225599994148,
-          "preparationSeconds": 0.022341402999927595,
-          "workAndValidationSeconds": 1.1828044600001704,
-          "exitSeconds": 0.08204896999995981,
-          "wallSeconds": 1.4285270889999993,
-          "peakRssBytes": 286617600
-        }
-      ],
-      "growthExponent": 0.5453081321381614
-    },
-    {
-      "implementation": "java-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.285290367,
-      "eventsPerSecond": 350520.0720639825,
-      "nsPerEvent": 2852.9036699999997,
-      "peakRssMiB": 86.56640625,
-      "startupSeconds": 0.14014808249999078,
-      "preparationSeconds": 0.016604889499944875,
-      "wallSeconds": 0.5536515579999559,
-      "exitSeconds": 0.06096625300006053,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.276174208,
-              "totalSeconds": 0.276174208,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.13131517800002257,
-          "preparationSeconds": 0.016314922999981718,
-          "workAndValidationSeconds": 0.3254607029998624,
-          "exitSeconds": 0.05109813600006419,
-          "wallSeconds": 0.5241889399999309,
-          "peakRssBytes": 88387584
-        },
-        {
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "retainedItems": 10000,
-          "maxHistoryLength": 1000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 0.294406526,
-              "totalSeconds": 0.294406526,
-              "bytes": 80000
-            }
-          ],
-          "startupSeconds": 0.148980986999959,
-          "preparationSeconds": 0.01689485599990803,
-          "workAndValidationSeconds": 0.34640396300005705,
-          "exitSeconds": 0.07083437000005688,
-          "wallSeconds": 0.5831141759999809,
-          "peakRssBytes": 90771456
-        }
-      ]
-    },
-    {
-      "implementation": "java-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 10.0425739205,
-      "eventsPerSecond": 99576.06564973254,
-      "nsPerEvent": 10042.5739205,
-      "peakRssMiB": 1358.6171875,
-      "startupSeconds": 0.2272630360000676,
-      "preparationSeconds": 0.017677847999948426,
-      "wallSeconds": 10.490995304499961,
-      "exitSeconds": 0.108225290499945,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 18.024854992,
-              "totalSeconds": 18.024854992,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.20972257900007207,
-          "preparationSeconds": 0.01898682799992457,
-          "workAndValidationSeconds": 18.147000789000003,
-          "exitSeconds": 0.1260839589999705,
-          "wallSeconds": 18.50179415499997,
-          "peakRssBytes": 1410650112
-        },
-        {
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "retainedItems": 100000,
-          "maxHistoryLength": 10000,
-          "ignored": 10,
-          "measurements": [
-            {
-              "encodeSeconds": 0,
-              "decodeSeconds": 0,
-              "switchSeconds": 2.060292849,
-              "totalSeconds": 2.060292849,
-              "bytes": 800000
-            }
-          ],
-          "startupSeconds": 0.2448034930000631,
-          "preparationSeconds": 0.01636886799997228,
-          "workAndValidationSeconds": 2.128657470999997,
-          "exitSeconds": 0.09036662199991952,
-          "wallSeconds": 2.4801964539999517,
-          "peakRssBytes": 1424613376
-        }
-      ],
-      "growthExponent": 1.5465579294408034
-    },
-    {
-      "implementation": "java-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "not-run-after-budget"
-    },
-    {
-      "implementation": "go-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.0162106575,
-      "eventsPerSecond": 6168781.247768636,
-      "nsPerEvent": 162.106575,
-      "peakRssMiB": 6.34375,
-      "startupSeconds": 0.023623624999913773,
-      "preparationSeconds": 1.7905000504470081e-06,
-      "wallSeconds": 0.04121597500000007,
-      "exitSeconds": 0.0010185620001266216,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "ignored": 10,
-          "maxHistoryLength": 1000,
-          "measurements": [
-            {
-              "bytes": 80000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 0.016123517,
-              "totalSeconds": 0.016123517
-            }
-          ],
-          "retainedItems": 10000,
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "startupSeconds": 0.033533492999822556,
-          "preparationSeconds": 1.503000021330081e-06,
-          "workAndValidationSeconds": 0.016668863999939276,
-          "exitSeconds": 0.0011393870001938922,
-          "wallSeconds": 0.051343246999977055,
-          "peakRssBytes": 6651904
-        },
-        {
-          "ignored": 10,
-          "maxHistoryLength": 1000,
-          "measurements": [
-            {
-              "bytes": 80000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 0.016297798,
-              "totalSeconds": 0.016297798
-            }
-          ],
-          "retainedItems": 10000,
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "startupSeconds": 0.013713757000004989,
-          "preparationSeconds": 2.0780000795639353e-06,
-          "workAndValidationSeconds": 0.016475130999879184,
-          "exitSeconds": 0.000897737000059351,
-          "wallSeconds": 0.031088703000023088,
-          "peakRssBytes": 6553600
-        }
-      ]
-    },
-    {
-      "implementation": "go-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 0.15607187849999998,
-      "eventsPerSecond": 6407304.183245286,
-      "nsPerEvent": 156.07187849999997,
-      "peakRssMiB": 7.5390625,
-      "startupSeconds": 0.015348703500080774,
-      "preparationSeconds": 2.231999928881123e-06,
-      "wallSeconds": 0.17317407000018648,
-      "exitSeconds": 0.001463736500113555,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "ignored": 10,
-          "maxHistoryLength": 10000,
-          "measurements": [
-            {
-              "bytes": 800000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 0.155623151,
-              "totalSeconds": 0.155623151
-            }
-          ],
-          "retainedItems": 100000,
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "startupSeconds": 0.01697060100013914,
-          "preparationSeconds": 1.7729998944560066e-06,
-          "workAndValidationSeconds": 0.156070937000095,
-          "exitSeconds": 0.0016189430000395078,
-          "wallSeconds": 0.1746622540001681,
-          "peakRssBytes": 7905280
-        },
-        {
-          "ignored": 10,
-          "maxHistoryLength": 10000,
-          "measurements": [
-            {
-              "bytes": 800000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 0.156520606,
-              "totalSeconds": 0.156520606
-            }
-          ],
-          "retainedItems": 100000,
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "startupSeconds": 0.013726806000022407,
-          "preparationSeconds": 2.69099996330624e-06,
-          "workAndValidationSeconds": 0.15664785900003153,
-          "exitSeconds": 0.0013085300001876021,
-          "wallSeconds": 0.17168588600020485,
-          "peakRssBytes": 7852032
-        }
-      ],
-      "growthExponent": 0.9835240275512389
-    },
-    {
-      "implementation": "go-native",
-      "mode": "indexed-append",
-      "profile": "dense",
-      "events": 10000000,
-      "status": "ok",
-      "projectionSeconds": 1.47493846,
-      "eventsPerSecond": 6779943.88999796,
-      "nsPerEvent": 147.49384600000002,
-      "peakRssMiB": 27.015625,
-      "startupSeconds": 0.018197960999941643,
-      "preparationSeconds": 1.0098500069943839e-05,
-      "wallSeconds": 1.4961294799999223,
-      "exitSeconds": 0.0023395904999006234,
-      "stateCount": 10,
-      "retainedItems": 1000000,
-      "maxHistoryLength": 100000,
-      "samples": [
-        {
-          "ignored": 10,
-          "maxHistoryLength": 100000,
-          "measurements": [
-            {
-              "bytes": 8000000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 1.547861239,
-              "totalSeconds": 1.547861239
-            }
-          ],
-          "retainedItems": 1000000,
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "startupSeconds": 0.016707641999801126,
-          "preparationSeconds": 1.735500018185121e-05,
-          "workAndValidationSeconds": 1.54826630499997,
-          "exitSeconds": 0.0025397800000064308,
-          "wallSeconds": 1.5675310819999595,
-          "peakRssBytes": 28327936
-        },
-        {
-          "ignored": 10,
-          "maxHistoryLength": 100000,
-          "measurements": [
-            {
-              "bytes": 8000000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 1.402015681,
-              "totalSeconds": 1.402015681
-            }
-          ],
-          "retainedItems": 1000000,
-          "roots": 10000000,
-          "samples": 1,
-          "sink": 15000598991655,
-          "stateCount": 10,
-          "startupSeconds": 0.01968828000008216,
-          "preparationSeconds": 2.8419999580364674e-06,
-          "workAndValidationSeconds": 1.40289735500005,
-          "exitSeconds": 0.002139400999794816,
-          "wallSeconds": 1.424727877999885,
-          "peakRssBytes": 26128384
-        }
-      ],
-      "growthExponent": 0.9754492426602523
-    },
-    {
-      "implementation": "go-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 100000,
-      "status": "ok",
-      "projectionSeconds": 0.0502517705,
-      "eventsPerSecond": 1989979.6366378772,
-      "nsPerEvent": 502.51770500000003,
-      "peakRssMiB": 8.11328125,
-      "startupSeconds": 0.014242405999993935,
-      "preparationSeconds": 1.8174999922848656e-06,
-      "wallSeconds": 0.06622321550003107,
-      "exitSeconds": 0.001676417999988189,
-      "stateCount": 10,
-      "retainedItems": 10000,
-      "maxHistoryLength": 1000,
-      "samples": [
-        {
-          "ignored": 10,
-          "maxHistoryLength": 1000,
-          "measurements": [
-            {
-              "bytes": 80000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 0.062804889,
-              "totalSeconds": 0.062804889
-            }
-          ],
-          "retainedItems": 10000,
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "startupSeconds": 0.014864643999999316,
-          "preparationSeconds": 2.0590000531228725e-06,
-          "workAndValidationSeconds": 0.06279141000004529,
-          "exitSeconds": 0.0018247499999688443,
-          "wallSeconds": 0.07948286300006657,
-          "peakRssBytes": 8507392
-        },
-        {
-          "ignored": 10,
-          "maxHistoryLength": 1000,
-          "measurements": [
-            {
-              "bytes": 80000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 0.037698652,
-              "totalSeconds": 0.037698652
-            }
-          ],
-          "retainedItems": 10000,
-          "roots": 100000,
-          "samples": 1,
-          "sink": 1505981635,
-          "stateCount": 10,
-          "startupSeconds": 0.013620167999988553,
-          "preparationSeconds": 1.5759999314468587e-06,
-          "workAndValidationSeconds": 0.03781373800006804,
-          "exitSeconds": 0.0015280860000075336,
-          "wallSeconds": 0.052963567999995576,
-          "peakRssBytes": 8429568
-        }
-      ]
-    },
-    {
-      "implementation": "go-native",
-      "mode": "indexed-copy",
-      "profile": "dense",
-      "events": 1000000,
-      "status": "ok",
-      "projectionSeconds": 2.4907574445,
-      "eventsPerSecond": 401484.2963565817,
-      "nsPerEvent": 2490.7574445,
-      "peakRssMiB": 32.21484375,
-      "startupSeconds": 0.013144116499915981,
-      "preparationSeconds": 2.13249995795195e-06,
-      "wallSeconds": 2.507263700499948,
-      "exitSeconds": 0.003157343999987461,
-      "stateCount": 10,
-      "retainedItems": 100000,
-      "maxHistoryLength": 10000,
-      "samples": [
-        {
-          "ignored": 10,
-          "maxHistoryLength": 10000,
-          "measurements": [
-            {
-              "bytes": 800000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 2.277863969,
-              "totalSeconds": 2.277863969
-            }
-          ],
-          "retainedItems": 100000,
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "startupSeconds": 0.014030676999936986,
-          "preparationSeconds": 2.1979999473842327e-06,
-          "workAndValidationSeconds": 2.2779399600001398,
-          "exitSeconds": 0.0022941249999348656,
-          "wallSeconds": 2.294266959999959,
-          "peakRssBytes": 15482880
-        },
-        {
-          "ignored": 10,
-          "maxHistoryLength": 10000,
-          "measurements": [
-            {
-              "bytes": 800000,
-              "decodeSeconds": 0,
-              "encodeSeconds": 0,
-              "switchSeconds": 2.70365092,
-              "totalSeconds": 2.70365092
-            }
-          ],
-          "retainedItems": 100000,
-          "roots": 1000000,
-          "samples": 1,
-          "sink": 150059891645,
-          "stateCount": 10,
-          "startupSeconds": 0.012257555999894976,
+          "startupSeconds": 0.00857959299992217,
           "preparationSeconds": 2.066999968519667e-06,
-          "workAndValidationSeconds": 2.703980255000033,
-          "exitSeconds": 0.004020563000040056,
-          "wallSeconds": 2.7202604409999367,
-          "peakRssBytes": 33779712
+          "workAndValidationSeconds": 0.7634522020000531,
+          "exitSeconds": 0.0009542899999814836,
+          "wallSeconds": 0.7729881519999253,
+          "peakRssBytes": 5324800
         }
       ],
-      "growthExponent": 1.6951800693517456
+      "growthExponent": 1.4771961464790666
     },
     {
-      "implementation": "go-native",
+      "implementation": "rust-native",
       "mode": "indexed-copy",
       "profile": "dense",
       "events": 10000000,
       "status": "timeout"
     },
     {
-      "implementation": "swift-native",
+      "implementation": "typescript-native",
       "mode": "indexed-append",
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.0825880145,
-      "eventsPerSecond": 1210829.447897673,
-      "nsPerEvent": 825.880145,
-      "peakRssMiB": 1.0390625,
-      "startupSeconds": 0.01128694349995385,
-      "preparationSeconds": 8.875000048647053e-06,
-      "wallSeconds": 0.09480839099990135,
-      "exitSeconds": 0.0008118004999460027,
+      "projectionSeconds": 0.03464096750000001,
+      "eventsPerSecond": 2886755.400235284,
+      "nsPerEvent": 346.4096750000001,
+      "peakRssMiB": 82.08203125,
+      "startupSeconds": 0.1317096519999268,
+      "preparationSeconds": 0.00024745200005327206,
+      "wallSeconds": 0.17740570299986302,
+      "exitSeconds": 0.01010567749983693,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -2205,17 +816,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.085172753,
-              "totalSeconds": 0.085172753,
+              "switchSeconds": 0.03278243000000002,
+              "totalSeconds": 0.03278243000000002,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.012911950999978217,
-          "preparationSeconds": 1.618300007066864e-05,
-          "workAndValidationSeconds": 0.08536974300000111,
-          "exitSeconds": 0.0009051879999333323,
-          "wallSeconds": 0.09920306499998333,
-          "peakRssBytes": 1028096
+          "startupSeconds": 0.1355991539999195,
+          "preparationSeconds": 0.0002746750001278997,
+          "workAndValidationSeconds": 0.03346551200002068,
+          "exitSeconds": 0.010061875999781478,
+          "wallSeconds": 0.17940121699984957,
+          "peakRssBytes": 85295104
         },
         {
           "roots": 100000,
@@ -2229,34 +840,34 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.080003276,
-              "totalSeconds": 0.080003276,
+              "switchSeconds": 0.036499505,
+              "totalSeconds": 0.036499505,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.009661935999929483,
-          "preparationSeconds": 1.5670000266254647e-06,
-          "workAndValidationSeconds": 0.08003180099990459,
-          "exitSeconds": 0.000718412999958673,
-          "wallSeconds": 0.09041371699981937,
-          "peakRssBytes": 1089536
+          "startupSeconds": 0.12782014999993407,
+          "preparationSeconds": 0.00022022899997864442,
+          "workAndValidationSeconds": 0.03722033100007138,
+          "exitSeconds": 0.01014947899989238,
+          "wallSeconds": 0.17541018899987648,
+          "peakRssBytes": 86069248
         }
       ]
     },
     {
-      "implementation": "swift-native",
+      "implementation": "typescript-native",
       "mode": "indexed-append",
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 0.8353842315,
-      "eventsPerSecond": 1197053.9570808262,
-      "nsPerEvent": 835.3842315,
-      "peakRssMiB": 2.5078125,
-      "startupSeconds": 0.010900356499973896,
-      "preparationSeconds": 1.138450011239911e-05,
-      "wallSeconds": 0.8474617315000614,
-      "exitSeconds": 0.0008475194999846281,
+      "projectionSeconds": 0.165093786,
+      "eventsPerSecond": 6057163.169060767,
+      "nsPerEvent": 165.093786,
+      "peakRssMiB": 97.22265625,
+      "startupSeconds": 0.12302111849999164,
+      "preparationSeconds": 0.0002303154999481194,
+      "wallSeconds": 0.2977020140000377,
+      "exitSeconds": 0.0074452100001281,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -2273,17 +884,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.857980232,
-              "totalSeconds": 0.857980232,
+              "switchSeconds": 0.171587353,
+              "totalSeconds": 0.171587353,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.012271709000060582,
-          "preparationSeconds": 1.1712000059560523e-05,
-          "workAndValidationSeconds": 0.8583108850000372,
-          "exitSeconds": 0.0008432499998889398,
-          "wallSeconds": 0.8714375560000462,
-          "peakRssBytes": 2519040
+          "startupSeconds": 0.12636345499981871,
+          "preparationSeconds": 0.00018161299999519542,
+          "workAndValidationSeconds": 0.1735734290000437,
+          "exitSeconds": 0.007405754000046727,
+          "wallSeconds": 0.3075242509999043,
+          "peakRssBytes": 97501184
         },
         {
           "roots": 1000000,
@@ -2297,35 +908,35 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.8127882310000001,
-              "totalSeconds": 0.8127882310000001,
+              "switchSeconds": 0.158600219,
+              "totalSeconds": 0.158600219,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.009529003999887209,
-          "preparationSeconds": 1.1057000165237696e-05,
-          "workAndValidationSeconds": 0.8130940569999439,
-          "exitSeconds": 0.0008517890000803163,
-          "wallSeconds": 0.8234859070000766,
-          "peakRssBytes": 2629632
+          "startupSeconds": 0.11967878200016457,
+          "preparationSeconds": 0.00027901799990104337,
+          "workAndValidationSeconds": 0.160437310999896,
+          "exitSeconds": 0.007484666000209472,
+          "wallSeconds": 0.2878797770001711,
+          "peakRssBytes": 101945344
         }
       ],
-      "growthExponent": 1.0049692480176942
+      "growthExponent": 0.6781407139873987
     },
     {
-      "implementation": "swift-native",
+      "implementation": "typescript-native",
       "mode": "indexed-append",
       "profile": "dense",
       "events": 10000000,
       "status": "ok",
-      "projectionSeconds": 8.938950479999999,
-      "eventsPerSecond": 1118699.5634861153,
-      "nsPerEvent": 893.8950479999999,
-      "peakRssMiB": 18.80078125,
-      "startupSeconds": 0.011306151999974645,
-      "preparationSeconds": 1.841099992816453e-05,
-      "wallSeconds": 8.953582741499872,
-      "exitSeconds": 0.0021493069999678482,
+      "projectionSeconds": 1.3742662180000003,
+      "eventsPerSecond": 7276610.506043887,
+      "nsPerEvent": 137.42662180000002,
+      "peakRssMiB": 169.09375,
+      "startupSeconds": 0.12271536850005305,
+      "preparationSeconds": 0.00022562149990790203,
+      "wallSeconds": 1.5315250059999244,
+      "exitSeconds": 0.018473033499958547,
       "stateCount": 10,
       "retainedItems": 1000000,
       "maxHistoryLength": 100000,
@@ -2342,17 +953,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 8.682267566,
-              "totalSeconds": 8.682267566,
+              "switchSeconds": 1.327334376,
+              "totalSeconds": 1.327334376,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.011380662999954438,
-          "preparationSeconds": 2.134099986506044e-05,
-          "workAndValidationSeconds": 8.683479156999965,
-          "exitSeconds": 0.0023936439999943104,
-          "wallSeconds": 8.697274804999779,
-          "peakRssBytes": 19714048
+          "startupSeconds": 0.11840172400002302,
+          "preparationSeconds": 0.00023050999993756704,
+          "workAndValidationSeconds": 1.339731927999992,
+          "exitSeconds": 0.016570715999932872,
+          "wallSeconds": 1.4749348779998854,
+          "peakRssBytes": 173670400
         },
         {
           "roots": 10000000,
@@ -2366,35 +977,35 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 9.195633394,
-              "totalSeconds": 9.195633394,
+              "switchSeconds": 1.4211980600000003,
+              "totalSeconds": 1.4211980600000003,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.011231640999994852,
-          "preparationSeconds": 1.5480999991268618e-05,
-          "workAndValidationSeconds": 9.196738586000038,
-          "exitSeconds": 0.001904969999941386,
-          "wallSeconds": 9.209890677999965,
-          "peakRssBytes": 19705856
+          "startupSeconds": 0.12702901300008307,
+          "preparationSeconds": 0.00022073299987823702,
+          "workAndValidationSeconds": 1.4404900370000178,
+          "exitSeconds": 0.02037535099998422,
+          "wallSeconds": 1.5881151339999633,
+          "peakRssBytes": 177307648
         }
       ],
-      "growthExponent": 1.0294002580052275
+      "growthExponent": 0.9203401437986797
     },
     {
-      "implementation": "swift-native",
+      "implementation": "typescript-native",
       "mode": "indexed-copy",
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.103149963,
-      "eventsPerSecond": 969462.2963655354,
-      "nsPerEvent": 1031.49963,
-      "peakRssMiB": 0.99609375,
-      "startupSeconds": 0.013484719500070241,
-      "preparationSeconds": 1.2658499940698675e-05,
-      "wallSeconds": 0.11768279650004843,
-      "exitSeconds": 0.0008372385000257054,
+      "projectionSeconds": 0.081298293,
+      "eventsPerSecond": 1230038.1263847693,
+      "nsPerEvent": 812.9829299999999,
+      "peakRssMiB": 82.921875,
+      "startupSeconds": 0.15465096700006598,
+      "preparationSeconds": 0.0002657560000898229,
+      "wallSeconds": 0.24748290900004122,
+      "exitSeconds": 0.010526174500000707,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -2411,17 +1022,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.105872393,
-              "totalSeconds": 0.105872393,
+              "switchSeconds": 0.07788396399999999,
+              "totalSeconds": 0.07788396399999999,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.012494891000187636,
-          "preparationSeconds": 1.6589999631833052e-06,
-          "workAndValidationSeconds": 0.1060502269999688,
-          "exitSeconds": 0.0008219100000133039,
-          "wallSeconds": 0.11936868700013292,
-          "peakRssBytes": 1044480
+          "startupSeconds": 0.16105528299999605,
+          "preparationSeconds": 0.0003374510001776798,
+          "workAndValidationSeconds": 0.07871965999993336,
+          "exitSeconds": 0.010429081999973278,
+          "wallSeconds": 0.25054147600008037,
+          "peakRssBytes": 86949888
         },
         {
           "roots": 100000,
@@ -2435,34 +1046,34 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.100427533,
-              "totalSeconds": 0.100427533,
+              "switchSeconds": 0.084712622,
+              "totalSeconds": 0.084712622,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.014474547999952847,
-          "preparationSeconds": 2.3657999918214045e-05,
-          "workAndValidationSeconds": 0.10064613300005476,
-          "exitSeconds": 0.0008525670000381069,
-          "wallSeconds": 0.11599690599996393,
-          "peakRssBytes": 1044480
+          "startupSeconds": 0.1482466510001359,
+          "preparationSeconds": 0.00019406100000196602,
+          "workAndValidationSeconds": 0.08536036299983607,
+          "exitSeconds": 0.010623267000028136,
+          "wallSeconds": 0.24442434200000207,
+          "peakRssBytes": 86740992
         }
       ]
     },
     {
-      "implementation": "swift-native",
+      "implementation": "typescript-native",
       "mode": "indexed-copy",
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 1.3346081925,
-      "eventsPerSecond": 749283.5767228366,
-      "nsPerEvent": 1334.6081924999999,
-      "peakRssMiB": 3.0,
-      "startupSeconds": 0.012618616500162716,
-      "preparationSeconds": 9.140999964074581e-06,
-      "wallSeconds": 1.3492255350000733,
-      "exitSeconds": 0.0016691350000428429,
+      "projectionSeconds": 3.132910948,
+      "eventsPerSecond": 319191.96446946054,
+      "nsPerEvent": 3132.910948,
+      "peakRssMiB": 204.9609375,
+      "startupSeconds": 0.1309580749999668,
+      "preparationSeconds": 0.00020414150014858023,
+      "wallSeconds": 3.2806420859999434,
+      "exitSeconds": 0.014638375999993514,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -2479,17 +1090,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 1.33728462,
-              "totalSeconds": 1.33728462,
+              "switchSeconds": 3.191471409,
+              "totalSeconds": 3.191471409,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.012260821000154465,
-          "preparationSeconds": 2.0879999738099286e-06,
-          "workAndValidationSeconds": 1.3376264219998575,
-          "exitSeconds": 0.0023868820001098356,
-          "wallSeconds": 1.3522762130000956,
-          "peakRssBytes": 2646016
+          "startupSeconds": 0.1285211879999224,
+          "preparationSeconds": 0.00019918300017707224,
+          "workAndValidationSeconds": 3.193384588999834,
+          "exitSeconds": 0.014530445999980657,
+          "wallSeconds": 3.336635405999914,
+          "peakRssBytes": 210984960
         },
         {
           "roots": 1000000,
@@ -2503,20 +1114,1420 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 1.331931765,
-              "totalSeconds": 1.331931765,
+              "switchSeconds": 3.0743504870000002,
+              "totalSeconds": 3.0743504870000002,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.012976412000170967,
-          "preparationSeconds": 1.6193999954339233e-05,
-          "workAndValidationSeconds": 1.3322308629999497,
-          "exitSeconds": 0.0009513879999758501,
-          "wallSeconds": 1.346174857000051,
-          "peakRssBytes": 3145728
+          "startupSeconds": 0.13339496200001122,
+          "preparationSeconds": 0.00020910000012008823,
+          "workAndValidationSeconds": 3.0762983979998353,
+          "exitSeconds": 0.01474630600000637,
+          "wallSeconds": 3.224648765999973,
+          "peakRssBytes": 214917120
         }
       ],
-      "growthExponent": 1.1118847099147766
+      "growthExponent": 1.5858666234574688
+    },
+    {
+      "implementation": "typescript-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "timeout"
+    },
+    {
+      "implementation": "typescript-zod-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.06484524,
+      "eventsPerSecond": 1542133.23907815,
+      "nsPerEvent": 648.4524,
+      "peakRssMiB": 90.3671875,
+      "startupSeconds": 0.23840711299999384,
+      "preparationSeconds": 0.0004226680000556371,
+      "wallSeconds": 0.317569576999972,
+      "exitSeconds": 0.013133775499909461,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.07511835299999998,
+              "totalSeconds": 0.07511835299999998,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.2644579560001148,
+          "preparationSeconds": 0.0005868959999588697,
+          "workAndValidationSeconds": 0.07587843400006022,
+          "exitSeconds": 0.014544280999871262,
+          "wallSeconds": 0.35546756700000515,
+          "peakRssBytes": 94756864
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.054572127,
+              "totalSeconds": 0.054572127,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.2123562699998729,
+          "preparationSeconds": 0.00025844000015240454,
+          "workAndValidationSeconds": 0.05533360699996592,
+          "exitSeconds": 0.01172326999994766,
+          "wallSeconds": 0.2796715869999389,
+          "peakRssBytes": 90230784
+        }
+      ]
+    },
+    {
+      "implementation": "typescript-zod-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.3204542585,
+      "eventsPerSecond": 3120570.170235388,
+      "nsPerEvent": 320.4542585,
+      "peakRssMiB": 104.01171875,
+      "startupSeconds": 0.21299360600005457,
+      "preparationSeconds": 0.0002508110000007946,
+      "wallSeconds": 0.5455614065000418,
+      "exitSeconds": 0.009373241000048438,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.32393178699999997,
+              "totalSeconds": 0.32393178699999997,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.20702839500017944,
+          "preparationSeconds": 0.00023442799988515617,
+          "workAndValidationSeconds": 0.32623238099995433,
+          "exitSeconds": 0.008968187000164107,
+          "wallSeconds": 0.542463391000183,
+          "peakRssBytes": 107614208
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.31697673,
+              "totalSeconds": 0.31697673,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.2189588169999297,
+          "preparationSeconds": 0.000267194000116433,
+          "workAndValidationSeconds": 0.3196551159999217,
+          "exitSeconds": 0.009778294999932768,
+          "wallSeconds": 0.5486594219999006,
+          "peakRssBytes": 109064192
+        }
+      ],
+      "growthExponent": 0.6938879453070481
+    },
+    {
+      "implementation": "typescript-zod-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "ok",
+      "projectionSeconds": 2.8435175265000003,
+      "eventsPerSecond": 3516771.0087261875,
+      "nsPerEvent": 284.35175265000004,
+      "peakRssMiB": 180.8828125,
+      "startupSeconds": 0.2675861279999481,
+      "preparationSeconds": 0.00024393600006078486,
+      "wallSeconds": 3.152888942499999,
+      "exitSeconds": 0.026365650999991885,
+      "stateCount": 10,
+      "retainedItems": 1000000,
+      "maxHistoryLength": 100000,
+      "samples": [
+        {
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "retainedItems": 1000000,
+          "maxHistoryLength": 100000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 2.722081011,
+              "totalSeconds": 2.722081011,
+              "bytes": 8000000
+            }
+          ],
+          "startupSeconds": 0.22258877400008714,
+          "preparationSeconds": 0.00018791699994835653,
+          "workAndValidationSeconds": 2.737758281999959,
+          "exitSeconds": 0.02880151800013664,
+          "wallSeconds": 2.989336491000131,
+          "peakRssBytes": 189669376
+        },
+        {
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "retainedItems": 1000000,
+          "maxHistoryLength": 100000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 2.964954042,
+              "totalSeconds": 2.964954042,
+              "bytes": 8000000
+            }
+          ],
+          "startupSeconds": 0.312583481999809,
+          "preparationSeconds": 0.0002999550001732132,
+          "workAndValidationSeconds": 2.9796281730000373,
+          "exitSeconds": 0.023929783999847132,
+          "wallSeconds": 3.3164413939998667,
+          "peakRssBytes": 185294848
+        }
+      ],
+      "growthExponent": 0.9480898621684939
+    },
+    {
+      "implementation": "typescript-zod-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.12341231300000002,
+      "eventsPerSecond": 810291.9195753181,
+      "nsPerEvent": 1234.1231300000002,
+      "peakRssMiB": 91.7421875,
+      "startupSeconds": 0.2804992469999661,
+      "preparationSeconds": 0.0002245755000558347,
+      "wallSeconds": 0.42038855650002915,
+      "exitSeconds": 0.015421675000084178,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.14217721900000002,
+              "totalSeconds": 0.14217721900000002,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.2953987230000621,
+          "preparationSeconds": 0.00024040900007094024,
+          "workAndValidationSeconds": 0.1431297659999018,
+          "exitSeconds": 0.01902717100006157,
+          "wallSeconds": 0.4577960690000964,
+          "peakRssBytes": 94511104
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.10464740700000001,
+              "totalSeconds": 0.10464740700000001,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.2655997709998701,
+          "preparationSeconds": 0.00020874200004072918,
+          "workAndValidationSeconds": 0.10535635199994431,
+          "exitSeconds": 0.011816179000106786,
+          "wallSeconds": 0.3829810439999619,
+          "peakRssBytes": 96198656
+        }
+      ]
+    },
+    {
+      "implementation": "typescript-zod-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 3.5865790840000003,
+      "eventsPerSecond": 278817.217348162,
+      "nsPerEvent": 3586.5790840000004,
+      "peakRssMiB": 213.68359375,
+      "startupSeconds": 0.2234176244999162,
+      "preparationSeconds": 0.0001914035001391312,
+      "wallSeconds": 3.8329488389999824,
+      "exitSeconds": 0.020307390999960262,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 3.669258353,
+              "totalSeconds": 3.669258353,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.23774572299998908,
+          "preparationSeconds": 0.00015242600011333707,
+          "workAndValidationSeconds": 3.6720962249999047,
+          "exitSeconds": 0.018098280000003797,
+          "wallSeconds": 3.928092654000011,
+          "peakRssBytes": 224063488
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 3.503899815,
+              "totalSeconds": 3.503899815,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.20908952599984332,
+          "preparationSeconds": 0.00023038100016492535,
+          "workAndValidationSeconds": 3.505968615000029,
+          "exitSeconds": 0.022516501999916727,
+          "wallSeconds": 3.737805023999954,
+          "peakRssBytes": 220839936
+        }
+      ],
+      "growthExponent": 1.463321919502367
+    },
+    {
+      "implementation": "typescript-zod-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "timeout"
+    },
+    {
+      "implementation": "java-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.2439091045,
+      "eventsPerSecond": 409988.79564169777,
+      "nsPerEvent": 2439.091045,
+      "peakRssMiB": 54.92578125,
+      "startupSeconds": 0.1526365369999212,
+      "preparationSeconds": 0.02401312799997868,
+      "wallSeconds": 0.5058539499999597,
+      "exitSeconds": 0.046255263000034574,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.263382493,
+              "totalSeconds": 0.263382493,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.17698048499983088,
+          "preparationSeconds": 0.028880131000050824,
+          "workAndValidationSeconds": 0.30271220899999207,
+          "exitSeconds": 0.07557560000009289,
+          "wallSeconds": 0.5841484249999667,
+          "peakRssBytes": 57593856
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.224435716,
+              "totalSeconds": 0.224435716,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.1282925890000115,
+          "preparationSeconds": 0.019146124999906533,
+          "workAndValidationSeconds": 0.26318583500005843,
+          "exitSeconds": 0.016934925999976258,
+          "wallSeconds": 0.4275594749999527,
+          "peakRssBytes": 57274368
+        }
+      ]
+    },
+    {
+      "implementation": "java-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.33723450099999996,
+      "eventsPerSecond": 2965295.6534242625,
+      "nsPerEvent": 337.23450099999997,
+      "peakRssMiB": 89.5078125,
+      "startupSeconds": 0.13280616650001775,
+      "preparationSeconds": 0.016396191500007262,
+      "wallSeconds": 0.5723540184999365,
+      "exitSeconds": 0.03539270199996736,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.342631753,
+              "totalSeconds": 0.342631753,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.12714615300001242,
+          "preparationSeconds": 0.016644087000031504,
+          "workAndValidationSeconds": 0.39433931499979735,
+          "exitSeconds": 0.06356724800002667,
+          "wallSeconds": 0.6016968029998679,
+          "peakRssBytes": 92979200
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.331837249,
+              "totalSeconds": 0.331837249,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.1384661800000231,
+          "preparationSeconds": 0.01614829599998302,
+          "workAndValidationSeconds": 0.3811786020000909,
+          "exitSeconds": 0.007218155999908049,
+          "wallSeconds": 0.5430112340000051,
+          "peakRssBytes": 93855744
+        }
+      ],
+      "growthExponent": 0.14070398729841804
+    },
+    {
+      "implementation": "java-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "ok",
+      "projectionSeconds": 1.086474488,
+      "eventsPerSecond": 9204081.743703125,
+      "nsPerEvent": 108.64744879999999,
+      "peakRssMiB": 274.0,
+      "startupSeconds": 0.129851816999917,
+      "preparationSeconds": 0.01657543600003919,
+      "wallSeconds": 1.333069976000047,
+      "exitSeconds": 0.03275435650004965,
+      "stateCount": 10,
+      "retainedItems": 1000000,
+      "maxHistoryLength": 100000,
+      "samples": [
+        {
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "retainedItems": 1000000,
+          "maxHistoryLength": 100000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 1.093302241,
+              "totalSeconds": 1.093302241,
+              "bytes": 8000000
+            }
+          ],
+          "startupSeconds": 0.12437446800004182,
+          "preparationSeconds": 0.015091277999999875,
+          "workAndValidationSeconds": 1.1624925290000192,
+          "exitSeconds": 0.015632558000106656,
+          "wallSeconds": 1.3175908330001675,
+          "peakRssBytes": 286679040
+        },
+        {
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "retainedItems": 1000000,
+          "maxHistoryLength": 100000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 1.079646735,
+              "totalSeconds": 1.079646735,
+              "bytes": 8000000
+            }
+          ],
+          "startupSeconds": 0.13532916599979217,
+          "preparationSeconds": 0.018059594000078505,
+          "workAndValidationSeconds": 1.1452842040000633,
+          "exitSeconds": 0.04987615499999265,
+          "wallSeconds": 1.3485491189999266,
+          "peakRssBytes": 287309824
+        }
+      ],
+      "growthExponent": 0.5080875338991129
+    },
+    {
+      "implementation": "java-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.225207263,
+      "eventsPerSecond": 444035.4128365745,
+      "nsPerEvent": 2252.07263,
+      "peakRssMiB": 86.609375,
+      "startupSeconds": 0.11143717150002885,
+      "preparationSeconds": 0.01472434099991915,
+      "wallSeconds": 0.4013116330000912,
+      "exitSeconds": 0.015522081499966589,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.236580776,
+              "totalSeconds": 0.236580776,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.11617469399993752,
+          "preparationSeconds": 0.014727210000046398,
+          "workAndValidationSeconds": 0.2721583280001596,
+          "exitSeconds": 0.02394777399990744,
+          "wallSeconds": 0.42700800600005095,
+          "peakRssBytes": 87482368
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.21383375,
+              "totalSeconds": 0.21383375,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.10669964900012019,
+          "preparationSeconds": 0.014721471999791902,
+          "workAndValidationSeconds": 0.24709775000019363,
+          "exitSeconds": 0.007096389000025738,
+          "wallSeconds": 0.37561526000013146,
+          "peakRssBytes": 90816512
+        }
+      ]
+    },
+    {
+      "implementation": "java-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 4.1632154825,
+      "eventsPerSecond": 240198.95299762447,
+      "nsPerEvent": 4163.215482500001,
+      "peakRssMiB": 1223.7890625,
+      "startupSeconds": 0.14305941050008641,
+      "preparationSeconds": 0.01807417449992954,
+      "wallSeconds": 4.458883760000049,
+      "exitSeconds": 0.08046499600004609,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 6.973500216,
+              "totalSeconds": 6.973500216,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.12790115999996488,
+          "preparationSeconds": 0.017590359999985594,
+          "workAndValidationSeconds": 7.045584794999968,
+          "exitSeconds": 0.09527359399999114,
+          "wallSeconds": 7.2863499089999095,
+          "peakRssBytes": 1283235840
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 1.352930749,
+              "totalSeconds": 1.352930749,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.15821766100020795,
+          "preparationSeconds": 0.018557988999873487,
+          "workAndValidationSeconds": 1.3889855630000056,
+          "exitSeconds": 0.06565639800010103,
+          "wallSeconds": 1.6314176110001881,
+          "peakRssBytes": 1199005696
+        }
+      ],
+      "growthExponent": 1.2668464974446494
+    },
+    {
+      "implementation": "java-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "timeout"
+    },
+    {
+      "implementation": "go-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.0276179135,
+      "eventsPerSecond": 3620838.3374073496,
+      "nsPerEvent": 276.17913500000003,
+      "peakRssMiB": 6.38671875,
+      "startupSeconds": 0.02640811300000223,
+      "preparationSeconds": 3.051000021514483e-06,
+      "wallSeconds": 0.057969000500065704,
+      "exitSeconds": 0.0013466034999964904,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "ignored": 10,
+          "maxHistoryLength": 1000,
+          "measurements": [
+            {
+              "bytes": 80000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 0.027663569,
+              "totalSeconds": 0.027663569
+            }
+          ],
+          "retainedItems": 10000,
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "startupSeconds": 0.035722011999951064,
+          "preparationSeconds": 1.4300001112133032e-06,
+          "workAndValidationSeconds": 0.03267220699990503,
+          "exitSeconds": 0.001444988999992347,
+          "wallSeconds": 0.06984063799995965,
+          "peakRssBytes": 6590464
+        },
+        {
+          "ignored": 10,
+          "maxHistoryLength": 1000,
+          "measurements": [
+            {
+              "bytes": 80000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 0.027572258,
+              "totalSeconds": 0.027572258
+            }
+          ],
+          "retainedItems": 10000,
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "startupSeconds": 0.017094214000053398,
+          "preparationSeconds": 4.671999931815662e-06,
+          "workAndValidationSeconds": 0.027750259000185906,
+          "exitSeconds": 0.0012482180000006338,
+          "wallSeconds": 0.046097363000171754,
+          "peakRssBytes": 6696960
+        }
+      ]
+    },
+    {
+      "implementation": "go-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.14253873,
+      "eventsPerSecond": 7015637.083338683,
+      "nsPerEvent": 142.53873000000002,
+      "peakRssMiB": 7.76171875,
+      "startupSeconds": 0.01554203649993724,
+      "preparationSeconds": 2.281000092807517e-06,
+      "wallSeconds": 0.15990133299999343,
+      "exitSeconds": 0.001648825000074794,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "ignored": 10,
+          "maxHistoryLength": 10000,
+          "measurements": [
+            {
+              "bytes": 800000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 0.165035484,
+              "totalSeconds": 0.165035484
+            }
+          ],
+          "retainedItems": 100000,
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "startupSeconds": 0.016989328999898134,
+          "preparationSeconds": 2.463000100760837e-06,
+          "workAndValidationSeconds": 0.1651350749998528,
+          "exitSeconds": 0.0019451450000360637,
+          "wallSeconds": 0.18407201199988776,
+          "peakRssBytes": 7872512
+        },
+        {
+          "ignored": 10,
+          "maxHistoryLength": 10000,
+          "measurements": [
+            {
+              "bytes": 800000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 0.120041976,
+              "totalSeconds": 0.120041976
+            }
+          ],
+          "retainedItems": 100000,
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "startupSeconds": 0.014094743999976345,
+          "preparationSeconds": 2.0990000848541968e-06,
+          "workAndValidationSeconds": 0.12028130599992437,
+          "exitSeconds": 0.0013525050001135241,
+          "wallSeconds": 0.1357306540000991,
+          "peakRssBytes": 8138752
+        }
+      ],
+      "growthExponent": 0.7127420199170302
+    },
+    {
+      "implementation": "go-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "ok",
+      "projectionSeconds": 1.2749445444999998,
+      "eventsPerSecond": 7843478.403150264,
+      "nsPerEvent": 127.49445444999999,
+      "peakRssMiB": 23.23828125,
+      "startupSeconds": 0.012345025500053453,
+      "preparationSeconds": 1.9014998997590737e-06,
+      "wallSeconds": 1.2897514494999314,
+      "exitSeconds": 0.0017440225000200371,
+      "stateCount": 10,
+      "retainedItems": 1000000,
+      "maxHistoryLength": 100000,
+      "samples": [
+        {
+          "ignored": 10,
+          "maxHistoryLength": 100000,
+          "measurements": [
+            {
+              "bytes": 8000000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 1.38837565,
+              "totalSeconds": 1.38837565
+            }
+          ],
+          "retainedItems": 1000000,
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "startupSeconds": 0.013538979000031759,
+          "preparationSeconds": 2.280999979120679e-06,
+          "workAndValidationSeconds": 1.3889774039998883,
+          "exitSeconds": 0.0018096900000728056,
+          "wallSeconds": 1.404328353999972,
+          "peakRssBytes": 24367104
+        },
+        {
+          "ignored": 10,
+          "maxHistoryLength": 100000,
+          "measurements": [
+            {
+              "bytes": 8000000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 1.161513439,
+              "totalSeconds": 1.161513439
+            }
+          ],
+          "retainedItems": 1000000,
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "startupSeconds": 0.011151072000075146,
+          "preparationSeconds": 1.5219998203974683e-06,
+          "workAndValidationSeconds": 1.162343596000028,
+          "exitSeconds": 0.0016783549999672687,
+          "wallSeconds": 1.1751745449998907,
+          "peakRssBytes": 24289280
+        }
+      ],
+      "growthExponent": 0.9515584099580346
+    },
+    {
+      "implementation": "go-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.0254875885,
+      "eventsPerSecond": 3923478.2843422,
+      "nsPerEvent": 254.875885,
+      "peakRssMiB": 7.79296875,
+      "startupSeconds": 0.010389746999862837,
+      "preparationSeconds": 2.0330001007096143e-06,
+      "wallSeconds": 0.03738152349990287,
+      "exitSeconds": 0.0013445824999962497,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "ignored": 10,
+          "maxHistoryLength": 1000,
+          "measurements": [
+            {
+              "bytes": 80000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 0.026938755,
+              "totalSeconds": 0.026938755
+            }
+          ],
+          "retainedItems": 10000,
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "startupSeconds": 0.0105289239998001,
+          "preparationSeconds": 2.2220001483219676e-06,
+          "workAndValidationSeconds": 0.0270829229998526,
+          "exitSeconds": 0.0011030699999992066,
+          "wallSeconds": 0.03871713899980023,
+          "peakRssBytes": 8171520
+        },
+        {
+          "ignored": 10,
+          "maxHistoryLength": 1000,
+          "measurements": [
+            {
+              "bytes": 80000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 0.024036422,
+              "totalSeconds": 0.024036422
+            }
+          ],
+          "retainedItems": 10000,
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "startupSeconds": 0.010250569999925574,
+          "preparationSeconds": 1.8440000530972611e-06,
+          "workAndValidationSeconds": 0.024207399000033547,
+          "exitSeconds": 0.0015860949999932927,
+          "wallSeconds": 0.03604590800000551,
+          "peakRssBytes": 7733248
+        }
+      ]
+    },
+    {
+      "implementation": "go-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 2.3832492675,
+      "eventsPerSecond": 419595.2197014574,
+      "nsPerEvent": 2383.2492675000003,
+      "peakRssMiB": 24.0546875,
+      "startupSeconds": 0.011417457000106879,
+      "preparationSeconds": 1.6195000398511183e-06,
+      "wallSeconds": 2.3969813565000777,
+      "exitSeconds": 0.0018097245000490148,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "ignored": 10,
+          "maxHistoryLength": 10000,
+          "measurements": [
+            {
+              "bytes": 800000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 2.380211981,
+              "totalSeconds": 2.380211981
+            }
+          ],
+          "retainedItems": 100000,
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "startupSeconds": 0.01122094500010462,
+          "preparationSeconds": 1.503000021330081e-06,
+          "workAndValidationSeconds": 2.3810456769999746,
+          "exitSeconds": 0.0013783950000743062,
+          "wallSeconds": 2.393646520000175,
+          "peakRssBytes": 18354176
+        },
+        {
+          "ignored": 10,
+          "maxHistoryLength": 10000,
+          "measurements": [
+            {
+              "bytes": 800000,
+              "decodeSeconds": 0,
+              "encodeSeconds": 0,
+              "switchSeconds": 2.386286554,
+              "totalSeconds": 2.386286554
+            }
+          ],
+          "retainedItems": 100000,
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "startupSeconds": 0.011613969000109137,
+          "preparationSeconds": 1.7360000583721558e-06,
+          "workAndValidationSeconds": 2.3864594339997893,
+          "exitSeconds": 0.0022410540000237233,
+          "wallSeconds": 2.4003161929999806,
+          "peakRssBytes": 25223168
+        }
+      ],
+      "growthExponent": 1.9708407214321728
+    },
+    {
+      "implementation": "go-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "timeout"
+    },
+    {
+      "implementation": "swift-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.075587688,
+      "eventsPerSecond": 1322966.7773407754,
+      "nsPerEvent": 755.87688,
+      "peakRssMiB": 1.0546875,
+      "startupSeconds": 0.009294265999983509,
+      "preparationSeconds": 1.0301999964212882e-05,
+      "wallSeconds": 0.08628799550001531,
+      "exitSeconds": 0.0011772470001005786,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.077556236,
+              "totalSeconds": 0.077556236,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.009826306999912049,
+          "preparationSeconds": 1.0920000022451859e-05,
+          "workAndValidationSeconds": 0.07780664799997794,
+          "exitSeconds": 0.0007765340001242294,
+          "wallSeconds": 0.08842040900003667,
+          "peakRssBytes": 1105920
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.07361914,
+              "totalSeconds": 0.07361914,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.008762225000054968,
+          "preparationSeconds": 9.683999905973906e-06,
+          "workAndValidationSeconds": 0.07380571299995609,
+          "exitSeconds": 0.0015779600000769278,
+          "wallSeconds": 0.08415558199999396,
+          "peakRssBytes": 1032192
+        }
+      ]
+    },
+    {
+      "implementation": "swift-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.7308136985,
+      "eventsPerSecond": 1368337.788484954,
+      "nsPerEvent": 730.8136985,
+      "peakRssMiB": 2.48828125,
+      "startupSeconds": 0.008947497000121984,
+      "preparationSeconds": 1.0845500014511344e-05,
+      "wallSeconds": 0.7410230590000992,
+      "exitSeconds": 0.0009768244999577291,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.725976268,
+              "totalSeconds": 0.725976268,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.009240431000080207,
+          "preparationSeconds": 1.2341999990894692e-05,
+          "workAndValidationSeconds": 0.7262716960001399,
+          "exitSeconds": 0.0007942039999306871,
+          "wallSeconds": 0.7363186730001416,
+          "peakRssBytes": 2584576
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.7356511290000001,
+              "totalSeconds": 0.7356511290000001,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.008654563000163762,
+          "preparationSeconds": 9.349000038127997e-06,
+          "workAndValidationSeconds": 0.7359040879998702,
+          "exitSeconds": 0.0011594449999847711,
+          "wallSeconds": 0.7457274450000568,
+          "peakRssBytes": 2609152
+        }
+      ],
+      "growthExponent": 0.9853556174658266
+    },
+    {
+      "implementation": "swift-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 10000000,
+      "status": "ok",
+      "projectionSeconds": 7.607098636,
+      "eventsPerSecond": 1314561.632299045,
+      "nsPerEvent": 760.7098636,
+      "peakRssMiB": 18.875,
+      "startupSeconds": 0.013518420499963213,
+      "preparationSeconds": 1.948999852174893e-06,
+      "wallSeconds": 7.622207779499945,
+      "exitSeconds": 0.001279764000059913,
+      "stateCount": 10,
+      "retainedItems": 1000000,
+      "maxHistoryLength": 100000,
+      "samples": [
+        {
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "retainedItems": 1000000,
+          "maxHistoryLength": 100000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 7.725506740999999,
+              "totalSeconds": 7.725506740999999,
+              "bytes": 8000000
+            }
+          ],
+          "startupSeconds": 0.01000333199999659,
+          "preparationSeconds": 2.078999841614859e-06,
+          "workAndValidationSeconds": 7.728582297999992,
+          "exitSeconds": 0.0010079150001729431,
+          "wallSeconds": 7.739595624000003,
+          "peakRssBytes": 19709952
+        },
+        {
+          "roots": 10000000,
+          "samples": 1,
+          "sink": 15000598991655,
+          "stateCount": 10,
+          "retainedItems": 1000000,
+          "maxHistoryLength": 100000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 7.4886905310000005,
+              "totalSeconds": 7.4886905310000005,
+              "bytes": 8000000
+            }
+          ],
+          "startupSeconds": 0.017033508999929836,
+          "preparationSeconds": 1.8189998627349269e-06,
+          "workAndValidationSeconds": 7.486232994000147,
+          "exitSeconds": 0.001551612999946883,
+          "wallSeconds": 7.504819934999887,
+          "peakRssBytes": 19791872
+        }
+      ],
+      "growthExponent": 1.0174123682398117
+    },
+    {
+      "implementation": "swift-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.07909175500000001,
+      "eventsPerSecond": 1264354.2933141384,
+      "nsPerEvent": 790.9175500000001,
+      "peakRssMiB": 1.0,
+      "startupSeconds": 0.010948418999987553,
+      "preparationSeconds": 2.3269000053005584e-05,
+      "wallSeconds": 0.09097868200001358,
+      "exitSeconds": 0.0007134395000321092,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.07993857600000001,
+              "totalSeconds": 0.07993857600000001,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.01177046399993742,
+          "preparationSeconds": 1.1615000175879686e-05,
+          "workAndValidationSeconds": 0.08017738899980031,
+          "exitSeconds": 0.0006735980000485142,
+          "wallSeconds": 0.09263306599996213,
+          "peakRssBytes": 1048576
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.078244934,
+              "totalSeconds": 0.078244934,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.010126374000037686,
+          "preparationSeconds": 3.492299993013148e-05,
+          "workAndValidationSeconds": 0.0784097200000815,
+          "exitSeconds": 0.0007532810000157042,
+          "wallSeconds": 0.08932429800006503,
+          "peakRssBytes": 1048576
+        }
+      ]
+    },
+    {
+      "implementation": "swift-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 1.0170567555,
+      "eventsPerSecond": 983229.2982591569,
+      "nsPerEvent": 1017.0567555000001,
+      "peakRssMiB": 2.70703125,
+      "startupSeconds": 0.01070892300003834,
+      "preparationSeconds": 8.728499892640684e-06,
+      "wallSeconds": 1.0289605804999837,
+      "exitSeconds": 0.0009081024999204601,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.9971027459999999,
+              "totalSeconds": 0.9971027459999999,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.010746780000090439,
+          "preparationSeconds": 2.4029998257901752e-06,
+          "workAndValidationSeconds": 0.9973359560001427,
+          "exitSeconds": 0.0009063859999969281,
+          "wallSeconds": 1.0089915250000558,
+          "peakRssBytes": 2707456
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 10,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 1.037010765,
+              "totalSeconds": 1.037010765,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.01067106599998624,
+          "preparationSeconds": 1.5053999959491193e-05,
+          "workAndValidationSeconds": 1.037333697000122,
+          "exitSeconds": 0.0009098189998439921,
+          "wallSeconds": 1.0489296359999116,
+          "peakRssBytes": 2838528
+        }
+      ],
+      "growthExponent": 1.109213976435364
     },
     {
       "implementation": "swift-native",
@@ -2543,7 +2554,7 @@
       "implementation": "csharp-native",
       "mode": "indexed-copy",
       "profile": "dense",
-      "largestTestedWithinTimeBudget": 100000,
+      "largestTestedWithinTimeBudget": 1000000,
       "timeBudgetSeconds": 8.0
     },
     {
@@ -2599,7 +2610,7 @@
       "implementation": "java-native",
       "mode": "indexed-copy",
       "profile": "dense",
-      "largestTestedWithinTimeBudget": 100000,
+      "largestTestedWithinTimeBudget": 1000000,
       "timeBudgetSeconds": 8.0
     },
     {
@@ -2620,7 +2631,7 @@
       "implementation": "swift-native",
       "mode": "indexed-append",
       "profile": "dense",
-      "largestTestedWithinTimeBudget": 1000000,
+      "largestTestedWithinTimeBudget": 10000000,
       "timeBudgetSeconds": 8.0
     },
     {
