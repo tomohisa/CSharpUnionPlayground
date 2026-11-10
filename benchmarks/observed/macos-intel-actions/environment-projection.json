@@ -1,14 +1,14 @@
 {
-  "timestampUtc": "2026-11-10T07:28:04.740678+00:00",
-  "sourceCommit": "6c092405388c3b5b937b19ae93e75f3f6013977f",
+  "timestampUtc": "2026-11-10T18:56:50.816986+00:00",
+  "sourceCommit": "3644b562c6f88fda499e9fcf2bf4ed00575d1f9a",
   "runner": "macos-15-intel",
   "cpu": "Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz",
   "logicalCpuCount": 4,
   "physicalMemoryBytes": 15032385536,
   "os": "ProductName:\t\tmacOS\nProductVersion:\t\t15.7.9\nBuildVersion:\t\t24G830",
-  "runUrl": "https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42775352886",
+  "runUrl": "https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880008976",
   "runAttempt": "1",
-  "suite": "projection",
+  "suite": "all",
   "jsonRoots": 200000,
   "csharpWasiMode": null,
   "completed": true
