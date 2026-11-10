@@ -1,0 +1,56 @@
+{
+  "sourceCommit": "5ba903a4590358ba7a8ce6526edc6d837845e5ec",
+  "suite": "json",
+  "files": {
+    "json": {
+      "csharp-abstract": {
+        "path": "code/json/csharp-abstract/Program.cs",
+        "sha256": "7cc53a787ac430b0661bb2aef1e2dcae00a282f7a55a440c852ee995a9383a94"
+      },
+      "csharp-closed-explicit": {
+        "path": "code/json/csharp-closed-explicit/Program.cs",
+        "sha256": "07706af589cdca22c854154a685466764bb4c7caa35b51a19ba79f6bd46f2433"
+      },
+      "csharp-closed-inferred": {
+        "path": "code/json/csharp-closed-inferred/Program.cs",
+        "sha256": "54af59539e6537153d8b07865dd6220b218283a71bc73dd81e8f7ee204346aec"
+      },
+      "csharp-union-custom": {
+        "path": "code/json/csharp-union-custom/Program.cs",
+        "sha256": "815263b15d0f88f563305214a9b0c21b7776e74b8119a1006d5046c88cbeda04"
+      },
+      "csharp-union-generated": {
+        "path": "code/json/csharp-union-generated/Program.cs",
+        "sha256": "3b9257ffbef9bcda2d755d95ee87750cc7153d511eed6019252f4ece8ca57c00"
+      },
+      "rust": {
+        "path": "code/json/rust/main.rs",
+        "sha256": "62e98b83fcd73f4212b38d204206edf8433179eb7d96c50db93d28211e51f4fd"
+      },
+      "typescript": {
+        "path": "code/json/typescript/benchmark.ts",
+        "sha256": "745fb8ca1b995d2dd4d7de05df13e4919081a7850d0674e720bf40df6f8636a2"
+      },
+      "typescript-simple": {
+        "path": "code/json/typescript-simple/benchmark-simple.ts",
+        "sha256": "3ac78faf520e2487630ad376722dfc9720d91774448bf97d8ff80bfe873def1b"
+      },
+      "typescript-zod": {
+        "path": "code/json/typescript-zod/benchmark-zod.ts",
+        "sha256": "4f7152ce3c73414d27d58e16163fd1f48116c322dd9c35c77f0369a734d9cbde"
+      },
+      "java": {
+        "path": "code/json/java/Benchmark.java",
+        "sha256": "5e8c53bfa43a32d90cbc4592e3d6ece1cddca6f1bece1c21216858be0bb25a75"
+      },
+      "go": {
+        "path": "code/json/go/benchmark.go",
+        "sha256": "98e0ab38175a74685724ac4ad7858627efaa9beafdca29efee0369884edd16b0"
+      },
+      "swift": {
+        "path": "code/json/swift/Benchmark.swift",
+        "sha256": "4adef4c1d687850a3457009de127d5b4d992bdcbcb743ab99031180f5275deb7"
+      }
+    }
+  }
+}
