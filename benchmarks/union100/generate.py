@@ -47,7 +47,7 @@ def generate(output, repo):
         (directory / 'Program.cs').write_text(code)
         analyzer = f'<ProjectReference Include="{repo / "src/PlaygroundTaggedJson.Generator/PlaygroundTaggedJson.Generator.csproj"}" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />' if mode == 'union-generated' else ''
         (directory / 'Benchmark.csproj').write_text(f'''<Project Sdk="Microsoft.NET.Sdk">
-<PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net11.0</TargetFramework><LangVersion>preview</LangVersion><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><PublishAot>true</PublishAot><JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault><NoWarn>SYSLIB1227</NoWarn><WarningsAsErrors>CS8509;CS8655;IL2026;IL3050</WarningsAsErrors></PropertyGroup>
+<PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net11.0</TargetFramework><LangVersion>15.0</LangVersion><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><PublishAot>true</PublishAot><JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault><NoWarn>SYSLIB1227</NoWarn><WarningsAsErrors>CS8509;CS8655;IL2026;IL3050</WarningsAsErrors></PropertyGroup>
 <ItemGroup>{analyzer}</ItemGroup></Project>''')
     rust = output / 'rust'; rust.mkdir(exist_ok=True)
     (rust / 'Cargo.toml').write_text('''[package]

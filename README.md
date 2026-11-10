@@ -2,7 +2,7 @@
 
 **English** | [日本語](README_JA.md)
 
-A playground for testing and exploring **C# 15 Union Types** (.NET 11 RC3).
+A playground for testing and exploring **C# 15 Union Types** (.NET 11 GA).
 
 ## What's This?
 
@@ -31,9 +31,17 @@ string describe = shape switch
 };
 ```
 
+## .NET 11 GA verification
+
+The repository pins SDK `11.0.100` / runtime `11.0.0`, with C# 15.0 and no preview opt-in in file-based samples.
+
+Reverified on 2026-11-10: **86 tests, 77 passed / 9 failed / 0 skipped**, exactly the same known failure set as RC3. The 7 closed exhaustiveness, 5 closed inference, 13 switch-comparison and 6 generator-diagnostic fixtures passed. All five nested Payment examples passed Native AOT execution on macOS arm64; the generator smoke app passed all 40 checks. A matched GA WASI LLVMOnly AOT smoke build also passed without interpreter fallback.
+
+[GA results, remaining failures and commands](docs/dotnet11-ga-verification.md) / [execution evidence](docs/verification/dotnet11-ga.json). Historical RC3 results below and archived benchmarks retain their original SDK labels.
+
 ## JSON serialization: RC3 verification
 
-SDK `11.0.100-rc.3.26522.148` is pinned in `global.json`. The runtime now supplies `UnionAttribute` and `IUnion`; the Preview 3 polyfill has been removed.
+The historical RC3 verification used SDK `11.0.100-rc.3.26522.148`. The runtime now supplies `UnionAttribute` and `IUnion`; the Preview 3 polyfill has been removed.
 
 - Distinct JSON token kinds (`int`, `string`, `bool`) round-trip automatically.
 - The active case is serialized directly, without a `Value` wrapper or `$type` discriminator. A default union round-trips as `null`.

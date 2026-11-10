@@ -9,14 +9,27 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 
+
+def find_cross_compiler(dotnet):
+    """Match the active SDK's runtime; never select a legacy compiler by path sort."""
+    dotnet = Path(dotnet).resolve()
+    sdk = subprocess.check_output([str(dotnet), '--version'], text=True).strip()
+    config = json.loads((dotnet.parent/'sdk'/sdk/'MSBuild.runtimeconfig.json').read_text())
+    version = config['runtimeOptions']['framework']['version']
+    cross = sorted((dotnet.parent/'packs').glob(
+        'Microsoft.NETCore.App.Runtime.AOT.*.Cross.wasi-wasm/*/tools/mono-aot-cross'))
+    matching = [path for path in cross if path.parent.parent.name == version]
+    if len(matching) != 1:
+        raise RuntimeError(f'Expected one WASI cross compiler matching SDK {sdk} runtime {version}; install wasi-experimental for that SDK.')
+    return matching[0]
+
+
 def build_csharp(project, output, dotnet, wasi_sdk, wasmtime='wasmtime'):
     project, output, dotnet, wasi_sdk = map(lambda p: Path(p).resolve(), (project, output, dotnet, wasi_sdk))
     output.mkdir(parents=True, exist_ok=True)
     if not dotnet.is_file():
         raise RuntimeError(f'WASI dotnet SDK not found: {dotnet}')
-    cross = sorted((dotnet.parent / 'packs').glob('Microsoft.NETCore.App.Runtime.AOT.*.Cross.wasi-wasm/*/tools/mono-aot-cross'))
-    if not cross:
-        raise RuntimeError('Install wasi-experimental in the dedicated dotnet SDK.')
+    cross = find_cross_compiler(dotnet)
     root = ET.parse(project).getroot()
     root.set('Sdk', 'Microsoft.NET.Sdk;Microsoft.NET.Runtime.MonoTargets.Sdk.net11;Microsoft.NET.Runtime.WebAssembly.Wasi.Sdk.net11')
     root.insert(0, ET.Element('Import', Project='Sdk.props', Sdk='Microsoft.NET.Runtime.MonoAOTCompiler.Task.net11'))
@@ -27,11 +40,11 @@ def build_csharp(project, output, dotnet, wasi_sdk, wasmtime='wasmtime'):
                 'WasmGenerateAppBundle': 'true', 'WasmBuildOnlyAfterPublish': 'true',
                 'InvariantGlobalization': 'false', 'WasmNativeStrip': 'true',
                 'WasiClangCompileOptimizationFlag': '-O3', 'WasiBitcodeCompileOptimizationFlag': '-O3',
-                'WasiClangLinkOptimizationFlag': '-O3', '_MonoAotCrossCompilerPath': str(cross[0])}
+                'WasiClangLinkOptimizationFlag': '-O3', '_MonoAotCrossCompilerPath': str(cross)}
     for key, value in settings.items():
         ET.SubElement(props, key).text = value
     ET.SubElement(ET.SubElement(root, 'ItemGroup'), 'MonoAotCrossCompiler',
-                  Include=str(cross[0]), RuntimeIdentifier='wasi-wasm')
+                  Include=str(cross), RuntimeIdentifier='wasi-wasm')
     # RC3's glob-based WASI bundler can retain stale, untrimmed framework DLLs.
     # Use only the actual linker outputs; never patch the installed SDK.
     target = ET.SubElement(root, 'Target', Name='UseTrimmedWasiAssemblies',

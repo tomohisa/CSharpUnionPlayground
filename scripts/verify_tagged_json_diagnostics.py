@@ -29,7 +29,7 @@ with tempfile.TemporaryDirectory(prefix='cupj-diagnostics-') as directory:
     # Preserve this repository's SDK selection even though fixtures live in /tmp.
     (folder / 'global.json').write_text((root / 'global.json').read_text())
     (folder / 'Fixture.csproj').write_text(f'''<Project Sdk="Microsoft.NET.Sdk">
-<PropertyGroup><TargetFramework>net11.0</TargetFramework><LangVersion>preview</LangVersion></PropertyGroup>
+<PropertyGroup><TargetFramework>net11.0</TargetFramework><LangVersion>15.0</LangVersion></PropertyGroup>
 <ItemGroup><ProjectReference Include="{escape(str(generator))}" OutputItemType="Analyzer" ReferenceOutputAssembly="false" /></ItemGroup>
 </Project>''')
     for name, fixture in fixtures.items():

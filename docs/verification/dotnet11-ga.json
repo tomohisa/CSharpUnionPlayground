@@ -1,0 +1,228 @@
+{
+  "sdk": "11.0.100",
+  "unitTestFailedNames": [
+    "UnionTest.Tests.UnionJsonDerivedTypeTests.PayCash_UnionSerialize_PaymentDeserialize_RoundTrip",
+    "UnionTest.Tests.UnionJsonSerializationTests.StringResult_Serialize_Succeeds",
+    "UnionTest.Tests.UnionJsonSerializationTests.IntResult_Deserialize_RoundTrip",
+    "UnionTest.Tests.UnionJsonSerializationTests.StringResult_Deserialize_RoundTrip",
+    "UnionTest.Tests.UnionJsonSerializationTests.ListResult_Serialize_Succeeds",
+    "UnionTest.Tests.UnionJsonSerializationTests.IntResult_Serialize_Succeeds",
+    "UnionTest.Tests.UnionJsonDerivedTypeTests.PayCard_UnionSerialize_PaymentDeserialize_RoundTrip",
+    "UnionTest.Tests.UnionJsonSerializationTests.ListResult_Deserialize_RoundTrip",
+    "UnionTest.Tests.UnionJsonDerivedTypeTests.PayCrypto_UnionSerialize_PaymentDeserialize_RoundTrip"
+  ],
+  "checks": [
+    {
+      "name": "closed-exhaustiveness",
+      "exitCode": 0,
+      "stdout": "PASS: all cases, no discard\nPASS: explicit abstract closed is rejected (CS9384)\nPASS: missing Card (CS8509)\nPASS: new unhandled Crypto case (CS8509)\nPASS: nullable input without null arm (CS8655)\nPASS: nullable input with null arm\nPASS: ordinary abstract base without closed (CS8509)\nPASS: 7 exhaustiveness compiler fixtures\n",
+      "stderr": ""
+    },
+    {
+      "name": "closed-inference",
+      "exitCode": 0,
+      "stdout": "PASS: type-level inference\nPASS: source-generation-level inference\nPASS: new case without switch update\nPASS: new case with switch update, no JSON registrations\nPASS: renamed Card changes inferred tag\nPASS: 5 closed inference fixtures\n",
+      "stderr": ""
+    },
+    {
+      "name": "payment-switches",
+      "exitCode": 0,
+      "stdout": "PASS: JsonDerived: complete switch: build succeeds\nPASS: JsonDerived: omit Card arm: build succeeds\nPASS: JsonDerived: add unhandled Crypto: build succeeds\nPASS: JsonDerived: remove discard arm: CS8509\nPASS: ClosedJsonDerived: complete switch: build succeeds\nPASS: ClosedJsonDerived: omit Card arm: CS8509\nPASS: ClosedJsonDerived: add unhandled Crypto: CS8509\nPASS: CustomConverter: complete switch: build succeeds\nPASS: CustomConverter: omit Card arm: CS8509\nPASS: CustomConverter: add unhandled Crypto: CS8509\nPASS: SourceGenerated: complete switch: build succeeds\nPASS: SourceGenerated: omit Card arm: CS8509\nPASS: SourceGenerated: add unhandled Crypto: CS8509\nPASS: 13 switch comparison compiler fixtures\n",
+      "stderr": ""
+    },
+    {
+      "name": "generator-diagnostics",
+      "exitCode": 0,
+      "stdout": "PASS: duplicate tag\nPASS: missing case\nPASS: unrelated type\nPASS: not a union\nPASS: reserved discriminator\nPASS: generic union\nPASS: 6 generator diagnostic fixtures\n",
+      "stderr": ""
+    },
+    {
+      "name": "aot-JsonDerived",
+      "exitCode": 0,
+      "stdout": "{\"$type\":\"cash\",\"amount\":100,\"next\":{\"$type\":\"card\",\"cardNumber\":\"4111\",\"amount\":250,\"next\":null}}\nswitch: cash:100 -> card:4111\nPASS\n",
+      "stderr": ""
+    },
+    {
+      "name": "aot-ClosedJsonDerived",
+      "exitCode": 0,
+      "stdout": "{\"$type\":\"cash\",\"amount\":100,\"next\":{\"$type\":\"card\",\"cardNumber\":\"4111\",\"amount\":250,\"next\":null}}\nswitch: cash:100 -> card:4111\nPASS\n",
+      "stderr": ""
+    },
+    {
+      "name": "aot-ClosedInferredJson",
+      "exitCode": 0,
+      "stdout": "{\"$type\":\"Cash\",\"amount\":100,\"next\":{\"$type\":\"Card\",\"cardNumber\":\"4111\",\"amount\":250,\"next\":null}}\nswitch: cash:100 -> card:4111\nPASS\n",
+      "stderr": ""
+    },
+    {
+      "name": "aot-CustomConverter",
+      "exitCode": 0,
+      "stdout": "{\"$type\":\"cash\",\"data\":{\"amount\":100,\"next\":{\"$type\":\"card\",\"data\":{\"cardNumber\":\"4111\",\"amount\":250,\"next\":null}}}}\nswitch: cash:100 -> card:4111; default: empty\nPASS\n",
+      "stderr": ""
+    },
+    {
+      "name": "aot-SourceGenerated",
+      "exitCode": 0,
+      "stdout": "{\"$type\":\"cash\",\"data\":{\"amount\":100,\"next\":{\"$type\":\"card\",\"data\":{\"cardNumber\":\"4111\",\"amount\":250,\"next\":null}}}}\nswitch: cash:100 -> card:4111; default: empty\nPASS\n",
+      "stderr": ""
+    },
+    {
+      "name": "generator-aot-smoke",
+      "exitCode": 0,
+      "stdout": "{\"$type\":\"cash\",\"data\":{\"amount\":100,\"detail\":{\"$type\":\"text\",\"data\":{\"value\":\"42\"}}}}\n{\"$type\":\"card\",\"data\":{\"cardNumber\":\"4111\",\"amount\":250,\"detail\":{\"$type\":\"text\",\"data\":{\"value\":\"42\"}}}}\n{\"$type\":\"cash\",\"data\":{\"amount\":100,\"detail\":{\"$type\":\"number\",\"data\":{\"value\":42}}}}\n{\"$type\":\"card\",\"data\":{\"cardNumber\":\"4111\",\"amount\":250,\"detail\":{\"$type\":\"number\",\"data\":{\"value\":42}}}}\n{\"$type\":\"cash\",\"data\":{\"amount\":100,\"detail\":null}}\n{\"$type\":\"card\",\"data\":{\"cardNumber\":\"4111\",\"amount\":250,\"detail\":null}}\n{\"id\":\"order-1\",\"payment\":{\"$type\":\"card\",\"data\":{\"cardNumber\":\"4111\",\"amount\":250,\"detail\":null}},\"values\":[{\"$type\":\"text\",\"data\":{\"value\":\"42\"}},{\"$type\":\"number\",\"data\":{\"value\":42}}]}\nPASS: 40 checks; dynamic code supported: False; JSON reflection: False\n",
+      "stderr": ""
+    }
+  ],
+  "verifiedDate": "2026-11-10",
+  "runtime": "11.0.0",
+  "languageVersion": "15.0",
+  "unitTests": {
+    "total": 86,
+    "passed": 77,
+    "failed": 9,
+    "skipped": 0,
+    "matchesRc3KnownFailureSet": true
+  },
+  "wasiSmoke": {
+    "parameterlessConstructors": false,
+    "platform": "macOS-26.7.2-arm64-arm-64bit",
+    "timestampUtc": "2026-11-10T18:50:38.432641+00:00",
+    "roots": 100,
+    "samples": 1,
+    "sourceSha256": "c0a9ea4d50a9488a5e66fc4a8e95eb9fcf650feadeffb588c202bdf85c2a2b04",
+    "buildProof": {
+      "mode": "Mono LLVMOnly AOT",
+      "settings": {
+        "RuntimeIdentifier": "wasi-wasm",
+        "PublishAot": "false",
+        "RunAOTCompilation": "true",
+        "AOTMode": "LLVMOnly",
+        "WasmEnableSIMD": "true",
+        "WasmBuildNative": "true",
+        "PublishTrimmed": "true",
+        "TrimMode": "full",
+        "WasmGenerateAppBundle": "true",
+        "WasmBuildOnlyAfterPublish": "true",
+        "InvariantGlobalization": "false",
+        "WasmNativeStrip": "true",
+        "WasiClangCompileOptimizationFlag": "-O3",
+        "WasiBitcodeCompileOptimizationFlag": "-O3",
+        "WasiClangLinkOptimizationFlag": "-O3",
+        "_MonoAotCrossCompilerPath": "/Users/tomohisa/.dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-arm64.Cross.wasi-wasm/11.0.0/tools/mono-aot-cross"
+      },
+      "sourceSha256": "c0a9ea4d50a9488a5e66fc4a8e95eb9fcf650feadeffb588c202bdf85c2a2b04",
+      "wasmSha256": "c675a786c37c0e6be4a2804e85ce8ad18b2a23215dc5e52ea0fef17bde8975a9",
+      "wasmBytes": 12497869,
+      "aotModule": "mono_aot_module_Benchmark_info",
+      "registeredAotModules": 9,
+      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/tomohisa/dev/GitHub/CSharpUnionPlayground/benchmarks/union100/.build/decoder-diagnostic/wasi/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/tomohisa/.dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/tomohisa/.dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/tomohisa/.dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include\"\n-g\n",
+      "httpSdkWorkaround": "Unused missing HTTP world only; fails if System.Net.Http is bundled."
+    },
+    "commands": {
+      "native": [
+        "/Users/tomohisa/dev/GitHub/CSharpUnionPlayground/benchmarks/union100/.build/decoder-diagnostic/native/Benchmark"
+      ],
+      "wasi": [
+        "wasmtime",
+        "run",
+        "-O",
+        "opt-level=2",
+        "--dir",
+        "/Users/tomohisa/dev/GitHub/CSharpUnionPlayground/benchmarks/union100/.build/decoder-diagnostic/wasi/bin/Release/net11.0/wasi-wasm/AppBundle::.",
+        "/Users/tomohisa/dev/GitHub/CSharpUnionPlayground/benchmarks/union100/.build/decoder-diagnostic/wasi/bin/Release/net11.0/wasi-wasm/AppBundle/dotnet.wasm",
+        "Benchmark"
+      ]
+    },
+    "toolchains": {
+      "dotnet": "11.0.100",
+      "wasiDotnet": "11.0.100",
+      "wasmtime": "wasmtime 41.0.0 (3dda91692 2026-01-20)"
+    },
+    "results": {
+      "native-metadata": {
+        "roots": 100,
+        "samples": 1,
+        "sink": 153401,
+        "measurements": [
+          {
+            "encodeSeconds": 0.000105833,
+            "decodeSeconds": 0.000277917,
+            "switchSeconds": 2.2e-05,
+            "totalSeconds": 0.00040575,
+            "bytes": 37731,
+            "decodeAllocatedBytes": 230008
+          }
+        ],
+        "startupSeconds": 0.2812308339999987,
+        "preparationSeconds": 0.007440041000002395,
+        "workAndValidationSeconds": 0.0005580420000015351,
+        "exitSeconds": 0.0014021669999948472,
+        "wallSeconds": 0.2906310839999975,
+        "peakRssBytes": 16023552
+      },
+      "native-direct": {
+        "roots": 100,
+        "samples": 1,
+        "sink": 153401,
+        "measurements": [
+          {
+            "encodeSeconds": 0.000145125,
+            "decodeSeconds": 0.00014175,
+            "switchSeconds": 2.2333e-05,
+            "totalSeconds": 0.000309208,
+            "bytes": 37731,
+            "decodeAllocatedBytes": 187816
+          }
+        ],
+        "startupSeconds": 0.0069994580000027895,
+        "preparationSeconds": 0.005150208999999961,
+        "workAndValidationSeconds": 0.0004685829999999669,
+        "exitSeconds": 0.0013708329999957414,
+        "wallSeconds": 0.013989082999998459,
+        "peakRssBytes": 15876096
+      },
+      "wasi-metadata": {
+        "roots": 100,
+        "samples": 1,
+        "sink": 153401,
+        "measurements": [
+          {
+            "encodeSeconds": 0.000713958,
+            "decodeSeconds": 0.003445667,
+            "switchSeconds": 0.001503875,
+            "totalSeconds": 0.0056635,
+            "bytes": 37731,
+            "decodeAllocatedBytes": 156040
+          }
+        ],
+        "startupSeconds": 1.175588334000004,
+        "preparationSeconds": 0.06598641600000121,
+        "workAndValidationSeconds": 0.010931499999998096,
+        "exitSeconds": 0.8452557089999999,
+        "wallSeconds": 2.097761959000003,
+        "peakRssBytes": 905134080
+      },
+      "wasi-direct": {
+        "roots": 100,
+        "samples": 1,
+        "sink": 153401,
+        "measurements": [
+          {
+            "encodeSeconds": 0.000783709,
+            "decodeSeconds": 0.001242458,
+            "switchSeconds": 0.001445792,
+            "totalSeconds": 0.003471959,
+            "bytes": 37731,
+            "decodeAllocatedBytes": 131144
+          }
+        ],
+        "startupSeconds": 0.10060816600000067,
+        "preparationSeconds": 0.0648241669999976,
+        "workAndValidationSeconds": 0.00910545800000051,
+        "exitSeconds": 0.830254250000003,
+        "wallSeconds": 1.0047920410000017,
+        "peakRssBytes": 202948608
+      }
+    }
+  }
+}
