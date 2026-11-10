@@ -1,5 +1,7 @@
 # このホストでの結果
 
+IntelのGitHub Actions結果は[別ディレクトリ](../../observed/macos-intel-actions/)に保存します。[domain配送の比較](../../observed/macos-intel-actions/projection-domain.md)と[fanoutの比較](../../observed/macos-intel-actions/projection-fanout.md)を参照してください。以下の数値は従来のARMホストの実測です。
+
 macOS arm64、物理メモリ128GiB。個々のサンプルとライフサイクル時間はJSON、一覧は同名のMarkdownに保存しています。
 
 - `native-scaling`: 6言語、fanout、1千～100万イベント、2回。144条件中143条件成功。Swiftのlinear-append / wide / 100万は15秒のプロセス予算を超過しました。
