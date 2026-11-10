@@ -87,3 +87,7 @@ dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj --filter FullyQualifiedNa
 ## License
 
 [MIT](LICENSE)
+
+## CLI benchmarks
+
+[100-case JSON and event projection benchmarks](benchmarks/README.md) compare C#, Rust, TypeScript, Java, Go and Swift, including memory, process lifecycle timings, scaling and WASI.
