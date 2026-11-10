@@ -9,8 +9,8 @@ global.jsonは正式版に固定し、allowPrereleaseはfalse。csprojと生成�
 | 対象 | 結果 |
 |---|---|
 | xUnit全件 | 86件中77成功、9失敗、skip 0 |
-| closedの網羅性 | 7/7 |
-| closed JSON自動推論 | 5/5 |
+| closedの網羅性 | 8/8 |
+| closed JSON自動推論 | 7/7 |
 | abstract / closed / unionのswitch比較 | 13/13 |
 | 属性Generatorのコンパイラー診断 | 6/6 |
 | ネストしたPaymentのNative AOT | 5方式すべて成功 |

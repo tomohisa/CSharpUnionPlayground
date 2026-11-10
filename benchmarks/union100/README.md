@@ -91,7 +91,7 @@ C#はすべてRelease Native AOT、標準JSONソース生成、リフレクシ�
 
 ## 必要環境・生成物
 
-このリポジトリの.NET 11 RC3、Rust/Cargo、Node.js 24以降、Java 21以降、Go、Swiftが必要です。初回ビルドではNuGet/Serde/Jacksonの依存取得が必要です。Jacksonは既存サンプルと同じ固定バージョンを使います。Rustの依存解決は同梱のCargo.lockを生成先へコピーして固定します。
+このリポジトリの.NET 11 GA (SDK 11.0.100)、Rust/Cargo、Node.js 24以降、Java 21以降、Go、Swiftが必要です。初回ビルドではNuGet/Serde/Jacksonの依存取得が必要です。Jacksonは既存サンプルと同じ固定バージョンを使います。Rustの依存解決は同梱のCargo.lockを生成先へコピーして固定します。
 
 macOS arm64で検証しています。他ホストでは必要なNative AOTコンパイラーとSwift/Foundation環境を用意し、必要に応じて `--rid` を指定してください。ビルド・生成物は `.build/`、結果は `results/` に保存され、Gitには含めません。
 
@@ -133,7 +133,7 @@ python3 benchmarks/union100/run_wasi.py --roots 200000 --samples 5 \
   --wasi-dotnet /path/to/dotnet --wasi-sdk /path/to/wasi-sdk
 ```
 
-WasmtimeとRustの`wasm32-wasip1`ターゲット、専用.NET 11 RC3の`wasi-experimental` workloadが必要です。既定のSDKパスはProjectionテストのローカル導入先です。C#の通常実行はNative AOTの`OptimizationPreference=Speed`とホスト命令セット、WASIは`RunAOTCompilation=true` / `AOTMode=LLVMOnly` / SIMD / トリミング / clang `-O3`です。Rustは両方opt-level=3・fat LTO・codegen-units=1で、通常実行はホスト命令セット、WasmはSIMDを有効にします。Wasmtimeは最適化レベル2です。
+WasmtimeとRustの`wasm32-wasip1`ターゲット、専用.NET 11 GA (SDK 11.0.100)の`wasi-experimental` workloadが必要です。既定のSDKパスはProjectionテストのローカル導入先です。C#の通常実行はNative AOTの`OptimizationPreference=Speed`とホスト命令セット、WASIは`RunAOTCompilation=true` / `AOTMode=LLVMOnly` / SIMD / トリミング / clang `-O3`です。Rustは両方opt-level=3・fat LTO・codegen-units=1で、通常実行はホスト命令セット、WasmはSIMDを有効にします。Wasmtimeは最適化レベル2です。
 
 C#は処理本体もWasmへ事前コンパイルします。共通ビルダーはアプリのAOTモジュール登録、コンパイルフラグ、リンク成果物と実行WasmのSHA256一致を確認し、`build-proof.json`を作ります。結果の`buildProofs`に含めます。インタープリターのフォールバックを主比較に使いません。
 

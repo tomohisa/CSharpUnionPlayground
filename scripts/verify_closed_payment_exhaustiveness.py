@@ -13,6 +13,7 @@ fixtures = [
     ('explicit abstract closed is rejected', source.replace('public closed record', 'public abstract closed record'), 'CS9384'),
     ('missing Card', source.replace(',\n' + card_arm, ''), 'CS8509'),
     ('new unhandled Crypto case', source + '\npublic sealed record Crypto(decimal Amount) : Payment;\n', 'CS8509'),
+    ('closed discard hides a new Crypto case', source.replace(card_arm, card_arm + ',\n    _ => "other"') + '\npublic sealed record Crypto(decimal Amount) : Payment;\n', None),
     ('nullable input without null arm', nullable, 'CS8655'),
     ('nullable input with null arm', nullable.replace(card_arm, card_arm + ',\n    null => "unset"'), None),
     ('ordinary abstract base without closed', source.replace('public closed record', 'public abstract record'), 'CS8509'),

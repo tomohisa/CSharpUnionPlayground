@@ -131,7 +131,7 @@ internal partial class PaymentContext : JsonSerializerContext;
 python3 scripts/verify_closed_inferred_json.py
 ```
 
-5パターンすべて成功しました:
+7パターンすべて成功しました:
 
 1. 型レベルの `JsonPolymorphic(InferClosedTypePolymorphism = true)` で往復。
 2. 型属性の代わりに `JsonSourceGenerationOptions(InferClosedTypePolymorphism = true)` でも往復。
@@ -217,8 +217,10 @@ python3 scripts/verify_closed_payment_exhaustiveness.py
 | Payment?でnull分岐も追加 | ビルド成功 |
 | closedを通常のabstractに戻す | CS8509（非網羅） |
 
-7パターンすべて期待どおりでした。サンプルはCS8509 / CS8655をエラーとして扱うため、ケース漏れを含むコードはビルドに失敗します。Native AOT実行は `--require-native` で動的コード生成が無効であることも検証します。
+8パターンすべて期待どおりでした。サンプルはCS8509 / CS8655をエラーとして扱うため、ケース漏れを含むコードはビルドに失敗します。Native AOT実行は `--require-native` で動的コード生成が無効であることも検証します。
 
 closedでも参照型のnullを実行時に禁止するわけではありません。非nullableな入力の網羅性チェックと、外部JSONのnull検証は別です。これは既存ケースを合成するC# `union` ではなく、閉じた継承階層のサンプルです。
 
 Zod版は`node samples/file-based/with-verification/PaymentZod.ts`で実行します。事前に`npm ci --prefix samples/file-based`で固定版依存を用意してください。ネストの往復・switch・不正入力の拒否を検証します。
+
+正式版の追加フィクスチャでは、closedにcatch-allを付けると新ケースを見落とすこと、明示登録が推論を置き換えること、実行時optionsだけでは不足した生成メタデータを補えないことも実行検証しています。[GA検証記録](../../../docs/dotnet11-ga-verification.md)を参照してください。

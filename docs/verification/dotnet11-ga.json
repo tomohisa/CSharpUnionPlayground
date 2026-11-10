@@ -15,13 +15,13 @@
     {
       "name": "closed-exhaustiveness",
       "exitCode": 0,
-      "stdout": "PASS: all cases, no discard\nPASS: explicit abstract closed is rejected (CS9384)\nPASS: missing Card (CS8509)\nPASS: new unhandled Crypto case (CS8509)\nPASS: nullable input without null arm (CS8655)\nPASS: nullable input with null arm\nPASS: ordinary abstract base without closed (CS8509)\nPASS: 7 exhaustiveness compiler fixtures\n",
+      "stdout": "PASS: all cases, no discard\nPASS: explicit abstract closed is rejected (CS9384)\nPASS: missing Card (CS8509)\nPASS: new unhandled Crypto case (CS8509)\nPASS: closed discard hides a new Crypto case\nPASS: nullable input without null arm (CS8655)\nPASS: nullable input with null arm\nPASS: ordinary abstract base without closed (CS8509)\nPASS: 8 exhaustiveness compiler fixtures\n",
       "stderr": ""
     },
     {
       "name": "closed-inference",
       "exitCode": 0,
-      "stdout": "PASS: type-level inference\nPASS: source-generation-level inference\nPASS: new case without switch update\nPASS: new case with switch update, no JSON registrations\nPASS: renamed Card changes inferred tag\nPASS: 5 closed inference fixtures\n",
+      "stdout": "PASS: explicit registrations replace inferred list\nPASS: runtime-only option cannot supply generated case metadata\nPASS: type-level inference\nPASS: source-generation-level inference\nPASS: new case without switch update\nPASS: new case with switch update, no JSON registrations\nPASS: renamed Card changes inferred tag\nPASS: 7 closed inference fixtures\n",
       "stderr": ""
     },
     {
@@ -224,5 +224,13 @@
         "peakRssBytes": 202948608
       }
     }
+  },
+  "articleSample": {
+    "sourceSha256": "0ca1a20d8e7aa3d7a04dda8b43c21e5d3ba0beedf59bc2fb47e7eafe039df4c1",
+    "command": "dotnet publish Payment.cs -c Release -r osx-arm64 -p:PublishAot=true -o /tmp/payment-ga",
+    "stdout": "{\"$type\":\"Cash\",\"amount\":100,\"next\":{\"$type\":\"Card\",\"cardNumber\":\"4111\",\"amount\":250,\"next\":null}}\ncash:100\n",
+    "sdk": "11.0.100",
+    "rid": "osx-arm64",
+    "exitCode": 0
   }
 }

@@ -19,7 +19,41 @@ Payment original =''')
 global_setting = source.replace('[JsonPolymorphic(InferClosedTypePolymorphism = true)]', '').replace(
     'PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)',
     'PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, InferClosedTypePolymorphism = true)')
+
+explicit = source.replace('[JsonPolymorphic(InferClosedTypePolymorphism = true)]',
+    '[JsonPolymorphic(InferClosedTypePolymorphism = true)]\n[JsonDerivedType(typeof(Cash), "cash-fixed")]\n[JsonDerivedType(typeof(Card), "card-fixed")]')
+explicit = explicit.replace('nameof(Cash)', '"cash-fixed"').replace('nameof(Card)', '"card-fixed"')
+explicit = explicit.replace('    Card card => $"card:{card.CardNumber}"',
+    '    Card card => $"card:{card.CardNumber}",\n    Crypto crypto => $"crypto:{crypto.Wallet}"')
+explicit = explicit.replace('Payment original =', """try
+{
+    JsonSerializer.Serialize<Payment>(new Crypto("wallet-1"), PaymentContext.Default.Payment);
+    throw new Exception("Unregistered case was inferred despite explicit registrations.");
+}
+catch (NotSupportedException) { }
+Payment original =""")
+explicit += '\npublic sealed record Crypto(string Wallet) : Payment;\n'
+runtime_only = source.replace('[JsonPolymorphic(InferClosedTypePolymorphism = true)]', '')
+runtime_only = runtime_only.replace('Payment original =', """var runtimeOptions = new JsonSerializerOptions { InferClosedTypePolymorphism = true };
+var runtimeContext = new PaymentContext(runtimeOptions);
+Payment original =""")
+runtime_only = runtime_only.replace('string json = JsonSerializer.Serialize(original, PaymentContext.Default.Payment);', """try
+{
+    JsonSerializer.Serialize(original, runtimeContext.Payment);
+    throw new Exception("Runtime option unexpectedly supplied missing generated metadata.");
+}
+catch (InvalidOperationException error) when (error.Message.Contains("derived type metadata was not generated"))
+{
+    Console.WriteLine("PASS: runtime-only inference rejected");
+}
+string json = "{}";
+""")
+# The remaining round-trip code is unreachable only at runtime; keep its types
+# available for the generator while exiting after the expected boundary check.
+runtime_only = runtime_only.replace('string json = "{}";', 'if (args.Length == 0) return;\nstring json = "{}";')
 fixtures = [
+    ('explicit registrations replace inferred list', explicit, None, '"$type":"cash-fixed"'),
+    ('runtime-only option cannot supply generated case metadata', runtime_only, None, 'runtime-only inference rejected'),
     ('type-level inference', source, None, '"$type":"Cash"'),
     ('source-generation-level inference', global_setting, None, '"$type":"Cash"'),
     ('new case without switch update', added, 'CS8509', None),
