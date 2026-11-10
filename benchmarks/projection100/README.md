@@ -74,3 +74,5 @@ TypeScript/NodeとJava/JVMはそのままWASIモジュールにならないた�
 ## 保存した計測
 
 `observed/`にこのMacでの実測を保存しています。各JSONにコマンド、ソース指紋、件数、個々の測定値を含みます。比較時はroutingとツールチェーンを揃えてください。古いホスト計測のSwiftはApple Swift 6.4、WASI比較の両エンジンは公式Swift 6.3.1であり、別の系列です。
+
+Intel Actionsでも`--languages csharp,rust --engines native,wasi`を同じ生成ソース・件数・モードで実行できます。[Actions手順](../actions/README.md)の`suite=wasi`を参照してください。C# WASIのプロジェクト作成はJSON往復と共通の`benchmarks/wasi_support.py`を使います。

@@ -120,3 +120,21 @@ python3 benchmarks/union100/test_runner.py
 生データのbuildFingerprintは計測時のランナーを含む指紋です。計測後の変更は、消費済みstdoutパイプを明示的にcloseする後処理のみです。生成した各言語のモデル・計測コードは同じです。
 
 Intelでの追加計測は[Actionsの観測データ](../observed/macos-intel-actions/)に保存します。JSONを含むsuiteで実行した場合は`union100.md` / `.json`があり、入力件数も記録します。既存のARM結果とはOS・ツール・件数などの条件も異なるため、環境情報を併せて比較してください。
+
+## C# / RustのNative対WASI
+
+同じ生成済み`Program.cs` / `main.rs`、同じ入力件数・バッチ回数・検証を使って比較します。C#の5方式とRustが対象です。
+
+```bash
+python3 benchmarks/union100/run_wasi.py --quick
+python3 benchmarks/union100/run_wasi.py --roots 10000 --samples 5
+# SDKを別の場所へ導入した環境
+python3 benchmarks/union100/run_wasi.py --roots 10000 --samples 5 \
+  --wasi-dotnet /path/to/dotnet --wasi-sdk /path/to/wasi-sdk
+```
+
+WasmtimeとRustの`wasm32-wasip1`ターゲット、専用.NET 11 RC3の`wasi-experimental` workloadが必要です。既定のSDKパスはProjectionテストのローカル導入先です。C#はホストがNative AOT、WASIが**実験的なMonoインタープリター**で、同じコンパイル方式の比較ではありません。Rustは両方releaseビルドし、cargoとrustcを同じstableツールチェーンに揃えます。
+
+C# WASIは公式ビルド済みランタイムを使い、トリミングなしで実行します。JSON処理・型定義・switchのソースは変更しません。起動にはWasmtimeによるコンパイルも含まれ、RSSはWasmtime全体です。WASIの失敗・時間超過はJSONの`errors`に理由を記録し、成功した計測値として扱いません。
+
+WASIのC#は遅いため、まずNative/WASI両方を1万ルート×5回で揃える実行例にしています。既存Intelの20万ルート、ARMの72.9万ルートの表とは件数が違います。`--roots 200000`で元のIntelと同じ件数にもできますが、全C#方式の計測は長時間になります。1万ルートではRustやNative C#の1バッチが1秒未満になることがあり、長いバッチを使った既存テストとは固定費の割合も異なります。

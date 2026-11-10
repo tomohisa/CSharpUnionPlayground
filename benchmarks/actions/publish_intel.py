@@ -8,6 +8,7 @@ import shutil
 PROJECTION_FILES = ['projection-fanout.json', 'projection-fanout.md',
                     'projection-domain.json', 'projection-domain.md']
 JSON_FILES = ['union100.json', 'union100.md']
+WASI_FILES = ['union100-wasi.json', 'union100-wasi.md', 'projection-wasi-fanout.json', 'projection-wasi-fanout.md', 'projection-wasi-domain.json', 'projection-wasi-domain.md']
 
 
 def read(path):
@@ -18,20 +19,21 @@ def render_index(destination):
     lines = ['# Intel GitHub Actions observations', '',
              'JSON serialization and memory projection are separate benchmarks. '
              'Each suite retains its own latest run and environment metadata.', '']
-    for suite in ['json', 'projection']:
+    for suite in ['json', 'projection', 'wasi']:
         path = destination / f'environment-{suite}.json'
         if path.exists():
             env = read(path)
-            lines += [f"## {'JSON' if suite == 'json' else 'Projection'} run", '',
+            lines += [f"## {'JSON' if suite == 'json' else 'WASI' if suite == 'wasi' else 'Projection'} run", '',
                       f"CPU: {env['cpu']}. RAM: {env['physicalMemoryBytes']/1024**3:.0f} GiB. "
                       f"[Actions run]({env['runUrl']}) / [Environment]({path.name}).", '']
             if env.get('completionNote'):
                 lines += [env['completionNote'].replace('JSON results are excluded.', 'JSON results from that run are excluded.'), '']
-        if suite == 'json' and (destination / 'union100.json').exists():
-            report = read(destination / 'union100.json')
+        json_name = 'union100-wasi' if suite == 'wasi' else 'union100'
+        if suite in ['json', 'wasi'] and (destination / (json_name + '.json')).exists():
+            report = read(destination / (json_name + '.json'))
             lines += [f"{report['roots']:,} roots / {report['nodesPerBatch']:,} nodes per batch, "
                       f"{report['samples']} large batches. "
-                      '[Full timings and lifecycle](union100.md) / [Raw data](union100.json).', '',
+                      f'[Full timings and lifecycle]({json_name}.md) / [Raw data]({json_name}.json).', '',
                       '| implementation | median batch s | encode s | decode s | peak RSS MiB |',
                       '|---|---:|---:|---:|---:|']
             for row in report['summary']:
@@ -40,9 +42,12 @@ def render_index(destination):
                              f"{row['peakRssMiB']:.1f} |")
             lines += ['', 'Counts, wire representations, runtime validation and runtime versions differ '
                       'between implementations and ARM runs; inspect the raw report before comparing.', '']
-        if suite == 'projection' and (destination / 'projection-domain.json').exists():
-            report = read(destination / 'projection-domain.json')
-            lines += ['[Domain details](projection-domain.md) / [Fanout details](projection-fanout.md).', '',
+        projection_name = 'projection-wasi' if suite == 'wasi' else 'projection'
+        if suite in ['projection', 'wasi'] and (destination / (projection_name + '-domain.json')).exists():
+            report = read(destination / (projection_name + '-domain.json'))
+            if suite == 'wasi':
+                lines += ['C# native is Native AOT; C# WASI is the experimental Mono interpreter. Rust uses release builds on both. Wasmtime RSS includes the host runtime, not just guest memory.', '']
+            lines += [f'[Domain details]({projection_name}-domain.md) / [Fanout details]({projection_name}-fanout.md).', '',
                       'Ten million events, domain routing, dense:', '',
                       '| implementation | append seconds | copy seconds | append RSS MiB |',
                       '|---|---:|---|---:|']
@@ -66,10 +71,10 @@ def render_index(destination):
 
 def publish(incoming, destination):
     env = read(incoming / 'environment.json')
-    if env.get('completed') is not True or env.get('suite') not in ['projection', 'json', 'all']:
+    if env.get('completed') is not True or env.get('suite') not in ['projection', 'json', 'all', 'wasi']:
         raise ValueError('Only a completed benchmark run can be published automatically.')
     suites = ['projection', 'json'] if env['suite'] == 'all' else [env['suite']]
-    files = (PROJECTION_FILES if 'projection' in suites else []) + (JSON_FILES if 'json' in suites else [])
+    files = (PROJECTION_FILES if 'projection' in suites else []) + (JSON_FILES if 'json' in suites else []) + (WASI_FILES if 'wasi' in suites else [])
     # Validate the entire incoming set before changing any tracked data.
     for name in files:
         if not (incoming / name).is_file():

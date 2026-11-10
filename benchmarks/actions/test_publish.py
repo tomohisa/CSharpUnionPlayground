@@ -44,6 +44,22 @@ class MergePublicationTests(unittest.TestCase):
         self.assertIn('union100.md', index)
         self.assertIn('projection-domain.md', index)
 
+    def test_wasi_update_retains_both_host_suites(self):
+        publisher.publish(self.source, self.target)
+        before = {name: (self.target / name).read_bytes() for name in ['union100.json', 'projection-domain.json']}
+        self.write(self.source / 'environment.json', {**self.env, 'suite': 'wasi'})
+        for name in publisher.WASI_FILES:
+            if name == 'union100-wasi.json':
+                self.write(self.source / name, {'roots': 100, 'nodesPerBatch': 300, 'samples': 5, 'summary': []})
+            elif name.endswith('.json'):
+                self.write(self.source / name, self.old_projection)
+            else:
+                (self.source / name).write_text('WASI timings\n')
+        publisher.publish(self.source, self.target)
+        for name, value in before.items():
+            self.assertEqual((self.target / name).read_bytes(), value)
+        self.assertIn('union100-wasi.md', (self.target / 'README.md').read_text())
+
     def test_incomplete_run_does_not_publish(self):
         self.write(self.source / 'environment.json', {**self.env, 'completed': False})
         with self.assertRaises(ValueError):
