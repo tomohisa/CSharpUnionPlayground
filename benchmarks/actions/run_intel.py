@@ -34,7 +34,7 @@ def run_suite(command, output, *, projection=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--suite', choices=['projection', 'json', 'all', 'wasi', 'decoder'], default='projection')
+    parser.add_argument('--suite', choices=['projection', 'json', 'all', 'wasi', 'decoder', 'combined'], default='projection')
     parser.add_argument('--json-roots', type=int, default=200000)
     parser.add_argument('--wasi-dotnet', type=Path, default=os.environ.get('WASI_DOTNET'))
     parser.add_argument('--wasi-sdk', type=Path, default=os.environ.get('WASI_SDK_PATH'))
@@ -62,7 +62,9 @@ def main():
         'os': capture('sw_vers'), 'runUrl': run_url,
         'runAttempt': os.environ.get('GITHUB_RUN_ATTEMPT'),
         'suite': args.suite, 'jsonRoots': args.json_roots,
-        'csharpWasiMode': 'LLVMOnly AOT, SIMD, clang -O3' if args.suite in ['wasi', 'decoder'] else None,
+        'comparisonGroup': run_url+'#attempt-'+os.environ.get('GITHUB_RUN_ATTEMPT','local') if args.suite=='combined' else None,
+        'measurementPolicy': 'One VM; sequential processes; one Native measurement per implementation; C# host JIT+PGO, abstract net10, other C# net11; WASM LLVMOnly AOT' if args.suite=='combined' else None,
+        'csharpWasiMode': 'LLVMOnly AOT, SIMD, clang -O3' if args.suite in ['wasi', 'decoder', 'combined'] else None,
     }
     (OUT / 'environment.json').write_text(json.dumps(environment, indent=2) + '\n')
     (OUT / 'README.md').write_text(
@@ -92,24 +94,8 @@ def main():
         }, environment)
         (OUT/'environment.json').write_text(json.dumps({**environment, 'completed': True}, indent=2)+'\n')
         return
-    if args.suite == 'wasi':
-        if not args.wasi_dotnet or not args.wasi_sdk:
-            parser.error('wasi requires --wasi-dotnet and --wasi-sdk')
-        paths = ['--wasi-dotnet', str(args.wasi_dotnet), '--wasi-sdk', str(args.wasi_sdk)]
-        base = ['benchmarks/projection100/run.py', '--languages', 'csharp,rust',
-                '--engines', 'native,wasi', '--build-dir', 'benchmarks/projection100/.build/intel-wasi',
-                '--samples', '2', '--timeout', '25', '--max-projection-seconds', '8', *paths]
-        run_suite(base + ['--sizes', '1000,10000,100000,1000000'], OUT / 'projection-wasi-fanout.json', projection=True)
-        run_suite(base + ['--skip-build', '--routing', 'domain', '--profiles', 'dense',
-                         '--modes', 'indexed-append,indexed-copy', '--sizes', '100000,1000000,10000000'],
-                  OUT / 'projection-wasi-domain.json', projection=True)
-        run_suite(['benchmarks/union100/run_wasi.py', '--roots', str(args.json_roots),
-                   '--samples', '5', '--timeout', '1800', *paths], OUT / 'union100-wasi.json')
-        wasi_report = json.loads((OUT / 'union100-wasi.json').read_text())
-        if any(error['status'] != 'timeout' for error in wasi_report['errors'].values()):
-            raise RuntimeError('WASI JSON had a build/runtime error; see the report.')
-    if args.suite in ['projection', 'all']:
-        base = ['benchmarks/projection100/run.py', '--engines', 'native', '--samples', '2',
+    if args.suite in ['projection', 'all', 'combined']:
+        base = ['benchmarks/projection100/run.py', '--engines', 'native', '--csharp-mode', 'jit-pgo', '--samples', '2',
                 '--timeout', '25', '--max-projection-seconds', '8']
         run_suite(base + ['--sizes', '1000,10000,100000,1000000'], OUT / 'projection-fanout.json', projection=True)
         run_suite(base + ['--skip-build', '--routing', 'domain', '--profiles', 'dense',
@@ -131,16 +117,32 @@ def main():
         with (OUT / 'README.md').open('a') as stream:
             stream.write('\n'.join(lines) + '\n\n[Domain details](projection-domain.md) / [Fanout details](projection-fanout.md).\n\n'
                          '`timeout` means the 25s process budget expired; `not-run-after-budget` means a smaller size exceeded a budget and this size was not measured. The projection stopping budget is 8s.\n')
-    if args.suite in ['json', 'all']:
-        run_suite(['benchmarks/union100/run.py', '--roots', str(args.json_roots), '--samples', '5'],
+    if args.suite in ['json', 'all', 'combined']:
+        run_suite(['benchmarks/union100/run.py', '--csharp-mode', 'jit-pgo', '--abstract-net10', '--roots', str(args.json_roots), '--samples', '5'],
                   OUT / 'union100.json')
+    if args.suite in ['wasi', 'combined']:
+        if not args.wasi_dotnet or not args.wasi_sdk:
+            parser.error('wasi requires --wasi-dotnet and --wasi-sdk')
+        paths = ['--wasi-dotnet', str(args.wasi_dotnet), '--wasi-sdk', str(args.wasi_sdk)]
+        base = ['benchmarks/projection100/run.py', '--languages', 'csharp,rust',
+                '--engines', 'wasi' if args.suite=='combined' else 'native,wasi', '--build-dir', 'benchmarks/projection100/.build/intel-wasi',
+                '--samples', '2', '--timeout', '25', '--max-projection-seconds', '8', *paths]
+        run_suite(base + ['--sizes', '1000,10000,100000,1000000'], OUT / 'projection-wasi-fanout.json', projection=True)
+        run_suite(base + ['--skip-build', '--routing', 'domain', '--profiles', 'dense',
+                         '--modes', 'indexed-append,indexed-copy', '--sizes', '100000,1000000,10000000'],
+                  OUT / 'projection-wasi-domain.json', projection=True)
+        run_suite(['benchmarks/union100/run_wasi.py', '--roots', str(args.json_roots),
+                   '--samples', '5', '--timeout', '1800', *(['--engines','wasi'] if args.suite=='combined' else []), *paths], OUT / 'union100-wasi.json')
+        wasi_report = json.loads((OUT / 'union100-wasi.json').read_text())
+        if wasi_report['errors'] and (args.suite=='combined' or any(error['status'] != 'timeout' for error in wasi_report['errors'].values())):
+            raise RuntimeError('WASI JSON had a build/runtime error; see the report.')
     if args.suite in ['json','projection']:
         family='union100' if args.suite=='json' else 'projection100'
         capture_sources(OUT,args.suite,environment['sourceCommit'],{args.suite:REPO/'benchmarks'/family/'.build/sources'})
-    elif args.suite=='all':
+    elif args.suite in ['all','combined']:
         for selected,family in [('json','union100'),('projection','projection100')]:
             capture_sources(OUT,selected,environment['sourceCommit'],{selected:REPO/'benchmarks'/family/'.build/sources'})
-    else:
+    if args.suite in ['wasi','combined']:
         capture_sources(OUT,'wasi',environment['sourceCommit'],{'json':REPO/'benchmarks/union100/.build/wasi-comparison/sources','projection':REPO/'benchmarks/projection100/.build/intel-wasi/sources'})
     (OUT / 'environment.json').write_text(json.dumps({**environment, 'completed': True}, indent=2) + '\n')
 

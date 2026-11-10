@@ -69,12 +69,19 @@ def render_index(destination):
     lines = ['# Intel GitHub Actions observations', '',
              'Native and WASM results are grouped by workload. Each implementation has one Native row and, where available, one WASM row. Native means host execution, including Node/JVM where applicable.', '',
              '**TypeScript labels:** `ts-simple` = no runtime validation; `ts-manual` = handwritten validation; `ts-zod` = Zod validation. Raw JSON and CLI retain their original implementation IDs.', '',
-             'For C# and Rust, the overview uses the optimized Native control measured in the same run as WASM. Earlier host-only values remain in the detailed reports. This selects a build configuration, not the fastest observed sample across runs.', '']
+             'The canonical Native rows come from the host report. WASM rows are included only when both reports belong to the same combined job/attempt. No minimum is selected across runs.', '']
     environments = {}
     for suite in ['json', 'projection', 'wasi']:
         path = destination / f'environment-{suite}.json'
         if path.exists():
             environments[suite] = read(path)
+
+    def matched(*suites):
+        envs = [environments.get(suite, {}) for suite in suites]
+        groups = {env.get('comparisonGroup') for env in envs}
+        return (len(groups) == 1 and None not in groups and
+                all(env.get('completed') is True for env in envs) and
+                len({(env.get('runUrl'), env.get('runAttempt'), env.get('sourceCommit')) for env in envs}) == 1)
 
     def provenance(suites):
         for suite in suites:
@@ -104,7 +111,12 @@ def render_index(destination):
 
     def config(suite, implementation):
         if suite != 'wasi':
-            return 'Host defaults'
+            path = destination/('union100.json' if suite=='json' else 'projection-domain.json')
+            native = read(path).get('nativeConfiguration',{}) if path.exists() else {}
+            if implementation.startswith('csharp') and native.get('csharpMode')=='jit-pgo':
+                version = '10' if implementation=='csharp-abstract' and native.get('abstractNet10') else '11'
+                return '.NET '+version+' / Release JIT + Dynamic PGO'
+            return 'Release Native AOT / SDK defaults' if implementation.startswith('csharp') else 'Host defaults'
         if implementation.startswith('csharp-'):
             return 'LLVMOnly AOT / SIMD / -O3' if implementation.endswith('-wasi') else 'Native AOT Speed / native ISA'
         return 'Release / LTO / SIMD' if implementation.endswith('-wasi') else 'Release / LTO / native ISA'
@@ -118,13 +130,15 @@ def render_index(destination):
             path = destination / (name+'.json')
             if not path.exists():
                 continue
+            if suite=='wasi' and not matched('json','wasi'):
+                continue
             report = read(path)
             for row in report['summary']:
                 value = (suite, row, report)
                 if row['implementation'].endswith('-wasi'):
                     wasm.append(value)
                 else:
-                    native[base_name(row['implementation'])] = value
+                    native.setdefault(base_name(row['implementation']), value)
         return list(native.values()) + wasm
 
     rows = json_rows()
@@ -135,8 +149,12 @@ def render_index(destination):
         if not varying:
             roots, nodes, samples = next(iter(inputs))
             lines += [f'{roots:,} roots / {nodes:,} nodes per batch; {samples} large batches per row.', '']
-        lines += ['[Host-only details](union100.md) / [Paired Native–WASM details](union100-wasi.md).', '']
+        lines += ['[Host-only details](union100.md) / [WASM / legacy paired details](union100-wasi.md).', '']
         provenance(['json','wasi'])
+        if not matched('json','wasi'):
+            lines += ['**Unmatched runs:** this table shows host Native results only. WASM details are retained at the link above, but are excluded from this ranking until one completed combined job supplies both backends.', '']
+        else:
+            lines += ['**One combined job / one VM / sequential processes.** C# Native uses JIT + Dynamic PGO (abstract: .NET 10; closed/union: .NET 11). WASM remains .NET 11 LLVMOnly AOT. These comparisons include runtime/version differences, not only the execution backend.', '']
         extra_header = ' roots / batches |' if varying else ''
         lines += ['| implementation | execution | build |'+extra_header+' median batch s | encode s | decode s | peak RSS MiB | measurement |',
                   '|---|---|---|'+('---:|' if varying else '')+'---:|---:|---:|---:|---|']
@@ -156,6 +174,8 @@ def render_index(destination):
             path = destination / (prefix+'-'+suffix+'.json')
             if not path.exists():
                 continue
+            if suite=='wasi' and not matched('projection','wasi'):
+                continue
             report = read(path)
             for implementation in report['commands']:
                 selected = [r for r in report['results'] if r['implementation'] == implementation]
@@ -163,15 +183,17 @@ def render_index(destination):
                 if implementation.endswith('-wasi'):
                     wasm.append(value)
                 else:
-                    native[base_name(implementation)] = value
+                    native.setdefault(base_name(implementation), value)
         return list(native.values()) + wasm
 
     domain, fanout = projection_reports('domain'), projection_reports('fanout')
     if domain or fanout or any((destination/name).exists() for name in ['projection-domain.json','projection-wasi-domain.json']):
         lines += ['## Projection run', '',
                   '`ts-simple` performs the projection without runtime payload validation. `ts-zod` validates/clones payload data in matching handlers, inside the projection timer. Unknown event kinds are ignored. This test does not parse JSON.', '',
-                  '[Host domain details](projection-domain.md) / [Host fanout details](projection-fanout.md) / [Native–WASM domain details](projection-wasi-domain.md) / [Native–WASM fanout details](projection-wasi-fanout.md).', '']
+                  '[Host domain details](projection-domain.md) / [Host fanout details](projection-fanout.md) / [WASM domain details](projection-wasi-domain.md) / [WASM fanout details](projection-wasi-fanout.md).', '']
         provenance(['projection','wasi'])
+        if not matched('projection','wasi'):
+            lines += ['**Unmatched runs:** only host Native rows are ranked here. Separate WASM measurements remain in the detail reports.', '']
     if domain:
         lines += ['### Domain routing: ten million events, dense', '',
                   '| implementation | execution | build | append s | copy s | append RSS MiB | measurement |',
@@ -206,9 +228,9 @@ def render_index(destination):
 
 def publish(incoming, destination):
     env = read(incoming / 'environment.json')
-    if env.get('completed') is not True or env.get('suite') not in ['projection', 'json', 'all', 'wasi', 'decoder']:
+    if env.get('completed') is not True or env.get('suite') not in ['projection', 'json', 'all', 'wasi', 'decoder', 'combined']:
         raise ValueError('Only a completed benchmark run can be published automatically.')
-    suites = ['projection', 'json'] if env['suite'] == 'all' else [env['suite']]
+    suites = ['projection','json','wasi'] if env['suite']=='combined' else ['projection', 'json'] if env['suite'] == 'all' else [env['suite']]
     files = (PROJECTION_FILES if 'projection' in suites else []) + (JSON_FILES if 'json' in suites else []) + (WASI_FILES if 'wasi' in suites else []) + (DECODER_FILES if 'decoder' in suites else [])
     # Validate the entire incoming set before changing any tracked data.
     for name in files:
@@ -230,6 +252,8 @@ def publish(incoming, destination):
                 raise ValueError('Diagnostic source snapshot mismatch')
     for selected in suites:
         source_manifest = incoming/'code'/selected/'manifest.json'
+        if env['suite']=='combined' and not source_manifest.exists():
+            raise ValueError('Combined run is missing a source manifest')
         if source_manifest.exists():
             manifest = read(source_manifest)
             if manifest.get('sourceCommit') != env.get('sourceCommit'):
@@ -241,6 +265,31 @@ def publish(incoming, destination):
                         raise ValueError('Invalid source snapshot path')
                     if hashlib.sha256((incoming/path).read_bytes()).hexdigest() != entry['sha256']:
                         raise ValueError('Source snapshot hash mismatch')
+    if env['suite']=='combined':
+        if not env.get('comparisonGroup'):
+            raise ValueError('Combined run is missing its job/attempt identity')
+        host, wasm = read(incoming/'union100.json'), read(incoming/'union100-wasi.json')
+        if any(host[k] != wasm[k] for k in ['roots','nodesPerBatch','samples']):
+            raise ValueError('Combined JSON counts differ between backends')
+        if host.get('nativeConfiguration',{}).get('csharpMode')!='jit-pgo' or not host.get('nativeConfiguration',{}).get('abstractNet10'):
+            raise ValueError('Combined Native C# must use JIT+PGO with abstract on .NET 10')
+        if read(incoming/'projection-domain.json').get('nativeConfiguration',{}).get('csharpMode')!='jit-pgo':
+            raise ValueError('Combined Native projection must use JIT+PGO')
+        if wasm.get('errors') or len(host['summary'])!=12 or len(wasm['summary'])!=6:
+            raise ValueError('Combined JSON must contain all 12 Native and 6 WASM results')
+        expected={'csharp-abstract','csharp-closed-explicit','csharp-closed-inferred','csharp-union-custom','csharp-union-generated','rust','typescript','typescript-simple','typescript-zod','java','go','swift'}
+        expected_wasm={name+'-wasi' for name in expected if name.startswith('csharp-') or name=='rust'}
+        if {r['implementation'] for r in host['summary']}!=expected or {r['implementation'] for r in wasm['summary']}!=expected_wasm:
+            raise ValueError('Combined run is missing an implementation')
+        if any(not row['implementation'].endswith('-wasi') for row in wasm['summary']):
+            raise ValueError('Combined run must measure each Native implementation only once')
+        manifests = {suite:read(incoming/'code'/suite/'manifest.json') for suite in suites}
+        for kind,suite in [('json','json'),('projection','projection')]:
+            native = manifests[suite]['files'][kind]
+            for name,entry in manifests['wasi']['files'][kind].items():
+                base = name.removesuffix('-wasi') + ('-native' if kind=='projection' else '')
+                if base not in native or native[base]['sha256'] != entry['sha256']:
+                    raise ValueError('Native/WASM workload source mismatch: '+name)
     destination.mkdir(parents=True, exist_ok=True)
     legacy = destination / 'environment.json'
     projection_env = destination / 'environment-projection.json'

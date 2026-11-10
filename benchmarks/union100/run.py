@@ -21,6 +21,8 @@ import threading
 
 HERE=Path(__file__).resolve().parent
 REPO=HERE.parents[1]
+sys.path.insert(0,str(HERE.parent))
+from native_settings import jit_publish_args, jit_command
 sys.path.insert(0,str(REPO/'scripts'))
 from run_payment_java import jackson_classpath
 from generate import generate
@@ -38,7 +40,7 @@ def checksum(roots):
             total+=i%100+i+len('item-'+str(i))+4*i+6+len('group')+len('g'+str(i%7))+len('note')+len('bench')
     return total
 
-def build(names,build_dir,rid,native_properties=None):
+def build(names,build_dir,rid,native_properties=None,csharp_mode="aot",abstract_net10=False):
     source=build_dir/'sources'
     staging=build_dir/'generated-next'
     if staging.exists():shutil.rmtree(staging)
@@ -54,9 +56,10 @@ def build(names,build_dir,rid,native_properties=None):
         out=build_dir/'bin'/name;out.mkdir(parents=True,exist_ok=True)
         if name.startswith('csharp-'):
             project=source/name/'Benchmark.csproj'
-            result=run(['dotnet','publish',project,'-c','Release','-r',rid,'-o',out]+[f'-p:{k}={v}' for k,v in (native_properties or {}).items()])
+            extra=jit_publish_args(project,abstract_net10 and name=='csharp-abstract') if csharp_mode=='jit-pgo' else [f'-p:{k}={v}' for k,v in (native_properties or {}).items()]
+            result=run(['dotnet','publish',project,'-c','Release','-r',rid,'-o',out]+extra,cwd=project.parent if abstract_net10 and name=='csharp-abstract' else REPO)
             (out/'build.log').write_text(result.stdout+result.stderr)
-            commands[name]=[str(out/'Benchmark')]
+            commands[name]=jit_command(out) if csharp_mode=='jit-pgo' else [str(out/'Benchmark')]
         elif name=='rust':
             result=run(['cargo','build','--release','--manifest-path',source/'rust/Cargo.toml'])
             (out/'build.log').write_text(result.stdout+result.stderr)
@@ -140,6 +143,8 @@ def measure(name,commands,roots,samples,timeout,progress_dir,expected_sink=None,
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--csharp-mode',choices=['aot','jit-pgo'],default='aot')
+    p.add_argument('--abstract-net10',action='store_true',help='Build abstract with SDK10/runtime10; requires jit-pgo')
     p.add_argument('--implementations',default=','.join(NAMES),help='comma-separated names; default: all twelve')
     p.add_argument('--roots',type=int,help='fixed large batch size; skips calibration')
     p.add_argument('--samples',type=int,default=5,help='large single-pass batches, not tiny loop repetitions')
@@ -154,6 +159,7 @@ def main():
     p.add_argument('--timeout',type=int,default=1800,help='timeout per implementation invocation, seconds')
     args=p.parse_args()
     names=args.implementations.split(',')
+    if args.abstract_net10 and args.csharp_mode!='jit-pgo':p.error('--abstract-net10 requires --csharp-mode jit-pgo')
     if len(set(names))!=len(names) or any(n not in NAMES for n in names):p.error('unknown or duplicate implementation')
     if args.quick:args.roots,args.samples=100,1
     if args.samples<1 or args.target_seconds<=0 or args.min_batch_seconds<=0 or args.max_roots<100:p.error('counts and durations must be positive')
@@ -162,6 +168,8 @@ def main():
     fingerprint=hashlib.sha256()
     for path in sorted([HERE/'generate.py',HERE/'run.py',HERE/'Cargo.lock',REPO/'global.json',REPO/'samples/file-based/package.json',REPO/'samples/file-based/package-lock.json',*list((HERE/'templates').iterdir()),*list((REPO/'src/PlaygroundTaggedJson.Generator').glob('*.cs')),REPO/'src/PlaygroundTaggedJson.Generator/PlaygroundTaggedJson.Generator.csproj']):
         fingerprint.update(str(path.relative_to(REPO)).encode());fingerprint.update(path.read_bytes())
+    fingerprint.update((HERE.parent/'native_settings.py').read_bytes())
+    fingerprint.update(json.dumps([args.csharp_mode,args.abstract_net10]).encode())
     digest=fingerprint.hexdigest()
     manifest=build_dir/'commands.json'
     if args.skip_build:
@@ -170,7 +178,7 @@ def main():
             raise RuntimeError('Build cache differs from sources, RID or requested implementations; run without --skip-build.')
         commands={name:cached['commands'][name] for name in names}
     else:
-        commands=build(names,build_dir,args.rid)
+        commands=build(names,build_dir,args.rid,csharp_mode=args.csharp_mode,abstract_net10=args.abstract_net10)
         manifest.write_text(json.dumps({'fingerprint':digest,'rid':args.rid,'commands':commands},indent=2))
     progress_dir=args.output.parent/(args.output.stem+'.progress')
     calibration=[]
@@ -208,11 +216,12 @@ def main():
         if name=='dotnet' and not any(n.startswith('csharp-') for n in names):continue
         if name!='dotnet' and not (name in names or name=='node' and any(n.startswith('typescript') for n in names)):continue
         version=run(command);versions[name]=(version.stdout+version.stderr).strip()
+    if args.abstract_net10 and 'csharp-abstract' in names:versions['dotnet-abstract']=run(['dotnet','--version'],cwd=build_dir/'sources/csharp-abstract').stdout.strip()
     if 'typescript-zod' in names:versions['zod']=json.loads((REPO/'samples/file-based/package.json').read_text())['dependencies']['zod']
     report={'timestampUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'platform':platform.platform(),
         'machine':platform.machine(),'rid':args.rid,'toolchains':versions,'buildFingerprint':digest,'roots':roots,'nodesPerBatch':roots*3,'samples':args.samples,
         'targetAggregateSeconds':args.target_seconds,'minBatchSeconds':args.min_batch_seconds,
-        'templateSha256':source_hash.hexdigest(),'commands':commands,'calibration':calibration,'results':results,'summary':summary,
+        'nativeConfiguration':{'csharpMode':args.csharp_mode,'abstractNet10':args.abstract_net10,'abstractRuntime':'10.0.12' if args.abstract_net10 else None},'templateSha256':source_hash.hexdigest(),'commands':commands,'calibration':calibration,'results':results,'summary':summary,
         'lifecycleMetric':'Parent-observed launch to ready, ready to prepared, result received to process exit. Includes OS time-wrapper and pipe scheduling overhead.',
         'memoryMetric':'OS process peak resident set size; includes setup, warm-up and correctness checks, not just measured phases.',
         'notes':['Startup, compilation, data generation, warm-up and correctness checks are excluded from measured phases.',
@@ -220,7 +229,7 @@ def main():
                  'typescript uses manual recursive validation; typescript-simple uses JSON.parse plus a type assertion without runtime validation; typescript-zod uses Zod discriminated unions and creates validated objects during decode. Swift uses synthesized enum envelopes and sorted keys; C# unions wrap case data. Wire bytes differ.',
                  'This measures these implementations and serializers, not language speed or isolated union overhead. GC, JIT state and host load affect results.']}
     args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(report,indent=2)+'\n')
-    md=['| implementation | median batch s | encode s | decode s | switch s | aggregate s | JSON MiB | peak RSS MiB |','|---|---:|---:|---:|---:|---:|---:|---:|']
+    md=[f'C# Native: {args.csharp_mode}; abstract .NET 10: {args.abstract_net10}.', '', '| implementation | median batch s | encode s | decode s | switch s | aggregate s | JSON MiB | peak RSS MiB |','|---|---:|---:|---:|---:|---:|---:|---:|']
     for r in summary:
         md.append(f"| {r['implementation']} | {r['medianSeconds']:.4f} | {r['encodeMedianSeconds']:.4f} | {r['decodeMedianSeconds']:.4f} | {r['switchMedianSeconds']:.4f} | {r['aggregateSeconds']:.2f} | {r['bytes']/1048576:.2f} | {r['peakRssMiB']:.1f} |")
     md+=['','| implementation | startup s | preparation s | exit s | total wall s |','|---|---:|---:|---:|---:|']

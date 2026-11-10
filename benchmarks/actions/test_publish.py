@@ -67,6 +67,8 @@ class MergePublicationTests(unittest.TestCase):
         host = {'roots':100,'nodesPerBatch':300,'samples':5,
                 'summary':[entry('rust',1),entry('typescript-simple',2)]}
         paired = {**host,'summary':[entry('rust-native',3),entry('rust-wasi',4)]}
+        self.write(self.target/'environment-json.json',{**self.env,'comparisonGroup':'same-job','runAttempt':'1','sourceCommit':'abc'})
+        self.write(self.target/'environment-wasi.json',{**self.env,'comparisonGroup':'same-job','runAttempt':'1','sourceCommit':'abc'})
         self.write(self.target/'union100.json',host)
         self.write(self.target/'union100-wasi.json',paired)
         publisher.render_index(self.target)
@@ -75,9 +77,82 @@ class MergePublicationTests(unittest.TestCase):
         self.assertNotIn('## WASI run',index)
         self.assertEqual(index.count('| rust | Native |'),1)
         self.assertEqual(index.count('| rust | WASM AOT |'),1)
-        self.assertIn('| rust | Native | Release / LTO / native ISA | 3.000 |',index)
+        self.assertIn('| rust | Native | Host defaults | 1.000 |',index)
         self.assertIn('| ts-simple | Native |',index)
         self.assertEqual(publisher.read(self.target/'union100.json')['summary'][0]['medianSeconds'],1)
+
+    def test_unmatched_vms_are_not_combined_in_ranking(self):
+        row={'implementation':'rust-wasi','medianSeconds':2,'encodeMedianSeconds':1,'decodeMedianSeconds':1,'peakRssMiB':10}
+        self.write(self.target/'union100-wasi.json',{'roots':100,'nodesPerBatch':300,'samples':5,'summary':[row]})
+        publisher.publish(self.source,self.target)
+        index=(self.target/'README.md').read_text()
+        self.assertIn('Unmatched runs',index)
+        self.assertNotIn('| rust | WASM AOT |',index)
+
+    def test_jit_and_framework_are_visible_in_build_column(self):
+        row={'implementation':'csharp-abstract','medianSeconds':1,'encodeMedianSeconds':.1,'decodeMedianSeconds':.8,'peakRssMiB':10}
+        self.write(self.source/'union100.json',{'roots':100,'nodesPerBatch':300,'samples':5,'summary':[row],
+            'nativeConfiguration':{'csharpMode':'jit-pgo','abstractNet10':True}})
+        publisher.publish(self.source,self.target)
+        self.assertIn('.NET 10 / Release JIT + Dynamic PGO',(self.target/'README.md').read_text())
+
+    def test_combined_partial_bundle_is_rejected_atomically(self):
+        self.write(self.source/'environment.json',{**self.env,'suite':'combined','comparisonGroup':'job'})
+        with self.assertRaises(ValueError):publisher.publish(self.source,self.target)
+        self.assertFalse((self.target/'union100.json').exists())
+
+    def combined_input(self):
+        import hashlib
+        env={**self.env,'suite':'combined','comparisonGroup':'one-job#1','sourceCommit':'abc','runAttempt':'1'}
+        self.write(self.source/'environment.json',env)
+        names=['csharp-abstract','csharp-closed-explicit','csharp-closed-inferred','csharp-union-custom','csharp-union-generated','rust','typescript-simple','typescript','typescript-zod','java','go','swift']
+        def row(name):return {'implementation':name,'medianSeconds':1,'encodeMedianSeconds':.1,'decodeMedianSeconds':.8,'peakRssMiB':10}
+        host={'roots':100,'nodesPerBatch':300,'samples':5,'summary':[row(n) for n in names],
+              'nativeConfiguration':{'csharpMode':'jit-pgo','abstractNet10':True}}
+        wasm={**host,'summary':[row(n+'-wasi') for n in names[:6]],'errors':{}}
+        self.write(self.source/'union100.json',host)
+        self.write(self.source/'union100-wasi.json',wasm)
+        for name in publisher.PROJECTION_FILES+publisher.WASI_FILES:
+            if name.startswith('union100'):continue
+            if name.endswith('.json'):self.write(self.source/name,{'commands':{},'results':[],'nativeConfiguration':{'csharpMode':'jit-pgo'}})
+            else:(self.source/name).write_text('projection')
+        (self.source/'union100-wasi.md').write_text('WASM only')
+        for suite in ['json','projection','wasi']:
+            kinds=['json','projection'] if suite=='wasi' else [suite]
+            manifest={'sourceCommit':'abc','files':{}}
+            for kind in kinds:
+                items=names if kind=='json' and suite!='wasi' else names[:6] if kind=='json' else ['csharp','rust']
+                entries=manifest['files'][kind]={}
+                for item in items:
+                    key=item+('-wasi' if suite=='wasi' else '-native' if kind=='projection' else '')
+                    path=Path('code')/suite/kind/item/'source.txt'
+                    (self.source/path).parent.mkdir(parents=True,exist_ok=True)
+                    data=(kind+item).encode();(self.source/path).write_bytes(data)
+                    entries[key]={'path':path.as_posix(),'sha256':hashlib.sha256(data).hexdigest()}
+            self.write(self.source/'code'/suite/'manifest.json',manifest)
+
+    def test_complete_combined_bundle_is_published_as_one_group(self):
+        self.combined_input();publisher.publish(self.source,self.target)
+        index=(self.target/'README.md').read_text()
+        self.assertIn('One combined job / one VM',index)
+        self.assertNotIn('Unmatched runs',index)
+        self.assertEqual(index.count('| WASM AOT |'),6)
+        for suite in ['json','projection','wasi']:
+            self.assertEqual(publisher.read(self.target/f'environment-{suite}.json')['comparisonGroup'],'one-job#1')
+
+    def test_combined_count_mismatch_is_rejected_before_writes(self):
+        self.combined_input()
+        report=publisher.read(self.source/'union100-wasi.json');report['roots']=200
+        self.write(self.source/'union100-wasi.json',report)
+        with self.assertRaisesRegex(ValueError,'counts differ'):publisher.publish(self.source,self.target)
+        self.assertFalse((self.target/'union100.json').exists())
+
+    def test_combined_rejects_wrong_csharp_profile(self):
+        self.combined_input()
+        report=publisher.read(self.source/'union100.json');report['nativeConfiguration']['csharpMode']='aot'
+        self.write(self.source/'union100.json',report)
+        with self.assertRaisesRegex(ValueError,'JIT\+PGO'):publisher.publish(self.source,self.target)
+        self.assertFalse((self.target/'union100.json').exists())
 
     def decoder_input(self):
         import hashlib
