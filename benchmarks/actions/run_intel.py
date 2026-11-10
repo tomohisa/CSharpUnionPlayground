@@ -33,8 +33,10 @@ def run_suite(command, output, *, projection=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--suite', choices=['projection', 'json', 'all'], default='projection')
+    parser.add_argument('--suite', choices=['projection', 'json', 'all', 'wasi'], default='projection')
     parser.add_argument('--json-roots', type=int, default=200000)
+    parser.add_argument('--wasi-dotnet', type=Path, default=os.environ.get('WASI_DOTNET'))
+    parser.add_argument('--wasi-sdk', type=Path, default=os.environ.get('WASI_SDK_PATH'))
     args = parser.parse_args()
     if not 100 <= args.json_roots <= 729000:
         parser.error('json-roots must be between 100 and 729000')
@@ -70,6 +72,22 @@ def main():
         'These are hosted VM measurements; ARM and Intel results also differ in OS, '
         'runtime versions and host resources. They do not isolate CPU architecture alone. '
         'Timeout is a process budget, not a measured completion time.\n')
+    if args.suite == 'wasi':
+        if not args.wasi_dotnet or not args.wasi_sdk:
+            parser.error('wasi requires --wasi-dotnet and --wasi-sdk')
+        paths = ['--wasi-dotnet', str(args.wasi_dotnet), '--wasi-sdk', str(args.wasi_sdk)]
+        base = ['benchmarks/projection100/run.py', '--languages', 'csharp,rust',
+                '--engines', 'native,wasi', '--build-dir', 'benchmarks/projection100/.build/intel-wasi',
+                '--samples', '2', '--timeout', '25', '--max-projection-seconds', '8', *paths]
+        run_suite(base + ['--sizes', '1000,10000,100000,1000000'], OUT / 'projection-wasi-fanout.json', projection=True)
+        run_suite(base + ['--skip-build', '--routing', 'domain', '--profiles', 'dense',
+                         '--modes', 'indexed-append,indexed-copy', '--sizes', '100000,1000000,10000000'],
+                  OUT / 'projection-wasi-domain.json', projection=True)
+        run_suite(['benchmarks/union100/run_wasi.py', '--roots', str(args.json_roots),
+                   '--samples', '5', '--timeout', '1800', *paths], OUT / 'union100-wasi.json')
+        wasi_report = json.loads((OUT / 'union100-wasi.json').read_text())
+        if any(error['status'] != 'timeout' for error in wasi_report['errors'].values()):
+            raise RuntimeError('WASI JSON had a build/runtime error; see the report.')
     if args.suite in ['projection', 'all']:
         base = ['benchmarks/projection100/run.py', '--engines', 'native', '--samples', '2',
                 '--timeout', '25', '--max-projection-seconds', '8']

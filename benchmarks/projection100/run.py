@@ -19,6 +19,8 @@ HERE=Path(__file__).resolve().parent;REPO=HERE.parents[1]
 spec=importlib.util.spec_from_file_location('projection_generator',HERE/'generate.py');generator=importlib.util.module_from_spec(spec);spec.loader.exec_module(generator)
 sys.path.insert(0,str(HERE.parent/'union100'))
 spec=importlib.util.spec_from_file_location('union_harness',HERE.parent/'union100/run.py');harness=importlib.util.module_from_spec(spec);spec.loader.exec_module(harness)
+sys.path.insert(0,str(HERE.parent))
+from wasi_support import build_csharp
 LANGUAGES=['csharp','rust','typescript','java','go','swift']
 MODES=['indexed-append','indexed-copy','linear-append']
 
@@ -54,22 +56,8 @@ def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,
                 harness.run(['dotnet','publish',sources/'Projection.csproj','-c','Release','-r',rid,'-o',out]);commands['csharp-native']=[str(out/'Projection')]
             if 'wasi' in engines:
                 try:
-                    if not wasi_dotnet.exists():raise RuntimeError('Specify --wasi-dotnet with a dedicated SDK containing wasi-experimental.')
-                    project=build_dir/'wasi-csharp';project.mkdir(exist_ok=True);shutil.copy2(sources/'Program.cs',project/'Program.cs')
-                    (project/'ProjectionWasi.csproj').write_text('<Project Sdk="Microsoft.NET.Sdk;Microsoft.NET.Runtime.MonoTargets.Sdk.net11;Microsoft.NET.Runtime.WebAssembly.Wasi.Sdk.net11"><PropertyGroup><TargetFramework>net11.0</TargetFramework><RuntimeIdentifier>wasi-wasm</RuntimeIdentifier><OutputType>Exe</OutputType><LangVersion>preview</LangVersion><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><WasmBuildNative>false</WasmBuildNative><PublishTrimmed>false</PublishTrimmed><WasmGenerateAppBundle>true</WasmGenerateAppBundle><InvariantGlobalization>false</InvariantGlobalization><JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault></PropertyGroup></Project>')
-                    cross=list((wasi_dotnet.parent/'packs').glob('Microsoft.NETCore.App.Runtime.AOT.*.Cross.wasi-wasm/*/tools/mono-aot-cross'))
-                    if not cross:raise RuntimeError('WASI Mono cross compiler pack is missing.')
-                    text=(project/'ProjectionWasi.csproj').read_text().replace('</PropertyGroup>',f'<_MonoAotCrossCompilerPath>{cross[0]}</_MonoAotCrossCompilerPath></PropertyGroup><ItemGroup><MonoAotCrossCompiler Include="{cross[0]}" RuntimeIdentifier="wasi-wasm" /></ItemGroup>')
-                    (project/'ProjectionWasi.csproj').write_text(text)
-                    env={**os.environ,'WASI_SDK_PATH':str(wasi_sdk)+os.sep}
-                    result=subprocess.run([str(wasi_dotnet),'publish',str(project/'ProjectionWasi.csproj'),'-c','Release'],env=env,text=True,capture_output=True)
-                    (out/'wasi-build.log').write_text(result.stdout+result.stderr)
-                    if result.returncode:raise RuntimeError(result.stdout+result.stderr)
-                    candidates=list((project/'bin/Release/net11.0/wasi-wasm').glob('AppBundle/dotnet.wasm'))
-                    if not candidates:candidates=list((project/'bin/Release/net11.0/wasi-wasm').rglob('dotnet.wasm'))
-                    binary=candidates[-1];bundle=binary.parent
-                    commands['csharp-wasi']=[shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'),'run','-S','http','--dir',str(bundle)+'::.',str(binary),'ProjectionWasi']
-                except (RuntimeError,IndexError) as e:unavailable['csharp-wasi']=str(e)
+                    commands['csharp-wasi']=build_csharp(sources/'Projection.csproj',build_dir/'wasi-csharp',wasi_dotnet,wasi_sdk,shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'))
+                except (RuntimeError,subprocess.SubprocessError) as e:unavailable['csharp-wasi']=str(e)+'\n'+str(getattr(e,'stdout',''))+'\n'+str(getattr(e,'stderr',''))
         elif language=='rust':
             if 'native' in engines:
                 harness.run((['rustup','run','stable','rustc'] if shutil.which('rustup') else ['rustc'])+['--edition=2024','-O',sources/'projection.rs','-o',out/'projection']);commands['rust-native']=[str(out/'projection')]
@@ -132,7 +120,7 @@ def main():
     if any(l not in LANGUAGES for l in languages)or any(e not in ['native','wasi']for e in engines)or any(m not in MODES for m in modes)or any(f not in ['dense','wide']for f in profiles)or min(sizes)<100 or args.samples<1 or args.timeout<=0 or args.max_projection_seconds<=0:p.error('Invalid implementation, engine, mode, profile or count')
     args.build_dir=args.build_dir.resolve();args.build_dir.mkdir(parents=True,exist_ok=True)
     fingerprint=hashlib.sha256()
-    for path in sorted([HERE/'generate.py',HERE/'run.py',HERE.parent/'union100/run.py',REPO/'global.json',*list((HERE/'templates').iterdir())]):fingerprint.update(path.read_bytes())
+    for path in sorted([HERE/'generate.py',HERE/'run.py',HERE.parent/'union100/run.py',HERE.parent/'wasi_support.py',REPO/'global.json',*list((HERE/'templates').iterdir())]):fingerprint.update(path.read_bytes())
     wasi_dotnet=(args.wasi_dotnet or args.build_dir/'dotnet/dotnet').resolve()
     wasi_sdk=(args.wasi_sdk or args.build_dir/'tools/wasi-sdk-33.0-arm64-macos').resolve()
     key={'source':fingerprint.hexdigest(),'languages':languages,'engines':engines,'rid':args.rid,'swiftSdk':args.swift_sdk,'swiftToolchain':args.swift_toolchain,'wasiDotnet':str(wasi_dotnet),'wasiSdk':str(wasi_sdk)}

@@ -6,12 +6,16 @@ on:
       suite:
         description: Benchmark suite
         type: choice
-        options: [projection, all, json]
+        options: [projection, all, json, wasi]
         default: projection
       json_roots:
         description: JSON roots (fixed count for the 14 GB runner)
         type: number
         default: 200000
+      wasi_json_roots:
+        description: Matched native/WASI JSON roots (C# WASI is interpreted)
+        type: number
+        default: 10000
       publish:
         description: Update tracked Intel results on main after a successful run
         type: boolean
@@ -27,12 +31,13 @@ concurrency:
 jobs:
   benchmark:
     runs-on: macos-15-intel
-    timeout-minutes: 90
+    timeout-minutes: 180
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
       BENCHMARK_SUITE: ${{ inputs.suite }}
       JSON_ROOTS: ${{ inputs.json_roots }}
+      WASI_JSON_ROOTS: ${{ inputs.wasi_json_roots }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -53,8 +58,31 @@ jobs:
         run: |
           rustup toolchain install stable --profile minimal
           rustup default stable
+      - name: Install official WASI toolchains
+        if: inputs.suite == 'wasi'
+        env:
+          WASI_TOOLS: ${{ runner.temp }}/wasi-tools
+        run: |
+          mkdir -p "$WASI_TOOLS"
+          curl --fail --location --retry 3 https://dot.net/v1/dotnet-install.sh -o "$WASI_TOOLS/dotnet-install.sh"
+          sdk_version=$(python3 -c 'import json; print(json.load(open("global.json"))["sdk"]["version"])')
+          bash "$WASI_TOOLS/dotnet-install.sh" --version "$sdk_version" --install-dir "$WASI_TOOLS/dotnet"
+          "$WASI_TOOLS/dotnet/dotnet" workload install wasi-experimental --skip-manifest-update
+          rustup target add wasm32-wasip1 --toolchain stable
+          curl --fail --location --retry 3 https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-33/wasi-sdk-33.0-x86_64-macos.tar.gz -o "$WASI_TOOLS/wasi-sdk.tar.gz"
+          echo "18f3f201ba9734e6a4455b0b6410690395a55e9ffa9f6f5066f66083a94b93b3  $WASI_TOOLS/wasi-sdk.tar.gz" | shasum -a 256 -c -
+          tar -xzf "$WASI_TOOLS/wasi-sdk.tar.gz" -C "$WASI_TOOLS"
+          curl --fail --location --retry 3 https://github.com/bytecodealliance/wasmtime/releases/download/v41.0.1/wasmtime-v41.0.1-x86_64-macos.tar.xz -o "$WASI_TOOLS/wasmtime.tar.xz"
+          echo "19dfb6b23295fad88091f0a4fe9c651b99366f3973e3676f8cc9572589550b32  $WASI_TOOLS/wasmtime.tar.xz" | shasum -a 256 -c -
+          tar -xJf "$WASI_TOOLS/wasmtime.tar.xz" -C "$WASI_TOOLS"
+          echo "$WASI_TOOLS/wasmtime-v41.0.1-x86_64-macos" >> "$GITHUB_PATH"
+          echo "WASI_DOTNET=$WASI_TOOLS/dotnet/dotnet" >> "$GITHUB_ENV"
+          echo "WASI_SDK_PATH=$WASI_TOOLS/wasi-sdk-33.0-x86_64-macos" >> "$GITHUB_ENV"
       - name: Capture Intel host and run benchmarks sequentially
-        run: python3 benchmarks/actions/run_intel.py --suite "$BENCHMARK_SUITE" --json-roots "$JSON_ROOTS"
+        run: |
+          benchmark_roots="$JSON_ROOTS"
+          if [ "$BENCHMARK_SUITE" = wasi ]; then benchmark_roots="$WASI_JSON_ROOTS"; fi
+          python3 benchmarks/actions/run_intel.py --suite "$BENCHMARK_SUITE" --json-roots "$benchmark_roots"
       - name: Publish job summary
         if: always()
         run: |
