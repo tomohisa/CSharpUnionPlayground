@@ -35,7 +35,7 @@ string describe = shape switch
 
 SDK `11.0.100` / ランタイム `11.0.0` に固定しました。C# 15.0を使い、file-basedサンプルからpreview指定を削除しました。
 
-2026-11-10の再実行は **86件中77成功・9失敗・skip 0件**。失敗集合はRC3と同じです。closed網羅性7件、自動推論5件、switch比較13件、生成器診断6件は全成功。ネストしたPaymentの5方式でmacOS arm64のNative AOT実行に成功し、生成器の40チェックも通りました。正式版と一致するWASIコンパイラーでLLVMOnly AOTのスモーク実行も成功しました。
+2026-11-10の再実行は **86件中77成功・9失敗・skip 0件**。失敗集合はRC3と同じです。closed網羅性8件、自動推論7件、switch比較13件、生成器診断6件は全成功。ネストしたPaymentの5方式でmacOS arm64のNative AOT実行に成功し、生成器の40チェックも通りました。正式版と一致するWASIコンパイラーでLLVMOnly AOTのスモーク実行も成功しました。
 
 [正式版の結果・既知の失敗・再実行方法](docs/dotnet11-ga-verification.md) / [実行記録](docs/verification/dotnet11-ga.json)。以下のRC3検証と過去のベンチマーク値は当時の記録として残し、正式版の測定値へ読み替えません。
 

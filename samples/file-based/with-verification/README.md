@@ -131,13 +131,15 @@ internal partial class PaymentContext : JsonSerializerContext;
 python3 scripts/verify_closed_inferred_json.py
 ```
 
-5パターンすべて成功しました:
+7パターンすべて成功しました:
 
 1. 型レベルの `JsonPolymorphic(InferClosedTypePolymorphism = true)` で往復。
 2. 型属性の代わりに `JsonSourceGenerationOptions(InferClosedTypePolymorphism = true)` でも往復。
 3. Cryptoケースを追加してswitch未更新ならCS8509。
 4. switchを更新すればCryptoもJSON登録・context登録の追加なしで往復。
 5. 型名をCardからDebitCardへ変更すると自動判別子も変更。
+6. 明示登録が推論を置き換え、明示したタグだけを使い未登録のCryptoは拒否。
+7. 実行時optionsだけで不足した生成メタデータを補おうとするとInvalidOperationException。
 
 型レベルの属性がない場合、実行時の `JsonSerializerOptions` だけで推論を有効にしても、AOT用の派生メタデータは後から追加されません。標準ソース生成に認識される型属性または `JsonSourceGenerationOptions` を使います。明示的な `JsonDerivedType` の登録は推論リストに追加されるのではなく、その階層の推論を置き換えます。
 
@@ -213,12 +215,15 @@ python3 scripts/verify_closed_payment_exhaustiveness.py
 | abstract closedを併記 | CS9384 |
 | Cardの分岐を削除 | CS8509（非網羅） |
 | Cryptoケースを追加してswitchを変更しない | CS8509（非網羅） |
+| closedにdiscardを付けてCryptoを追加 | ビルド成功、追加漏れを隠す |
 | 入力をPayment?に変更しnull分岐なし | CS8655（null未処理） |
 | Payment?でnull分岐も追加 | ビルド成功 |
 | closedを通常のabstractに戻す | CS8509（非網羅） |
 
-7パターンすべて期待どおりでした。サンプルはCS8509 / CS8655をエラーとして扱うため、ケース漏れを含むコードはビルドに失敗します。Native AOT実行は `--require-native` で動的コード生成が無効であることも検証します。
+8パターンすべて期待どおりでした。サンプルはCS8509 / CS8655をエラーとして扱うため、ケース漏れを含むコードはビルドに失敗します。Native AOT実行は `--require-native` で動的コード生成が無効であることも検証します。
 
 closedでも参照型のnullを実行時に禁止するわけではありません。非nullableな入力の網羅性チェックと、外部JSONのnull検証は別です。これは既存ケースを合成するC# `union` ではなく、閉じた継承階層のサンプルです。
 
 Zod版は`node samples/file-based/with-verification/PaymentZod.ts`で実行します。事前に`npm ci --prefix samples/file-based`で固定版依存を用意してください。ネストの往復・switch・不正入力の拒否を検証します。
+
+正式版の追加フィクスチャでは、closedにcatch-allを付けると新ケースを見落とすこと、明示登録が推論を置き換えること、実行時optionsだけでは不足した生成メタデータを補えないことも実行検証しています。[GA検証記録](../../../docs/dotnet11-ga-verification.md)を参照してください。
