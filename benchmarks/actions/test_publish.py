@@ -79,6 +79,47 @@ class MergePublicationTests(unittest.TestCase):
         self.assertIn('| ts-simple | Native |',index)
         self.assertEqual(publisher.read(self.target/'union100.json')['summary'][0]['medianSeconds'],1)
 
+    def decoder_input(self):
+        import hashlib
+        self.write(self.source/'environment.json', {**self.env, 'suite':'decoder', 'sourceCommit':'abc'})
+        (self.source/'decoder/code').mkdir(parents=True)
+        sources={}
+        for name in ['positional.cs','parameterless.cs','rust.rs']:
+            data=name.encode()
+            (self.source/'decoder/code'/name).write_bytes(data)
+            sources[name]=hashlib.sha256(data).hexdigest()
+        # checksum(100) from the independent workload reference.
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'union100'))
+        from run import checksum
+        result={'roots':100,'samples':1,'sink':checksum(100),
+                'measurements':[{'bytes':1000,'decodeSeconds':1}]}
+        report={'host':{'sourceCommit':'abc'}, 'sources':sources}
+        for group, count in [('positional',4),('parameterless',4),('rust',2)]:
+            report[group]={'roots':100,'samples':1,'results':{str(i):result for i in range(count)}}
+            if group != 'rust':
+                report[group].update(sourceSha256=sources[group+'.cs'],
+                    buildProof={'sourceSha256':sources[group+'.cs'],'settings':{'AOTMode':'LLVMOnly'}})
+        self.write(self.source/'decoder/report.json',report)
+        (self.source/'decoder/README.md').write_text('Diagnostic results')
+
+    def test_decoder_update_retains_other_suites_and_links_result(self):
+        publisher.publish(self.source,self.target)
+        original=(self.target/'union100.json').read_bytes()
+        self.decoder_input()
+        publisher.publish(self.source,self.target)
+        self.assertEqual((self.target/'union100.json').read_bytes(),original)
+        self.assertTrue((self.target/'decoder/code/rust.rs').exists())
+        self.assertIn('decoder/README.md',(self.target/'README.md').read_text())
+        self.assertEqual(publisher.read(self.target/'environment-decoder.json')['sourceCommit'],'abc')
+
+    def test_decoder_hash_mismatch_blocks_publication_before_mutating(self):
+        self.decoder_input()
+        (self.source/'decoder/code/positional.cs').write_text('modified after measurement')
+        with self.assertRaises(ValueError):
+            publisher.publish(self.source,self.target)
+        self.assertFalse((self.target/'decoder').exists())
+
     def test_incomplete_run_does_not_publish(self):
         self.write(self.source / 'environment.json', {**self.env, 'completed': False})
         with self.assertRaises(ValueError):

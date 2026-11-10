@@ -9,6 +9,7 @@ import shutil
 PROJECTION_FILES = ['projection-fanout.json', 'projection-fanout.md',
                     'projection-domain.json', 'projection-domain.md']
 JSON_FILES = ['union100.json', 'union100.md']
+DECODER_FILES = ['decoder/report.json', 'decoder/README.md', 'decoder/code/positional.cs', 'decoder/code/parameterless.cs', 'decoder/code/rust.rs']
 WASI_FILES = ['union100-wasi.json', 'union100-wasi.md', 'projection-wasi-fanout.json', 'projection-wasi-fanout.md', 'projection-wasi-domain.json', 'projection-wasi-domain.md']
 
 
@@ -145,6 +146,10 @@ def render_index(destination):
             lines.append(f"| {label(suite,'json',implementation)} | {backend(implementation)} | {config(suite,implementation)} |{extra} {row['medianSeconds']:.3f} | {row['encodeMedianSeconds']:.3f} | {row['decodeMedianSeconds']:.3f} | {row['peakRssMiB']:.1f} | {measurement(suite)} |")
         lines += ['', 'Median batch time includes encode, decode and switch traversal. TypeScript runtime validation differs by variant; wire representations differ between some implementations. See the source and raw reports.', '']
 
+    if (destination/'decoder/README.md').exists():
+        lines += ['### JSON read-path diagnostic', '',
+                  '[Intel: STJ metadata vs direct reader vs Rust](decoder/README.md). Same 100-case workload, separate matched Native/WASI AOT run; decode allocation and full lifecycle are retained.', '']
+
     def projection_reports(suffix):
         native, wasm = {}, []
         for suite, prefix in [('projection','projection'),('wasi','projection-wasi')]:
@@ -201,10 +206,10 @@ def render_index(destination):
 
 def publish(incoming, destination):
     env = read(incoming / 'environment.json')
-    if env.get('completed') is not True or env.get('suite') not in ['projection', 'json', 'all', 'wasi']:
+    if env.get('completed') is not True or env.get('suite') not in ['projection', 'json', 'all', 'wasi', 'decoder']:
         raise ValueError('Only a completed benchmark run can be published automatically.')
     suites = ['projection', 'json'] if env['suite'] == 'all' else [env['suite']]
-    files = (PROJECTION_FILES if 'projection' in suites else []) + (JSON_FILES if 'json' in suites else []) + (WASI_FILES if 'wasi' in suites else [])
+    files = (PROJECTION_FILES if 'projection' in suites else []) + (JSON_FILES if 'json' in suites else []) + (WASI_FILES if 'wasi' in suites else []) + (DECODER_FILES if 'decoder' in suites else [])
     # Validate the entire incoming set before changing any tracked data.
     for name in files:
         if not (incoming / name).is_file():
@@ -212,6 +217,17 @@ def publish(incoming, destination):
     for name in files:
         if name.endswith('.json'):
             read(incoming / name)
+    if 'decoder' in suites:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'union100/diagnostics'))
+        from capture import validate
+        report = read(incoming/'decoder/report.json')
+        validate(report)
+        if report['host']['sourceCommit'] != env['sourceCommit']:
+            raise ValueError('Diagnostic source commit mismatch')
+        for name, digest in report['sources'].items():
+            if Path(name).name != name or hashlib.sha256((incoming/'decoder/code'/name).read_bytes()).hexdigest() != digest:
+                raise ValueError('Diagnostic source snapshot mismatch')
     for selected in suites:
         source_manifest = incoming/'code'/selected/'manifest.json'
         if source_manifest.exists():
@@ -231,6 +247,7 @@ def publish(incoming, destination):
     if legacy.exists() and not projection_env.exists() and (destination / 'projection-domain.json').exists():
         shutil.copy2(legacy, projection_env)
     for name in files:
+        (destination/name).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(incoming / name, destination / name)
     for suite in suites:
         (destination / f'environment-{suite}.json').write_text(json.dumps(env, indent=2) + '\n')
