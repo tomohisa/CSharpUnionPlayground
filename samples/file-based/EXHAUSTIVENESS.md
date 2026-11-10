@@ -19,7 +19,7 @@
 
 C#のCS8509は本来警告ですが、サンプルではエラー扱いです。Rust/TypeScript/Javaは上記構成で型チェックのエラーになります。いずれも型定義を変更して利用側も再コンパイルした結果です。配布済みバイナリーへ新ケースが来る場合の保証とは異なります。
 
-[ClosedInferredJson.cs](ClosedInferredJson.cs) の `InferClosedTypePolymorphism` はJSONの登録を自動化しますが、switchの網羅性は同じclosed階層の機能です。新ケース追加時はswitchの更新が必要です。自動JSON登録・ケース追加・型名変更については `python3 scripts/verify_closed_inferred_json.py` の5パターンで検証しています。
+[ClosedInferredJson.cs](ClosedInferredJson.cs) の `InferClosedTypePolymorphism` はJSONの登録を自動化しますが、switchの網羅性は同じclosed階層の機能です。新ケース追加時はswitchの更新が必要です。自動JSON登録・ケース追加・型名変更・明示登録との優先順位・実行時optionsの制約については `python3 scripts/verify_closed_inferred_json.py` の7パターンで検証しています。
 
 ## Rust: enumとmatchが直接対応
 
