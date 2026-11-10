@@ -34,7 +34,7 @@ def run_suite(command, output, *, projection=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--suite', choices=['projection', 'json', 'all', 'wasi'], default='projection')
+    parser.add_argument('--suite', choices=['projection', 'json', 'all', 'wasi', 'decoder'], default='projection')
     parser.add_argument('--json-roots', type=int, default=200000)
     parser.add_argument('--wasi-dotnet', type=Path, default=os.environ.get('WASI_DOTNET'))
     parser.add_argument('--wasi-sdk', type=Path, default=os.environ.get('WASI_SDK_PATH'))
@@ -62,7 +62,7 @@ def main():
         'os': capture('sw_vers'), 'runUrl': run_url,
         'runAttempt': os.environ.get('GITHUB_RUN_ATTEMPT'),
         'suite': args.suite, 'jsonRoots': args.json_roots,
-        'csharpWasiMode': 'LLVMOnly AOT, SIMD, clang -O3' if args.suite == 'wasi' else None,
+        'csharpWasiMode': 'LLVMOnly AOT, SIMD, clang -O3' if args.suite in ['wasi', 'decoder'] else None,
     }
     (OUT / 'environment.json').write_text(json.dumps(environment, indent=2) + '\n')
     (OUT / 'README.md').write_text(
@@ -74,6 +74,24 @@ def main():
         'These are hosted VM measurements; ARM and Intel results also differ in OS, '
         'runtime versions and host resources. They do not isolate CPU architecture alone. '
         'Timeout is a process budget, not a measured completion time.\n')
+    if args.suite == 'decoder':
+        if not args.wasi_dotnet or not args.wasi_sdk:
+            parser.error('decoder requires --wasi-dotnet and --wasi-sdk')
+        base = ['benchmarks/union100/diagnostics/run.py', '--roots', str(args.json_roots), '--samples', '5',
+                '--wasi-dotnet', str(args.wasi_dotnet), '--wasi-sdk', str(args.wasi_sdk)]
+        positional, parameterless = OUT/'decoder-positional.json', OUT/'decoder-parameterless.json'
+        subprocess.run([sys.executable, *base, '--with-rust', '--output', str(positional)], cwd=REPO, check=True)
+        subprocess.run([sys.executable, *base, '--parameterless', '--output', str(parameterless)], cwd=REPO, check=True)
+        sys.path.insert(0, str(REPO/'benchmarks/union100/diagnostics'))
+        from capture import capture as capture_decoder
+        root = REPO/'benchmarks/union100/.build'
+        capture_decoder(positional, parameterless, OUT/'decoder', {
+            'positional.cs': root/'decoder-diagnostic/sources/csharp-closed-inferred/Program.cs',
+            'parameterless.cs': root/'decoder-diagnostic-setters/sources/csharp-closed-inferred/Program.cs',
+            'rust.rs': root/'decoder-diagnostic/rust-control/sources/rust/main.rs',
+        }, environment)
+        (OUT/'environment.json').write_text(json.dumps({**environment, 'completed': True}, indent=2)+'\n')
+        return
     if args.suite == 'wasi':
         if not args.wasi_dotnet or not args.wasi_sdk:
             parser.error('wasi requires --wasi-dotnet and --wasi-sdk')

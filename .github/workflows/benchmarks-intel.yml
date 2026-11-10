@@ -6,7 +6,7 @@ on:
       suite:
         description: Benchmark suite
         type: choice
-        options: [projection, all, json, wasi]
+        options: [projection, all, json, wasi, decoder]
         default: projection
       json_roots:
         description: JSON roots (fixed count for the 14 GB runner)
@@ -59,7 +59,7 @@ jobs:
           rustup toolchain install stable --profile minimal
           rustup default stable
       - name: Install official WASI toolchains
-        if: inputs.suite == 'wasi'
+        if: inputs.suite == 'wasi' || inputs.suite == 'decoder'
         env:
           WASI_TOOLS: ${{ runner.temp }}/wasi-tools
         run: |
@@ -97,6 +97,7 @@ jobs:
             benchmarks/observed/macos-intel-actions/*.json
             benchmarks/observed/macos-intel-actions/*.md
             benchmarks/observed/macos-intel-actions/code/**
+            benchmarks/observed/macos-intel-actions/decoder/**
           if-no-files-found: warn
           retention-days: 90
 
