@@ -66,79 +66,138 @@ def source_label(destination, suite, kind, implementation):
 
 def render_index(destination):
     lines = ['# Intel GitHub Actions observations', '',
-             'JSON serialization and memory projection are separate benchmarks. '
-             'Each suite retains its own latest run and environment metadata.', '',
-             '**TypeScript labels:** `ts-simple` = no runtime validation; `ts-manual` = handwritten validation; `ts-zod` = Zod validation. Raw JSON and CLI retain their original implementation IDs.', '']
+             'Native and WASM results are grouped by workload. Each implementation has one Native row and, where available, one WASM row. Native means host execution, including Node/JVM where applicable.', '',
+             '**TypeScript labels:** `ts-simple` = no runtime validation; `ts-manual` = handwritten validation; `ts-zod` = Zod validation. Raw JSON and CLI retain their original implementation IDs.', '',
+             'For C# and Rust, the overview uses the optimized Native control measured in the same run as WASM. Earlier host-only values remain in the detailed reports. This selects a build configuration, not the fastest observed sample across runs.', '']
+    environments = {}
     for suite in ['json', 'projection', 'wasi']:
         path = destination / f'environment-{suite}.json'
         if path.exists():
-            env = read(path)
-            lines += [f"## {'JSON' if suite == 'json' else 'WASI' if suite == 'wasi' else 'Projection'} run", '',
-                      f"CPU: {env['cpu']}. RAM: {env['physicalMemoryBytes']/1024**3:.0f} GiB. "
-                      f"[Actions run]({env['runUrl']}) / [Environment]({path.name}).", '']
-            if (destination/'code'/suite/'README.md').exists():
-                lines += [f'[Generated source code](code/{suite}/README.md) / [Source SHA256 manifest](code/{suite}/manifest.json).', '']
-            if env.get('completionNote'):
-                lines += [env['completionNote'].replace('JSON results are excluded.', 'JSON results from that run are excluded.'), '']
-        json_name = 'union100-wasi' if suite == 'wasi' else 'union100'
-        if suite in ['json', 'wasi'] and (destination / (json_name + '.json')).exists():
-            report = read(destination / (json_name + '.json'))
-            lines += [f"{report['roots']:,} roots / {report['nodesPerBatch']:,} nodes per batch, "
-                      f"{report['samples']} large batches. "
-                      f'[Full timings and lifecycle]({json_name}.md) / [Raw data]({json_name}.json).', '',
-                      '| implementation | median batch s | encode s | decode s | peak RSS MiB |',
-                      '|---|---:|---:|---:|---:|']
-            for row in report['summary']:
-                lines.append(f"| {source_label(destination,suite,'json',row['implementation'])} | {row['medianSeconds']:.3f} | "
-                             f"{row['encodeMedianSeconds']:.3f} | {row['decodeMedianSeconds']:.3f} | "
-                             f"{row['peakRssMiB']:.1f} |")
-            lines += ['', 'Counts, wire representations, runtime validation and runtime versions differ '
-                      'between implementations and ARM runs; inspect the raw report before comparing.', '']
-        projection_name = 'projection-wasi' if suite == 'wasi' else 'projection'
-        if suite in ['projection', 'wasi'] and (destination / (projection_name + '-domain.json')).exists():
-            report = read(destination / (projection_name + '-domain.json'))
-            if suite == 'projection':
-                lines += ['`ts-simple (native)` is the simple projection. `ts-zod (native)` additionally validates/clones payload data only for matching handlers; this cost is included in projection time. Unknown event kinds are still ignored. No JSON parsing is included in this projection test.', '']
-            if suite == 'wasi':
-                lines += ['C# native is speed-optimized Native AOT; C# WASI is LLVMOnly AOT with SIMD/-O3, with no interpreter fallback. Rust uses optimized release/LTO with native ISA or Wasm SIMD. Wasmtime RSS includes the host runtime, not just guest memory.', '']
-            lines += [f'[Domain details]({projection_name}-domain.md) / [Fanout details]({projection_name}-fanout.md).', '',
-                      'Ten million events, domain routing, dense:', '',
-                      '| implementation | append seconds | copy seconds | append RSS MiB |',
-                      '|---|---:|---|---:|']
-            for name in report['commands']:
-                rows = {r['mode']: r for r in report['results']
-                        if r['implementation'] == name and r['events'] == 10000000}
-                if 'indexed-append' not in rows or 'indexed-copy' not in rows:
-                    continue
-                a, c = rows['indexed-append'], rows['indexed-copy']
-                seconds = f"{a['projectionSeconds']:.3f}" if a['status'] == 'ok' else a['status']
-                copied = f"{c['projectionSeconds']:.3f}" if c['status'] == 'ok' else c['status']
-                rss = f"{a['peakRssMiB']:.1f}" if a['status'] == 'ok' else '—'
-                lines.append(f'| {source_label(destination,suite,"projection",name)} | {seconds} | {copied} | {rss} |')
-            fanout_path = destination / (projection_name + '-fanout.json')
-            if fanout_path.exists():
-                fanout = read(fanout_path)
-                lines += ['', 'One million events, sequential fanout, indexed-append:', '',
-                          '| implementation | dense seconds | wide seconds | dense RSS MiB | wide RSS MiB |',
-                          '|---|---:|---:|---:|---:|']
-                for name in fanout['commands']:
-                    cases = {r['profile']: r for r in fanout['results'] if r['implementation'] == name
-                             and r['events'] == 1000000 and r['mode'] == 'indexed-append'}
-                    if not cases:
-                        continue
-                    times, memory = [], []
-                    for profile in ['dense', 'wide']:
-                        row = cases.get(profile, {'status': 'not-measured'})
-                        times.append(f"{row['projectionSeconds']:.3f}" if row['status'] == 'ok' else row['status'])
-                        memory.append(f"{row['peakRssMiB']:.1f}" if row['status'] == 'ok' else '—')
-                    lines.append(f'| {source_label(destination,suite,"projection",name)} | {times[0]} | {times[1]} | {memory[0]} | {memory[1]} |')
-            lines += ['', '`timeout` means the 25s process budget expired. `not-run-after-budget` means '
-                      'an earlier smaller size exceeded a budget and this point was not run. '
-                      'The projection stopping budget is 8s.', '']
-    lines += ['RSS is the whole-process peak, not retained-state size. Hosted VM, OS and runtime '
-              'differences mean these results do not isolate CPU architecture alone.']
-    (destination / 'README.md').write_text('\n'.join(lines) + '\n')
+            environments[suite] = read(path)
 
+    def provenance(suites):
+        for suite in suites:
+            if suite not in environments:
+                continue
+            env = environments[suite]
+            lines.extend([f"- [{suite} measurement]({env['runUrl']}): {env['cpu']}, "
+                          f"{env['physicalMemoryBytes']/1024**3:.0f} GiB; [environment](environment-{suite}.json)."])
+            if (destination/'code'/suite/'README.md').exists():
+                lines.append(f'  [Generated source code](code/{suite}/README.md) / [Source SHA256 manifest](code/{suite}/manifest.json).')
+        lines.append('')
+
+    def backend(implementation):
+        return 'WASM AOT' if implementation.endswith('-wasi') else 'Native'
+
+    def base_name(implementation):
+        return implementation.removesuffix('-native').removesuffix('-wasi')
+
+    def label(suite, kind, implementation):
+        link = source_label(destination, suite, kind, implementation)
+        old = display_name(implementation)
+        new = display_name(base_name(implementation))
+        # Projection's plain TypeScript ID denotes unchecked, simple projection.
+        if kind == 'projection':
+            new = 'ts-simple' if base_name(implementation) == 'typescript' else 'ts-zod' if base_name(implementation) == 'typescript-zod' else new
+        return link.replace('['+old+']', '['+new+']', 1) if link.startswith('[') else new
+
+    def config(suite, implementation):
+        if suite != 'wasi':
+            return 'Host defaults'
+        if implementation.startswith('csharp-'):
+            return 'LLVMOnly AOT / SIMD / -O3' if implementation.endswith('-wasi') else 'Native AOT Speed / native ISA'
+        return 'Release / LTO / SIMD' if implementation.endswith('-wasi') else 'Release / LTO / native ISA'
+
+    def measurement(suite):
+        return f'[{suite}](environment-{suite}.json)' if suite in environments else suite
+
+    def json_rows():
+        native, wasm = {}, []
+        for suite, name in [('json','union100'),('wasi','union100-wasi')]:
+            path = destination / (name+'.json')
+            if not path.exists():
+                continue
+            report = read(path)
+            for row in report['summary']:
+                value = (suite, row, report)
+                if row['implementation'].endswith('-wasi'):
+                    wasm.append(value)
+                else:
+                    native[base_name(row['implementation'])] = value
+        return list(native.values()) + wasm
+
+    rows = json_rows()
+    if rows or any((destination/name).exists() for name in ['union100.json','union100-wasi.json']):
+        lines += ['## JSON run', '']
+        inputs = {(report['roots'], report['nodesPerBatch'], report['samples']) for _,_,report in rows}
+        varying = len(inputs) != 1
+        if not varying:
+            roots, nodes, samples = next(iter(inputs))
+            lines += [f'{roots:,} roots / {nodes:,} nodes per batch; {samples} large batches per row.', '']
+        lines += ['[Host-only details](union100.md) / [Paired Native–WASM details](union100-wasi.md).', '']
+        provenance(['json','wasi'])
+        extra_header = ' roots / batches |' if varying else ''
+        lines += ['| implementation | execution | build |'+extra_header+' median batch s | encode s | decode s | peak RSS MiB | measurement |',
+                  '|---|---|---|'+('---:|' if varying else '')+'---:|---:|---:|---:|---|']
+        for suite, row, report in sorted(rows, key=lambda item: item[1]['medianSeconds']):
+            implementation = row['implementation']
+            extra = f" {report['roots']:,} / {report['samples']} |" if varying else ''
+            lines.append(f"| {label(suite,'json',implementation)} | {backend(implementation)} | {config(suite,implementation)} |{extra} {row['medianSeconds']:.3f} | {row['encodeMedianSeconds']:.3f} | {row['decodeMedianSeconds']:.3f} | {row['peakRssMiB']:.1f} | {measurement(suite)} |")
+        lines += ['', 'Median batch time includes encode, decode and switch traversal. TypeScript runtime validation differs by variant; wire representations differ between some implementations. See the source and raw reports.', '']
+
+    def projection_reports(suffix):
+        native, wasm = {}, []
+        for suite, prefix in [('projection','projection'),('wasi','projection-wasi')]:
+            path = destination / (prefix+'-'+suffix+'.json')
+            if not path.exists():
+                continue
+            report = read(path)
+            for implementation in report['commands']:
+                selected = [r for r in report['results'] if r['implementation'] == implementation]
+                value = (suite, implementation, selected)
+                if implementation.endswith('-wasi'):
+                    wasm.append(value)
+                else:
+                    native[base_name(implementation)] = value
+        return list(native.values()) + wasm
+
+    domain, fanout = projection_reports('domain'), projection_reports('fanout')
+    if domain or fanout or any((destination/name).exists() for name in ['projection-domain.json','projection-wasi-domain.json']):
+        lines += ['## Projection run', '',
+                  '`ts-simple` performs the projection without runtime payload validation. `ts-zod` validates/clones payload data in matching handlers, inside the projection timer. Unknown event kinds are ignored. This test does not parse JSON.', '',
+                  '[Host domain details](projection-domain.md) / [Host fanout details](projection-fanout.md) / [Native–WASM domain details](projection-wasi-domain.md) / [Native–WASM fanout details](projection-wasi-fanout.md).', '']
+        provenance(['projection','wasi'])
+    if domain:
+        lines += ['### Domain routing: ten million events, dense', '',
+                  '| implementation | execution | build | append s | copy s | append RSS MiB | measurement |',
+                  '|---|---|---|---:|---|---:|---|']
+        for suite, implementation, selected in domain:
+            cases = {r['mode']:r for r in selected if r['events']==10000000 and r['profile']=='dense'}
+            if 'indexed-append' not in cases or 'indexed-copy' not in cases:
+                continue
+            a, c = cases['indexed-append'], cases['indexed-copy']
+            seconds = f"{a['projectionSeconds']:.3f}" if a['status']=='ok' else a['status']
+            copied = f"{c['projectionSeconds']:.3f}" if c['status']=='ok' else c['status']
+            rss = f"{a['peakRssMiB']:.1f}" if a['status']=='ok' else '—'
+            lines.append(f"| {label(suite,'projection',implementation)} | {backend(implementation)} | {config(suite,implementation)} | {seconds} | {copied} | {rss} | {measurement(suite)} |")
+    if fanout:
+        lines += ['', '### Sequential fanout: one million events, indexed-append', '',
+                  '| implementation | execution | build | dense s | wide s | dense RSS MiB | wide RSS MiB | measurement |',
+                  '|---|---|---|---:|---:|---:|---:|---|']
+        for suite, implementation, selected in fanout:
+            cases = {r['profile']:r for r in selected if r['events']==1000000 and r['mode']=='indexed-append'}
+            if not cases:
+                continue
+            times, memory = [], []
+            for profile in ['dense','wide']:
+                row = cases.get(profile,{'status':'not-measured'})
+                times.append(f"{row['projectionSeconds']:.3f}" if row['status']=='ok' else row['status'])
+                memory.append(f"{row['peakRssMiB']:.1f}" if row['status']=='ok' else '—')
+            lines.append(f"| {label(suite,'projection',implementation)} | {backend(implementation)} | {config(suite,implementation)} | {times[0]} | {times[1]} | {memory[0]} | {memory[1]} | {measurement(suite)} |")
+    if domain or fanout or any((destination/name).exists() for name in ['projection-domain.json','projection-wasi-domain.json']):
+        lines += ['', '`timeout` means the 25s process budget expired. `not-run-after-budget` means an earlier smaller size exceeded a budget and this point was not run. The projection stopping budget is 8s.', '']
+    lines += ['C# WASM uses LLVMOnly AOT with SIMD/-O3, without interpreter fallback. WASM RSS includes Wasmtime compilation/runtime; it is not guest heap alone. Host VM load, OS, toolchain and build differences affect results. Earlier host-only Native measurements remain available in the detail files and raw JSON.']
+    (destination/'README.md').write_text('\n'.join(lines)+'\n')
 
 def publish(incoming, destination):
     env = read(incoming / 'environment.json')
