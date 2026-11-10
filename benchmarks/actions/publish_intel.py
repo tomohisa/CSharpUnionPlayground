@@ -22,7 +22,7 @@ def render_index(destination):
         path = destination / f'environment-{suite}.json'
         if path.exists():
             env = read(path)
-            lines += [f'## {suite.capitalize()} run', '',
+            lines += [f"## {'JSON' if suite == 'json' else 'Projection'} run", '',
                       f"CPU: {env['cpu']}. RAM: {env['physicalMemoryBytes']/1024**3:.0f} GiB. "
                       f"[Actions run]({env['runUrl']}) / [Environment]({path.name}).", '']
             if env.get('completionNote'):
