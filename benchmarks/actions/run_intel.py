@@ -77,6 +77,22 @@ def main():
         run_suite(base + ['--skip-build', '--routing', 'domain', '--profiles', 'dense',
                          '--modes', 'indexed-append,indexed-copy', '--sizes', '100000,1000000,10000000'],
                   OUT / 'projection-domain.json', projection=True)
+        report = json.loads((OUT / 'projection-domain.json').read_text())
+        lines = ['\n## Ten million events, domain routing, dense\n',
+                 '| implementation | append seconds | copy seconds | append RSS MiB |',
+                 '|---|---:|---|---:|']
+        for name in report['commands']:
+            rows = {r['mode']: r for r in report['results']
+                    if r['implementation'] == name and r['events'] == 10000000}
+            append = rows['indexed-append']
+            copied = rows['indexed-copy']
+            seconds = f"{append['projectionSeconds']:.3f}" if append['status'] == 'ok' else append['status']
+            copy_seconds = f"{copied['projectionSeconds']:.3f}" if copied['status'] == 'ok' else copied['status']
+            rss = f"{append['peakRssMiB']:.1f}" if append['status'] == 'ok' else '—'
+            lines.append(f'| {name} | {seconds} | {copy_seconds} | {rss} |')
+        with (OUT / 'README.md').open('a') as stream:
+            stream.write('\n'.join(lines) + '\n\n[Domain details](projection-domain.md) / [Fanout details](projection-fanout.md).\n\n'
+                         '`timeout` means the 25s process budget expired; `not-run-after-budget` means a smaller size exceeded a budget and this size was not measured. The projection stopping budget is 8s.\n')
     if args.suite in ['json', 'all']:
         run_suite(['benchmarks/union100/run.py', '--roots', str(args.json_roots), '--samples', '5'],
                   OUT / 'union100.json')
