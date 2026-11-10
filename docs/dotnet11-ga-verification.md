@@ -50,4 +50,14 @@ dotnet publish src/PlaygroundTaggedJson.AotSmoke -c Release -r osx-arm64 -o /tmp
 
 Generator参照のあるfile-based appにCLI引数でグローバルな `-p:PublishAot=true` を渡すと、netstandard2.0のAnalyzerにも伝播してNETSDK1207になります。file-based publishの既定のAOT、またはアプリ側csprojのPublishAotを使い、`--require-native` で実際のネイティブ実行を確認しています。
 
-性能データは正式版で別途再計測します。RC3のアーカイブの版名や数値は変更しません。
+## Intelでの性能再計測
+
+同じGA対応コミット `3644b56` で、次の実行も完了しました。
+
+- [通常JSON・Projection](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880008976)
+- [Native / WASM AOT対照](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880014627)
+- [JSON読み取り診断](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880019482)
+
+[観測ページ](../benchmarks/observed/macos-intel-actions/README.md)の各測定元はSDK 11.0.100です。Native/WASM JSONの12条件はすべて完走し、エラーはありません。Projectionのtimeout / not-run-after-budgetは、設定した予算による観測としてそのまま記録しています。C#のWASMビルド証跡は11.0.0のクロスコンパイラーとLLVMOnly AOTを示します。
+
+通常実行、対照実行、読み取り診断は別VMです。RC3との差をSDK変更だけの効果とは解釈しません。RC3のアーカイブの版名や数値は変更していません。
