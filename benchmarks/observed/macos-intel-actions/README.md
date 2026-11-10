@@ -65,4 +65,51 @@ One million events, sequential fanout, indexed-append:
 
 `timeout` means the 25s process budget expired. `not-run-after-budget` means an earlier smaller size exceeded a budget and this point was not run. The projection stopping budget is 8s.
 
+## WASI run
+
+CPU: Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz. RAM: 14 GiB. [Actions run](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42773487767) / [Environment](environment-wasi.json).
+
+200,000 roots / 600,000 nodes per batch, 5 large batches. [Full timings and lifecycle](union100-wasi.md) / [Raw data](union100-wasi.json).
+
+| implementation | median batch s | encode s | decode s | peak RSS MiB |
+|---|---:|---:|---:|---:|
+| csharp-abstract-native | 4.759 | 0.731 | 3.409 | 2151.7 |
+| csharp-closed-explicit-native | 4.490 | 0.734 | 3.162 | 2151.4 |
+| csharp-closed-inferred-native | 4.023 | 0.613 | 2.976 | 2150.2 |
+| csharp-union-custom-native | 8.181 | 0.649 | 7.177 | 2019.9 |
+| csharp-union-generated-native | 8.604 | 0.998 | 7.022 | 2158.7 |
+| csharp-abstract-wasi | 23.337 | 2.987 | 15.095 | 2211.7 |
+| csharp-closed-explicit-wasi | 19.782 | 2.809 | 13.405 | 2154.3 |
+| csharp-closed-inferred-wasi | 20.205 | 2.710 | 13.782 | 2203.2 |
+| csharp-union-custom-wasi | 35.617 | 3.404 | 28.768 | 2396.3 |
+| csharp-union-generated-wasi | 44.120 | 10.966 | 29.718 | 2469.9 |
+| rust-native | 2.364 | 0.328 | 1.997 | 1192.8 |
+| rust-wasi | 2.205 | 0.562 | 1.610 | 902.9 |
+
+Counts, wire representations, runtime validation and runtime versions differ between implementations and ARM runs; inspect the raw report before comparing.
+
+C# native is speed-optimized Native AOT; C# WASI is LLVMOnly AOT with SIMD/-O3, with no interpreter fallback. Rust uses optimized release/LTO with native ISA or Wasm SIMD. Wasmtime RSS includes the host runtime, not just guest memory.
+
+[Domain details](projection-wasi-domain.md) / [Fanout details](projection-wasi-fanout.md).
+
+Ten million events, domain routing, dense:
+
+| implementation | append seconds | copy seconds | append RSS MiB |
+|---|---:|---|---:|
+| csharp-native | 0.920 | not-run-after-budget | 24.8 |
+| csharp-wasi | 2.893 | not-run-after-budget | 154.2 |
+| rust-native | 2.797 | timeout | 15.2 |
+| rust-wasi | 3.128 | timeout | 20.5 |
+
+One million events, sequential fanout, indexed-append:
+
+| implementation | dense seconds | wide seconds | dense RSS MiB | wide RSS MiB |
+|---|---:|---:|---:|---:|
+| csharp-native | 0.334 | 0.540 | 11.3 | 65.0 |
+| csharp-wasi | 0.751 | 0.794 | 144.8 | 194.8 |
+| rust-native | 1.956 | 2.029 | 2.7 | 54.3 |
+| rust-wasi | 3.027 | 3.409 | 11.2 | 40.5 |
+
+`timeout` means the 25s process budget expired. `not-run-after-budget` means an earlier smaller size exceeded a budget and this point was not run. The projection stopping budget is 8s.
+
 RSS is the whole-process peak, not retained-state size. Hosted VM, OS and runtime differences mean these results do not isolate CPU architecture alone.
