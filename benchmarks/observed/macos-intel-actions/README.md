@@ -4,22 +4,24 @@ JSON serialization and memory projection are separate benchmarks. Each suite ret
 
 ## JSON run
 
-CPU: Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz. RAM: 14 GiB. [Actions run](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42755191904) / [Environment](environment-json.json).
+CPU: Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz. RAM: 14 GiB. [Actions run](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42771617697) / [Environment](environment-json.json).
 
 200,000 roots / 600,000 nodes per batch, 5 large batches. [Full timings and lifecycle](union100.md) / [Raw data](union100.json).
 
 | implementation | median batch s | encode s | decode s | peak RSS MiB |
 |---|---:|---:|---:|---:|
-| typescript | 1.788 | 0.392 | 1.218 | 1658.2 |
-| rust | 1.886 | 0.325 | 1.526 | 1219.8 |
-| csharp-closed-explicit | 3.860 | 0.618 | 3.065 | 2162.1 |
-| csharp-abstract | 3.967 | 0.613 | 3.098 | 2122.5 |
-| csharp-closed-inferred | 3.975 | 0.610 | 3.175 | 2125.7 |
-| java | 4.159 | 1.087 | 2.293 | 2910.0 |
-| csharp-union-generated | 7.449 | 0.825 | 6.044 | 2167.0 |
-| go | 9.545 | 2.972 | 6.465 | 1615.6 |
-| csharp-union-custom | 10.793 | 1.190 | 9.329 | 2189.1 |
-| swift | 32.337 | 15.928 | 16.154 | 2112.7 |
+| typescript-simple | 1.387 | 0.358 | 0.836 | 1738.5 |
+| typescript | 1.834 | 0.421 | 1.178 | 1740.4 |
+| rust | 1.919 | 0.325 | 1.553 | 1180.2 |
+| java | 2.620 | 0.865 | 1.103 | 3112.3 |
+| csharp-closed-inferred | 3.254 | 0.529 | 2.561 | 2137.6 |
+| csharp-abstract | 3.437 | 0.554 | 2.715 | 2123.8 |
+| typescript-zod | 5.114 | 0.584 | 4.279 | 2350.0 |
+| csharp-closed-explicit | 5.302 | 1.258 | 3.814 | 2149.0 |
+| csharp-union-generated | 5.955 | 0.720 | 4.878 | 2156.6 |
+| csharp-union-custom | 6.926 | 0.548 | 6.196 | 2150.1 |
+| go | 7.408 | 2.190 | 5.114 | 1562.3 |
+| swift | 29.482 | 14.850 | 14.192 | 2127.2 |
 
 Counts, wire representations, runtime validation and runtime versions differ between implementations and ARM runs; inspect the raw report before comparing.
 
