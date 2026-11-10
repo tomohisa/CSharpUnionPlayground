@@ -53,18 +53,18 @@ def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,
         print('Building '+language,flush=True)
         if language=='csharp':
             if 'native' in engines:
-                harness.run(['dotnet','publish',sources/'Projection.csproj','-c','Release','-r',rid,'-o',out]);commands['csharp-native']=[str(out/'Projection')]
+                harness.run(['dotnet','publish',sources/'Projection.csproj','-c','Release','-r',rid,'-o',out]+(['-p:OptimizationPreference=Speed','-p:IlcInstructionSet=native'] if 'wasi' in engines else []));commands['csharp-native']=[str(out/'Projection')]
             if 'wasi' in engines:
                 try:
                     commands['csharp-wasi']=build_csharp(sources/'Projection.csproj',build_dir/'wasi-csharp',wasi_dotnet,wasi_sdk,shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'))
                 except (RuntimeError,subprocess.SubprocessError) as e:unavailable['csharp-wasi']=str(e)+'\n'+str(getattr(e,'stdout',''))+'\n'+str(getattr(e,'stderr',''))
         elif language=='rust':
             if 'native' in engines:
-                harness.run((['rustup','run','stable','rustc'] if shutil.which('rustup') else ['rustc'])+['--edition=2024','-O',sources/'projection.rs','-o',out/'projection']);commands['rust-native']=[str(out/'projection')]
+                harness.run((['rustup','run','stable','rustc'] if shutil.which('rustup') else ['rustc'])+['--edition=2024','-O']+(['-C','lto=fat','-C','codegen-units=1','-C','target-cpu=native'] if 'wasi' in engines else [])+[sources/'projection.rs','-o',out/'projection']);commands['rust-native']=[str(out/'projection')]
             if 'wasi' in engines:
                 try:
-                    harness.run((['rustup','run','stable','rustc'] if shutil.which('rustup') else ['rustc'])+['--edition=2024','-O','--target','wasm32-wasip1',sources/'projection.rs','-o',out/'projection.wasm'])
-                    commands['rust-wasi']=[shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'),'run',str(out/'projection.wasm')]
+                    harness.run((['rustup','run','stable','rustc'] if shutil.which('rustup') else ['rustc'])+['--edition=2024','-O','-C','lto=fat','-C','codegen-units=1','-C','target-feature=+simd128','--target','wasm32-wasip1',sources/'projection.rs','-o',out/'projection.wasm'])
+                    commands['rust-wasi']=[shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'),'run','-O','opt-level=2',str(out/'projection.wasm')]
                 except subprocess.CalledProcessError as e:unavailable['rust-wasi']=e.stderr
         elif language=='typescript':
             if 'native' in engines:commands['typescript-native']=['node','--max-old-space-size=6144',str(sources/'projection.ts')]
@@ -80,7 +80,7 @@ def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,
                 env={**os.environ,'GOOS':'wasip1','GOARCH':'wasm'}
                 result=subprocess.run(['go','build','-o',str(out/'projection.wasm'),str(sources/'projection.go')],text=True,capture_output=True,env=env)
                 if result.returncode:unavailable['go-wasi']=result.stderr
-                else:commands['go-wasi']=[shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'),'run',str(out/'projection.wasm')]
+                else:commands['go-wasi']=[shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'),'run','-O','opt-level=2',str(out/'projection.wasm')]
         elif language=='swift':
             swift='swift';swiftc='swiftc'
             if 'wasi' in engines and shutil.which('swiftly'):
@@ -144,7 +144,7 @@ def main():
       version=harness.run(command);versions[name]=(version.stdout+version.stderr).strip()
      except (OSError,subprocess.CalledProcessError) as e:versions[name]=str(e)
     rows=[];args.output.parent.mkdir(parents=True,exist_ok=True)
-    def save():args.output.write_text(json.dumps({'timestampUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'toolchains':versions,'timeoutSeconds':args.timeout,'maxProjectionSeconds':args.max_projection_seconds,'platform':platform.platform(),'routing':args.routing,'sizes':sizes,'samples':args.samples,'buildKey':key,'commands':commands,'unavailable':unavailable,'results':rows,'notes':['Peak RSS includes the entire process. For WASI it includes Wasmtime compilation/runtime, not guest allocations alone.','Events are generated and projected in one streaming pass; event construction and dispatch are inside the projection timer.','Capacity is the largest tested point within the time budget, not a language or hardware maximum.']},indent=2)+'\n')
+    def save():args.output.write_text(json.dumps({'timestampUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'toolchains':versions,'timeoutSeconds':args.timeout,'maxProjectionSeconds':args.max_projection_seconds,'buildProofs':({'csharp-wasi':json.loads((args.build_dir/'wasi-csharp/build-proof.json').read_text())} if 'csharp-wasi' in commands else {}),'optimization':('C# Native AOT Speed/native ISA and LLVMOnly WASI AOT/SIMD/-O3; Rust release/LTO/native ISA or SIMD; Wasmtime opt-level=2' if 'wasi' in engines else 'Host defaults'),'platform':platform.platform(),'routing':args.routing,'sizes':sizes,'samples':args.samples,'buildKey':key,'commands':commands,'unavailable':unavailable,'results':rows,'notes':['Peak RSS includes the entire process. For WASI it includes Wasmtime compilation/runtime, not guest allocations alone.','Events are generated and projected in one streaming pass; event construction and dispatch are inside the projection timer.','Capacity is the largest tested point within the time budget, not a language or hardware maximum.']},indent=2)+'\n')
     save()
     for name in commands:
       for mode in modes:

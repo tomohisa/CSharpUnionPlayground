@@ -65,7 +65,9 @@ rustup target add wasm32-wasip1 --toolchain stable
 
 今回使ったSwift SDK名は`swift-6.3.1-RELEASE_wasm`、Wasmtimeは41系です。SDKの取得URL・チェックサム・コンパイラーとの対応は上記の公式手順で確認してください。
 
-今回の.NET RC3ではネイティブ再リンクに必要なWITファイルが不足したため、公式のビルド済みMono WASIランタイムを使います（WasmBuildNative=false、トリミングなし）。C#のWASIは**Native AOTではなくMonoインタープリター**です。ランタイムのimport解決に`wasmtime -S http`が必要ですが、テストはHTTPを利用しません。報告JSONは数値を直接書き、STJのreflectionに依存しません。
+現在のC# WASI比較はLLVMOnly AOT・SIMD・clang `-O3`・トリミングを使います。通常実行はNative AOT Speed/ホスト命令セットです。Rustも両方にLTOと各ターゲット向け最適化を使います。アプリのAOTモジュールと実行Wasmの一致を検証するビルド証拠は結果の`buildProofs`に保存します。RC3 SDKの未トリミングDLL混入と未使用HTTP WIT欠落はプロジェクト内で補正し、SDK本体や投影処理は変更しません。
+
+既存ARMの`observed/wasi-scaling`は旧Monoインタープリター構成の参考記録です。現在のAOT結果とは実行方式が異なります。
 
 TypeScript/NodeとJava/JVMはそのままWASIモジュールにならないため、このバックエンドは未実装として理由を出力します。別コンパイラーやWasm内JSエンジンの測定値を同一実装の結果として混ぜません。
 

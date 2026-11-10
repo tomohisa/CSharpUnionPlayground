@@ -13,9 +13,9 @@ on:
         type: number
         default: 200000
       wasi_json_roots:
-        description: Matched native/WASI JSON roots (C# WASI is interpreted)
+        description: Matched optimized AOT native/WASI JSON roots
         type: number
-        default: 10000
+        default: 200000
       publish:
         description: Update tracked Intel results on main after a successful run
         type: boolean

@@ -61,6 +61,7 @@ def main():
         'os': capture('sw_vers'), 'runUrl': run_url,
         'runAttempt': os.environ.get('GITHUB_RUN_ATTEMPT'),
         'suite': args.suite, 'jsonRoots': args.json_roots,
+        'csharpWasiMode': 'LLVMOnly AOT, SIMD, clang -O3' if args.suite == 'wasi' else None,
     }
     (OUT / 'environment.json').write_text(json.dumps(environment, indent=2) + '\n')
     (OUT / 'README.md').write_text(

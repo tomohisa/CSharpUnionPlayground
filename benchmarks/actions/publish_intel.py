@@ -46,7 +46,7 @@ def render_index(destination):
         if suite in ['projection', 'wasi'] and (destination / (projection_name + '-domain.json')).exists():
             report = read(destination / (projection_name + '-domain.json'))
             if suite == 'wasi':
-                lines += ['C# native is Native AOT; C# WASI is the experimental Mono interpreter. Rust uses release builds on both. Wasmtime RSS includes the host runtime, not just guest memory.', '']
+                lines += ['C# native is speed-optimized Native AOT; C# WASI is LLVMOnly AOT with SIMD/-O3, with no interpreter fallback. Rust uses optimized release/LTO with native ISA or Wasm SIMD. Wasmtime RSS includes the host runtime, not just guest memory.', '']
             lines += [f'[Domain details]({projection_name}-domain.md) / [Fanout details]({projection_name}-fanout.md).', '',
                       'Ten million events, domain routing, dense:', '',
                       '| implementation | append seconds | copy seconds | append RSS MiB |',
