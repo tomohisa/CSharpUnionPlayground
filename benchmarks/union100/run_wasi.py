@@ -25,7 +25,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--implementations', default=','.join(NAMES))
     parser.add_argument('--engines', default='native,wasi')
-    parser.add_argument('--roots', type=int, default=10000)
+    parser.add_argument('--roots', type=int, default=200000)
     parser.add_argument('--samples', type=int, default=5)
     parser.add_argument('--timeout', type=float, default=1800)
     parser.add_argument('--quick', action='store_true')
@@ -63,7 +63,7 @@ def main():
             for name in names:
                 if name == 'rust':
                     continue
-                command = harness.build([name], build_dir, rid)[name]
+                command = harness.build([name], build_dir, rid, native_properties={'OptimizationPreference':'Speed','IlcInstructionSet':'native'})[name]
                 commands[name + '-native'] = command
         cargo = ['rustup', 'run', 'stable', 'cargo'] if shutil.which('rustup') else ['cargo']
         for name in names:
@@ -76,9 +76,11 @@ def main():
                     rust_env = dict(os.environ)
                     if shutil.which('rustup'):
                         rust_env['RUSTC'] = harness.run(['rustup', 'which', '--toolchain', 'stable', 'rustc']).stdout.strip()
+                    rust_env.update(CARGO_PROFILE_RELEASE_OPT_LEVEL='3', CARGO_PROFILE_RELEASE_LTO='fat', CARGO_PROFILE_RELEASE_CODEGEN_UNITS='1')
+                    rust_env['RUSTFLAGS'] = '-C target-feature=+simd128' if engine == 'wasi' else '-C target-cpu=native'
                     subprocess.run(command, cwd=harness.REPO, env=rust_env, capture_output=True, text=True, check=True, timeout=1800)
                     binary = sources / ('rust/target/wasm32-wasip1/release/union100.wasm' if engine == 'wasi' else 'rust/target/release/union100')
-                    commands[full_name] = (['wasmtime', 'run'] if engine == 'wasi' else []) + [str(binary)]
+                    commands[full_name] = (['wasmtime', 'run', '-O', 'opt-level=2'] if engine == 'wasi' else []) + [str(binary)]
                 elif engine == 'wasi':
                     try:
                         commands[full_name] = build_csharp(sources / name / 'Benchmark.csproj',
@@ -93,11 +95,12 @@ def main():
         result = harness.run(command)
         versions[name] = (result.stdout + result.stderr).strip()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    report = {'timestampUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'platform': platform.platform(),
+    proofs = {name: json.loads((build_dir/'wasi'/name.removesuffix('-wasi')/'build-proof.json').read_text()) for name in commands if name.startswith('csharp-') and name.endswith('-wasi')}
+    report = {'buildProofs': proofs, 'optimization': {'csharpNative':'Native AOT Speed, native ISA','csharpWasi':'LLVMOnly AOT, SIMD, clang -O3','rust':'opt-level=3, fat LTO, codegen-units=1, host native ISA / Wasm SIMD','wasmtime':'opt-level=2'}, 'timestampUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'platform': platform.platform(),
               'machine': platform.machine(), 'buildKey': key, 'roots': args.roots, 'nodesPerBatch': args.roots * 3,
               'samples': args.samples, 'toolchains': versions, 'commands': commands, 'results': results, 'errors': errors,
               'summary': [], 'notes': ['Native and WASI use the same generated Program.cs/main.rs and payloads, warm-up, validation and timed phases.',
-              'C# native is Native AOT; C# WASI uses the experimental untrimmed Mono interpreter. Rust uses release builds on both.',
+              'C# native is Native AOT Speed/native ISA; C# WASI is LLVMOnly AOT with SIMD and clang -O3, no interpreter fallback. Rust uses optimized release/LTO with host native ISA or Wasm SIMD.',
               'WASI peak RSS includes Wasmtime compilation/runtime and is not guest heap usage. Startup includes Wasmtime compilation.',
               'C# union wire envelopes differ from polymorphic record/Rust formats, as in the existing benchmark.']}
     def save():

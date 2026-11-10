@@ -38,7 +38,7 @@ def checksum(roots):
             total+=i%100+i+len('item-'+str(i))+4*i+6+len('group')+len('g'+str(i%7))+len('note')+len('bench')
     return total
 
-def build(names,build_dir,rid):
+def build(names,build_dir,rid,native_properties=None):
     source=build_dir/'sources'
     staging=build_dir/'generated-next'
     if staging.exists():shutil.rmtree(staging)
@@ -54,7 +54,7 @@ def build(names,build_dir,rid):
         out=build_dir/'bin'/name;out.mkdir(parents=True,exist_ok=True)
         if name.startswith('csharp-'):
             project=source/name/'Benchmark.csproj'
-            result=run(['dotnet','publish',project,'-c','Release','-r',rid,'-o',out])
+            result=run(['dotnet','publish',project,'-c','Release','-r',rid,'-o',out]+[f'-p:{k}={v}' for k,v in (native_properties or {}).items()])
             (out/'build.log').write_text(result.stdout+result.stderr)
             commands[name]=[str(out/'Benchmark')]
         elif name=='rust':

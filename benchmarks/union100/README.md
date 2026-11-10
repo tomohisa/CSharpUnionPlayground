@@ -121,23 +121,25 @@ python3 benchmarks/union100/test_runner.py
 
 Intelでの追加計測は[Actionsの観測データ](../observed/macos-intel-actions/)に保存します。JSONを含むsuiteで実行した場合は`union100.md` / `.json`があり、入力件数も記録します。既存のARM結果とはOS・ツール・件数などの条件も異なるため、環境情報を併せて比較してください。
 
-## C# / RustのNative対WASI
+## C# / Rustの最適化Native対WASI AOT
 
 同じ生成済み`Program.cs` / `main.rs`、同じ入力件数・バッチ回数・検証を使って比較します。C#の5方式とRustが対象です。
 
 ```bash
 python3 benchmarks/union100/run_wasi.py --quick
-python3 benchmarks/union100/run_wasi.py --roots 10000 --samples 5
+python3 benchmarks/union100/run_wasi.py --roots 200000 --samples 5
 # SDKを別の場所へ導入した環境
-python3 benchmarks/union100/run_wasi.py --roots 10000 --samples 5 \
+python3 benchmarks/union100/run_wasi.py --roots 200000 --samples 5 \
   --wasi-dotnet /path/to/dotnet --wasi-sdk /path/to/wasi-sdk
 ```
 
-WasmtimeとRustの`wasm32-wasip1`ターゲット、専用.NET 11 RC3の`wasi-experimental` workloadが必要です。既定のSDKパスはProjectionテストのローカル導入先です。C#はホストがNative AOT、WASIが**実験的なMonoインタープリター**で、同じコンパイル方式の比較ではありません。Rustは両方releaseビルドし、cargoとrustcを同じstableツールチェーンに揃えます。
+WasmtimeとRustの`wasm32-wasip1`ターゲット、専用.NET 11 RC3の`wasi-experimental` workloadが必要です。既定のSDKパスはProjectionテストのローカル導入先です。C#の通常実行はNative AOTの`OptimizationPreference=Speed`とホスト命令セット、WASIは`RunAOTCompilation=true` / `AOTMode=LLVMOnly` / SIMD / トリミング / clang `-O3`です。Rustは両方opt-level=3・fat LTO・codegen-units=1で、通常実行はホスト命令セット、WasmはSIMDを有効にします。Wasmtimeは最適化レベル2です。
 
-C# WASIは公式ビルド済みランタイムを使い、トリミングなしで実行します。JSON処理・型定義・switchのソースは変更しません。起動にはWasmtimeによるコンパイルも含まれ、RSSはWasmtime全体です。WASIの失敗・時間超過はJSONの`errors`に理由を記録し、成功した計測値として扱いません。
+C#は処理本体もWasmへ事前コンパイルします。共通ビルダーはアプリのAOTモジュール登録、コンパイルフラグ、リンク成果物と実行WasmのSHA256一致を確認し、`build-proof.json`を作ります。結果の`buildProofs`に含めます。インタープリターのフォールバックを主比較に使いません。
 
-WASIのC#は遅いため、まずNative/WASI両方を1万ルート×5回で揃える実行例にしています。既存Intelの20万ルート、ARMの72.9万ルートの表とは件数が違います。`--roots 200000`で元のIntelと同じ件数にもできますが、全C#方式の計測は長時間になります。1万ルートではRustやNative C#の1バッチが1秒未満になることがあり、長いバッチを使った既存テストとは固定費の割合も異なります。
+RC3 SDKの互換対応として、トリミング済みDLLのみをAOT入力にし、HTTPを使わない場合だけ欠落したHTTP WIT参照を除外します。SDK本体やベンチマークの処理コードは変更しません。HTTPのDLLが必要な場合はエラーにします。
+
+起動にはWasmtimeによるコンパイルも含まれ、RSSはWasmtime全体です。WASIの失敗・時間超過はJSONの`errors`に理由を記録し、成功した計測値として扱いません。20万ルート×5回が標準で、元のIntel JSON比較と同じ件数です。ARMの72.9万ルートの表とは件数が違います。
 
 ## TypeScriptの読み込み方式を分ける
 
