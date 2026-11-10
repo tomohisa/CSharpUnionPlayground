@@ -78,3 +78,15 @@ TypeScript/NodeとJava/JVMはそのままWASIモジュールにならないた�
 `observed/`にこのMacでの実測を保存しています。各JSONにコマンド、ソース指紋、件数、個々の測定値を含みます。比較時はroutingとツールチェーンを揃えてください。古いホスト計測のSwiftはApple Swift 6.4、WASI比較の両エンジンは公式Swift 6.3.1であり、別の系列です。
 
 Intel Actionsでも`--languages csharp,rust --engines native,wasi`を同じ生成ソース・件数・モードで実行できます。[Actions手順](../actions/README.md)の`suite=wasi`を参照してください。C# WASIのプロジェクト作成はJSON往復と共通の`benchmarks/wasi_support.py`を使います。
+
+
+## TypeScriptとZodのProjection比較
+
+`typescript-native`は従来の単純TS投影です。追加の`typescript-zod-native`は、同じswitchで該当イベントを選んだ後、payloadのid/value/labelをZodで検証・コピーしてから同じ状態更新を行います。検証は投影タイマー内です。未知のイベントは従来どおり無視し、全100ケースを閉じたunionとして強制しません。JSONのparseはこのテストには含みません。
+
+```bash
+python3 benchmarks/projection100/run.py --languages typescript,typescript-zod --quick
+python3 benchmarks/projection100/run.py --languages typescript,typescript-zod --routing domain
+```
+
+通常の全言語実行にも両方が含まれます。Zodの版・integrityはサンプルと同じpackage-lockに固定します。[Intel結果一覧](../observed/macos-intel-actions/README.md)はJSON・Projection（単純TS/Zodを含む）・WASM AOTを保持して自動更新します。

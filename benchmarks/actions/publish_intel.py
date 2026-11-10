@@ -45,6 +45,8 @@ def render_index(destination):
         projection_name = 'projection-wasi' if suite == 'wasi' else 'projection'
         if suite in ['projection', 'wasi'] and (destination / (projection_name + '-domain.json')).exists():
             report = read(destination / (projection_name + '-domain.json'))
+            if suite == 'projection':
+                lines += ['`typescript-native` is the simple projection. `typescript-zod-native` additionally validates/clones payload data only for matching handlers; this cost is included in projection time. Unknown event kinds are still ignored. No JSON parsing is included in this projection test.', '']
             if suite == 'wasi':
                 lines += ['C# native is speed-optimized Native AOT; C# WASI is LLVMOnly AOT with SIMD/-O3, with no interpreter fallback. Rust uses optimized release/LTO with native ISA or Wasm SIMD. Wasmtime RSS includes the host runtime, not just guest memory.', '']
             lines += [f'[Domain details]({projection_name}-domain.md) / [Fanout details]({projection_name}-fanout.md).', '',

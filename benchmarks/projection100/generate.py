@@ -24,3 +24,7 @@ def generate(out):
  (out/'Projection.java').write_text(render('Projection.java',TYPES='\n'.join(f'record {n}(EventData data) implements EventPayload {{}}' for n in NAMES),CREATE='\n'.join(f'case {i}->new {n}(data);' for i,n in enumerate(NAMES)),HANDLERS='\n'.join(handlers['java']),ROUTE='\n'.join(f'case {d}->apply{d}(p,stores[{d}],mode);' for d in range(10))))
  (out/'projection.go').write_text(render('projection.go',TYPES='\n'.join(f'type {n} struct{{Data EventData}}\nfunc({n})isPayload(){{}}' for n in NAMES),CREATE='\n'.join(f'case {i}:return {n}{{data}}' for i,n in enumerate(NAMES)),HANDLERS='\n'.join(handlers['go']),ROUTE='\n'.join(f'case {d}:apply{d}(p,stores[{d}],mode)' for d in range(10))))
  (out/'Projection.swift').write_text(render('Projection.swift',TYPES='\n'.join(f'struct {n}:EventPayload{{let data:EventData}}' for n in NAMES),CREATE='\n'.join(f'case {i}:return {n}(data:data)' for i,n in enumerate(NAMES)),HANDLERS='\n'.join(handlers['swift']),ROUTE='\n'.join(f'case {d}:apply{d}(p,stores[{d}],mode)' for d in range(10))))
+
+ ts=(out/'projection.ts').read_text()
+ schema='import { z } from "zod";\nconst EventDataSchema = z.object({id:z.number().int(),value:z.number().int(),label:z.string()});\n'
+ (out/'projection-zod.ts').write_text(schema+ts.replace('update(s,p.data,','update(s,EventDataSchema.parse(p.data),'))
