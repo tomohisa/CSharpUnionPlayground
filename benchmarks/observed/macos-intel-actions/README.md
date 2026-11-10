@@ -27,9 +27,9 @@ Counts, wire representations, runtime validation and runtime versions differ bet
 
 ## Projection run
 
-CPU: Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz. RAM: 14 GiB. [Actions run](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42751950702) / [Environment](environment-projection.json).
+CPU: Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz. RAM: 14 GiB. [Actions run](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42775352886) / [Environment](environment-projection.json).
 
-Both projection reports completed and passed validation before cancellation during the additional JSON suite. JSON results from that run are excluded. Projection reports are imported from the run artifact; this snapshot was not committed by the cancelled workflow publication job.
+`typescript-native` is the simple projection. `typescript-zod-native` additionally validates/clones payload data only for matching handlers; this cost is included in projection time. Unknown event kinds are still ignored. No JSON parsing is included in this projection test.
 
 [Domain details](projection-domain.md) / [Fanout details](projection-fanout.md).
 
@@ -37,12 +37,25 @@ Ten million events, domain routing, dense:
 
 | implementation | append seconds | copy seconds | append RSS MiB |
 |---|---:|---|---:|
-| csharp-native | 1.006 | not-run-after-budget | 24.7 |
-| rust-native | 2.868 | timeout | 15.3 |
-| typescript-native | 2.198 | timeout | 171.3 |
-| java-native | 1.379 | timeout | 273.1 |
-| go-native | 1.737 | timeout | 22.9 |
-| swift-native | 11.550 | timeout | 18.8 |
+| csharp-native | 0.688 | not-run-after-budget | 24.7 |
+| rust-native | 1.987 | timeout | 15.3 |
+| typescript-native | 1.251 | timeout | 170.0 |
+| typescript-zod-native | 2.387 | timeout | 178.3 |
+| java-native | 0.985 | timeout | 272.3 |
+| go-native | 1.163 | timeout | 25.0 |
+| swift-native | 8.627 | timeout | 18.9 |
+
+One million events, sequential fanout, indexed-append:
+
+| implementation | dense seconds | wide seconds | dense RSS MiB | wide RSS MiB |
+|---|---:|---:|---:|---:|
+| csharp-native | 0.317 | 1.373 | 11.3 | 65.0 |
+| rust-native | 1.886 | 2.340 | 2.6 | 54.3 |
+| typescript-native | 0.426 | 1.623 | 98.3 | 224.3 |
+| typescript-zod-native | 0.483 | 1.212 | 102.0 | 262.9 |
+| java-native | 0.478 | 0.588 | 90.8 | 163.4 |
+| go-native | 0.299 | 0.327 | 7.6 | 53.7 |
+| swift-native | 5.876 | 5.834 | 2.5 | 29.9 |
 
 `timeout` means the 25s process budget expired. `not-run-after-budget` means an earlier smaller size exceeded a budget and this point was not run. The projection stopping budget is 8s.
 
