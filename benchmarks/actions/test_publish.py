@@ -60,6 +60,25 @@ class MergePublicationTests(unittest.TestCase):
             self.assertEqual((self.target / name).read_bytes(), value)
         self.assertIn('union100-wasi.md', (self.target / 'README.md').read_text())
 
+    def test_overview_combines_backends_without_duplicate_native_rows(self):
+        def entry(name, seconds):
+            return {'implementation':name,'medianSeconds':seconds,'encodeMedianSeconds':0.1,
+                    'decodeMedianSeconds':0.2,'peakRssMiB':10}
+        host = {'roots':100,'nodesPerBatch':300,'samples':5,
+                'summary':[entry('rust',1),entry('typescript-simple',2)]}
+        paired = {**host,'summary':[entry('rust-native',3),entry('rust-wasi',4)]}
+        self.write(self.target/'union100.json',host)
+        self.write(self.target/'union100-wasi.json',paired)
+        publisher.render_index(self.target)
+        index = (self.target/'README.md').read_text()
+        self.assertIn('## JSON run',index)
+        self.assertNotIn('## WASI run',index)
+        self.assertEqual(index.count('| rust | Native |'),1)
+        self.assertEqual(index.count('| rust | WASM AOT |'),1)
+        self.assertIn('| rust | Native | Release / LTO / native ISA | 3.000 |',index)
+        self.assertIn('| ts-simple | Native |',index)
+        self.assertEqual(publisher.read(self.target/'union100.json')['summary'][0]['medianSeconds'],1)
+
     def test_incomplete_run_does_not_publish(self):
         self.write(self.source / 'environment.json', {**self.env, 'completed': False})
         with self.assertRaises(ValueError):

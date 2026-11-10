@@ -38,3 +38,5 @@ Projectionは既存と同じサイズ、fanout/domain配送、モード、予算
 Different suites may measure on separate Intel runner VMs concurrently. Same-suite runs and result publication are serialized; updates retain the other suites. Projection event handlers themselves remain sequential.
 
 表示名は`ts-simple`（検証なし）、`ts-manual`（手書き検証）、`ts-zod`（Zod）です。CLIと生JSONの実装IDは互換性のため従来名を保持します。結果表の実装名から`code/<suite>/`の生成済み実ソースへ移動できます。各計測でコンパイラー／Nodeへ渡したファイルを保存し、コミットとSHA256を`manifest.json`に記録します。C# WASIはAOTの入力ソースSHA256との一致も確認します。実行は元のCLIで行うと、依存・最適化フラグを再現できます。
+
+結果一覧は実行環境ではなく、`JSON run` / `Projection run`の2区分です。各表のexecution列でNative / WASM AOTを区別します。Nativeの重複を避けるため、C#とRustはWASMと同時計測した最適化Native対照値を採用し、以前のホスト単独計測は詳細ファイルに保持します。異なる計測の最小値を選ぶことはしません。ビルド条件・計測元・コードへのリンクを各行に残します。
