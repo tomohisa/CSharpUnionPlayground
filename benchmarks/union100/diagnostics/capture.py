@@ -29,7 +29,8 @@ def capture(positional, parameterless, destination, sources, host):
              '|---|---:|---:|---:|---:|']
     for group, decoder, label, file in [('positional','metadata','STJ generated metadata','positional.cs'),
                                        ('parameterless','metadata','Parameterless JsonConstructor / init','parameterless.cs'),
-                                       ('positional','direct','Schema-specific direct reader','positional.cs')]:
+                                       ('positional','direct','Schema-specific direct reader','positional.cs'),
+                                       ('parameterless','direct','Direct reader / parameterless-model control','parameterless.cs')]:
         values=[]
         for engine in ['native','wasi']:
             ms=report[group]['results'][engine+'-'+decoder]['measurements']
@@ -40,7 +41,7 @@ def capture(positional, parameterless, destination, sources, host):
     lines += [f'| [Rust / serde_json](code/rust.rs) | {native:.3f} | {wasi:.3f} | not measured | not measured |', '',
               '[Raw samples, allocation, RSS, startup/preparation/exit, source hashes and AOT proofs](report.json).', '',
               'Allocation is cumulative current-thread decode allocation, not live heap or GC time. WASI is 32-bit; Native is 64-bit. RSS includes Wasmtime compilation/runtime. These are sequential hosted-VM measurements; no confidence interval or universal ranking is claimed.', '',
-              'The parameterless direct-reader control is also retained in the raw report. The direct reader is benchmark-schema-specific; it does not reproduce every JsonSerializer contract/option.', '',
+              'The parameterless direct-reader control is shown to expose variation between the two binaries. The direct reader is benchmark-schema-specific; it does not reproduce every JsonSerializer contract/option.', '',
               '[Method, implementation and reproduction commands](../../../union100/diagnostics/README.md).']
     (destination/'README.md').write_text('\n'.join(lines)+'\n')
     return report

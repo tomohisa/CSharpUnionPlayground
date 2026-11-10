@@ -1,25 +1,30 @@
 # WASI JSONデシリアライズの切り分け
 
-初回のARM測定では、C#の読み取りをスキーマ専用の `Utf8JsonReader` コードに置き換えると、この測定では **6.48秒 → 2.83秒（2.29倍）** に改善しました。Rust WASIは1.65秒なので、差は約3.92倍から約1.71倍に縮まりました。既存のSource Generatorの製品コードを変更した結果ではなく、改善できる範囲を確認するために追加した診断実装です。
+正式版.NET 11のIntel測定では、C#の標準STJから直接readerへの変更でWASI decodeが21.069秒から5.015秒（約4.20倍）になりました。診断用のスキーマ専用実装で、一般向けSource Generatorの製品コードを変更した結果ではありません。
 
-## Intelでの再計測
+## .NET 11正式版・Intelでの再計測
 
-[2026-11-10のIntel Actions実行](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42787344724)も完了しました。i7-8700B / RAM 14 GiB、同じ20万ルート・60万ノード×5バッチです。下のARMとは別の測定です。
+[正式版のIntel Actions実行](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42880019482)が完了しました。SDK 11.0.100 / runtime 11.0.0、i7-8700B / RAM 14 GiB、20万ルート・60万ノード×5バッチです。下のARM/RC3測定とは別です。
 
-| 読み取り | Native decode 秒 | WASI AOT decode 秒 | WASI decode割り当て MiB |
-|---|---:|---:|---:|
-| 標準STJ Source Generation | 2.779 | 9.912 | 300.1 |
-| 引数なしJsonConstructor + init | 1.936 | 12.591 | 254.3 |
-| スキーマ専用の直接reader | 1.590 | 3.016 | 254.3 |
-| Rust serde_json | 1.552 | 1.406 | 未計測 |
+| 読み取り | Native decode 秒 | WASI AOT decode 秒 |
+|---|---:|---:|
+| 標準STJ | 5.064 | 21.069 |
+| 引数なしJsonConstructor / init | 2.260 | 11.849 |
+| 直接reader | 3.087 | 5.015 |
+| 直接reader / 引数なし型の対照 | 1.648 | 3.558 |
+| Rust serde_json | 2.375 | 1.648 |
 
-同じ実行内のC# WASIは9.912秒から3.016秒、約3.29倍に改善しました。Rustとの差は約7.05倍から約2.15倍に縮まりました。引数なしコンストラクターだけではWASIで改善せず、割り当て量の削減だけで速さが決まらない点も再確認できました。
+同じバイナリ内の標準STJから直接readerへの短縮は、位置パラメーター版が21.069秒→5.015秒（約4.20倍）、引数なし型版が11.849秒→3.558秒（約3.33倍）でした。
 
-[Intelの全ソース・生データ・ビルド証跡・起動と終了の内訳](../../observed/macos-intel-actions/decoder/README.md)を別に保存しています。以前のIntel標準STJ 13.782秒から今回の直接reader 3.016秒への比率を改善率には使いません。比較の基準は同じ実行で測り直した9.912秒です。
+引数なし型版の標準STJも今回は短時間でしたが、同版の直接reader対照も動いています。コンストラクター指定だけの効果とは分解していません。RC3とは別VMでの再測定なので、SDK更新そのものの性能差を測ったものでもありません。
 
-GitHub Actionsの `Intel benchmarks` を `suite=decoder` で実行すると、同じ結果ページへ追記更新します。ほかのJSON / Projectionの計測結果は保持します。
+[正式版Intelの全ソース・全50バッチ・メモリ・ビルド証跡](../../observed/macos-intel-actions/decoder/README.md)を保存しています。過去RC3のIntel値は[当時の固定コミット](https://github.com/tomohisa/CSharpUnionPlayground/tree/4fe4c78/benchmarks/observed/macos-intel-actions/decoder)で参照できます。
 
-## 条件と実測
+GitHub ActionsのIntel benchmarksをsuite=decoderで実行すると更新します。ほかのJSON / Projection結果は保持します。
+
+## 過去のARM/RC3測定
+
+初回のARM/RC3測定では、C#の読み取りをスキーマ専用の `Utf8JsonReader` コードに置き換えると、この測定では **6.48秒 → 2.83秒（2.29倍）** に改善しました。Rust WASIは1.65秒なので、差は約3.92倍から約1.71倍に縮まりました。既存のSource Generatorの製品コードを変更した結果ではなく、改善できる範囲を確認するために追加した診断実装です。
 
 2026-11-10、Apple M4 Max / arm64 / RAM 128 GiB。**Intel Actionsの結果とは別の測定**です。20万ルート、深さ3、100ケース、1バッチ60万ノード、5バッチ。JSONは各バッチ86,602,883 bytes（82.59 MiB）。小さいオブジェクトを何千回も反復する計測ではありません。
 
@@ -44,7 +49,7 @@ C#は.NET 11 RC3。NativeはNative AOT・Speed・native ISA、WASIはMono **LLVM
 
 1. **AOTと、型専用の読み取りコード生成は別です。** STJのSource Generationは読み取り側でメタデータを使います。Microsoftの[公式説明](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation)にも、fast-path deserializationは未提供とあります。[対応issue](https://github.com/dotnet/runtime/issues/55043)も参照してください。対してSerdeのderiveは[Deserialize traitの実装を生成](https://serde.rs/derive.html)します。どちらも「コード生成」ですが、生成するものが同じではありません。
 2. **このモデルでは、汎用バインド処理を省く効果が大きいです。** 直接readerはプロパティ名をUTF-8のまま比較し、Payloadとケースを直接構築します。STJの型別メタデータ、プロパティ用コンバーター、コンストラクター引数の仲介などを通りません。WASIの時間が約56%、割り当てが約15%減りました。これはこれらをまとめて置き換えた効果であり、型判別だけのコストを測ったものではありません。
-3. **割り当て量だけでは説明できません。** 引数なしJsonConstructor版は直接readerとほぼ同じ割り当て量まで減りますが、WASIで速くなりませんでした。この変更単独は推奨しません。後半の直接reader測定にも3.03〜4.25秒のばらつきがあり、わずかな差のランキングには使えません。標準の位置パラメーター版直接readerの範囲は2.80〜3.02秒です。
+3. **割り当て量だけでは説明できません。** この過去のARM/RC3測定では、引数なしJsonConstructor版は割り当てが減ってもWASIで速くなりませんでした。上のGA/Intelでは異なる結果なので、この変更単独に一律の改善率は置きません。後半の直接reader測定にも3.03〜4.25秒のばらつきがあり、わずかな差のランキングには使えません。標準の位置パラメーター版直接readerの範囲は2.80〜3.02秒です。
 4. **既存unionコンバーターには追加コストがあります。** [手書き版](../templates/converter.cs)と[生成器](../../../src/PlaygroundTaggedJson.Generator/TaggedJsonGenerator.cs)は `JsonDocument.ParseValue` → ケースの `JsonSerializer.Deserialize` を使います。ネストしたサブツリーをDOM化してから読み直します。今回の主比較はDOMを使わないclosed版なので、上記6.48秒の原因をDOMのせいにはできません。Intelのunion版約29秒にも、今回の改善率をそのまま掛けることはできません。unionはJSONのdataラッパーも1段多く、別の条件です。
 5. **残る約1.7倍は未分解です。** 直接readerにもUTF-8解析、文字列・配列・辞書の割り当て、GCが残ります。C# Native AOTとMono WASI AOTではランタイム・コード生成が異なり、Rustともメモリ表現が違います。しかし、この測定だけでは残差を「GCが何秒」「SIMD不足が何秒」などと断定できません。CPUサンプリングやGC計測をしていないため、これらは候補です。Rust側の型判別が全くバッファリングしない、という前提も置いていません。
 
