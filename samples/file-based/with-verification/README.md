@@ -38,7 +38,7 @@ go run samples/file-based/with-verification/Payment.go
 swift samples/file-based/with-verification/Payment.swift
 ```
 
-C#は固定済みの.NET 11 RC3を使います。各 `.cs` はfile-based appで、専用 `.csproj` は不要です。Generator版だけは `#:project` で既存のGeneratorをAnalyzer参照します（外部配布版ではありません）。JSONリフレクションは全5方式で無効にしています。
+C#は固定済みの.NET 11 GA (SDK 11.0.100)を使います。各 `.cs` はfile-based appで、専用 `.csproj` は不要です。Generator版だけは `#:project` で既存のGeneratorをAnalyzer参照します（外部配布版ではありません）。JSONリフレクションは全5方式で無効にしています。
 
 Rustは安定版CargoとSerdeを使用します。補助スクリプトが一時ディレクトリに依存用 `Cargo.toml` を作り、リポジトリの `Payment.rs` を直接ビルドします。ソース本体は1ファイルで、Cargoプロジェクトをリポジトリに追加する必要はありません。初回は依存のダウンロードが必要です。再帰enumのサイズを有限にするため `Box<Payment>` を使用します。
 
@@ -197,11 +197,11 @@ python3 scripts/verify_payment_switch_comparison.py
 
 ## closed継承モデルの追加検証
 
-RC3の正しい構文は `public closed record Payment;` です。**closedは暗黙にabstractであり、`abstract closed` を併記するとCS9384になります。** ケースは `sealed record Cash(...) : Payment` / `sealed record Card(...) : Payment` と定義します。
+正式版の構文は `public closed record Payment;` です。**closedは暗黙にabstractであり、`abstract closed` を併記するとCS9384になります。** ケースは `sealed record Cash(...) : Payment` / `sealed record Card(...) : Payment` と定義します。
 
 `ClosedJsonDerived.cs` は `Describe(Payment)` でCash/Cardだけを列挙し、`_` や `null` の分岐を置きません。ネストしたJSONの復元結果に対して、外側のCash・内側のCardの両方でこのswitchを実行します。JSON nullは読み込み境界で拒否し、内側の終端 `Next` だけは `Payment?` としてnullを許します。
 
-実サンプルの一時コピーを変更して、実際のRC3コンパイラーの診断も検証できます:
+実サンプルの一時コピーを変更して、実際の正式版コンパイラーの診断も検証できます:
 
 ```bash
 python3 scripts/verify_closed_payment_exhaustiveness.py

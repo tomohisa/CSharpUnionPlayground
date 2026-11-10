@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('wasi', Path(__file__).with_name('wasi_support.py'))
 wasi = importlib.util.module_from_spec(spec)
@@ -47,6 +48,31 @@ class AotProofTests(unittest.TestCase):
         (self.bundle / 'dotnet.wasm').write_bytes(b'prebuilt interpreter runtime')
         with self.assertRaises(RuntimeError):
             self.verify()
+
+
+class CompilerSelectionTests(unittest.TestCase):
+    def test_stable_sdk_ignores_older_and_preview_compilers(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);dotnet=root/'dotnet';dotnet.touch()
+            sdk=root/'sdk/11.0.100';sdk.mkdir(parents=True)
+            (sdk/'MSBuild.runtimeconfig.json').write_text(json.dumps(
+                {'runtimeOptions':{'framework':{'version':'11.0.0'}}}))
+            for version in ['10.0.2','11.0.0-rc.3.26522.148','11.0.0']:
+                compiler=root/'packs/Microsoft.NETCore.App.Runtime.AOT.osx-arm64.Cross.wasi-wasm'/version/'tools/mono-aot-cross'
+                compiler.parent.mkdir(parents=True);compiler.touch()
+            with patch.object(wasi.subprocess,'check_output',return_value='11.0.100'):
+                self.assertEqual(wasi.find_cross_compiler(dotnet).parent.parent.name,'11.0.0')
+
+    def test_missing_matching_compiler_does_not_fall_back(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);dotnet=root/'dotnet';dotnet.touch()
+            sdk=root/'sdk/11.0.100';sdk.mkdir(parents=True)
+            (sdk/'MSBuild.runtimeconfig.json').write_text(json.dumps(
+                {'runtimeOptions':{'framework':{'version':'11.0.0'}}}))
+            compiler=root/'packs/Microsoft.NETCore.App.Runtime.AOT.osx-arm64.Cross.wasi-wasm/10.0.2/tools/mono-aot-cross'
+            compiler.parent.mkdir(parents=True);compiler.touch()
+            with patch.object(wasi.subprocess,'check_output',return_value='11.0.100'):
+                with self.assertRaises(RuntimeError):wasi.find_cross_compiler(dotnet)
 
 
 if __name__ == '__main__':

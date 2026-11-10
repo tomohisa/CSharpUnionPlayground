@@ -2,7 +2,7 @@
 
 [English](README.md) | **日本語**
 
-**C# 15 Union 型** (.NET 11 RC3) の機能と制限を検証するプレイグラウンドです。
+**C# 15 Union 型** (.NET 11 GA) の機能と制限を検証するプレイグラウンドです。
 
 ## 概要
 
@@ -31,9 +31,17 @@ string describe = shape switch
 };
 ```
 
+## .NET 11正式版での再検証
+
+SDK `11.0.100` / ランタイム `11.0.0` に固定しました。C# 15.0を使い、file-basedサンプルからpreview指定を削除しました。
+
+2026-11-10の再実行は **86件中77成功・9失敗・skip 0件**。失敗集合はRC3と同じです。closed網羅性7件、自動推論5件、switch比較13件、生成器診断6件は全成功。ネストしたPaymentの5方式でmacOS arm64のNative AOT実行に成功し、生成器の40チェックも通りました。正式版と一致するWASIコンパイラーでLLVMOnly AOTのスモーク実行も成功しました。
+
+[正式版の結果・既知の失敗・再実行方法](docs/dotnet11-ga-verification.md) / [実行記録](docs/verification/dotnet11-ga.json)。以下のRC3検証と過去のベンチマーク値は当時の記録として残し、正式版の測定値へ読み替えません。
+
 ## JSON シリアライズ: RC3 検証
 
-`global.json` で SDK `11.0.100-rc.3.26522.148` に固定しました。`UnionAttribute` と `IUnion` はランタイムに含まれるため、Preview 3 用 polyfill を削除しました。
+この過去の検証では SDK `11.0.100-rc.3.26522.148` を使いました。`UnionAttribute` と `IUnion` はランタイムに含まれるため、Preview 3 用 polyfill を削除しました。
 
 - `int`・`string`・`bool` のように JSON トークンの種類が異なるケースは、標準設定でラウンドトリップできます。
 - 有効なケースが直接出力され、`Value` ラッパーや `$type` は付きません。default union は `null` として往復できます。

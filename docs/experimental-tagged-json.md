@@ -1,6 +1,6 @@
 # Experimental tagged union JSON generator
 
-This is a repository experiment, not a released package or a stable API. Names live under `CSharpUnionPlayground.Experimental` to avoid implying a framework feature. Requires the pinned .NET 11 RC3 SDK.
+This is a repository experiment, not a released package or a stable API. Names live under `CSharpUnionPlayground.Experimental` to avoid implying a framework feature. Requires the pinned .NET 11 GA (SDK 11.0.100) SDK.
 
 ## Usage
 
@@ -125,7 +125,7 @@ Observed with SDK `11.0.100-rc.3.26522.148` on macOS arm64:
 - Published file: `Mach-O 64-bit executable arm64`.
 - 40 smoke checks pass when run with `--require-native` (39 without that flag), with `RuntimeFeature.IsDynamicCodeSupported == false` and `JsonSerializer.IsReflectionEnabledByDefault == false`.
 - Cash/Card cases; nested parent record; list of cases sharing the `value` property (record class and record struct); nested unions using `$type` at both levels; default/null union; reversed field order; nine invalid payloads.
-- Six diagnostic fixtures pass: duplicate tag, missing case, unrelated type, non-union target, reserved discriminator, generic union. Each requires `CUPJ001` from the real RC3 compiler.
+- Six diagnostic fixtures pass: duplicate tag, missing case, unrelated type, non-union target, reserved discriminator, generic union. Each requires `CUPJ001` from the real C# 15 compiler.
 - No IL2026/IL3050 warnings. Apple's linker reports duplicate debug-map entries in the SDK Native AOT runtime libraries; publishing and execution succeed.
 - Existing suite remains 86 tests: 77 passed and the same 9 previously documented failures. This experiment is separate from those models and does not rewrite their JSON contracts.
 

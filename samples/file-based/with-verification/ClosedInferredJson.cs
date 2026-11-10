@@ -1,5 +1,4 @@
 #:property TargetFramework=net11.0
-#:property LangVersion=preview
 #:property Nullable=enable
 #:property JsonSerializerIsReflectionEnabledByDefault=false
 #:property WarningsAsErrors=CS8509;CS8655;IL2026;IL3050

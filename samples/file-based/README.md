@@ -35,7 +35,7 @@ swift samples/file-based/Payment.swift
 
 出力はJSONとswitch / matchの結果（`cash:100`）です。CashのNextにはCardが入っています。
 
-C#は固定済み.NET 11 RC3のfile-based appで、個別のcsprojは不要です。Generator版だけは `#:project` で既存の実験版Generatorを参照します。すべてJSONリフレクションを無効にして、標準の `JsonSerializerContext` を使います。
+C#は固定済み.NET 11 GA (SDK 11.0.100)のfile-based appで、個別のcsprojは不要です。Generator版だけは `#:project` で既存の実験版Generatorを参照します。すべてJSONリフレクションを無効にして、標準の `JsonSerializerContext` を使います。
 
 Rustのrunnerは安定版Cargoの依存設定を、JavaのrunnerはJacksonのjarを一時ディレクトリへ用意します。TypeScriptはNode.js 24.18.0で直接実行できますが、型チェックは別途 `tsc --noEmit --strict --target ES2022 samples/file-based/Payment.ts` を使います。Goは標準ライブラリだけを使います。
 
