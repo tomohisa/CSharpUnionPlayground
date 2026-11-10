@@ -9,6 +9,7 @@ import shutil
 PROJECTION_FILES = ['projection-fanout.json', 'projection-fanout.md',
                     'projection-domain.json', 'projection-domain.md']
 JSON_FILES = ['union100.json', 'union100.md']
+AOT_FILES = ['union100-aot.json','union100-aot.md','projection-aot-fanout.json','projection-aot-fanout.md','projection-aot-domain.json','projection-aot-domain.md']
 DECODER_FILES = ['decoder/report.json', 'decoder/README.md', 'decoder/code/positional.cs', 'decoder/code/parameterless.cs', 'decoder/code/rust.rs']
 WASI_FILES = ['union100-wasi.json', 'union100-wasi.md', 'projection-wasi-fanout.json', 'projection-wasi-fanout.md', 'projection-wasi-domain.json', 'projection-wasi-domain.md']
 
@@ -33,11 +34,11 @@ def display_name(name):
 
 def refresh_report_labels(destination):
     reverse = {value:key for key,value in DISPLAY_NAMES.items()}
-    for name in PROJECTION_FILES + JSON_FILES + WASI_FILES:
+    for name in PROJECTION_FILES + JSON_FILES + WASI_FILES + AOT_FILES:
         path = destination / name
         if path.suffix != '.md' or not path.exists():
             continue
-        suite = 'wasi' if '-wasi' in name else 'json' if name.startswith('union100') else 'projection'
+        suite = 'aot' if '-aot' in name else 'wasi' if '-wasi' in name else 'json' if name.startswith('union100') else 'projection'
         kind = 'json' if name.startswith('union100') else 'projection'
         manifest = destination/'code'/suite/'manifest.json'
         implementations = read(manifest).get('files',{}).get(kind,{}) if manifest.exists() else {}
@@ -67,11 +68,11 @@ def source_label(destination, suite, kind, implementation):
 
 def render_index(destination):
     lines = ['# Intel GitHub Actions observations', '',
-             'Native and WASM results are grouped by workload. Each implementation has one Native row and, where available, one WASM row. Native means host execution, including Node/JVM where applicable.', '',
+             'Native and WASM results are grouped by workload. C# has separate Native AOT and JIT+PGO rows, plus a WASM row where available. Other implementations have one host row and a WASM row where available. Native means host execution, including Node/JVM where applicable.', '',
              '**TypeScript labels:** `ts-simple` = no runtime validation; `ts-manual` = handwritten validation; `ts-zod` = Zod validation. Raw JSON and CLI retain their original implementation IDs.', '',
-             'The canonical Native rows come from the host report. WASM rows are included only when both reports belong to the same combined job/attempt. No minimum is selected across runs.', '']
+             'JIT Native rows come from the host report; C# AOT rows come from the matched AOT report. WASM rows are included only when both reports belong to the same combined job/attempt. No minimum is selected across runs or C# runtime modes.', '']
     environments = {}
-    for suite in ['json', 'projection', 'wasi']:
+    for suite in ['json', 'projection', 'wasi', 'aot']:
         path = destination / f'environment-{suite}.json'
         if path.exists():
             environments[suite] = read(path)
@@ -111,11 +112,14 @@ def render_index(destination):
 
     def config(suite, implementation):
         if suite != 'wasi':
-            path = destination/('union100.json' if suite=='json' else 'projection-domain.json')
+            path = destination/('union100-aot.json' if suite=='aot' and implementation.startswith('csharp-') else 'projection-aot-domain.json' if suite=='aot' else 'union100.json' if suite=='json' else 'projection-domain.json')
             native = read(path).get('nativeConfiguration',{}) if path.exists() else {}
             if implementation.startswith('csharp') and native.get('csharpMode')=='jit-pgo':
                 version = '10' if implementation=='csharp-abstract' and native.get('abstractNet10') else '11'
                 return '.NET '+version+' / Release JIT + Dynamic PGO'
+            if implementation.startswith('csharp') and suite=='aot':
+                version='10' if implementation=='csharp-abstract' and native.get('abstractNet10') else '11'
+                return '.NET '+version+' / Native AOT Speed / native ISA'
             return 'Release Native AOT / SDK defaults' if implementation.startswith('csharp') else 'Host defaults'
         if implementation.startswith('csharp-'):
             return 'LLVMOnly AOT / SIMD / -O3' if implementation.endswith('-wasi') else 'Native AOT Speed / native ISA'
@@ -125,21 +129,25 @@ def render_index(destination):
         return f'[{suite}](environment-{suite}.json)' if suite in environments else suite
 
     def json_rows():
-        native, wasm = {}, []
-        for suite, name in [('json','union100'),('wasi','union100-wasi')]:
+        native, wasm, aot = {}, [], []
+        for suite, name in [('json','union100'),('aot','union100-aot'),('wasi','union100-wasi')]:
             path = destination / (name+'.json')
             if not path.exists():
+                continue
+            if suite=='aot' and not matched('json','aot'):
                 continue
             if suite=='wasi' and not matched('json','wasi'):
                 continue
             report = read(path)
             for row in report['summary']:
                 value = (suite, row, report)
-                if row['implementation'].endswith('-wasi'):
+                if suite=='aot':
+                    aot.append(value)
+                elif row['implementation'].endswith('-wasi'):
                     wasm.append(value)
                 else:
                     native.setdefault(base_name(row['implementation']), value)
-        return list(native.values()) + wasm
+        return list(native.values()) + aot + wasm
 
     rows = json_rows()
     if rows or any((destination/name).exists() for name in ['union100.json','union100-wasi.json']):
@@ -150,11 +158,13 @@ def render_index(destination):
             roots, nodes, samples = next(iter(inputs))
             lines += [f'{roots:,} roots / {nodes:,} nodes per batch; {samples} large batches per row.', '']
         lines += ['[Host-only details](union100.md) / [WASM / legacy paired details](union100-wasi.md).', '']
-        provenance(['json','wasi'])
+        if (destination/'union100-aot.md').exists():
+            lines += ['[C# Native AOT details](union100-aot.md).', '']
+        provenance(['json','aot','wasi'])
         if not matched('json','wasi'):
             lines += ['**Unmatched runs:** this table shows host Native results only. WASM details are retained at the link above, but are excluded from this ranking until one completed combined job supplies both backends.', '']
         else:
-            lines += ['**One combined job / one VM / sequential processes.** C# Native uses JIT + Dynamic PGO (abstract: .NET 10; closed/union: .NET 11). WASM remains .NET 11 LLVMOnly AOT. These comparisons include runtime/version differences, not only the execution backend.', '']
+            lines += ['**One combined job / one VM / sequential processes.** C# Native compares JIT + Dynamic PGO and Native AOT side by side (abstract: .NET 10 for both; closed/union: .NET 11). WASM remains .NET 11 LLVMOnly AOT. These comparisons include runtime/version differences, not only the execution backend.', '']
         extra_header = ' roots / batches |' if varying else ''
         lines += ['| implementation | execution | build |'+extra_header+' median batch s | encode s | decode s | peak RSS MiB | measurement |',
                   '|---|---|---|'+('---:|' if varying else '')+'---:|---:|---:|---:|---|']
@@ -169,10 +179,12 @@ def render_index(destination):
                   '[Intel: STJ metadata vs direct reader vs Rust](decoder/README.md). Same 100-case workload, separate matched Native/WASI AOT run; decode allocation and full lifecycle are retained.', '']
 
     def projection_reports(suffix):
-        native, wasm = {}, []
-        for suite, prefix in [('projection','projection'),('wasi','projection-wasi')]:
+        native, wasm, aot = {}, [], []
+        for suite, prefix in [('projection','projection'),('aot','projection-aot'),('wasi','projection-wasi')]:
             path = destination / (prefix+'-'+suffix+'.json')
             if not path.exists():
+                continue
+            if suite=='aot' and not matched('projection','aot'):
                 continue
             if suite=='wasi' and not matched('projection','wasi'):
                 continue
@@ -180,18 +192,22 @@ def render_index(destination):
             for implementation in report['commands']:
                 selected = [r for r in report['results'] if r['implementation'] == implementation]
                 value = (suite, implementation, selected)
-                if implementation.endswith('-wasi'):
+                if suite=='aot':
+                    aot.append(value)
+                elif implementation.endswith('-wasi'):
                     wasm.append(value)
                 else:
                     native.setdefault(base_name(implementation), value)
-        return list(native.values()) + wasm
+        return list(native.values()) + aot + wasm
 
     domain, fanout = projection_reports('domain'), projection_reports('fanout')
     if domain or fanout or any((destination/name).exists() for name in ['projection-domain.json','projection-wasi-domain.json']):
         lines += ['## Projection run', '',
                   '`ts-simple` performs the projection without runtime payload validation. `ts-zod` validates/clones payload data in matching handlers, inside the projection timer. Unknown event kinds are ignored. This test does not parse JSON.', '',
                   '[Host domain details](projection-domain.md) / [Host fanout details](projection-fanout.md) / [WASM domain details](projection-wasi-domain.md) / [WASM fanout details](projection-wasi-fanout.md).', '']
-        provenance(['projection','wasi'])
+        if (destination/'projection-aot-domain.md').exists():
+            lines += ['[C# AOT domain details](projection-aot-domain.md) / [C# AOT fanout details](projection-aot-fanout.md).', '']
+        provenance(['projection','aot','wasi'])
         if not matched('projection','wasi'):
             lines += ['**Unmatched runs:** only host Native rows are ranked here. Separate WASM measurements remain in the detail reports.', '']
     if domain:
@@ -230,8 +246,8 @@ def publish(incoming, destination):
     env = read(incoming / 'environment.json')
     if env.get('completed') is not True or env.get('suite') not in ['projection', 'json', 'all', 'wasi', 'decoder', 'combined']:
         raise ValueError('Only a completed benchmark run can be published automatically.')
-    suites = ['projection','json','wasi'] if env['suite']=='combined' else ['projection', 'json'] if env['suite'] == 'all' else [env['suite']]
-    files = (PROJECTION_FILES if 'projection' in suites else []) + (JSON_FILES if 'json' in suites else []) + (WASI_FILES if 'wasi' in suites else []) + (DECODER_FILES if 'decoder' in suites else [])
+    suites = ['projection','json','wasi','aot'] if env['suite']=='combined' else ['projection', 'json'] if env['suite'] == 'all' else [env['suite']]
+    files = (PROJECTION_FILES if 'projection' in suites else []) + (JSON_FILES if 'json' in suites else []) + (WASI_FILES if 'wasi' in suites else []) + (DECODER_FILES if 'decoder' in suites else []) + (AOT_FILES if 'aot' in suites else [])
     # Validate the entire incoming set before changing any tracked data.
     for name in files:
         if not (incoming / name).is_file():
@@ -283,13 +299,32 @@ def publish(incoming, destination):
             raise ValueError('Combined run is missing an implementation')
         if any(not row['implementation'].endswith('-wasi') for row in wasm['summary']):
             raise ValueError('Combined run must measure each Native implementation only once')
+        aot = read(incoming/'union100-aot.json')
+        expected_aot={name for name in expected if name.startswith('csharp-')}
+        if {row['implementation'] for row in aot['summary']}!=expected_aot or len(aot['summary'])!=5:
+            raise ValueError('Combined run must include all five C# AOT implementations')
+        if any(host[k]!=aot[k] for k in ['roots','nodesPerBatch','samples']):
+            raise ValueError('AOT/JIT JSON counts differ')
+        if aot.get('nativeConfiguration',{}).get('csharpMode')!='aot' or not aot.get('nativeConfiguration',{}).get('abstractNet10'):
+            raise ValueError('AOT abstract must remain on .NET 10')
+        for name in ['projection-aot-domain.json','projection-aot-fanout.json']:
+            projection=read(incoming/name)
+            if set(projection['commands'])!={'csharp-native'} or projection.get('nativeConfiguration',{}).get('csharpMode')!='aot':
+                raise ValueError('C# AOT Projection missing or wrong runtime mode')
         manifests = {suite:read(incoming/'code'/suite/'manifest.json') for suite in suites}
+        if set(manifests['aot']['files']['json'])!=expected_aot or set(manifests['aot']['files']['projection'])!={'csharp-native'}:
+            raise ValueError('AOT source snapshot is incomplete')
         for kind,suite in [('json','json'),('projection','projection')]:
             native = manifests[suite]['files'][kind]
             for name,entry in manifests['wasi']['files'][kind].items():
                 base = name.removesuffix('-wasi') + ('-native' if kind=='projection' else '')
                 if base not in native or native[base]['sha256'] != entry['sha256']:
                     raise ValueError('Native/WASM workload source mismatch: '+name)
+        for kind,suite in [('json','json'),('projection','projection')]:
+            native=manifests[suite]['files'][kind]
+            for name,entry in manifests['aot']['files'][kind].items():
+                if name not in native or native[name]['sha256']!=entry['sha256']:
+                    raise ValueError('AOT/JIT workload source mismatch: '+name)
     destination.mkdir(parents=True, exist_ok=True)
     legacy = destination / 'environment.json'
     projection_env = destination / 'environment-projection.json'

@@ -1,6 +1,6 @@
 # Intelでの一括比較
 
-一覧の比較には `combined` を使います（Actionsの既定値）。全言語のNative JSON / Projectionと、対応するC#・RustのWASMを**同じジョブ・同じVMで順次測定**します。Nativeは各実装1回だけ測定し、別ジョブの値や最速値を混ぜません。
+一覧の比較には `combined` を使います（Actionsの既定値）。全言語のNative JSON / Projectionと、対応するC#・RustのWASMを**同じジョブ・同じVMで順次測定**します。C#のNativeはAOTとJIT＋PGOを別々に1回ずつ測り、他言語のNativeは1回だけ測定します。別ジョブの値や最速値を混ぜません。
 
 ```bash
 gh workflow run benchmarks-intel.yml -f suite=combined -f json_roots=200000 -F publish=true
@@ -8,18 +8,18 @@ gh workflow run benchmarks-intel.yml -f suite=combined -f json_roots=200000 -F p
 
 | 対象 | 実行設定 |
 |---|---|
-| C# abstract Native JSON | .NET 10 SDK 10.0.401 / runtime 10.0.12、Release JIT＋Dynamic PGO |
-| C# closed / union Native JSON | .NET 11正式版、Release JIT＋Dynamic PGO |
-| C# Native Projection | .NET 11正式版、Release JIT＋Dynamic PGO |
+| C# abstract Native JSON | .NET 10 SDK 10.0.401 / runtime 10.0.12、Native AOT Speed / native ISA と Release JIT＋Dynamic PGO |
+| C# closed / union Native JSON | .NET 11正式版、Native AOT Speed / native ISA と Release JIT＋Dynamic PGO |
+| C# Native Projection | .NET 11正式版、Native AOT Speed / native ISA と Release JIT＋Dynamic PGO |
 | C# WASM | .NET 11 LLVMOnly AOT / SIMD / clang -O3（インタープリターなし） |
 | 他言語のNative | 既存のRelease／ホスト設定 |
 | Rust WASM | Release / LTO / SIMD |
 
-C# JITのアプリはILで発行し、標準フレームワークのReadyToRunは維持します。`DOTNET_TieredCompilation=1`、`DOTNET_TieredPGO=1`、`DOTNET_TC_QuickJit=1`、`DOTNET_TC_QuickJitForLoops=1` をコマンドごとに設定します。型・シリアライザーは変更せず、専用readerは使いません。従来どおり1000ルートのウォームアップと5つの大きいバッチを使います。PGO有効化は定常性能への収束を保証しないため、生データには初回を含む全バッチを残します。
+C# JITのアプリはILで発行し、標準フレームワークのReadyToRunは維持します。`DOTNET_TieredCompilation=1`、`DOTNET_TieredPGO=1`、`DOTNET_TC_QuickJit=1`、`DOTNET_TC_QuickJitForLoops=1` をコマンドごとに設定します。型・シリアライザーは変更せず、専用readerは使いません。従来どおり1000ルートのウォームアップと5つの大きいバッチを使います。AOTとJITでProgram.cs・入力・回数・ウォームアップ・検証を揃えます。PGO有効化は定常性能への収束を保証しないため、生データには初回を含む全バッチを残します。
 
 Native abstractとWASM abstractは同じProgram.csですが、.NET 10 JITと.NET 11 AOTの比較です。バックエンドだけの差を測っているとは解釈しません。
 
-`union100.md` は全言語Nativeの正規結果、`union100-wasi.md` はWASMのみです。一覧のNative行は前者をそのまま使います。JSON12 Native＋6 WASM、Projection7 Native＋2 WASMを1つの実行として公開します。各environmentに共通の `comparisonGroup`（run URL＋attempt）を保存し、入力件数・ケースの欠落・Native/WASMソースハッシュ・成果物一式を検証してからまとめて反映します。別ジョブの結果しかない場合は、WASMを同じ順位表に混ぜず詳細へのリンクを残します。
+`union100.md` は全言語ホスト（C#はJIT＋PGO）、`union100-aot.md` はC# Native AOT、`union100-wasi.md` はWASMです。Projectionにも `projection-aot-domain` / `projection-aot-fanout` を追加します。JSONは12ホスト＋5 C# AOT＋6 WASMの23行、Projectionは7ホスト＋1 C# AOT＋2 WASMの10行を、実行方式・.NET版を明記して同じ表に並べます。各environmentに共通の `comparisonGroup`（run URL＋attempt）を保存し、入力件数・ケースの欠落・Native/WASMソースハッシュ・成果物一式を検証してからまとめて反映します。別ジョブの結果しかない場合は、WASMを同じ順位表に混ぜず詳細へのリンクを残します。
 
 同じVMでも測定時点の負荷やGCによる変動はあります。プロセスを同時に走らせないことで、ベンチマーク同士のCPU・メモリ競合を避けます。スイート間のActions実行も直列化します。
 

@@ -63,7 +63,7 @@ def main():
         'runAttempt': os.environ.get('GITHUB_RUN_ATTEMPT'),
         'suite': args.suite, 'jsonRoots': args.json_roots,
         'comparisonGroup': run_url+'#attempt-'+os.environ.get('GITHUB_RUN_ATTEMPT','local') if args.suite=='combined' else None,
-        'measurementPolicy': 'One VM; sequential processes; one Native measurement per implementation; C# host JIT+PGO, abstract net10, other C# net11; WASM LLVMOnly AOT' if args.suite=='combined' else None,
+        'measurementPolicy': 'One VM; sequential processes; C# Native AOT and JIT+PGO measured separately; C# host JIT+PGO, abstract net10, other C# net11; WASM LLVMOnly AOT' if args.suite=='combined' else None,
         'csharpWasiMode': 'LLVMOnly AOT, SIMD, clang -O3' if args.suite in ['wasi', 'decoder', 'combined'] else None,
     }
     (OUT / 'environment.json').write_text(json.dumps(environment, indent=2) + '\n')
@@ -120,6 +120,18 @@ def main():
     if args.suite in ['json', 'all', 'combined']:
         run_suite(['benchmarks/union100/run.py', '--csharp-mode', 'jit-pgo', '--abstract-net10', '--roots', str(args.json_roots), '--samples', '5'],
                   OUT / 'union100.json')
+    if args.suite=='combined':
+        base = ['benchmarks/projection100/run.py', '--languages', 'csharp', '--engines', 'native',
+                '--csharp-mode', 'aot', '--build-dir', 'benchmarks/projection100/.build/intel-aot',
+                '--samples', '2', '--timeout', '25', '--max-projection-seconds', '8']
+        run_suite(base+['--sizes','1000,10000,100000,1000000'],OUT/'projection-aot-fanout.json',projection=True)
+        run_suite(base+['--skip-build','--routing','domain','--profiles','dense',
+                       '--modes','indexed-append,indexed-copy','--sizes','100000,1000000,10000000'],
+                  OUT/'projection-aot-domain.json',projection=True)
+        run_suite(['benchmarks/union100/run.py','--implementations',
+                   'csharp-abstract,csharp-closed-explicit,csharp-closed-inferred,csharp-union-custom,csharp-union-generated',
+                   '--csharp-mode','aot','--abstract-net10','--build-dir','benchmarks/union100/.build/intel-aot',
+                   '--roots',str(args.json_roots),'--samples','5'],OUT/'union100-aot.json')
     if args.suite in ['wasi', 'combined']:
         if not args.wasi_dotnet or not args.wasi_sdk:
             parser.error('wasi requires --wasi-dotnet and --wasi-sdk')
@@ -142,6 +154,9 @@ def main():
     elif args.suite in ['all','combined']:
         for selected,family in [('json','union100'),('projection','projection100')]:
             capture_sources(OUT,selected,environment['sourceCommit'],{selected:REPO/'benchmarks'/family/'.build/sources'})
+    if args.suite=='combined':
+        capture_sources(OUT,'aot',environment['sourceCommit'],{'json':REPO/'benchmarks/union100/.build/intel-aot/sources',
+                       'projection':REPO/'benchmarks/projection100/.build/intel-aot/sources'})
     if args.suite in ['wasi','combined']:
         capture_sources(OUT,'wasi',environment['sourceCommit'],{'json':REPO/'benchmarks/union100/.build/wasi-comparison/sources','projection':REPO/'benchmarks/projection100/.build/intel-wasi/sources'})
     (OUT / 'environment.json').write_text(json.dumps({**environment, 'completed': True}, indent=2) + '\n')

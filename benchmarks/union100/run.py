@@ -22,7 +22,7 @@ import threading
 HERE=Path(__file__).resolve().parent
 REPO=HERE.parents[1]
 sys.path.insert(0,str(HERE.parent))
-from native_settings import jit_publish_args, jit_command
+from native_settings import jit_publish_args, jit_command, configure_net10
 sys.path.insert(0,str(REPO/'scripts'))
 from run_payment_java import jackson_classpath
 from generate import generate
@@ -56,7 +56,8 @@ def build(names,build_dir,rid,native_properties=None,csharp_mode="aot",abstract_
         out=build_dir/'bin'/name;out.mkdir(parents=True,exist_ok=True)
         if name.startswith('csharp-'):
             project=source/name/'Benchmark.csproj'
-            extra=jit_publish_args(project,abstract_net10 and name=='csharp-abstract') if csharp_mode=='jit-pgo' else [f'-p:{k}={v}' for k,v in (native_properties or {}).items()]
+            extra=jit_publish_args(project,abstract_net10 and name=='csharp-abstract') if csharp_mode=='jit-pgo' else [f'-p:{k}={v}' for k,v in (native_properties or {'OptimizationPreference':'Speed','IlcInstructionSet':'native'}).items()]
+            if csharp_mode=='aot' and abstract_net10 and name=='csharp-abstract':extra+=configure_net10(project)
             result=run(['dotnet','publish',project,'-c','Release','-r',rid,'-o',out]+extra,cwd=project.parent if abstract_net10 and name=='csharp-abstract' else REPO)
             (out/'build.log').write_text(result.stdout+result.stderr)
             commands[name]=jit_command(out) if csharp_mode=='jit-pgo' else [str(out/'Benchmark')]
@@ -144,7 +145,7 @@ def measure(name,commands,roots,samples,timeout,progress_dir,expected_sink=None,
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--csharp-mode',choices=['aot','jit-pgo'],default='aot')
-    p.add_argument('--abstract-net10',action='store_true',help='Build abstract with SDK10/runtime10; requires jit-pgo')
+    p.add_argument('--abstract-net10',action='store_true',help='Build abstract with SDK10/runtime10')
     p.add_argument('--implementations',default=','.join(NAMES),help='comma-separated names; default: all twelve')
     p.add_argument('--roots',type=int,help='fixed large batch size; skips calibration')
     p.add_argument('--samples',type=int,default=5,help='large single-pass batches, not tiny loop repetitions')
@@ -159,7 +160,6 @@ def main():
     p.add_argument('--timeout',type=int,default=1800,help='timeout per implementation invocation, seconds')
     args=p.parse_args()
     names=args.implementations.split(',')
-    if args.abstract_net10 and args.csharp_mode!='jit-pgo':p.error('--abstract-net10 requires --csharp-mode jit-pgo')
     if len(set(names))!=len(names) or any(n not in NAMES for n in names):p.error('unknown or duplicate implementation')
     if args.quick:args.roots,args.samples=100,1
     if args.samples<1 or args.target_seconds<=0 or args.min_batch_seconds<=0 or args.max_roots<100:p.error('counts and durations must be positive')

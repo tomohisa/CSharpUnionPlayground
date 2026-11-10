@@ -51,12 +51,12 @@ class CombinedJobTests(unittest.TestCase):
             argv=['run_intel.py','--suite','combined','--json-roots','1000','--wasi-dotnet','/sdk/dotnet','--wasi-sdk','/sdk/wasi']
             with patch.object(intel,'OUT',out), patch.object(intel.platform,'system',return_value='Darwin'), patch.object(intel.platform,'machine',return_value='x86_64'), patch.object(intel,'capture',side_effect=capture), patch.object(intel,'run_suite',side_effect=suite), patch.object(intel,'capture_sources') as sources, patch.object(intel.sys,'argv',argv):
                 intel.main()
-            self.assertEqual(len(calls),6)
+            self.assertEqual(len(calls),9)
             self.assertIn('--abstract-net10',calls[2])
             self.assertIn('jit-pgo',calls[0])
             self.assertIn('jit-pgo',calls[2])
-            for call in calls[3:]:self.assertEqual(call[call.index('--engines')+1],'wasi')
-            self.assertEqual({c.args[1] for c in sources.call_args_list},{'json','projection','wasi'})
+            for call in calls[6:]:self.assertEqual(call[call.index('--engines')+1],'wasi')
+            self.assertEqual({c.args[1] for c in sources.call_args_list},{'json','projection','wasi','aot'})
             env=json.loads((out/'environment.json').read_text())
             self.assertTrue(env['completed'])
             self.assertTrue(env['comparisonGroup'])
