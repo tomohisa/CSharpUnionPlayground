@@ -1,6 +1,23 @@
 # WASI JSONデシリアライズの切り分け
 
-C#の読み取りをスキーマ専用の `Utf8JsonReader` コードに置き換えると、この測定では **6.48秒 → 2.83秒（2.29倍）** に改善しました。Rust WASIは1.65秒なので、差は約3.92倍から約1.71倍に縮まりました。既存のSource Generatorの製品コードを変更した結果ではなく、改善できる範囲を確認するために追加した診断実装です。
+初回のARM測定では、C#の読み取りをスキーマ専用の `Utf8JsonReader` コードに置き換えると、この測定では **6.48秒 → 2.83秒（2.29倍）** に改善しました。Rust WASIは1.65秒なので、差は約3.92倍から約1.71倍に縮まりました。既存のSource Generatorの製品コードを変更した結果ではなく、改善できる範囲を確認するために追加した診断実装です。
+
+## Intelでの再計測
+
+[2026-11-10のIntel Actions実行](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/42787344724)も完了しました。i7-8700B / RAM 14 GiB、同じ20万ルート・60万ノード×5バッチです。下のARMとは別の測定です。
+
+| 読み取り | Native decode 秒 | WASI AOT decode 秒 | WASI decode割り当て MiB |
+|---|---:|---:|---:|
+| 標準STJ Source Generation | 2.779 | 9.912 | 300.1 |
+| 引数なしJsonConstructor + init | 1.936 | 12.591 | 254.3 |
+| スキーマ専用の直接reader | 1.590 | 3.016 | 254.3 |
+| Rust serde_json | 1.552 | 1.406 | 未計測 |
+
+同じ実行内のC# WASIは9.912秒から3.016秒、約3.29倍に改善しました。Rustとの差は約7.05倍から約2.15倍に縮まりました。引数なしコンストラクターだけではWASIで改善せず、割り当て量の削減だけで速さが決まらない点も再確認できました。
+
+[Intelの全ソース・生データ・ビルド証跡・起動と終了の内訳](../../observed/macos-intel-actions/decoder/README.md)を別に保存しています。以前のIntel標準STJ 13.782秒から今回の直接reader 3.016秒への比率を改善率には使いません。比較の基準は同じ実行で測り直した9.912秒です。
+
+GitHub Actionsの `Intel benchmarks` を `suite=decoder` で実行すると、同じ結果ページへ追記更新します。ほかのJSON / Projectionの計測結果は保持します。
 
 ## 条件と実測
 
