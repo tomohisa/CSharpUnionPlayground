@@ -214,3 +214,7 @@ python3 benchmarks/union100/run.py \
 ```
 
 [結果一覧](../observed/macos-intel-actions/README.md)の各実装名にも、その計測の生成済みソースへのリンクがあります。単純な2ケースの利用例は[通常TS](../../samples/file-based/Payment.ts) / [Zod版](../../samples/file-based/PaymentZod.ts)です。
+
+## WASIデシリアライズの改善調査
+
+[原因の切り分け・実測・改善用reader・再実行CLI](diagnostics/README.md)を追加しました。同じ100ケース・60万ノードで、標準STJの読み取りと型専用の直接readerをNative/WASI AOTで比較しています。ローカルARMでの診断結果をIntel Actionsの結果とは分けて保存しています。
