@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and compare large, single-pass 100-case JSON workloads across ten implementations."""
+"""Build and compare large, single-pass 100-case JSON workloads across twelve implementations."""
 from pathlib import Path
 import argparse
 import datetime
@@ -24,7 +24,7 @@ REPO=HERE.parents[1]
 sys.path.insert(0,str(REPO/'scripts'))
 from run_payment_java import jackson_classpath
 from generate import generate
-NAMES=['csharp-abstract','csharp-closed-explicit','csharp-closed-inferred','csharp-union-custom','csharp-union-generated','rust','typescript','java','go','swift']
+NAMES=['csharp-abstract','csharp-closed-explicit','csharp-closed-inferred','csharp-union-custom','csharp-union-generated','rust','typescript','typescript-simple','typescript-zod','java','go','swift']
 
 def run(command, *, cwd=None, timeout=1800):
     return subprocess.run([str(c) for c in command],cwd=cwd or REPO,text=True,
@@ -61,7 +61,13 @@ def build(names,build_dir,rid):
             result=run(['cargo','build','--release','--manifest-path',source/'rust/Cargo.toml'])
             (out/'build.log').write_text(result.stdout+result.stderr)
             commands[name]=[str(source/'rust/target/release/union100')]
-        elif name=='typescript':commands[name]=['node','--max-old-space-size=6144',str(source/'benchmark.ts')]
+        elif name.startswith('typescript'):
+            suffix={'typescript':'','typescript-simple':'-simple','typescript-zod':'-zod'}[name]
+            if name=='typescript-zod':
+                for manifest_name in ['package.json','package-lock.json']:
+                    shutil.copy2(REPO/'samples/file-based'/manifest_name,source/manifest_name)
+                run(['npm','ci','--omit=dev','--ignore-scripts','--no-audit','--no-fund','--prefix',source])
+            commands[name]=['node','--max-old-space-size=6144',str(source/('benchmark'+suffix+'.ts'))]
         elif name=='java':
             jars=build_dir/'jars';jars.mkdir(exist_ok=True)
             cp=jackson_classpath(jars)
@@ -134,7 +140,7 @@ def measure(name,commands,roots,samples,timeout,progress_dir,expected_sink=None,
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--implementations',default=','.join(NAMES),help='comma-separated names; default: all ten')
+    p.add_argument('--implementations',default=','.join(NAMES),help='comma-separated names; default: all twelve')
     p.add_argument('--roots',type=int,help='fixed large batch size; skips calibration')
     p.add_argument('--samples',type=int,default=5,help='large single-pass batches, not tiny loop repetitions')
     p.add_argument('--target-seconds',type=float,default=10,help='target fastest aggregate measured time across samples')
@@ -154,7 +160,7 @@ def main():
     if args.roots is not None and not 100<=args.roots<=args.max_roots:p.error('roots must be between 100 and max-roots')
     build_dir=args.build_dir.resolve();build_dir.mkdir(parents=True,exist_ok=True)
     fingerprint=hashlib.sha256()
-    for path in sorted([HERE/'generate.py',HERE/'run.py',HERE/'Cargo.lock',REPO/'global.json',*list((HERE/'templates').iterdir()),*list((REPO/'src/PlaygroundTaggedJson.Generator').glob('*.cs')),REPO/'src/PlaygroundTaggedJson.Generator/PlaygroundTaggedJson.Generator.csproj']):
+    for path in sorted([HERE/'generate.py',HERE/'run.py',HERE/'Cargo.lock',REPO/'global.json',REPO/'samples/file-based/package.json',REPO/'samples/file-based/package-lock.json',*list((HERE/'templates').iterdir()),*list((REPO/'src/PlaygroundTaggedJson.Generator').glob('*.cs')),REPO/'src/PlaygroundTaggedJson.Generator/PlaygroundTaggedJson.Generator.csproj']):
         fingerprint.update(str(path.relative_to(REPO)).encode());fingerprint.update(path.read_bytes())
     digest=fingerprint.hexdigest()
     manifest=build_dir/'commands.json'
@@ -200,8 +206,9 @@ def main():
     versions={}
     for name,command in {'dotnet':['dotnet','--version'],'rust':['rustc','--version'],'node':['node','--version'],'java':['java','-version'],'go':['go','version'],'swift':['swift','--version']}.items():
         if name=='dotnet' and not any(n.startswith('csharp-') for n in names):continue
-        if name!='dotnet' and not (name in names or name=='node' and 'typescript' in names):continue
+        if name!='dotnet' and not (name in names or name=='node' and any(n.startswith('typescript') for n in names)):continue
         version=run(command);versions[name]=(version.stdout+version.stderr).strip()
+    if 'typescript-zod' in names:versions['zod']=json.loads((REPO/'samples/file-based/package.json').read_text())['dependencies']['zod']
     report={'timestampUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'platform':platform.platform(),
         'machine':platform.machine(),'rid':args.rid,'toolchains':versions,'buildFingerprint':digest,'roots':roots,'nodesPerBatch':roots*3,'samples':args.samples,
         'targetAggregateSeconds':args.target_seconds,'minBatchSeconds':args.min_batch_seconds,
@@ -210,7 +217,7 @@ def main():
         'memoryMetric':'OS process peak resident set size; includes setup, warm-up and correctness checks, not just measured phases.',
         'notes':['Startup, compilation, data generation, warm-up and correctness checks are excluded from measured phases.',
                  'Each sample encodes/decodes the entire large batch once and traverses all decoded nodes once.',
-                 'TypeScript includes recursive runtime validation; Swift uses synthesized enum envelopes and sorted keys; C# unions wrap case data. Wire bytes differ.',
+                 'typescript uses manual recursive validation; typescript-simple uses JSON.parse plus a type assertion without runtime validation; typescript-zod uses Zod discriminated unions and creates validated objects during decode. Swift uses synthesized enum envelopes and sorted keys; C# unions wrap case data. Wire bytes differ.',
                  'This measures these implementations and serializers, not language speed or isolated union overhead. GC, JIT state and host load affect results.']}
     args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(report,indent=2)+'\n')
     md=['| implementation | median batch s | encode s | decode s | switch s | aggregate s | JSON MiB | peak RSS MiB |','|---|---:|---:|---:|---:|---:|---:|---:|']

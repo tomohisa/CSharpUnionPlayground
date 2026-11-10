@@ -1,6 +1,6 @@
 # UNION 100ケース・大きなバッチのJSON比較ベンチマーク
 
-C# 5方式、Rust、TypeScript、Java、Go、Swiftをコマンドラインで比較します。各実装に100種類のケース型を生成し、ネストした同じ論理データを使います。
+C# 5方式、Rust、TypeScript 3方式、Java、Go、Swiftをコマンドラインで比較します。各実装に100種類のケース型を生成し、ネストした同じ論理データを使います。
 
 **小さいJSONを何千回も繰り返すベンチマークではありません。** 大きな配列全体のencode → decode → switch/matchによる全走査を、1バッチとして数回だけ測定します。
 
@@ -9,7 +9,7 @@ C# 5方式、Rust、TypeScript、Java、Go、Swiftをコマンドラインで比
 リポジトリのルートから:
 
 ```bash
-# 全10実装をビルドし、予備計測で件数を決めて本計測
+# 全12実装をビルドし、予備計測で件数を決めて本計測
 python3 benchmarks/union100/run.py
 
 # 同じビルドを再利用（ソース・RID・実装の一致を確認）
@@ -138,3 +138,17 @@ WasmtimeとRustの`wasm32-wasip1`ターゲット、専用.NET 11 RC3の`wasi-exp
 C# WASIは公式ビルド済みランタイムを使い、トリミングなしで実行します。JSON処理・型定義・switchのソースは変更しません。起動にはWasmtimeによるコンパイルも含まれ、RSSはWasmtime全体です。WASIの失敗・時間超過はJSONの`errors`に理由を記録し、成功した計測値として扱いません。
 
 WASIのC#は遅いため、まずNative/WASI両方を1万ルート×5回で揃える実行例にしています。既存Intelの20万ルート、ARMの72.9万ルートの表とは件数が違います。`--roots 200000`で元のIntelと同じ件数にもできますが、全C#方式の計測は長時間になります。1万ルートではRustやNative C#の1バッチが1秒未満になることがあり、長いバッチを使った既存テストとは固定費の割合も異なります。
+
+## TypeScriptの読み込み方式を分ける
+
+```bash
+python3 benchmarks/union100/run.py \
+  --implementations typescript-simple,typescript-zod,typescript \
+  --roots 200000 --samples 5
+```
+
+- `typescript-simple`: `JSON.parse`の結果を型アサーションで受け取るだけ。外部入力の型安全性は保証しません。
+- `typescript-zod`: `JSON.parse`の後、Zodの再帰的な`discriminatedUnion`で100ケースと全フィールドを検証し、検証済みオブジェクトを作ります。この処理と割り当てをdecode時間に含めます。
+- `typescript`: 従来の手書き再帰検証。過去の観測値の意味を変えず、比較用に残します。
+
+入力・JSON.stringify・switch・ウォームアップ・回数・結果検証は共通です。Zodのスキーマ構築とパッケージの導入は計測区間外です。Zodの版はサンプルのpackage-lockに固定し、結果のtoolchainsにも記録します。通常の全実装実行にも新しい2方式を含めます。
