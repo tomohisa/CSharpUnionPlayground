@@ -18,14 +18,14 @@
         "WasiClangCompileOptimizationFlag": "-O3",
         "WasiBitcodeCompileOptimizationFlag": "-O3",
         "WasiClangLinkOptimizationFlag": "-O3",
-        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0-rc.3.26522.148/tools/mono-aot-cross"
+        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0/tools/mono-aot-cross"
       },
       "sourceSha256": "7cc53a787ac430b0661bb2aef1e2dcae00a282f7a55a440c852ee995a9383a94",
-      "wasmSha256": "776a5125debf51a4b52ee25be31ee7d65aad45bd43b15fc3006c2cf5fd61b673",
-      "wasmBytes": 12446000,
+      "wasmSha256": "c2e233f92118472275d7e7537ba7c10859b02671530fdddba57d478772f256da",
+      "wasmBytes": 12456279,
       "aotModule": "mono_aot_module_Benchmark_info",
       "registeredAotModules": 9,
-      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-abstract/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include\"\n-g\n",
+      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-abstract/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include\"\n-g\n",
       "httpSdkWorkaround": "Unused missing HTTP world only; fails if System.Net.Http is bundled."
     },
     "csharp-closed-explicit-wasi": {
@@ -46,14 +46,14 @@
         "WasiClangCompileOptimizationFlag": "-O3",
         "WasiBitcodeCompileOptimizationFlag": "-O3",
         "WasiClangLinkOptimizationFlag": "-O3",
-        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0-rc.3.26522.148/tools/mono-aot-cross"
+        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0/tools/mono-aot-cross"
       },
       "sourceSha256": "07706af589cdca22c854154a685466764bb4c7caa35b51a19ba79f6bd46f2433",
-      "wasmSha256": "2ce558d7769056de191f93c437170e6cf9138886be3f4e33b393b4925a235fac",
-      "wasmBytes": 12447467,
+      "wasmSha256": "155c7fa1c1abb6fe1bedfd33a3388db57ed54cd85914dbbf4c500f6b3ba647c5",
+      "wasmBytes": 12457730,
       "aotModule": "mono_aot_module_Benchmark_info",
       "registeredAotModules": 9,
-      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-closed-explicit/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include\"\n-g\n",
+      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-closed-explicit/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include\"\n-g\n",
       "httpSdkWorkaround": "Unused missing HTTP world only; fails if System.Net.Http is bundled."
     },
     "csharp-closed-inferred-wasi": {
@@ -74,14 +74,14 @@
         "WasiClangCompileOptimizationFlag": "-O3",
         "WasiBitcodeCompileOptimizationFlag": "-O3",
         "WasiClangLinkOptimizationFlag": "-O3",
-        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0-rc.3.26522.148/tools/mono-aot-cross"
+        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0/tools/mono-aot-cross"
       },
       "sourceSha256": "54af59539e6537153d8b07865dd6220b218283a71bc73dd81e8f7ee204346aec",
-      "wasmSha256": "9d6fab79b26d49bd00e8907423f70b903a8fc5881e3067228c5614a7b22bb117",
-      "wasmBytes": 12447476,
+      "wasmSha256": "9735da4ca9a69864751e381f355a7632f88d82a7269cb088f38f99091d3672fd",
+      "wasmBytes": 12457739,
       "aotModule": "mono_aot_module_Benchmark_info",
       "registeredAotModules": 9,
-      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-closed-inferred/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include\"\n-g\n",
+      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-closed-inferred/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include\"\n-g\n",
       "httpSdkWorkaround": "Unused missing HTTP world only; fails if System.Net.Http is bundled."
     },
     "csharp-union-custom-wasi": {
@@ -102,14 +102,14 @@
         "WasiClangCompileOptimizationFlag": "-O3",
         "WasiBitcodeCompileOptimizationFlag": "-O3",
         "WasiClangLinkOptimizationFlag": "-O3",
-        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0-rc.3.26522.148/tools/mono-aot-cross"
+        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0/tools/mono-aot-cross"
       },
       "sourceSha256": "815263b15d0f88f563305214a9b0c21b7776e74b8119a1006d5046c88cbeda04",
-      "wasmSha256": "5d64d40d42fe2f820f5992724d59d65ced1b9b12406d79f99d228677e16ff800",
-      "wasmBytes": 12670842,
+      "wasmSha256": "9e67349c01d9fa69c934589b98321979cd46fa915a19f9045598c97f8708ca97",
+      "wasmBytes": 12681011,
       "aotModule": "mono_aot_module_Benchmark_info",
       "registeredAotModules": 11,
-      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-union-custom/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include\"\n-g\n",
+      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-union-custom/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include\"\n-g\n",
       "httpSdkWorkaround": "Unused missing HTTP world only; fails if System.Net.Http is bundled."
     },
     "csharp-union-generated-wasi": {
@@ -130,14 +130,14 @@
         "WasiClangCompileOptimizationFlag": "-O3",
         "WasiBitcodeCompileOptimizationFlag": "-O3",
         "WasiClangLinkOptimizationFlag": "-O3",
-        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0-rc.3.26522.148/tools/mono-aot-cross"
+        "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0/tools/mono-aot-cross"
       },
       "sourceSha256": "3b9257ffbef9bcda2d755d95ee87750cc7153d511eed6019252f4ece8ca57c00",
-      "wasmSha256": "89717c590d6635869175f55fa8ec0f1f0ea36c0e43a0f3516dd52a4def3280a5",
-      "wasmBytes": 12967290,
+      "wasmSha256": "4a077c5b9296743b62105d67ff8aa27de4294ec7b725ffc0bf642d694b5caaa4",
+      "wasmBytes": 12977587,
       "aotModule": "mono_aot_module_Benchmark_info",
       "registeredAotModules": 11,
-      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-union-generated/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0-rc.3.26522.148/runtimes/wasi-wasm/native/include\"\n-g\n",
+      "compileFlags": "-DGEN_PINVOKE=1\n-DENABLE_AOT=1\n-DDRIVER_GEN=1\n-DLINK_ICALLS=1\n\"-I/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/union100/.build/wasi-comparison/wasi/csharp-union-generated/obj/Release/net11.0/wasi-wasm/wasm/for-publish\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/mono-2.0\"\n\"-I/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include/wasm\"\n-I\"/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.wasi-wasm/11.0.0/runtimes/wasi-wasm/native/include\"\n-g\n",
       "httpSdkWorkaround": "Unused missing HTTP world only; fails if System.Net.Http is bundled."
     }
   },
@@ -147,11 +147,11 @@
     "rust": "opt-level=3, fat LTO, codegen-units=1, host native ISA / Wasm SIMD",
     "wasmtime": "opt-level=2"
   },
-  "timestampUtc": "2026-11-10T07:45:34.600814+00:00",
+  "timestampUtc": "2026-11-10T19:37:14.930193+00:00",
   "platform": "macOS-15.7.9-x86_64-i386-64bit-Mach-O",
   "machine": "x86_64",
   "buildKey": {
-    "source": "5ff27bc426f6137b2cd05facf8ed014538a7a55cde118e06d6162d0e8f7fc98c",
+    "source": "2358ee1bf4ac0129cfff7cea3eb8c1c3c8f8bf39405a49efc37f90d6069dfa90",
     "names": [
       "csharp-abstract",
       "csharp-closed-explicit",
@@ -172,8 +172,8 @@
   "nodesPerBatch": 600000,
   "samples": 5,
   "toolchains": {
-    "dotnet": "11.0.100-rc.3.26522.148",
-    "wasi-dotnet": "11.0.100-rc.3.26522.148",
+    "dotnet": "11.0.100",
+    "wasi-dotnet": "11.0.100",
     "rust": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
     "wasmtime": "wasmtime 41.0.1 (c30fce86b 2026-01-26)"
   },
@@ -261,47 +261,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 1.332582995,
-          "decodeSeconds": 3.964487964,
-          "switchSeconds": 0.242809711,
-          "totalSeconds": 5.53988067,
+          "encodeSeconds": 1.319446743,
+          "decodeSeconds": 4.189548271,
+          "switchSeconds": 0.216344681,
+          "totalSeconds": 5.725339695,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.731050584,
-          "decodeSeconds": 3.326336214,
-          "switchSeconds": 0.701489871,
-          "totalSeconds": 4.758876669,
+          "encodeSeconds": 0.816954446,
+          "decodeSeconds": 3.960718239,
+          "switchSeconds": 0.700574254,
+          "totalSeconds": 5.478246939,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.700540006,
-          "decodeSeconds": 3.377112486,
-          "switchSeconds": 0.263293345,
-          "totalSeconds": 4.340945837,
+          "encodeSeconds": 0.807633062,
+          "decodeSeconds": 3.886110199,
+          "switchSeconds": 0.254095187,
+          "totalSeconds": 4.947838448,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.808022475,
-          "decodeSeconds": 3.40886477,
-          "switchSeconds": 0.217338127,
-          "totalSeconds": 4.434225372,
+          "encodeSeconds": 0.901425653,
+          "decodeSeconds": 3.974620132,
+          "switchSeconds": 0.24098059,
+          "totalSeconds": 5.117026375,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.679393171,
-          "decodeSeconds": 4.244419502,
-          "switchSeconds": 0.244126314,
-          "totalSeconds": 5.167938987,
+          "encodeSeconds": 1.083288146,
+          "decodeSeconds": 11.504064363,
+          "switchSeconds": 0.524610445,
+          "totalSeconds": 13.111962954,
           "bytes": 86602883
         }
       ],
-      "startupSeconds": 0.05375054199976148,
-      "preparationSeconds": 1.5469538590000411,
-      "workAndValidationSeconds": 25.08145641300007,
-      "exitSeconds": 0.1719066489999932,
-      "wallSeconds": 26.854067462999865,
-      "peakRssBytes": 2256265216
+      "startupSeconds": 0.05038849599986861,
+      "preparationSeconds": 1.4889316970002255,
+      "workAndValidationSeconds": 35.25906770499978,
+      "exitSeconds": 0.2751027869999234,
+      "wallSeconds": 37.0734906849998,
+      "peakRssBytes": 2264453120
     },
     "csharp-closed-explicit-native": {
       "roots": 200000,
@@ -309,47 +309,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 1.038078356,
-          "decodeSeconds": 3.468673005,
-          "switchSeconds": 0.212520082,
-          "totalSeconds": 4.719271443,
+          "encodeSeconds": 1.495372761,
+          "decodeSeconds": 4.588809583,
+          "switchSeconds": 0.195134621,
+          "totalSeconds": 6.279316965,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.733705489,
-          "decodeSeconds": 3.085232903,
-          "switchSeconds": 0.685763897,
-          "totalSeconds": 4.504702289,
+          "encodeSeconds": 0.789625538,
+          "decodeSeconds": 3.664204406,
+          "switchSeconds": 0.731197559,
+          "totalSeconds": 5.185027503,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.676540393,
-          "decodeSeconds": 3.161945696,
-          "switchSeconds": 0.222016609,
-          "totalSeconds": 4.060502698,
+          "encodeSeconds": 0.836811226,
+          "decodeSeconds": 3.979254471,
+          "switchSeconds": 0.254828625,
+          "totalSeconds": 5.070894322,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.678311173,
-          "decodeSeconds": 3.009046445,
-          "switchSeconds": 0.208040474,
-          "totalSeconds": 3.895398092,
+          "encodeSeconds": 0.646579601,
+          "decodeSeconds": 2.748079252,
+          "switchSeconds": 0.187112507,
+          "totalSeconds": 3.58177136,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.736044861,
-          "decodeSeconds": 3.543413992,
-          "switchSeconds": 0.210477007,
-          "totalSeconds": 4.48993586,
+          "encodeSeconds": 0.62658687,
+          "decodeSeconds": 4.316231595,
+          "switchSeconds": 0.27182609,
+          "totalSeconds": 5.214644555,
           "bytes": 86602883
         }
       ],
-      "startupSeconds": 0.042124564000005194,
-      "preparationSeconds": 1.417626792000192,
-      "workAndValidationSeconds": 22.47683049599982,
-      "exitSeconds": 0.16872024099984628,
-      "wallSeconds": 24.105302092999864,
-      "peakRssBytes": 2255884288
+      "startupSeconds": 0.04917478900006245,
+      "preparationSeconds": 1.7690518210001756,
+      "workAndValidationSeconds": 26.080608459999894,
+      "exitSeconds": 0.1539927369999532,
+      "wallSeconds": 28.052827807000085,
+      "peakRssBytes": 2258038784
     },
     "csharp-closed-inferred-native": {
       "roots": 200000,
@@ -357,47 +357,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 1.087508949,
-          "decodeSeconds": 3.07989221,
-          "switchSeconds": 0.185969946,
-          "totalSeconds": 4.353371105,
+          "encodeSeconds": 1.225007295,
+          "decodeSeconds": 4.201890862,
+          "switchSeconds": 0.235564277,
+          "totalSeconds": 5.662462434,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.613207258,
-          "decodeSeconds": 2.787851915,
-          "switchSeconds": 0.621507561,
-          "totalSeconds": 4.022566734,
+          "encodeSeconds": 0.777239492,
+          "decodeSeconds": 3.941086116,
+          "switchSeconds": 0.690519448,
+          "totalSeconds": 5.408845056,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.568129055,
-          "decodeSeconds": 2.822854443,
-          "switchSeconds": 0.209875815,
-          "totalSeconds": 3.600859313,
+          "encodeSeconds": 0.669517712,
+          "decodeSeconds": 3.944651913,
+          "switchSeconds": 0.271351066,
+          "totalSeconds": 4.885520691,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.601492111,
-          "decodeSeconds": 2.976331611,
-          "switchSeconds": 0.196306868,
-          "totalSeconds": 3.77413059,
+          "encodeSeconds": 0.971681467,
+          "decodeSeconds": 4.333041121,
+          "switchSeconds": 0.218709654,
+          "totalSeconds": 5.523432242,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 0.63535884,
-          "decodeSeconds": 3.46968835,
-          "switchSeconds": 0.210194179,
-          "totalSeconds": 4.315241369,
+          "encodeSeconds": 0.689197074,
+          "decodeSeconds": 4.107131302,
+          "switchSeconds": 0.265790167,
+          "totalSeconds": 5.062118543,
           "bytes": 86602883
         }
       ],
-      "startupSeconds": 0.02929300300002069,
-      "preparationSeconds": 1.2308460270000978,
-      "workAndValidationSeconds": 20.753645175999736,
-      "exitSeconds": 0.1873625550001634,
-      "wallSeconds": 22.201146761000018,
-      "peakRssBytes": 2254643200
+      "startupSeconds": 0.07159407500012094,
+      "preparationSeconds": 1.4280293110000457,
+      "workAndValidationSeconds": 27.559419959000024,
+      "exitSeconds": 0.20120896999969773,
+      "wallSeconds": 29.26025231499989,
+      "peakRssBytes": 2257956864
     },
     "csharp-union-custom-native": {
       "roots": 200000,
@@ -405,47 +405,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 0.735747577,
-          "decodeSeconds": 6.085996021,
-          "switchSeconds": 0.204146216,
-          "totalSeconds": 7.025889814,
+          "encodeSeconds": 1.037843668,
+          "decodeSeconds": 9.131355569,
+          "switchSeconds": 0.287067272,
+          "totalSeconds": 10.456266509,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 0.59310556,
-          "decodeSeconds": 7.304833113,
-          "switchSeconds": 0.282826422,
-          "totalSeconds": 8.180765095,
+          "encodeSeconds": 0.677895782,
+          "decodeSeconds": 7.56143106,
+          "switchSeconds": 0.472423923,
+          "totalSeconds": 8.711750765,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 0.696712312,
-          "decodeSeconds": 6.549153166,
-          "switchSeconds": 0.233551102,
-          "totalSeconds": 7.47941658,
+          "encodeSeconds": 0.629686279,
+          "decodeSeconds": 6.452598137,
+          "switchSeconds": 0.196724786,
+          "totalSeconds": 7.279009202,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 0.606623423,
-          "decodeSeconds": 7.17700137,
-          "switchSeconds": 0.861472045,
-          "totalSeconds": 8.645096838,
+          "encodeSeconds": 0.544202038,
+          "decodeSeconds": 6.438436381,
+          "switchSeconds": 0.215082809,
+          "totalSeconds": 7.197721228,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 0.649465099,
-          "decodeSeconds": 7.381230985,
-          "switchSeconds": 0.229706244,
-          "totalSeconds": 8.260402328,
+          "encodeSeconds": 0.608209996,
+          "decodeSeconds": 15.612319516,
+          "switchSeconds": 0.195277296,
+          "totalSeconds": 16.415806808,
           "bytes": 92002883
         }
       ],
-      "startupSeconds": 0.03327875600007246,
-      "preparationSeconds": 1.2258135519996358,
-      "workAndValidationSeconds": 40.22730440700025,
-      "exitSeconds": 0.20392127100012658,
-      "wallSeconds": 41.69031798600008,
-      "peakRssBytes": 2118012928
+      "startupSeconds": 0.07684400900006949,
+      "preparationSeconds": 1.5317014749998634,
+      "workAndValidationSeconds": 50.77797767099992,
+      "exitSeconds": 0.15007858599983592,
+      "wallSeconds": 52.536601740999686,
+      "peakRssBytes": 2328207360
     },
     "csharp-union-generated-native": {
       "roots": 200000,
@@ -453,47 +453,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 1.372068061,
-          "decodeSeconds": 7.022474081,
-          "switchSeconds": 0.209762044,
-          "totalSeconds": 8.604304186,
+          "encodeSeconds": 1.643436675,
+          "decodeSeconds": 8.880948926,
+          "switchSeconds": 0.246314457,
+          "totalSeconds": 10.770700058,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 0.969979405,
-          "decodeSeconds": 7.610898764,
-          "switchSeconds": 0.240849168,
-          "totalSeconds": 8.821727337,
+          "encodeSeconds": 1.442815236,
+          "decodeSeconds": 8.233342879,
+          "switchSeconds": 0.208658362,
+          "totalSeconds": 9.884816477,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 0.915259931,
-          "decodeSeconds": 6.647491227,
-          "switchSeconds": 0.232287537,
-          "totalSeconds": 7.795038695,
+          "encodeSeconds": 1.029464237,
+          "decodeSeconds": 8.875993433,
+          "switchSeconds": 0.41561744,
+          "totalSeconds": 10.32107511,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 1.123334152,
-          "decodeSeconds": 6.448334288,
-          "switchSeconds": 0.203476658,
-          "totalSeconds": 7.775145098,
+          "encodeSeconds": 1.295046751,
+          "decodeSeconds": 8.33114889,
+          "switchSeconds": 0.245672884,
+          "totalSeconds": 9.871868525,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 0.998147291,
-          "decodeSeconds": 7.674219657,
-          "switchSeconds": 0.650443479,
-          "totalSeconds": 9.322810427,
+          "encodeSeconds": 1.129584062,
+          "decodeSeconds": 8.683492287,
+          "switchSeconds": 0.231484255,
+          "totalSeconds": 10.044560604,
           "bytes": 92002883
         }
       ],
-      "startupSeconds": 0.03240094100010538,
-      "preparationSeconds": 1.2617140970000946,
-      "workAndValidationSeconds": 43.38388360599993,
-      "exitSeconds": 0.13509340500013423,
-      "wallSeconds": 44.81309204900026,
-      "peakRssBytes": 2263519232
+      "startupSeconds": 0.07626889200037112,
+      "preparationSeconds": 1.570638766999764,
+      "workAndValidationSeconds": 52.20526609400031,
+      "exitSeconds": 0.15624154299985094,
+      "wallSeconds": 54.008415296000294,
+      "peakRssBytes": 2287493120
     },
     "csharp-abstract-wasi": {
       "roots": 200000,
@@ -501,47 +501,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 3.318627069,
-          "decodeSeconds": 15.911492364,
-          "switchSeconds": 4.658606432,
-          "totalSeconds": 23.888725865,
+          "encodeSeconds": 3.860391787,
+          "decodeSeconds": 17.003844338,
+          "switchSeconds": 3.718695368,
+          "totalSeconds": 24.582931493,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.987449676,
-          "decodeSeconds": 15.056254165,
-          "switchSeconds": 3.505951772,
-          "totalSeconds": 21.549655613,
+          "encodeSeconds": 3.187690437,
+          "decodeSeconds": 17.589407906,
+          "switchSeconds": 5.062383753,
+          "totalSeconds": 25.839482096,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.601728449,
-          "decodeSeconds": 14.289211813,
-          "switchSeconds": 4.121691072,
-          "totalSeconds": 21.012631334,
+          "encodeSeconds": 3.989019903,
+          "decodeSeconds": 17.8224211,
+          "switchSeconds": 4.900076714,
+          "totalSeconds": 26.711517717,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.625140551,
-          "decodeSeconds": 16.21448204,
-          "switchSeconds": 4.894842852,
-          "totalSeconds": 23.734465443,
+          "encodeSeconds": 3.70009866,
+          "decodeSeconds": 17.405432756,
+          "switchSeconds": 4.667240671,
+          "totalSeconds": 25.772772087,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 4.299549335,
-          "decodeSeconds": 15.094776728,
-          "switchSeconds": 3.942244736,
-          "totalSeconds": 23.336570799,
+          "encodeSeconds": 3.36543574,
+          "decodeSeconds": 18.809808632,
+          "switchSeconds": 4.578728985,
+          "totalSeconds": 26.753973357,
           "bytes": 86602883
         }
       ],
-      "startupSeconds": 11.55294050700013,
-      "preparationSeconds": 6.2231275089998235,
-      "workAndValidationSeconds": 116.56329640800004,
-      "exitSeconds": 2.4844729080000434,
-      "wallSeconds": 136.82383733200004,
-      "peakRssBytes": 2319159296
+      "startupSeconds": 14.11315926999987,
+      "preparationSeconds": 7.760429734999889,
+      "workAndValidationSeconds": 133.29604744100016,
+      "exitSeconds": 3.1284219099998154,
+      "wallSeconds": 158.29805835599973,
+      "peakRssBytes": 2256904192
     },
     "csharp-closed-explicit-wasi": {
       "roots": 200000,
@@ -549,47 +549,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 2.93732442,
-          "decodeSeconds": 13.405318077,
-          "switchSeconds": 3.439603619,
-          "totalSeconds": 19.782246116,
+          "encodeSeconds": 4.626051466,
+          "decodeSeconds": 18.193338196,
+          "switchSeconds": 4.020727267,
+          "totalSeconds": 26.840116929,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.180563942,
-          "decodeSeconds": 13.023772955,
-          "switchSeconds": 3.468730879,
-          "totalSeconds": 18.673067776,
+          "encodeSeconds": 2.870943364,
+          "decodeSeconds": 14.221945243,
+          "switchSeconds": 4.357485546,
+          "totalSeconds": 21.450374153,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.809128334,
-          "decodeSeconds": 13.787772992,
-          "switchSeconds": 4.228578253,
-          "totalSeconds": 20.825479579,
+          "encodeSeconds": 2.767704828,
+          "decodeSeconds": 15.969621872,
+          "switchSeconds": 5.163793828,
+          "totalSeconds": 23.901120528,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 3.284143406,
-          "decodeSeconds": 15.074307972,
-          "switchSeconds": 3.415769911,
-          "totalSeconds": 21.774221289,
+          "encodeSeconds": 3.581355929,
+          "decodeSeconds": 19.172277308,
+          "switchSeconds": 4.78475846,
+          "totalSeconds": 27.538391697,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.464714003,
-          "decodeSeconds": 12.991453864,
-          "switchSeconds": 3.599562501,
-          "totalSeconds": 19.055730368,
+          "encodeSeconds": 3.077891386,
+          "decodeSeconds": 17.376280727,
+          "switchSeconds": 5.481032646,
+          "totalSeconds": 25.935204759,
           "bytes": 86602883
         }
       ],
-      "startupSeconds": 12.39642523700013,
-      "preparationSeconds": 6.03127880699958,
-      "workAndValidationSeconds": 102.7125571800002,
-      "exitSeconds": 2.644425993999903,
-      "wallSeconds": 123.78468721799982,
-      "peakRssBytes": 2258931712
+      "startupSeconds": 18.930834351999692,
+      "preparationSeconds": 8.02587267600029,
+      "workAndValidationSeconds": 129.18046914499973,
+      "exitSeconds": 3.173584728000151,
+      "wallSeconds": 159.31076090099987,
+      "peakRssBytes": 2253160448
     },
     "csharp-closed-inferred-wasi": {
       "roots": 200000,
@@ -597,47 +597,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 2.710063901,
-          "decodeSeconds": 12.576366058,
-          "switchSeconds": 3.694706237,
-          "totalSeconds": 18.981136196,
+          "encodeSeconds": 3.95709566,
+          "decodeSeconds": 17.617830282,
+          "switchSeconds": 3.593165566,
+          "totalSeconds": 25.168091508,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.1975233,
-          "decodeSeconds": 12.622163603,
-          "switchSeconds": 3.422839799,
-          "totalSeconds": 18.242526702,
+          "encodeSeconds": 3.335123391,
+          "decodeSeconds": 13.64515155,
+          "switchSeconds": 3.678236101,
+          "totalSeconds": 20.658511042,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.415217948,
-          "decodeSeconds": 13.781631783,
-          "switchSeconds": 4.008421684,
-          "totalSeconds": 20.205271415,
+          "encodeSeconds": 3.503394339,
+          "decodeSeconds": 13.814127242,
+          "switchSeconds": 4.143263667,
+          "totalSeconds": 21.460785248,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 2.719201679,
-          "decodeSeconds": 14.01288242,
-          "switchSeconds": 4.055396269,
-          "totalSeconds": 20.787480368,
+          "encodeSeconds": 3.715199758,
+          "decodeSeconds": 15.612505391,
+          "switchSeconds": 3.78982341,
+          "totalSeconds": 23.117528559,
           "bytes": 86602883
         },
         {
-          "encodeSeconds": 3.16824444,
-          "decodeSeconds": 14.091057896,
-          "switchSeconds": 3.566299363,
-          "totalSeconds": 20.825601699,
+          "encodeSeconds": 3.043680054,
+          "decodeSeconds": 11.671117859,
+          "switchSeconds": 3.26901684,
+          "totalSeconds": 17.983814753,
           "bytes": 86602883
         }
       ],
-      "startupSeconds": 9.611408105999999,
-      "preparationSeconds": 4.990157214000192,
-      "workAndValidationSeconds": 101.71492889799993,
-      "exitSeconds": 2.518045104000066,
-      "wallSeconds": 118.83453932200018,
-      "peakRssBytes": 2310189056
+      "startupSeconds": 13.093533827999636,
+      "preparationSeconds": 7.120338967999942,
+      "workAndValidationSeconds": 111.8410210230004,
+      "exitSeconds": 2.172281910000038,
+      "wallSeconds": 134.227175729,
+      "peakRssBytes": 2218831872
     },
     "csharp-union-custom-wasi": {
       "roots": 200000,
@@ -645,47 +645,47 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 3.404156399,
-          "decodeSeconds": 25.578628365,
-          "switchSeconds": 3.650293268,
-          "totalSeconds": 32.633078032,
+          "encodeSeconds": 4.218870631,
+          "decodeSeconds": 32.104603125,
+          "switchSeconds": 3.680592162,
+          "totalSeconds": 40.004065918,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 3.552596452,
-          "decodeSeconds": 29.257273429,
-          "switchSeconds": 3.93772192,
-          "totalSeconds": 36.747591801,
+          "encodeSeconds": 3.149558949,
+          "decodeSeconds": 33.729414174,
+          "switchSeconds": 5.333032502,
+          "totalSeconds": 42.212005625,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 2.894063444,
-          "decodeSeconds": 28.76844341,
-          "switchSeconds": 3.954182582,
-          "totalSeconds": 35.616689436,
+          "encodeSeconds": 4.599045678,
+          "decodeSeconds": 36.644444679,
+          "switchSeconds": 4.841051997,
+          "totalSeconds": 46.084542354,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 3.079836059,
-          "decodeSeconds": 26.028087881,
-          "switchSeconds": 4.321972313,
-          "totalSeconds": 33.429896253,
+          "encodeSeconds": 4.001054968,
+          "decodeSeconds": 27.958602793,
+          "switchSeconds": 3.825674724,
+          "totalSeconds": 35.785332485,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 3.797686172,
-          "decodeSeconds": 33.262792993,
-          "switchSeconds": 4.006546123,
-          "totalSeconds": 41.067025288,
+          "encodeSeconds": 3.39031573,
+          "decodeSeconds": 32.815733025,
+          "switchSeconds": 4.991918758,
+          "totalSeconds": 41.197967513,
           "bytes": 92002883
         }
       ],
-      "startupSeconds": 10.217302948999986,
-      "preparationSeconds": 5.558687645000191,
-      "workAndValidationSeconds": 183.31096262799974,
-      "exitSeconds": 2.6117471900001874,
-      "wallSeconds": 201.6987004120001,
-      "peakRssBytes": 2512711680
+      "startupSeconds": 9.5111936899998,
+      "preparationSeconds": 6.184460174999913,
+      "workAndValidationSeconds": 208.34971603600025,
+      "exitSeconds": 3.079841446000046,
+      "wallSeconds": 227.125211347,
+      "peakRssBytes": 2482651136
     },
     "csharp-union-generated-wasi": {
       "roots": 200000,
@@ -693,314 +693,314 @@
       "sink": 1500793335670,
       "measurements": [
         {
-          "encodeSeconds": 10.966378189,
-          "decodeSeconds": 27.737891568,
-          "switchSeconds": 4.167850531,
-          "totalSeconds": 42.872120288,
+          "encodeSeconds": 12.821892195,
+          "decodeSeconds": 39.083786384,
+          "switchSeconds": 4.875840223,
+          "totalSeconds": 56.781518802,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 13.177439254,
-          "decodeSeconds": 30.552163333,
-          "switchSeconds": 4.367259614,
-          "totalSeconds": 48.096862201,
+          "encodeSeconds": 16.181823742,
+          "decodeSeconds": 37.887249451,
+          "switchSeconds": 4.216907238,
+          "totalSeconds": 58.285980431,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 12.168654778,
-          "decodeSeconds": 30.811335147,
-          "switchSeconds": 4.354692698,
-          "totalSeconds": 47.334682623,
+          "encodeSeconds": 14.814144396,
+          "decodeSeconds": 38.975558564,
+          "switchSeconds": 4.335417388,
+          "totalSeconds": 58.125120348,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 10.146096977,
-          "decodeSeconds": 29.718302754,
-          "switchSeconds": 4.255275096,
-          "totalSeconds": 44.119674827,
+          "encodeSeconds": 9.858328148,
+          "decodeSeconds": 32.159659193,
+          "switchSeconds": 3.443099624,
+          "totalSeconds": 45.461086965,
           "bytes": 92002883
         },
         {
-          "encodeSeconds": 9.402867539,
-          "decodeSeconds": 27.402221483,
-          "switchSeconds": 3.75352243,
-          "totalSeconds": 40.558611452,
+          "encodeSeconds": 12.501642772,
+          "decodeSeconds": 37.569391881,
+          "switchSeconds": 4.826759659,
+          "totalSeconds": 54.897794312,
           "bytes": 92002883
         }
       ],
-      "startupSeconds": 12.578685426999982,
-      "preparationSeconds": 6.672850348000338,
-      "workAndValidationSeconds": 236.34983228400006,
-      "exitSeconds": 3.445234406999589,
-      "wallSeconds": 259.04660246599997,
-      "peakRssBytes": 2589904896
+      "startupSeconds": 14.592471271999784,
+      "preparationSeconds": 7.2520707170001515,
+      "workAndValidationSeconds": 288.63518504500007,
+      "exitSeconds": 3.7451715899997,
+      "wallSeconds": 314.2248986239997,
+      "peakRssBytes": 2353762304
     },
     "rust-native": {
       "measurements": [
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.96407077,
-          "encodeSeconds": 0.376855116,
-          "switchSeconds": 0.030892167000000192,
-          "totalSeconds": 2.371818053
+          "decodeSeconds": 2.592065657,
+          "encodeSeconds": 0.503983677,
+          "switchSeconds": 0.033094989999999935,
+          "totalSeconds": 3.129144324
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.9999857829999999,
-          "encodeSeconds": 0.328791215,
-          "switchSeconds": 0.03478625699999993,
-          "totalSeconds": 2.363563255
+          "decodeSeconds": 2.8490575490000003,
+          "encodeSeconds": 0.419993391,
+          "switchSeconds": 0.04167278800000007,
+          "totalSeconds": 3.310723728
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.9965597259999999,
-          "encodeSeconds": 0.327556244,
-          "switchSeconds": 0.03291496600000032,
-          "totalSeconds": 2.357030936
+          "decodeSeconds": 2.4618192629999998,
+          "encodeSeconds": 0.440402379,
+          "switchSeconds": 0.042489740000000165,
+          "totalSeconds": 2.944711382
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.9326998519999998,
-          "encodeSeconds": 0.327186325,
-          "switchSeconds": 0.03484052900000023,
-          "totalSeconds": 2.294726706
+          "decodeSeconds": 2.377937428,
+          "encodeSeconds": 0.40538359,
+          "switchSeconds": 0.03756891899999992,
+          "totalSeconds": 2.820889937
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 4.215348617,
-          "encodeSeconds": 0.319470124,
-          "switchSeconds": 0.09239877799999974,
-          "totalSeconds": 4.627217519
+          "decodeSeconds": 2.6376705009999997,
+          "encodeSeconds": 0.434719096,
+          "switchSeconds": 0.04420643000000002,
+          "totalSeconds": 3.116596027
         }
       ],
       "roots": 200000,
       "samples": 5,
       "sink": 1500793335670,
-      "startupSeconds": 0.013573126999745,
-      "preparationSeconds": 0.9216845000000831,
-      "workAndValidationSeconds": 16.254578969999784,
-      "exitSeconds": 0.5057562110000617,
-      "wallSeconds": 17.695592807999674,
-      "peakRssBytes": 1250742272
+      "startupSeconds": 0.054950724999798695,
+      "preparationSeconds": 0.9784436300001289,
+      "workAndValidationSeconds": 18.405308457000046,
+      "exitSeconds": 0.5448887400002604,
+      "wallSeconds": 19.983591552000235,
+      "peakRssBytes": 1269473280
     },
     "rust-wasi": {
       "measurements": [
         {
           "bytes": 86602883,
-          "decodeSeconds": 2.326925906,
-          "encodeSeconds": 0.663495643,
-          "switchSeconds": 0.03696156100000003,
-          "totalSeconds": 3.02738311
+          "decodeSeconds": 2.328597888,
+          "encodeSeconds": 0.768672643,
+          "switchSeconds": 0.04129258700000005,
+          "totalSeconds": 3.138563118
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.7976025660000001,
-          "encodeSeconds": 0.534890495,
-          "switchSeconds": 0.034427191999999884,
-          "totalSeconds": 2.366920253
+          "decodeSeconds": 2.127825296,
+          "encodeSeconds": 0.592025428,
+          "switchSeconds": 0.03604635899999975,
+          "totalSeconds": 2.755897083
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.6095032729999998,
-          "encodeSeconds": 0.565679225,
-          "switchSeconds": 0.029824751000000038,
-          "totalSeconds": 2.205007249
+          "decodeSeconds": 1.815722133,
+          "encodeSeconds": 0.722966247,
+          "switchSeconds": 0.026796097000000074,
+          "totalSeconds": 2.565484477
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.6079268310000001,
-          "encodeSeconds": 0.561648481,
-          "switchSeconds": 0.0322282490000001,
-          "totalSeconds": 2.201803561
+          "decodeSeconds": 1.7120478010000002,
+          "encodeSeconds": 0.668143379,
+          "switchSeconds": 0.0438273859999998,
+          "totalSeconds": 2.424018566
         },
         {
           "bytes": 86602883,
-          "decodeSeconds": 1.557890619,
-          "encodeSeconds": 0.539994957,
-          "switchSeconds": 0.03266627,
-          "totalSeconds": 2.130551846
+          "decodeSeconds": 1.884406769,
+          "encodeSeconds": 0.618816066,
+          "switchSeconds": 0.033580420999999916,
+          "totalSeconds": 2.536803256
         }
       ],
       "roots": 200000,
       "samples": 5,
       "sink": 1500793335670,
-      "startupSeconds": 0.25745275000008405,
-      "preparationSeconds": 0.39206354599991755,
-      "workAndValidationSeconds": 13.348270627000147,
-      "exitSeconds": 0.1562172669996471,
-      "wallSeconds": 14.154004189999796,
-      "peakRssBytes": 946749440
+      "startupSeconds": 0.31218486799980383,
+      "preparationSeconds": 0.43684190200019657,
+      "workAndValidationSeconds": 15.047854392999852,
+      "exitSeconds": 0.1660447210001621,
+      "wallSeconds": 15.962925884000015,
+      "peakRssBytes": 946528256
     }
   },
   "errors": {},
   "summary": [
     {
       "implementation": "csharp-abstract-native",
-      "medianSeconds": 4.758876669,
-      "encodeMedianSeconds": 0.731050584,
-      "decodeMedianSeconds": 3.40886477,
-      "switchMedianSeconds": 0.244126314,
-      "aggregateSeconds": 24.241867535,
+      "medianSeconds": 5.478246939,
+      "encodeMedianSeconds": 0.901425653,
+      "decodeMedianSeconds": 3.974620132,
+      "switchMedianSeconds": 0.254095187,
+      "aggregateSeconds": 34.380414411,
       "bytes": 86602883,
-      "peakRssMiB": 2151.7421875,
-      "startupSeconds": 0.05375054199976148,
-      "preparationSeconds": 1.5469538590000411,
-      "exitSeconds": 0.1719066489999932,
-      "wallSeconds": 26.854067462999865
+      "peakRssMiB": 2159.55078125,
+      "startupSeconds": 0.05038849599986861,
+      "preparationSeconds": 1.4889316970002255,
+      "exitSeconds": 0.2751027869999234,
+      "wallSeconds": 37.0734906849998
     },
     {
       "implementation": "csharp-closed-explicit-native",
-      "medianSeconds": 4.48993586,
-      "encodeMedianSeconds": 0.733705489,
-      "decodeMedianSeconds": 3.161945696,
-      "switchMedianSeconds": 0.212520082,
-      "aggregateSeconds": 21.669810382,
+      "medianSeconds": 5.185027503,
+      "encodeMedianSeconds": 0.789625538,
+      "decodeMedianSeconds": 3.979254471,
+      "switchMedianSeconds": 0.254828625,
+      "aggregateSeconds": 25.331654705,
       "bytes": 86602883,
-      "peakRssMiB": 2151.37890625,
-      "startupSeconds": 0.042124564000005194,
-      "preparationSeconds": 1.417626792000192,
-      "exitSeconds": 0.16872024099984628,
-      "wallSeconds": 24.105302092999864
+      "peakRssMiB": 2153.43359375,
+      "startupSeconds": 0.04917478900006245,
+      "preparationSeconds": 1.7690518210001756,
+      "exitSeconds": 0.1539927369999532,
+      "wallSeconds": 28.052827807000085
     },
     {
       "implementation": "csharp-closed-inferred-native",
-      "medianSeconds": 4.022566734,
-      "encodeMedianSeconds": 0.613207258,
-      "decodeMedianSeconds": 2.976331611,
-      "switchMedianSeconds": 0.209875815,
-      "aggregateSeconds": 20.066169111,
+      "medianSeconds": 5.408845056,
+      "encodeMedianSeconds": 0.777239492,
+      "decodeMedianSeconds": 4.107131302,
+      "switchMedianSeconds": 0.265790167,
+      "aggregateSeconds": 26.542378966,
       "bytes": 86602883,
-      "peakRssMiB": 2150.1953125,
-      "startupSeconds": 0.02929300300002069,
-      "preparationSeconds": 1.2308460270000978,
-      "exitSeconds": 0.1873625550001634,
-      "wallSeconds": 22.201146761000018
+      "peakRssMiB": 2153.35546875,
+      "startupSeconds": 0.07159407500012094,
+      "preparationSeconds": 1.4280293110000457,
+      "exitSeconds": 0.20120896999969773,
+      "wallSeconds": 29.26025231499989
     },
     {
       "implementation": "csharp-union-custom-native",
-      "medianSeconds": 8.180765095,
-      "encodeMedianSeconds": 0.649465099,
-      "decodeMedianSeconds": 7.17700137,
-      "switchMedianSeconds": 0.233551102,
-      "aggregateSeconds": 39.591570655,
+      "medianSeconds": 8.711750765,
+      "encodeMedianSeconds": 0.629686279,
+      "decodeMedianSeconds": 7.56143106,
+      "switchMedianSeconds": 0.215082809,
+      "aggregateSeconds": 50.060554511999996,
       "bytes": 92002883,
-      "peakRssMiB": 2019.89453125,
-      "startupSeconds": 0.03327875600007246,
-      "preparationSeconds": 1.2258135519996358,
-      "exitSeconds": 0.20392127100012658,
-      "wallSeconds": 41.69031798600008
+      "peakRssMiB": 2220.3515625,
+      "startupSeconds": 0.07684400900006949,
+      "preparationSeconds": 1.5317014749998634,
+      "exitSeconds": 0.15007858599983592,
+      "wallSeconds": 52.536601740999686
     },
     {
       "implementation": "csharp-union-generated-native",
-      "medianSeconds": 8.604304186,
-      "encodeMedianSeconds": 0.998147291,
-      "decodeMedianSeconds": 7.022474081,
-      "switchMedianSeconds": 0.232287537,
-      "aggregateSeconds": 42.319025743,
+      "medianSeconds": 10.044560604,
+      "encodeMedianSeconds": 1.295046751,
+      "decodeMedianSeconds": 8.683492287,
+      "switchMedianSeconds": 0.245672884,
+      "aggregateSeconds": 50.893020774,
       "bytes": 92002883,
-      "peakRssMiB": 2158.66015625,
-      "startupSeconds": 0.03240094100010538,
-      "preparationSeconds": 1.2617140970000946,
-      "exitSeconds": 0.13509340500013423,
-      "wallSeconds": 44.81309204900026
+      "peakRssMiB": 2181.5234375,
+      "startupSeconds": 0.07626889200037112,
+      "preparationSeconds": 1.570638766999764,
+      "exitSeconds": 0.15624154299985094,
+      "wallSeconds": 54.008415296000294
     },
     {
       "implementation": "csharp-abstract-wasi",
-      "medianSeconds": 23.336570799,
-      "encodeMedianSeconds": 2.987449676,
-      "decodeMedianSeconds": 15.094776728,
-      "switchMedianSeconds": 4.121691072,
-      "aggregateSeconds": 113.52204905400001,
+      "medianSeconds": 25.839482096,
+      "encodeMedianSeconds": 3.70009866,
+      "decodeMedianSeconds": 17.589407906,
+      "switchMedianSeconds": 4.667240671,
+      "aggregateSeconds": 129.66067675,
       "bytes": 86602883,
-      "peakRssMiB": 2211.72265625,
-      "startupSeconds": 11.55294050700013,
-      "preparationSeconds": 6.2231275089998235,
-      "exitSeconds": 2.4844729080000434,
-      "wallSeconds": 136.82383733200004
+      "peakRssMiB": 2152.3515625,
+      "startupSeconds": 14.11315926999987,
+      "preparationSeconds": 7.760429734999889,
+      "exitSeconds": 3.1284219099998154,
+      "wallSeconds": 158.29805835599973
     },
     {
       "implementation": "csharp-closed-explicit-wasi",
-      "medianSeconds": 19.782246116,
-      "encodeMedianSeconds": 2.809128334,
-      "decodeMedianSeconds": 13.405318077,
-      "switchMedianSeconds": 3.468730879,
-      "aggregateSeconds": 100.11074512799999,
+      "medianSeconds": 25.935204759,
+      "encodeMedianSeconds": 3.077891386,
+      "decodeMedianSeconds": 17.376280727,
+      "switchMedianSeconds": 4.78475846,
+      "aggregateSeconds": 125.665208066,
       "bytes": 86602883,
-      "peakRssMiB": 2154.28515625,
-      "startupSeconds": 12.39642523700013,
-      "preparationSeconds": 6.03127880699958,
-      "exitSeconds": 2.644425993999903,
-      "wallSeconds": 123.78468721799982
+      "peakRssMiB": 2148.78125,
+      "startupSeconds": 18.930834351999692,
+      "preparationSeconds": 8.02587267600029,
+      "exitSeconds": 3.173584728000151,
+      "wallSeconds": 159.31076090099987
     },
     {
       "implementation": "csharp-closed-inferred-wasi",
-      "medianSeconds": 20.205271415,
-      "encodeMedianSeconds": 2.710063901,
-      "decodeMedianSeconds": 13.781631783,
-      "switchMedianSeconds": 3.694706237,
-      "aggregateSeconds": 99.04201638,
+      "medianSeconds": 21.460785248,
+      "encodeMedianSeconds": 3.503394339,
+      "decodeMedianSeconds": 13.814127242,
+      "switchMedianSeconds": 3.678236101,
+      "aggregateSeconds": 108.38873111000001,
       "bytes": 86602883,
-      "peakRssMiB": 2203.16796875,
-      "startupSeconds": 9.611408105999999,
-      "preparationSeconds": 4.990157214000192,
-      "exitSeconds": 2.518045104000066,
-      "wallSeconds": 118.83453932200018
+      "peakRssMiB": 2116.04296875,
+      "startupSeconds": 13.093533827999636,
+      "preparationSeconds": 7.120338967999942,
+      "exitSeconds": 2.172281910000038,
+      "wallSeconds": 134.227175729
     },
     {
       "implementation": "csharp-union-custom-wasi",
-      "medianSeconds": 35.616689436,
-      "encodeMedianSeconds": 3.404156399,
-      "decodeMedianSeconds": 28.76844341,
-      "switchMedianSeconds": 3.954182582,
-      "aggregateSeconds": 179.49428081000002,
+      "medianSeconds": 41.197967513,
+      "encodeMedianSeconds": 4.001054968,
+      "decodeMedianSeconds": 32.815733025,
+      "switchMedianSeconds": 4.841051997,
+      "aggregateSeconds": 205.283913895,
       "bytes": 92002883,
-      "peakRssMiB": 2396.30859375,
-      "startupSeconds": 10.217302948999986,
-      "preparationSeconds": 5.558687645000191,
-      "exitSeconds": 2.6117471900001874,
-      "wallSeconds": 201.6987004120001
+      "peakRssMiB": 2367.640625,
+      "startupSeconds": 9.5111936899998,
+      "preparationSeconds": 6.184460174999913,
+      "exitSeconds": 3.079841446000046,
+      "wallSeconds": 227.125211347
     },
     {
       "implementation": "csharp-union-generated-wasi",
-      "medianSeconds": 44.119674827,
-      "encodeMedianSeconds": 10.966378189,
-      "decodeMedianSeconds": 29.718302754,
-      "switchMedianSeconds": 4.255275096,
-      "aggregateSeconds": 222.981951391,
+      "medianSeconds": 56.781518802,
+      "encodeMedianSeconds": 12.821892195,
+      "decodeMedianSeconds": 37.887249451,
+      "switchMedianSeconds": 4.335417388,
+      "aggregateSeconds": 273.551500858,
       "bytes": 92002883,
-      "peakRssMiB": 2469.92578125,
-      "startupSeconds": 12.578685426999982,
-      "preparationSeconds": 6.672850348000338,
-      "exitSeconds": 3.445234406999589,
-      "wallSeconds": 259.04660246599997
+      "peakRssMiB": 2244.72265625,
+      "startupSeconds": 14.592471271999784,
+      "preparationSeconds": 7.2520707170001515,
+      "exitSeconds": 3.7451715899997,
+      "wallSeconds": 314.2248986239997
     },
     {
       "implementation": "rust-native",
-      "medianSeconds": 2.363563255,
-      "encodeMedianSeconds": 0.327556244,
-      "decodeMedianSeconds": 1.9965597259999999,
-      "switchMedianSeconds": 0.03478625699999993,
-      "aggregateSeconds": 14.014356469,
+      "medianSeconds": 3.116596027,
+      "encodeMedianSeconds": 0.434719096,
+      "decodeMedianSeconds": 2.592065657,
+      "switchMedianSeconds": 0.04167278800000007,
+      "aggregateSeconds": 15.322065398,
       "bytes": 86602883,
-      "peakRssMiB": 1192.80078125,
-      "startupSeconds": 0.013573126999745,
-      "preparationSeconds": 0.9216845000000831,
-      "exitSeconds": 0.5057562110000617,
-      "wallSeconds": 17.695592807999674
+      "peakRssMiB": 1210.6640625,
+      "startupSeconds": 0.054950724999798695,
+      "preparationSeconds": 0.9784436300001289,
+      "exitSeconds": 0.5448887400002604,
+      "wallSeconds": 19.983591552000235
     },
     {
       "implementation": "rust-wasi",
-      "medianSeconds": 2.205007249,
-      "encodeMedianSeconds": 0.561648481,
-      "decodeMedianSeconds": 1.6095032729999998,
-      "switchMedianSeconds": 0.03266627,
-      "aggregateSeconds": 11.931666019,
+      "medianSeconds": 2.565484477,
+      "encodeMedianSeconds": 0.668143379,
+      "decodeMedianSeconds": 1.884406769,
+      "switchMedianSeconds": 0.03604635899999975,
+      "aggregateSeconds": 13.4207665,
       "bytes": 86602883,
-      "peakRssMiB": 902.890625,
-      "startupSeconds": 0.25745275000008405,
-      "preparationSeconds": 0.39206354599991755,
-      "exitSeconds": 0.1562172669996471,
-      "wallSeconds": 14.154004189999796
+      "peakRssMiB": 902.6796875,
+      "startupSeconds": 0.31218486799980383,
+      "preparationSeconds": 0.43684190200019657,
+      "exitSeconds": 0.1660447210001621,
+      "wallSeconds": 15.962925884000015
     }
   ],
   "notes": [
