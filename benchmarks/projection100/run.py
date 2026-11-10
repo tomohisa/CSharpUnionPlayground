@@ -45,7 +45,7 @@ def reference(events,aggregates,routing):
             'stateCount':len(states),'retainedItems':sum(s[9] for s in states.values()),
             'maxHistoryLength':max(s[9] for s in states.values()),'ignored':(events*9 if routing=='fanout' else 0)+10}
 
-def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,wasi_sdk):
+def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,wasi_sdk,csharp_mode="aot"):
     sources=build_dir/'sources';generator.generate(sources)
     commands={};unavailable={}
     for language in languages:
@@ -53,7 +53,9 @@ def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,
         print('Building '+language,flush=True)
         if language=='csharp':
             if 'native' in engines:
-                harness.run(['dotnet','publish',sources/'Projection.csproj','-c','Release','-r',rid,'-o',out]+(['-p:OptimizationPreference=Speed','-p:IlcInstructionSet=native'] if 'wasi' in engines else []));commands['csharp-native']=[str(out/'Projection')]
+                extra=harness.jit_publish_args(sources/'Projection.csproj') if csharp_mode=='jit-pgo' else (['-p:OptimizationPreference=Speed','-p:IlcInstructionSet=native'] if 'wasi' in engines else [])
+                harness.run(['dotnet','publish',sources/'Projection.csproj','-c','Release','-r',rid,'-o',out]+extra)
+                commands['csharp-native']=harness.jit_command(out,'Projection') if csharp_mode=='jit-pgo' else [str(out/'Projection')]
             if 'wasi' in engines:
                 try:
                     commands['csharp-wasi']=build_csharp(sources/'Projection.csproj',build_dir/'wasi-csharp',wasi_dotnet,wasi_sdk,shutil.which('wasmtime') or str(Path.home()/'.wasmtime/bin/wasmtime'))
@@ -109,6 +111,7 @@ def build(languages,engines,build_dir,rid,swift_sdk,swift_toolchain,wasi_dotnet,
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--csharp-mode',choices=['aot','jit-pgo'],default='aot')
     p.add_argument('--languages',default=','.join(LANGUAGES));p.add_argument('--engines',default='native',help='native,wasi or both comma separated')
     p.add_argument('--sizes',default='1000,10000,100000,1000000,10000000');p.add_argument('--samples',type=int,default=3)
     p.add_argument('--modes',default=','.join(MODES));p.add_argument('--profiles',default='dense,wide')
@@ -126,17 +129,18 @@ def main():
     if any(l not in LANGUAGES for l in languages)or any(e not in ['native','wasi']for e in engines)or any(m not in MODES for m in modes)or any(f not in ['dense','wide']for f in profiles)or min(sizes)<100 or args.samples<1 or args.timeout<=0 or args.max_projection_seconds<=0:p.error('Invalid implementation, engine, mode, profile or count')
     args.build_dir=args.build_dir.resolve();args.build_dir.mkdir(parents=True,exist_ok=True)
     fingerprint=hashlib.sha256()
+    fingerprint.update((HERE.parent/'native_settings.py').read_bytes())
     for path in sorted([HERE/'generate.py',HERE/'run.py',HERE.parent/'union100/run.py',HERE.parent/'wasi_support.py',REPO/'samples/file-based/package.json',REPO/'samples/file-based/package-lock.json',REPO/'global.json',*list((HERE/'templates').iterdir())]):fingerprint.update(path.read_bytes())
     wasi_dotnet=(args.wasi_dotnet or args.build_dir/'dotnet/dotnet').resolve()
     wasi_sdk=(args.wasi_sdk or args.build_dir/'tools/wasi-sdk-33.0-arm64-macos').resolve()
-    key={'source':fingerprint.hexdigest(),'languages':languages,'engines':engines,'rid':args.rid,'swiftSdk':args.swift_sdk,'swiftToolchain':args.swift_toolchain,'wasiDotnet':str(wasi_dotnet),'wasiSdk':str(wasi_sdk)}
+    key={'source':fingerprint.hexdigest(),'languages':languages,'engines':engines,'rid':args.rid,'swiftSdk':args.swift_sdk,'swiftToolchain':args.swift_toolchain,'csharpMode':args.csharp_mode,'wasiDotnet':str(wasi_dotnet),'wasiSdk':str(wasi_sdk)}
     cache=args.build_dir/'commands.json'
     if args.skip_build:
         saved=json.loads(cache.read_text())
         if saved['key']!=key:raise RuntimeError('Build configuration changed; run without --skip-build.')
         commands,unavailable=saved['commands'],saved['unavailable']
     else:
-        commands,unavailable=build(languages,engines,args.build_dir,args.rid,args.swift_sdk,args.swift_toolchain,wasi_dotnet,wasi_sdk)
+        commands,unavailable=build(languages,engines,args.build_dir,args.rid,args.swift_sdk,args.swift_toolchain,wasi_dotnet,wasi_sdk,args.csharp_mode)
         cache.write_text(json.dumps({'key':key,'commands':commands,'unavailable':unavailable},indent=2))
     versions={}
     checks={'csharp':['dotnet','--version'],'rust':(['rustup','run','stable','rustc','--version'] if shutil.which('rustup') else ['rustc','--version']),'typescript':['node','--version'],'typescript-zod':['node','--version'],'java':['java','-version'],'go':['go','version'],'swift':['swift','--version']}
@@ -151,7 +155,7 @@ def main():
      except (OSError,subprocess.CalledProcessError) as e:versions[name]=str(e)
     if 'typescript-zod' in languages:versions['zod']=json.loads((REPO/'samples/file-based/package.json').read_text())['dependencies']['zod']
     rows=[];args.output.parent.mkdir(parents=True,exist_ok=True)
-    def save():args.output.write_text(json.dumps({'timestampUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'toolchains':versions,'timeoutSeconds':args.timeout,'maxProjectionSeconds':args.max_projection_seconds,'buildProofs':({'csharp-wasi':json.loads((args.build_dir/'wasi-csharp/build-proof.json').read_text())} if 'csharp-wasi' in commands else {}),'optimization':('C# Native AOT Speed/native ISA and LLVMOnly WASI AOT/SIMD/-O3; Rust release/LTO/native ISA or SIMD; Wasmtime opt-level=2' if 'wasi' in engines else 'Host defaults'),'platform':platform.platform(),'routing':args.routing,'sizes':sizes,'samples':args.samples,'buildKey':key,'commands':commands,'unavailable':unavailable,'results':rows,'notes':['Peak RSS includes the entire process. For WASI it includes Wasmtime compilation/runtime, not guest allocations alone.','Events are generated and projected in one streaming pass; event construction and dispatch are inside the projection timer. typescript-native is simple unchecked projection; typescript-zod-native validates/clones payload data only in matching handlers, inside the same timer, and ignores unknown event kinds.','Capacity is the largest tested point within the time budget, not a language or hardware maximum.']},indent=2)+'\n')
+    def save():args.output.write_text(json.dumps({'timestampUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'toolchains':versions,'timeoutSeconds':args.timeout,'maxProjectionSeconds':args.max_projection_seconds,'buildProofs':({'csharp-wasi':json.loads((args.build_dir/'wasi-csharp/build-proof.json').read_text())} if 'csharp-wasi' in commands else {}),'nativeConfiguration':{'csharpMode':args.csharp_mode},'optimization':('C# Native AOT Speed/native ISA and LLVMOnly WASI AOT/SIMD/-O3; Rust release/LTO/native ISA or SIMD; Wasmtime opt-level=2' if 'wasi' in engines else 'Host defaults'),'platform':platform.platform(),'routing':args.routing,'sizes':sizes,'samples':args.samples,'buildKey':key,'commands':commands,'unavailable':unavailable,'results':rows,'notes':['Peak RSS includes the entire process. For WASI it includes Wasmtime compilation/runtime, not guest allocations alone.','Events are generated and projected in one streaming pass; event construction and dispatch are inside the projection timer. typescript-native is simple unchecked projection; typescript-zod-native validates/clones payload data only in matching handlers, inside the same timer, and ignores unknown event kinds.','Capacity is the largest tested point within the time budget, not a language or hardware maximum.']},indent=2)+'\n')
     save()
     for name in commands:
       for mode in modes:

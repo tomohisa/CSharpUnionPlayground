@@ -103,6 +103,8 @@ def main():
               'C# native is Native AOT Speed/native ISA; C# WASI is LLVMOnly AOT with SIMD and clang -O3, no interpreter fallback. Rust uses optimized release/LTO with host native ISA or Wasm SIMD.',
               'WASI peak RSS includes Wasmtime compilation/runtime and is not guest heap usage. Startup includes Wasmtime compilation.',
               'C# union wire envelopes differ from polymorphic record/Rust formats, as in the existing benchmark.']}
+    if engines==['wasi']:
+        report['notes'].insert(0,'WASM-only measurements. Native results belong to the separate host report; combine only when job/attempt metadata matches. C# WASM uses .NET 11 AOT even when the Native abstract implementation uses .NET 10 JIT.')
     def save():
         args.output.write_text(json.dumps(report, indent=2) + '\n')
     save()

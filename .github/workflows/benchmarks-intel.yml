@@ -6,8 +6,8 @@ on:
       suite:
         description: Benchmark suite
         type: choice
-        options: [projection, all, json, wasi, decoder]
-        default: projection
+        options: [combined, projection, all, json, wasi, decoder]
+        default: combined
       json_roots:
         description: JSON roots (fixed count for the 14 GB runner)
         type: number
@@ -25,7 +25,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: intel-benchmarks-${{ inputs.suite }}
+  group: intel-benchmarks
   cancel-in-progress: false
 
 jobs:
@@ -43,6 +43,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.401
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
@@ -59,7 +60,7 @@ jobs:
           rustup toolchain install stable --profile minimal
           rustup default stable
       - name: Install official WASI toolchains
-        if: inputs.suite == 'wasi' || inputs.suite == 'decoder'
+        if: inputs.suite == 'wasi' || inputs.suite == 'decoder' || inputs.suite == 'combined'
         env:
           WASI_TOOLS: ${{ runner.temp }}/wasi-tools
         run: |
