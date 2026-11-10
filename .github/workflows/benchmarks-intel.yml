@@ -65,7 +65,9 @@ jobs:
         if: always()
         with:
           name: intel-benchmark-results
-          path: benchmarks/observed/macos-intel-actions/
+          path: |
+            benchmarks/observed/macos-intel-actions/*.json
+            benchmarks/observed/macos-intel-actions/*.md
           if-no-files-found: warn
           retention-days: 90
 
