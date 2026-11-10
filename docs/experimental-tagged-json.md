@@ -120,7 +120,7 @@ file /tmp/csharp-union-tagged-aot/PlaygroundTaggedJson.AotSmoke
 /tmp/csharp-union-tagged-aot/PlaygroundTaggedJson.AotSmoke --require-native
 ```
 
-Observed with SDK `11.0.100-rc.3.26522.148` on macOS arm64:
+Reverified with GA SDK `11.0.100` on macOS arm64 ([execution evidence](verification/dotnet11-ga.json)):
 
 - Published file: `Mach-O 64-bit executable arm64`.
 - 40 smoke checks pass when run with `--require-native` (39 without that flag), with `RuntimeFeature.IsDynamicCodeSupported == false` and `JsonSerializer.IsReflectionEnabledByDefault == false`.

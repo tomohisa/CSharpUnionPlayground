@@ -138,6 +138,8 @@ python3 scripts/verify_closed_inferred_json.py
 3. Cryptoケースを追加してswitch未更新ならCS8509。
 4. switchを更新すればCryptoもJSON登録・context登録の追加なしで往復。
 5. 型名をCardからDebitCardへ変更すると自動判別子も変更。
+6. 明示登録が推論を置き換え、明示したタグだけを使い未登録のCryptoは拒否。
+7. 実行時optionsだけで不足した生成メタデータを補おうとするとInvalidOperationException。
 
 型レベルの属性がない場合、実行時の `JsonSerializerOptions` だけで推論を有効にしても、AOT用の派生メタデータは後から追加されません。標準ソース生成に認識される型属性または `JsonSourceGenerationOptions` を使います。明示的な `JsonDerivedType` の登録は推論リストに追加されるのではなく、その階層の推論を置き換えます。
 
@@ -213,6 +215,7 @@ python3 scripts/verify_closed_payment_exhaustiveness.py
 | abstract closedを併記 | CS9384 |
 | Cardの分岐を削除 | CS8509（非網羅） |
 | Cryptoケースを追加してswitchを変更しない | CS8509（非網羅） |
+| closedにdiscardを付けてCryptoを追加 | ビルド成功、追加漏れを隠す |
 | 入力をPayment?に変更しnull分岐なし | CS8655（null未処理） |
 | Payment?でnull分岐も追加 | ビルド成功 |
 | closedを通常のabstractに戻す | CS8509（非網羅） |
