@@ -118,3 +118,5 @@ python3 benchmarks/union100/test_runner.py
 [生データ](observed/macos-arm64.json) / [表](observed/macos-arm64.md) を保存しています。729,000ルート（2,187,000ケース）を5バッチ計測し、最速の中央値は約2.15秒/バッチ、最速の計測合計は約10.53秒でした。128GiBメモリのmacOS arm64ホストでの結果です。別ホストの性能や最大保持可能件数を保証するものではありません。
 
 生データのbuildFingerprintは計測時のランナーを含む指紋です。計測後の変更は、消費済みstdoutパイプを明示的にcloseする後処理のみです。生成した各言語のモデル・計測コードは同じです。
+
+Intelでの追加計測は[Actionsの観測データ](../observed/macos-intel-actions/)に保存します。JSONを含むsuiteで実行した場合は`union100.md` / `.json`があり、入力件数も記録します。既存のARM結果とはOS・ツール・件数などの条件も異なるため、環境情報を併せて比較してください。
