@@ -13,6 +13,7 @@
 | [Payment.ts](Payment.ts) | TypeScript union + JSON | switch + never |
 | [Payment.java](Payment.java) | Java sealed interface + Jackson | switch式 |
 | [Payment.go](Payment.go) | Go interface + encoding/json | type switch |
+| [Payment.swift](Payment.swift) | Swift indirect enum + 標準Codable | 全ケースのswitch |
 
 ## 実行
 
@@ -28,6 +29,7 @@ python3 scripts/run_payment_rust.py
 node samples/file-based/Payment.ts
 python3 scripts/run_payment_java.py
 go run samples/file-based/Payment.go
+swift samples/file-based/Payment.swift
 ```
 
 出力はJSONとswitch / matchの結果（`cash:100`）です。CashのNextにはCardが入っています。
@@ -35,6 +37,14 @@ go run samples/file-based/Payment.go
 C#は固定済み.NET 11 RC3のfile-based appで、個別のcsprojは不要です。Generator版だけは `#:project` で既存の実験版Generatorを参照します。すべてJSONリフレクションを無効にして、標準の `JsonSerializerContext` を使います。
 
 Rustのrunnerは安定版Cargoの依存設定を、JavaのrunnerはJacksonのjarを一時ディレクトリへ用意します。TypeScriptはNode.js 24.18.0で直接実行できますが、型チェックは別途 `tsc --noEmit --strict --target ES2022 samples/file-based/Payment.ts` を使います。Goは標準ライブラリだけを使います。
+
+Swiftは外部パッケージ不要で、`indirect enum Payment: Codable` とFoundationのJSONEncoder / JSONDecoderだけを使います。標準の自動生成に任せるため、JSONは `$type` ではなくケース名で包む形式です:
+
+```json
+{"cash":{"amount":100,"next":{"card":{"amount":250,"cardNumber":"4111"}}}}
+```
+
+Swift版をほかの例と同じ `$type` 形式に合わせる場合は、独自のCodable実装などが必要です。この例は標準機能で最短に書くことを優先しています。
 
 ## 通常のエラー処理とテストの区別
 
@@ -50,6 +60,7 @@ python3 scripts/run_payment_rust.py samples/file-based/with-verification/Payment
 python3 scripts/run_payment_java.py samples/file-based/with-verification/Payment.java
 node samples/file-based/with-verification/Payment.ts
 go run samples/file-based/with-verification/Payment.go
+swift samples/file-based/with-verification/Payment.swift
 ```
 
 - [switch / matchと網羅性の比較分析](EXHAUSTIVENESS.md)

@@ -88,7 +88,7 @@ macOS arm64 の Native AOT 実行で40チェック成功（`--require-native`指
 
 closed派生型を `InferClosedTypePolymorphism` で自動登録する [標準機能の1ファイル例](samples/file-based/ClosedInferredJson.cs) も追加済みです。JsonDerivedTypeや派生型のcontext登録を列挙せずに、ネストしたPaymentのNative AOT往復を確認しました。
 
-ネストしたPaymentを比較する、C# 5方式・Rust・TypeScript・Java・Goの各1ファイルサンプルは [こちら](samples/file-based/README.md)。[switch/match網羅性の分析](samples/file-based/EXHAUSTIVENESS.md)では各言語の構文と、ケース追加・分岐削除の診断を比較しています。Rust/TypeScript/Java/Goの16パターンを実測済みです。closed継承モデル＋JsonDerivedType版ではNative AOTのJSON往復と、switch網羅性など7パターンも検証しています。なおclosedは暗黙にabstractで、`abstract closed` の併記はエラーになります。
+ネストしたPaymentを比較する、C# 5方式・Rust・TypeScript・Java・Go・Swiftの各1ファイルサンプルは [こちら](samples/file-based/README.md)。[switch/match網羅性の分析](samples/file-based/EXHAUSTIVENESS.md)では各言語の構文と、ケース追加・分岐削除の診断を比較しています。Rust/TypeScript/Java/Goの16パターンと、Swiftの6パターンを実測済みです。closed継承モデル＋JsonDerivedType版ではNative AOTのJSON往復と、switch網羅性など7パターンも検証しています。なおclosedは暗黙にabstractで、`abstract closed` の併記はエラーになります。
 
 ```bash
 dotnet test src/UnionTest.Tests/UnionTest.Tests.csproj
