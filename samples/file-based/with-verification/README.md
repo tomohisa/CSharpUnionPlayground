@@ -4,7 +4,7 @@
 
 # Payment JSON: 1ファイルずつの比較
 
-すべて「Cash(100) の Next に Card(4111, 250)」を持つ例です。各ファイルに、型定義・オブジェクト生成・シリアライズ・デシリアライズ・復元結果の確認をまとめています。タグは内外とも `$type`。成功時はJSONと `PASS` を表示します。C#の各ファイルはswitch式による外側・内側のケース処理と、その結果も表示します。
+すべて「Cash(100) の Next に Card(4111, 250)」を持つ例です。各ファイルに、型定義・オブジェクト生成・シリアライズ・デシリアライズ・復元結果の確認をまとめています。Swift以外のタグは内外とも `$type`。Swiftは標準Codableのケース名ラッパーを使います。成功時はJSONと `PASS` を表示します。C#の各ファイルはswitch式による外側・内側のケース処理と、その結果も表示します。
 
 | ファイル | 方法 | 共通基底型 | 手書きコンバーター |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | [Payment.ts](Payment.ts) | TypeScript union + JSON + 読み込み検証 | 不要 | 不要（型検証関数は同ファイル内） |
 | [Payment.java](Payment.java) | Java sealed interface + Jackson | 共通interface | 不要 |
 | [Payment.go](Payment.go) | Go marker interface + encoding/json | 共通interface | 型判別dispatchを同ファイル内に実装 |
+| [Payment.swift](Payment.swift) | Swift indirect enum + Codable | 不要 | 不要 |
 
 各言語のswitch / Rust matchと、ケース追加・分岐漏れによる網羅性の実測比較は **[EXHAUSTIVENESS.md](../EXHAUSTIVENESS.md)** を参照してください。Rust・TypeScriptにも分岐例を追加し、Java・Goを含む16パターンのコンパイル検証を用意しています。
 
@@ -34,6 +35,7 @@ python3 scripts/run_payment_rust.py samples/file-based/with-verification/Payment
 node samples/file-based/with-verification/Payment.ts
 python3 scripts/run_payment_java.py samples/file-based/with-verification/Payment.java
 go run samples/file-based/with-verification/Payment.go
+swift samples/file-based/with-verification/Payment.swift
 ```
 
 C#は固定済みの.NET 11 RC3を使います。各 `.cs` はfile-based appで、専用 `.csproj` は不要です。Generator版だけは `#:project` で既存のGeneratorをAnalyzer参照します（外部配布版ではありません）。JSONリフレクションは全5方式で無効にしています。
@@ -44,7 +46,20 @@ TypeScriptはNode.js 24.18.0で直接実行を確認しました。`JSON.parse(.
 
 JavaはJava 21以降とJacksonを使用します。補助スクリプトが固定バージョンのjarを一時取得してsource-file modeで実行するため、サンプル本体は1ファイルで、Maven/Gradleの設定は不要です。Goは標準ライブラリだけを使い、`go run` で直接実行できます。全4言語で外側・内側の分岐処理と、不正な内側タグを拒否することも検証します。
 
+Swift版はネストしたケースと値の等価性、両階層のswitch、ケース名によるJSON構造、不正なケースとJSON nullの拒否を検証します。コンパイラー診断6件は `python3 scripts/verify_swift_payment_switches.py` で再現できます。Apple Swift 6.4で確認済みです。ネイティブ実行も確認しています:
+
+```bash
+swiftc samples/file-based/with-verification/Payment.swift -o /tmp/payment-swift
+/tmp/payment-swift
+```
+
 ## 出力の違い
+
+Swiftの標準Codableはケース名をキーにして包みます。Optionalのnextがnilなら、そのフィールドは出力されません:
+
+```json
+{"cash":{"amount":100,"next":{"card":{"amount":250,"cardNumber":"4111"}}}}
+```
 
 JsonDerived / ClosedJsonDerived / Rust / TypeScript / Java / Go は、型判別子とケースのフィールドを同じオブジェクトに入れます（プロパティの出力順は言語によって異なります）:
 

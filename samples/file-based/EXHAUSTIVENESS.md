@@ -12,6 +12,7 @@
 | C# closed＋JsonDerived／自動推論 | switch式、`_`なし | CS8509 | CS8509 | `_`を追加すれば漏れを隠す |
 | C# union（手書き／生成Converter） | union自体のswitch式＋`null` | CS8509 | CS8509 | nullだけなら新ケースのチェックを維持 |
 | Rust enum | `match`、ワイルドカードなし | E0004 | E0004 | `_`を追加すれば漏れを隠す |
+| Swift enum | switch、defaultなし | 非網羅エラー | 非網羅エラー | defaultを追加すれば漏れを隠す |
 | TypeScript union | switch＋`never`への代入 | TS2322 | TS2322 | 普通のdefaultでは隠れるが、never検証なら検出 |
 | Java sealed interface | switch式、defaultなし | 非網羅エラー | 非網羅エラー | defaultを追加すれば漏れを隠す |
 | Go marker interface | type switch＋default | ビルド成功 | ビルド成功 | コンパイラーは実装型の網羅性を検査しない |
@@ -34,6 +35,38 @@ fn describe(payment: &Payment) -> String {
 ```
 
 enumがケース集合を定義し、コンパイラーが全ケースの処理を要求します。`_ => panic!(...)` を置くと将来ケースがそこに入るため、追加漏れの検出は失われます。JSON変換はSerdeのderiveが担当し、matchの網羅性とは独立です。
+
+## Swift: indirect enumとCodable、網羅的switch
+
+[Payment.swift](Payment.swift) は再帰構造を `indirect`、JSON変換を `Codable` で宣言します。共通基底型や専用コンバーター、contextへの型登録は不要です。
+
+```swift
+indirect enum Payment: Codable {
+    case cash(amount: Int, next: Payment?)
+    case card(cardNumber: String, amount: Int, next: Payment?)
+}
+
+func describe(_ payment: Payment) -> String {
+    switch payment {
+    case let .cash(amount, _): return "cash:\(amount)"
+    case let .card(cardNumber, _, _): return "card:\(cardNumber)"
+    }
+}
+```
+
+同一モジュールのenumのswitchは網羅的である必要があります。分岐削除やCryptoケース追加では `switch must be exhaustive` でコンパイルに失敗します。defaultを置くと追加ケースがそこで処理されるため、漏れの検出が失われます。ライブラリ進化を有効にした外部モジュールのnon-frozen enumでは、将来ケースを扱う `@unknown default` などの考慮が別途必要です。
+
+Payment自体には空のdefault状態がありません。`let absent: Payment = nil` は型エラー、`Payment? = nil` は許可されます。Nextは末端を表すためOptionalにしています。これはC# struct unionの「非nullableでも中身が空になり得る」性質とは異なります。
+
+標準Codableは `$type` タグ方式ではなく `{"cash":{...}}` のケース名ラッパーを生成し、末端のnilのOptionalフィールドは省略されます。ほかのサンプルとJSON契約を揃えるなら独自のencode/decode処理が必要です。今回はSwift本来の簡潔さを示すため自動生成を利用しました。
+
+通常版と [検証版](with-verification/Payment.swift) のスクリプト実行、swiftcでコンパイルしたネイティブ実行が成功しました。検証版は外側・内側のケース／値／switch、JSON構造、不正な内側ケース、JSON nullの拒否も確認します。Apple Swift 6.4で次の6件を実測しました:
+
+```bash
+python3 scripts/verify_swift_payment_switches.py
+```
+
+全ケースなら成功、Card分岐削除なら失敗、Crypto追加なら失敗、default追加で成功、非Optionalへのnil代入は失敗、Optionalへのnil代入は成功、の6パターンです。Swiftの6件は既存4言語の16件とは別のスクリプトで実行します。
 
 ## TypeScript: neverで残りのケースがないことを証明
 
@@ -123,6 +156,8 @@ Rust/TypeScript/Java/Goは、各4パターンの計16コンパイル検証がす
 ## 公式資料
 
 - [Rust: matchと網羅性](https://doc.rust-lang.org/book/ch06-02-match.html)
+- [Swift: enum・再帰・switchの網羅性](https://docs.swift.org/latest/documentation/the-swift-programming-language/enumerations/)
+- [Swift: Codableのenum自動生成（SE-0295）](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0295-codable-synthesis-for-enums-with-associated-values.md)
 - [TypeScript: neverによる網羅性チェック](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#exhaustiveness-checking)
 - [Java 21: pattern matching for switch](https://docs.oracle.com/en/java/javase/21/language/pattern-matching-switch.html)
 - [Java: sealed classes / interfaces](https://docs.oracle.com/en/java/javase/24/language/sealed-classes-and-interfaces.html)
