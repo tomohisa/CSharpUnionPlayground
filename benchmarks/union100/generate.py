@@ -71,6 +71,22 @@ path="main.rs"
         TYPES='\n'.join(f'type {n} = {{ $type: "{n}"; data: Payload }};' for n in NAMES),
         UNION=' | '.join(NAMES), CREATE='\n'.join(f'    case {i}: return {{ $type: "{n}", data }};' for i,n in enumerate(NAMES)),
         DISPATCH='\n'.join(f'    case "{n}": index = {i}; break;' for i,n in enumerate(NAMES))))
+    ts = (output / 'benchmark.ts').read_text()
+    start = ts.index('// JSON.parse alone')
+    end = ts.index('console.log(JSON.stringify({event:"ready"}))', start)
+    simple = 'function parse(json:string):Payment[] { return JSON.parse(json) as Payment[]; }\n'
+    (output / 'benchmark-simple.ts').write_text(ts[:start] + simple + ts[end:])
+    schema = """const PayloadSchema:z.ZodType<Payload> = z.object({
+  id:z.number().int(), label:z.string(), values:z.array(z.number().int()),
+  tags:z.record(z.string(),z.string()), next:z.lazy(()=>PaymentSchema).nullable()
+});
+const PaymentSchema:z.ZodType<Payment> = z.discriminatedUnion("$type", [
+""" + ',\n'.join(f'  z.object({{$type:z.literal("{n}"),data:PayloadSchema}})' for n in NAMES) + """
+]);
+const BatchSchema = z.array(PaymentSchema);
+function parse(json:string):Payment[] { return BatchSchema.parse(JSON.parse(json)); }
+"""
+    (output / 'benchmark-zod.ts').write_text('import { z } from "zod";\n' + ts[:start] + schema + ts[end:])
     java = output / 'java';java.mkdir(exist_ok=True)
     (java / 'Benchmark.java').write_text(template('Benchmark.java',
         ATTRS=',\n'.join(f'        @JsonSubTypes.Type(value={n}.class, name="{n}")' for n in NAMES),

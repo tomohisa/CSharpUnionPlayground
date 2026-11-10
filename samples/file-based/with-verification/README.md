@@ -220,3 +220,5 @@ python3 scripts/verify_closed_payment_exhaustiveness.py
 7パターンすべて期待どおりでした。サンプルはCS8509 / CS8655をエラーとして扱うため、ケース漏れを含むコードはビルドに失敗します。Native AOT実行は `--require-native` で動的コード生成が無効であることも検証します。
 
 closedでも参照型のnullを実行時に禁止するわけではありません。非nullableな入力の網羅性チェックと、外部JSONのnull検証は別です。これは既存ケースを合成するC# `union` ではなく、閉じた継承階層のサンプルです。
+
+Zod版は`node samples/file-based/with-verification/PaymentZod.ts`で実行します。事前に`npm ci --prefix samples/file-based`で固定版依存を用意してください。ネストの往復・switch・不正入力の拒否を検証します。

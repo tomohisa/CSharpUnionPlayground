@@ -10,6 +10,7 @@
 | [CustomConverter.cs](CustomConverter.cs) | union + 同ファイル内の手書きConverter | ケース + null |
 | [SourceGenerated.cs](SourceGenerated.cs) | union + 実験版Generator | ケース + null |
 | [Payment.rs](Payment.rs) | Rust enum + Serde | match |
+| [PaymentZod.ts](PaymentZod.ts) | TypeScript + Zodの再帰union | switch + never |
 | [Payment.ts](Payment.ts) | TypeScript union + JSON | switch + never |
 | [Payment.java](Payment.java) | Java sealed interface + Jackson | switch式 |
 | [Payment.go](Payment.go) | Go interface + encoding/json | type switch |
@@ -67,3 +68,15 @@ swift samples/file-based/with-verification/Payment.swift
 - [検証付きサンプルの詳細・Native AOT手順](with-verification/README.md)
 
 closedの自動推論では `$type` は型名（Cash / Card）、明示登録版ではcash / cardです。長期保存するJSONのタグを固定したい場合は明示登録を選びます。手書き／生成Converter版だけはケースのフィールドを `data` に包みます。
+
+## TypeScript + Zod
+
+[PaymentZod.ts](PaymentZod.ts)は通常の[Payment.ts](Payment.ts)とは別の1ファイル例です。再帰的な`z.discriminatedUnion("$type", ...)`でネストを検証し、`z.infer`でPayment型を導出します。オブジェクト生成 → JSON.stringify → JSON.parse＋Zod.parse → switchの流れです。
+
+```bash
+npm ci --prefix samples/file-based
+node samples/file-based/PaymentZod.ts
+samples/file-based/node_modules/.bin/tsc --noEmit --strict --target ES2022 --module NodeNext samples/file-based/PaymentZod.ts
+```
+
+Zodは外部ライブラリです。依存の版とintegrityはこのフォルダの`package-lock.json`に固定しています。通常TS例の手書き検証はそのまま残しています。ベンチマークでは、検証なしの`typescript-simple`、Zod検証の`typescript-zod`、従来の手書き検証の`typescript`を区別します。
