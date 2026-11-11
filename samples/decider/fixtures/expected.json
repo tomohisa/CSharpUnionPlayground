@@ -1,0 +1,395 @@
+{
+  "empty": {
+    "initial": {
+      "$type": "NotCreated"
+    },
+    "state": {
+      "$type": "NotCreated"
+    },
+    "events": [],
+    "steps": []
+  },
+  "lifecycle": {
+    "initial": {
+      "$type": "NotCreated"
+    },
+    "state": {
+      "$type": "Available",
+      "roster": {
+        "name": "Room A",
+        "capacity": 2,
+        "students": []
+      }
+    },
+    "events": [
+      {
+        "$type": "RoomCreated",
+        "name": "Room A",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "alice"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "bob"
+      },
+      {
+        "$type": "StudentDropped",
+        "studentId": "alice"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "carol"
+      },
+      {
+        "$type": "StudentDropped",
+        "studentId": "bob"
+      },
+      {
+        "$type": "StudentDropped",
+        "studentId": "carol"
+      }
+    ],
+    "steps": [
+      {
+        "phase": "NotCreated",
+        "emitted": [],
+        "error": "not_created"
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "RoomCreated"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Available",
+        "emitted": [],
+        "error": "already_created"
+      },
+      {
+        "phase": "Available",
+        "emitted": [],
+        "error": "invalid_student"
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Available",
+        "emitted": [],
+        "error": "already_enrolled"
+      },
+      {
+        "phase": "Available",
+        "emitted": [],
+        "error": "not_enrolled"
+      },
+      {
+        "phase": "Full",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Full",
+        "emitted": [],
+        "error": "full"
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "StudentDropped"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Full",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "StudentDropped"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "StudentDropped"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Available",
+        "emitted": [],
+        "error": "not_enrolled"
+      }
+    ]
+  },
+  "validation": {
+    "initial": {
+      "$type": "NotCreated"
+    },
+    "state": {
+      "$type": "Full",
+      "roster": {
+        "name": "R",
+        "capacity": 1,
+        "students": [
+          "b"
+        ]
+      }
+    },
+    "events": [
+      {
+        "$type": "RoomCreated",
+        "name": "R",
+        "capacity": 1
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "a"
+      },
+      {
+        "$type": "StudentDropped",
+        "studentId": "a"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "b"
+      }
+    ],
+    "steps": [
+      {
+        "phase": "NotCreated",
+        "emitted": [],
+        "error": "invalid_name"
+      },
+      {
+        "phase": "NotCreated",
+        "emitted": [],
+        "error": "invalid_capacity"
+      },
+      {
+        "phase": "NotCreated",
+        "emitted": [],
+        "error": "invalid_capacity"
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "RoomCreated"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Available",
+        "emitted": [],
+        "error": "invalid_student"
+      },
+      {
+        "phase": "Available",
+        "emitted": [],
+        "error": "not_enrolled"
+      },
+      {
+        "phase": "Full",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Full",
+        "emitted": [],
+        "error": "already_enrolled"
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "StudentDropped"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Full",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      }
+    ]
+  },
+  "resume": {
+    "initial": {
+      "$type": "Full",
+      "roster": {
+        "name": "Lab",
+        "capacity": 2,
+        "students": [
+          "alice",
+          "bob"
+        ]
+      }
+    },
+    "state": {
+      "$type": "Full",
+      "roster": {
+        "name": "Lab",
+        "capacity": 2,
+        "students": [
+          "alice",
+          "carol"
+        ]
+      }
+    },
+    "events": [
+      {
+        "$type": "RoomCreated",
+        "name": "Lab",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "alice"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "bob"
+      },
+      {
+        "$type": "StudentDropped",
+        "studentId": "bob"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "carol"
+      }
+    ],
+    "steps": [
+      {
+        "phase": "Available",
+        "emitted": [
+          "StudentDropped"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Full",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Full",
+        "emitted": [],
+        "error": "already_enrolled"
+      }
+    ]
+  },
+  "unicode": {
+    "initial": {
+      "$type": "NotCreated"
+    },
+    "state": {
+      "$type": "Available",
+      "roster": {
+        "name": "教室 A",
+        "capacity": 1,
+        "students": []
+      }
+    },
+    "events": [
+      {
+        "$type": "RoomCreated",
+        "name": "教室 A",
+        "capacity": 1
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "太郎"
+      },
+      {
+        "$type": "StudentDropped",
+        "studentId": "太郎"
+      }
+    ],
+    "steps": [
+      {
+        "phase": "Available",
+        "emitted": [
+          "RoomCreated"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Full",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      },
+      {
+        "phase": "Available",
+        "emitted": [
+          "StudentDropped"
+        ],
+        "error": null
+      }
+    ]
+  },
+  "metadata-order": {
+    "initial": {
+      "$type": "Available",
+      "roster": {
+        "name": "R",
+        "capacity": 1,
+        "students": []
+      }
+    },
+    "state": {
+      "$type": "Full",
+      "roster": {
+        "name": "R",
+        "capacity": 1,
+        "students": [
+          "a"
+        ]
+      }
+    },
+    "events": [
+      {
+        "$type": "RoomCreated",
+        "name": "R",
+        "capacity": 1
+      },
+      {
+        "$type": "StudentEnrolled",
+        "studentId": "a"
+      }
+    ],
+    "steps": [
+      {
+        "phase": "Full",
+        "emitted": [
+          "StudentEnrolled"
+        ],
+        "error": null
+      }
+    ]
+  }
+}

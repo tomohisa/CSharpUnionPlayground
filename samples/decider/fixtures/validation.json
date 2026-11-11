@@ -1,0 +1,48 @@
+{
+  "commands": [
+    {
+      "$type": "Create",
+      "name": "",
+      "capacity": 2
+    },
+    {
+      "$type": "Create",
+      "name": "R",
+      "capacity": 0
+    },
+    {
+      "$type": "Create",
+      "name": "R",
+      "capacity": 11
+    },
+    {
+      "$type": "Create",
+      "name": "R",
+      "capacity": 1
+    },
+    {
+      "$type": "Drop",
+      "studentId": ""
+    },
+    {
+      "$type": "Drop",
+      "studentId": "nobody"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "a"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "a"
+    },
+    {
+      "$type": "Drop",
+      "studentId": "a"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "b"
+    }
+  ]
+}

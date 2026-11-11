@@ -1,0 +1,31 @@
+{
+  "history": [
+    {
+      "$type": "RoomCreated",
+      "name": "Lab",
+      "capacity": 2
+    },
+    {
+      "$type": "StudentEnrolled",
+      "studentId": "alice"
+    },
+    {
+      "$type": "StudentEnrolled",
+      "studentId": "bob"
+    }
+  ],
+  "commands": [
+    {
+      "$type": "Drop",
+      "studentId": "bob"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "carol"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "carol"
+    }
+  ]
+}

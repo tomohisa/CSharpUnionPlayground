@@ -4,6 +4,10 @@
 
 **C# 15 Union 型** (.NET 11 GA) の機能と制限を検証するプレイグラウンドです。
 
+## 6言語のDecider Pattern
+
+[Classroom Deciderサンプル](samples/decider/README.md)で、C#・Rust・TypeScript・Java・Go・Swiftのフェーズ別State、Command/Event、純粋なdecide/evolve、JSON履歴の再生を同じ題材で比較できます。
+
 ## 概要
 
 C# 15 で導入された `union` キーワードの動作を実験・検証するリポジトリです:

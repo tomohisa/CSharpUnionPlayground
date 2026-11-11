@@ -1,0 +1,9 @@
+{
+  "commands": [],
+  "history": [
+    {
+      "$type": "RoomRenamed",
+      "name": "R"
+    }
+  ]
+}
