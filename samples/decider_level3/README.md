@@ -182,7 +182,21 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 
 ## コード量の比較
 
-Model／Decider／その他／合計はLevel 2と同じ分類を残し、その他を共通ライブラリ・投影・アプリ接続・JSON／CLIへ分けます。型定義のJSON属性やZodスキーマはModel、Genericなタグ・エンベロープ・port・実行ループは共通ライブラリ、学校のRoutingとApplicationはアプリ接続です。
+共通ライブラリを別枠にし、ライブラリを除いた**アプリ側合計**を表示します。ファイル単位ではなく、混在するファイルはソース範囲単位で次の責務に分けます。
+
+| 分類 | 含めるコード |
+|---|---|
+| Model | 学籍・履修・クラスの状態、値、イベント、拒否理由、判断入力のDecisionModel |
+| Decider | 純粋な業務判断と補助関数、判断結果のAccepted／Rejected型 |
+| コマンド・ハンドラー | Command型、学校固有のタグ／イベントメタ情報、読み取り条件、状態復元とDeciderを接続するRouting |
+| ドメイン投影 | 学籍・履修・クラスのreducer、一覧生成、SchoolList型。判断用の状態復元にも共用する投影を含む |
+| ユースケース | Execute／Prepare／Commit／一覧／再構築／再配送のOperation型と実行制御、Trace型、チケット・実行履歴管理 |
+| アプリ設定・JSON・CLI | ストア／投影／processorの生成と購読接続、入出力DTO、JSON変換、CLI、Application内のimport・namespace等の共通宣言 |
+| 共通ライブラリ（別枠） | 学校に依存しないタグ・イベントエンベロープ・ストアport・条件付き追記・再試行processor・ライブ投影基盤 |
+
+汎用CommandProcessorの競合再判断ループは共通ライブラリ、学校の読み取り条件と判断への接続はコマンド・ハンドラーです。Application内の初期接続はアプリ設定、その後の実行制御はユースケースとして区別します。型に付随するJSON属性・Zodスキーマ・コンストラクター検証はその型の分類に含めます。独立した手書きJSON変換はアプリ設定・JSON・CLIに含めるため、JSON関連の総量を単独で表す列ではありません。
+
+[分類定義](code_stats_classification.json)は各ソースの既定分類と上書き範囲（1始まり、両端を含む）を保持します。**各物理行を一度だけ分類し、その同じ行から行数と空白以外の文字数を加算**します。上書き範囲内の空行・括弧もその範囲の分類へ、それ以外の空行・括弧・import等はファイルの既定分類へ計上します。範囲指定のないファイル追加・範囲重複・削除・ソースSHA256の変化を検出して集計を停止するため、コード変更時には分類も再確認してください。末尾のソース範囲一覧で分類を確認できます。
 
 - 空行・コメント・括弧だけの行を含む物理行数を数えます。
 - 文字数はUnicodeの空白をすべて除いた文字数です。文字列・コメント中の空白も除き、バイト数とは区別します。
@@ -194,51 +208,83 @@ Model／Decider／その他／合計はLevel 2と同じ分類を残し、その�
 
 ### 行数（空行を含む）
 
-| 言語 | Model | Decider | その他 | 合計 |
-|---|---:|---:|---:|---:|
-| C# | 86 | 122 | 315 | 523 |
-| F# | 113 | 94 | 267 | 474 |
-| Rust | 150 | 106 | 226 | 482 |
-| TypeScript＋Zod | 101 | 96 | 224 | 421 |
-| Java | 343 | 108 | 232 | 683 |
-| Go | 356 | 279 | 1,440 | 2,075 |
-| Swift | 99 | 98 | 559 | 756 |
-
-### 行数（空行を含む）：その他の内訳
-
-| 言語 | 共通ライブラリ | 投影 | アプリ接続 | JSON・CLI |
-|---|---:|---:|---:|---:|
-| C# | 130 | 77 | 88 | 20 |
-| F# | 90 | 58 | 90 | 29 |
-| Rust | 110 | 38 | 68 | 10 |
-| TypeScript＋Zod | 93 | 50 | 72 | 9 |
-| Java | 107 | 53 | 60 | 12 |
-| Go | 295 | 190 | 179 | 776 |
-| Swift | 106 | 49 | 57 | 347 |
+| 言語 | Model | Decider | コマンド・ハンドラー | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ除外） | 共通ライブラリ（別枠） |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| C# | 61 | 126 | 52 | 78 | 44 | 32 | 393 | 130 |
+| F# | 88 | 98 | 46 | 59 | 54 | 39 | 384 | 90 |
+| Rust | 103 | 112 | 49 | 46 | 40 | 22 | 372 | 110 |
+| TypeScript＋Zod | 69 | 101 | 54 | 52 | 32 | 20 | 328 | 93 |
+| Java | 205 | 125 | 100 | 61 | 65 | 20 | 576 | 107 |
+| Go | 230 | 291 | 145 | 196 | 113 | 805 | 1,780 | 295 |
+| Swift | 62 | 102 | 46 | 55 | 32 | 353 | 650 | 106 |
 
 ### 空白以外の文字数
 
-| 言語 | Model | Decider | その他 | 合計 |
-|---|---:|---:|---:|---:|
-| C# | 4,623 | 5,310 | 15,973 | 25,906 |
-| F# | 5,060 | 4,869 | 13,638 | 23,567 |
-| Rust | 4,444 | 5,470 | 16,961 | 26,875 |
-| TypeScript＋Zod | 6,252 | 4,959 | 15,674 | 26,885 |
-| Java | 10,277 | 5,641 | 17,751 | 33,669 |
-| Go | 6,242 | 5,227 | 33,465 | 44,934 |
-| Swift | 3,552 | 5,541 | 28,587 | 37,680 |
+| 言語 | Model | Decider | コマンド・ハンドラー | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ除外） | 共通ライブラリ（別枠） |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| C# | 3,075 | 5,504 | 2,638 | 4,381 | 2,701 | 1,930 | 20,229 | 5,677 |
+| F# | 3,604 | 5,024 | 2,858 | 3,376 | 2,711 | 1,532 | 19,105 | 4,462 |
+| Rust | 3,055 | 5,645 | 3,107 | 3,889 | 3,116 | 1,406 | 20,218 | 6,657 |
+| TypeScript＋Zod | 3,938 | 5,218 | 3,774 | 3,792 | 3,041 | 1,281 | 21,044 | 5,841 |
+| Java | 6,302 | 6,066 | 4,517 | 4,935 | 3,877 | 1,429 | 27,126 | 6,543 |
+| Go | 4,167 | 5,412 | 4,054 | 4,279 | 3,056 | 17,849 | 38,817 | 6,117 |
+| Swift | 2,597 | 5,620 | 2,940 | 3,468 | 2,511 | 13,374 | 30,510 | 7,170 |
 
-### 空白以外の文字数：その他の内訳
+### 分類したソース範囲
 
-| 言語 | 共通ライブラリ | 投影 | アプリ接続 | JSON・CLI |
-|---|---:|---:|---:|---:|
-| C# | 5,677 | 4,215 | 4,845 | 1,236 |
-| F# | 4,462 | 3,268 | 4,889 | 1,019 |
-| Rust | 6,657 | 3,674 | 6,031 | 599 |
-| TypeScript＋Zod | 5,841 | 3,542 | 5,711 | 580 |
-| Java | 6,543 | 4,672 | 5,738 | 798 |
-| Go | 6,117 | 4,110 | 6,174 | 17,064 |
-| Swift | 7,170 | 3,341 | 5,252 | 12,824 |
+同じファイルの中も責務で分けています。以下は行数・文字数に共通の分類です。
+
+| 言語 | 分類 | ソース範囲 |
+|---|---|---|
+| C# | Model | [csharp/Models.cs:1–25](csharp/Models.cs#L1-L25) / [csharp/Models.cs:28–48](csharp/Models.cs#L28-L48) / [csharp/Models.cs:60–73](csharp/Models.cs#L60-L73) / [csharp/Models.cs:78–78](csharp/Models.cs#L78-L78) |
+| C# | Decider | [csharp/Decider.cs:1–122](csharp/Decider.cs#L1-L122) / [csharp/Models.cs:74–77](csharp/Models.cs#L74-L77) |
+| C# | コマンド・ハンドラー | [csharp/Models.cs:49–59](csharp/Models.cs#L49-L59) / [csharp/Routing.cs:1–41](csharp/Routing.cs#L1-L41) |
+| C# | ドメイン投影 | [csharp/Models.cs:26–26](csharp/Models.cs#L26-L26) / [csharp/Projection.cs:1–77](csharp/Projection.cs#L1-L77) |
+| C# | ユースケース | [csharp/Application.cs:7–10](csharp/Application.cs#L7-L10) / [csharp/Application.cs:17–47](csharp/Application.cs#L17-L47) / [csharp/Models.cs:27–27](csharp/Models.cs#L27-L27) / [csharp/Models.cs:79–86](csharp/Models.cs#L79-L86) |
+| C# | アプリ設定・JSON・CLI | [csharp/Application.cs:1–6](csharp/Application.cs#L1-L6) / [csharp/Application.cs:11–16](csharp/Application.cs#L11-L16) / [csharp/Program.cs:1–20](csharp/Program.cs#L1-L20) |
+| C# | 共通ライブラリ | [csharp/Dcb.cs:1–130](csharp/Dcb.cs#L1-L130) |
+| F# | Model | [fsharp/Models.fs:1–71](fsharp/Models.fs#L1-L71) / [fsharp/Models.fs:73–73](fsharp/Models.fs#L73-L73) / [fsharp/Models.fs:75–75](fsharp/Models.fs#L75-L75) / [fsharp/Models.fs:87–100](fsharp/Models.fs#L87-L100) / [fsharp/Models.fs:105–105](fsharp/Models.fs#L105-L105) |
+| F# | Decider | [fsharp/Decider.fs:1–94](fsharp/Decider.fs#L1-L94) / [fsharp/Models.fs:101–104](fsharp/Models.fs#L101-L104) |
+| F# | コマンド・ハンドラー | [fsharp/Models.fs:76–86](fsharp/Models.fs#L76-L86) / [fsharp/Routing.fs:1–35](fsharp/Routing.fs#L1-L35) |
+| F# | ドメイン投影 | [fsharp/Models.fs:72–72](fsharp/Models.fs#L72-L72) / [fsharp/Projection.fs:1–58](fsharp/Projection.fs#L1-L58) |
+| F# | ユースケース | [fsharp/Application.fs:6–7](fsharp/Application.fs#L6-L7) / [fsharp/Application.fs:13–55](fsharp/Application.fs#L13-L55) / [fsharp/Models.fs:74–74](fsharp/Models.fs#L74-L74) / [fsharp/Models.fs:106–113](fsharp/Models.fs#L106-L113) |
+| F# | アプリ設定・JSON・CLI | [fsharp/Application.fs:1–5](fsharp/Application.fs#L1-L5) / [fsharp/Application.fs:8–12](fsharp/Application.fs#L8-L12) / [fsharp/Program.fs:1–29](fsharp/Program.fs#L1-L29) |
+| F# | 共通ライブラリ | [fsharp/Dcb.fs:1–90](fsharp/Dcb.fs#L1-L90) |
+| Rust | Model | [rust/src/models.rs:1–58](rust/src/models.rs#L1-L58) / [rust/src/models.rs:67–67](rust/src/models.rs#L67-L67) / [rust/src/models.rs:78–104](rust/src/models.rs#L78-L104) / [rust/src/models.rs:118–133](rust/src/models.rs#L118-L133) / [rust/src/models.rs:140–140](rust/src/models.rs#L140-L140) |
+| Rust | Decider | [rust/src/decider.rs:1–106](rust/src/decider.rs#L1-L106) / [rust/src/models.rs:134–139](rust/src/models.rs#L134-L139) |
+| Rust | コマンド・ハンドラー | [rust/src/models.rs:105–117](rust/src/models.rs#L105-L117) / [rust/src/routing.rs:1–36](rust/src/routing.rs#L1-L36) |
+| Rust | ドメイン投影 | [rust/src/models.rs:59–66](rust/src/models.rs#L59-L66) / [rust/src/projection.rs:1–38](rust/src/projection.rs#L1-L38) |
+| Rust | ユースケース | [rust/src/application.rs:9–15](rust/src/application.rs#L9-L15) / [rust/src/application.rs:20–32](rust/src/application.rs#L20-L32) / [rust/src/models.rs:68–77](rust/src/models.rs#L68-L77) / [rust/src/models.rs:141–150](rust/src/models.rs#L141-L150) |
+| Rust | アプリ設定・JSON・CLI | [rust/src/application.rs:1–8](rust/src/application.rs#L1-L8) / [rust/src/application.rs:16–19](rust/src/application.rs#L16-L19) / [rust/src/main.rs:1–10](rust/src/main.rs#L1-L10) |
+| Rust | 共通ライブラリ | [rust/src/dcb.rs:1–110](rust/src/dcb.rs#L1-L110) |
+| TypeScript＋Zod | Model | [typescript/models.ts:1–48](typescript/models.ts#L1-L48) / [typescript/models.ts:51–51](typescript/models.ts#L51-L51) / [typescript/models.ts:54–54](typescript/models.ts#L54-L54) / [typescript/models.ts:67–84](typescript/models.ts#L67-L84) / [typescript/models.ts:100–100](typescript/models.ts#L100-L100) |
+| TypeScript＋Zod | Decider | [typescript/decider.ts:1–96](typescript/decider.ts#L1-L96) / [typescript/models.ts:85–89](typescript/models.ts#L85-L89) |
+| TypeScript＋Zod | コマンド・ハンドラー | [typescript/models.ts:55–66](typescript/models.ts#L55-L66) / [typescript/routing.ts:1–42](typescript/routing.ts#L1-L42) |
+| TypeScript＋Zod | ドメイン投影 | [typescript/models.ts:49–50](typescript/models.ts#L49-L50) / [typescript/projection.ts:1–50](typescript/projection.ts#L1-L50) |
+| TypeScript＋Zod | ユースケース | [typescript/application.ts:7–7](typescript/application.ts#L7-L7) / [typescript/application.ts:12–30](typescript/application.ts#L12-L30) / [typescript/models.ts:52–53](typescript/models.ts#L52-L53) / [typescript/models.ts:90–99](typescript/models.ts#L90-L99) |
+| TypeScript＋Zod | アプリ設定・JSON・CLI | [typescript/application.ts:1–6](typescript/application.ts#L1-L6) / [typescript/application.ts:8–11](typescript/application.ts#L8-L11) / [typescript/main.ts:1–5](typescript/main.ts#L1-L5) / [typescript/models.ts:101–101](typescript/models.ts#L101-L101) / [typescript/wire.ts:1–4](typescript/wire.ts#L1-L4) |
+| TypeScript＋Zod | 共通ライブラリ | [typescript/dcb.ts:1–93](typescript/dcb.ts#L1-L93) |
+| Java | Model | [java/Models.java:1–45](java/Models.java#L1-L45) / [java/Models.java:61–143](java/Models.java#L61-L143) / [java/Models.java:210–285](java/Models.java#L210-L285) / [java/Models.java:303–303](java/Models.java#L303-L303) |
+| Java | Decider | [java/Decider.java:1–108](java/Decider.java#L1-L108) / [java/Models.java:286–302](java/Models.java#L286-L302) |
+| Java | コマンド・ハンドラー | [java/Models.java:144–209](java/Models.java#L144-L209) / [java/Routing.java:1–34](java/Routing.java#L1-L34) |
+| Java | ドメイン投影 | [java/Models.java:46–53](java/Models.java#L46-L53) / [java/Projection.java:1–53](java/Projection.java#L1-L53) |
+| Java | ユースケース | [java/Application.java:6–6](java/Application.java#L6-L6) / [java/Application.java:10–26](java/Application.java#L10-L26) / [java/Models.java:54–60](java/Models.java#L54-L60) / [java/Models.java:304–343](java/Models.java#L304-L343) |
+| Java | アプリ設定・JSON・CLI | [java/Application.java:1–5](java/Application.java#L1-L5) / [java/Application.java:7–9](java/Application.java#L7-L9) / [java/Main.java:1–12](java/Main.java#L1-L12) |
+| Java | 共通ライブラリ | [java/playground/dcb/Dcb.java:1–107](java/playground/dcb/Dcb.java#L1-L107) |
+| Go | Model | [go/domain/models.go:1–80](go/domain/models.go#L1-L80) / [go/domain/models.go:95–168](go/domain/models.go#L95-L168) / [go/domain/models.go:233–307](go/domain/models.go#L233-L307) / [go/domain/models.go:320–320](go/domain/models.go#L320-L320) |
+| Go | Decider | [go/domain/decider.go:1–279](go/domain/decider.go#L1-L279) / [go/domain/models.go:308–319](go/domain/models.go#L308-L319) |
+| Go | コマンド・ハンドラー | [go/domain/models.go:169–232](go/domain/models.go#L169-L232) / [go/domain/routing.go:1–81](go/domain/routing.go#L1-L81) |
+| Go | ドメイン投影 | [go/domain/models.go:81–86](go/domain/models.go#L81-L86) / [go/domain/projection.go:1–190](go/domain/projection.go#L1-L190) |
+| Go | ユースケース | [go/application.go:25–25](go/application.go#L25-L25) / [go/application.go:31–98](go/application.go#L31-L98) / [go/domain/models.go:87–94](go/domain/models.go#L87-L94) / [go/domain/models.go:321–356](go/domain/models.go#L321-L356) |
+| Go | アプリ設定・JSON・CLI | [go/application.go:1–24](go/application.go#L1-L24) / [go/application.go:26–30](go/application.go#L26-L30) / [go/domain/json.go:1–694](go/domain/json.go#L1-L694) / [go/main.go:1–30](go/main.go#L1-L30) / [go/wire.go:1–52](go/wire.go#L1-L52) |
+| Go | 共通ライブラリ | [go/dcb/store.go:1–295](go/dcb/store.go#L1-L295) |
+| Swift | Model | [swift/models.swift:1–33](swift/models.swift#L1-L33) / [swift/models.swift:48–64](swift/models.swift#L48-L64) / [swift/models.swift:76–87](swift/models.swift#L76-L87) |
+| Swift | Decider | [swift/decider.swift:1–98](swift/decider.swift#L1-L98) / [swift/models.swift:88–91](swift/models.swift#L88-L91) |
+| Swift | コマンド・ハンドラー | [swift/models.swift:65–75](swift/models.swift#L65-L75) / [swift/routing.swift:1–35](swift/routing.swift#L1-L35) |
+| Swift | ドメイン投影 | [swift/models.swift:34–39](swift/models.swift#L34-L39) / [swift/projection.swift:1–49](swift/projection.swift#L1-L49) |
+| Swift | ユースケース | [swift/application.swift:4–4](swift/application.swift#L4-L4) / [swift/application.swift:8–22](swift/application.swift#L8-L22) / [swift/models.swift:40–47](swift/models.swift#L40-L47) / [swift/models.swift:92–99](swift/models.swift#L92-L99) |
+| Swift | アプリ設定・JSON・CLI | [swift/application.swift:1–3](swift/application.swift#L1-L3) / [swift/application.swift:5–7](swift/application.swift#L5-L7) / [swift/main.swift:1–9](swift/main.swift#L1-L9) / [swift/wire.swift:1–338](swift/wire.swift#L1-L338) |
+| Swift | 共通ライブラリ | [swift/dcb.swift:1–106](swift/dcb.swift#L1-L106) |
 
 <!-- code-stats:end -->
 

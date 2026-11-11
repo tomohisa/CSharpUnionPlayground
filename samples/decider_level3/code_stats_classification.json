@@ -1,0 +1,531 @@
+{
+  "csharp/Application.cs": {
+    "role": "UseCase",
+    "sha256": "82828ded30d2903b9d0e00f5621c04efa87c33a2b08f22eed96e392e27967eb6",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 6,
+        "role": "Boundary"
+      },
+      {
+        "start": 11,
+        "end": 16,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "csharp/Dcb.cs": {
+    "role": "Library",
+    "sha256": "51b573970f80bb0e4743e8f419d0aa571eae5d7bb7b3db8087eb8a5d8d565920",
+    "ranges": []
+  },
+  "csharp/Decider.cs": {
+    "role": "Decider",
+    "sha256": "0ec40734096e89de2226d1b97cec8e8d9bd4f0cca1bd9e7194a55fedaa03421f",
+    "ranges": []
+  },
+  "csharp/Models.cs": {
+    "role": "Model",
+    "sha256": "99193b2e1bb53b555a0b3ab0b0ff5510fba4ca8b6099ddb695893b1f131bdaca",
+    "ranges": [
+      {
+        "start": 26,
+        "end": 26,
+        "role": "Projection"
+      },
+      {
+        "start": 27,
+        "end": 27,
+        "role": "UseCase"
+      },
+      {
+        "start": 49,
+        "end": 59,
+        "role": "Command"
+      },
+      {
+        "start": 74,
+        "end": 77,
+        "role": "Decider"
+      },
+      {
+        "start": 79,
+        "end": 86,
+        "role": "UseCase"
+      }
+    ]
+  },
+  "csharp/Program.cs": {
+    "role": "Boundary",
+    "sha256": "94ffe2f8776b59c8213abe74c4ad2a824bfbe2e6baaf1990a35e5b3154502d08",
+    "ranges": []
+  },
+  "csharp/Projection.cs": {
+    "role": "Projection",
+    "sha256": "3fef45c045c2d43d2ac22c6d9d023333be0d18222ac32bd2b5810f6b0b607ffa",
+    "ranges": []
+  },
+  "csharp/Routing.cs": {
+    "role": "Command",
+    "sha256": "81a6c0b77e2a2e08543e19ebfc26a7d1a3fed8ef31092035487e9941d1607833",
+    "ranges": []
+  },
+  "fsharp/Application.fs": {
+    "role": "UseCase",
+    "sha256": "01356fe9bb1faf2d6db154709c5855dfd5b04ed280a16943cd5d938a0c236059",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 5,
+        "role": "Boundary"
+      },
+      {
+        "start": 8,
+        "end": 12,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "fsharp/Dcb.fs": {
+    "role": "Library",
+    "sha256": "4519244e6f4ef5adddd6a27a37786136587ee02d800c40528d8067b10ee229d8",
+    "ranges": []
+  },
+  "fsharp/Decider.fs": {
+    "role": "Decider",
+    "sha256": "ac5dbe2db5f71984ea3723b934af891cbc3fb962692717cb745dd2f5be568351",
+    "ranges": []
+  },
+  "fsharp/Models.fs": {
+    "role": "Model",
+    "sha256": "2874c6c139dc50636246bb2f4e62a8fde020a3f894362f93d6dff603fc5635d9",
+    "ranges": [
+      {
+        "start": 72,
+        "end": 72,
+        "role": "Projection"
+      },
+      {
+        "start": 74,
+        "end": 74,
+        "role": "UseCase"
+      },
+      {
+        "start": 76,
+        "end": 86,
+        "role": "Command"
+      },
+      {
+        "start": 101,
+        "end": 104,
+        "role": "Decider"
+      },
+      {
+        "start": 106,
+        "end": 113,
+        "role": "UseCase"
+      }
+    ]
+  },
+  "fsharp/Program.fs": {
+    "role": "Boundary",
+    "sha256": "36ed3db842993d2ebb96f7235b6ba89cdabc807dbcb5f940bb3447aadc94e668",
+    "ranges": []
+  },
+  "fsharp/Projection.fs": {
+    "role": "Projection",
+    "sha256": "537c31334b80567ff3efa90253ec9e35e558a5c67afc9b97db987e6b994b99f6",
+    "ranges": []
+  },
+  "fsharp/Routing.fs": {
+    "role": "Command",
+    "sha256": "b1fc9d768e4071ddfda5baa061a017ca156a82accea555e8b6b88095df7c3a2b",
+    "ranges": []
+  },
+  "rust/src/application.rs": {
+    "role": "UseCase",
+    "sha256": "100f65d51c82d6263a185a33b91c653b5dbef5162d622d340d5e6670a45fe315",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 8,
+        "role": "Boundary"
+      },
+      {
+        "start": 16,
+        "end": 19,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "rust/src/dcb.rs": {
+    "role": "Library",
+    "sha256": "bcf07f3ff524d8be59d57154e559b311022b1c6c915d0fac6cefc3a0d6802a28",
+    "ranges": []
+  },
+  "rust/src/decider.rs": {
+    "role": "Decider",
+    "sha256": "50dc1d47570e9cc1688164ed5f375f0e3cacd846fe654fc6829bad456a1634e5",
+    "ranges": []
+  },
+  "rust/src/main.rs": {
+    "role": "Boundary",
+    "sha256": "9a3206a8c7f725e4147b69ad7715cab36d49f7245366c6c91e69d34560bc0469",
+    "ranges": []
+  },
+  "rust/src/models.rs": {
+    "role": "Model",
+    "sha256": "2f249f0011df104cad9058726ea26d0ec10edba5078a7c37ce9dff5cdd39be97",
+    "ranges": [
+      {
+        "start": 59,
+        "end": 66,
+        "role": "Projection"
+      },
+      {
+        "start": 68,
+        "end": 77,
+        "role": "UseCase"
+      },
+      {
+        "start": 105,
+        "end": 117,
+        "role": "Command"
+      },
+      {
+        "start": 134,
+        "end": 139,
+        "role": "Decider"
+      },
+      {
+        "start": 141,
+        "end": 150,
+        "role": "UseCase"
+      }
+    ]
+  },
+  "rust/src/projection.rs": {
+    "role": "Projection",
+    "sha256": "ee23bfdd49367e6fb70ecedcb9d41b15e391babf02085f7b99529b8498b51107",
+    "ranges": []
+  },
+  "rust/src/routing.rs": {
+    "role": "Command",
+    "sha256": "b7af65c4611680e44c2291bc2fc8e0243829b51eb33bd663046eb79d3d1c3949",
+    "ranges": []
+  },
+  "typescript/application.ts": {
+    "role": "UseCase",
+    "sha256": "bda825e53afa689808cd924c86ff2b95a07484f932a34bfbb27489c3611ede82",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 6,
+        "role": "Boundary"
+      },
+      {
+        "start": 8,
+        "end": 11,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "typescript/dcb.ts": {
+    "role": "Library",
+    "sha256": "272e5f693d52b7b9c949250daeee603b2480b78a69be03d76679633102583070",
+    "ranges": []
+  },
+  "typescript/decider.ts": {
+    "role": "Decider",
+    "sha256": "3b078b5b25ee012b12fe7943746a38cc16ffbeb1827b6d11a4b9c9b8103ff10d",
+    "ranges": []
+  },
+  "typescript/main.ts": {
+    "role": "Boundary",
+    "sha256": "9db5cc19ec9575b835470e56aa74361aafdfb786a96cdbc4d4f380cff13ffcc5",
+    "ranges": []
+  },
+  "typescript/models.ts": {
+    "role": "Model",
+    "sha256": "ca764b9b43fedb12dac142e01aab66c706d9350b919bf35729794afc9fb4a588",
+    "ranges": [
+      {
+        "start": 49,
+        "end": 50,
+        "role": "Projection"
+      },
+      {
+        "start": 52,
+        "end": 53,
+        "role": "UseCase"
+      },
+      {
+        "start": 55,
+        "end": 66,
+        "role": "Command"
+      },
+      {
+        "start": 85,
+        "end": 89,
+        "role": "Decider"
+      },
+      {
+        "start": 90,
+        "end": 99,
+        "role": "UseCase"
+      },
+      {
+        "start": 101,
+        "end": 101,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "typescript/projection.ts": {
+    "role": "Projection",
+    "sha256": "85a52451bb6db07ffc0ebe004dc0158bbfb0003550e032a2de6cc3130af5e498",
+    "ranges": []
+  },
+  "typescript/routing.ts": {
+    "role": "Command",
+    "sha256": "af2a8bfce08062920def66be860c21c90d6fae012ae1c953c4a49dee72edcfc4",
+    "ranges": []
+  },
+  "typescript/wire.ts": {
+    "role": "Boundary",
+    "sha256": "d2df1ec8610102d3833c1a8939ead927e144012e780ccbee482f4fb90c4290dc",
+    "ranges": []
+  },
+  "java/Application.java": {
+    "role": "UseCase",
+    "sha256": "49e6e18079faba48b500748281ecf71cdcc537664079e595cc5eac6f7247b04d",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 5,
+        "role": "Boundary"
+      },
+      {
+        "start": 7,
+        "end": 9,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "java/Decider.java": {
+    "role": "Decider",
+    "sha256": "cdb2190ac63ac0ace80e2418a4666c4dfe59a9037db794587dfe1fa6b122cf3f",
+    "ranges": []
+  },
+  "java/Main.java": {
+    "role": "Boundary",
+    "sha256": "2547328e45789423b2aa4fc66a52d0556d3069e41337814ebf7efd426e8f4699",
+    "ranges": []
+  },
+  "java/Models.java": {
+    "role": "Model",
+    "sha256": "e539dfdcbbd034c0d079c771b4b8f3335e0596b208589a2e9c23eabc8232965c",
+    "ranges": [
+      {
+        "start": 46,
+        "end": 53,
+        "role": "Projection"
+      },
+      {
+        "start": 54,
+        "end": 60,
+        "role": "UseCase"
+      },
+      {
+        "start": 144,
+        "end": 209,
+        "role": "Command"
+      },
+      {
+        "start": 286,
+        "end": 302,
+        "role": "Decider"
+      },
+      {
+        "start": 304,
+        "end": 343,
+        "role": "UseCase"
+      }
+    ]
+  },
+  "java/Projection.java": {
+    "role": "Projection",
+    "sha256": "2b363d0465034305d28f9906a632aaffe2560160edcc1e861e7957541510f9d5",
+    "ranges": []
+  },
+  "java/Routing.java": {
+    "role": "Command",
+    "sha256": "13e16f8f1b4eaca52a851c11ade614ca30e06b39a740653fbf835aabc612ef8b",
+    "ranges": []
+  },
+  "java/playground/dcb/Dcb.java": {
+    "role": "Library",
+    "sha256": "0bc02baa099f44e974e334f1bc061ba8e1fa9a1d3dc21a052b35a803f0142000",
+    "ranges": []
+  },
+  "go/application.go": {
+    "role": "UseCase",
+    "sha256": "6bd08390df6082ba889beb9934731a99daa4593fa82695ca3a1b8f46e0703182",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 24,
+        "role": "Boundary"
+      },
+      {
+        "start": 26,
+        "end": 30,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "go/dcb/store.go": {
+    "role": "Library",
+    "sha256": "c9645b4ae2921429964c48e3750f51faa4ba613cc1021b1acb27a509d8ee61bc",
+    "ranges": []
+  },
+  "go/domain/decider.go": {
+    "role": "Decider",
+    "sha256": "93e68ee5f80a4efc44eaeda84d4148324c9776bf7ff825d1e6945a0d6f5b5a48",
+    "ranges": []
+  },
+  "go/domain/json.go": {
+    "role": "Boundary",
+    "sha256": "1c66242a9a4052f0e91f126acd96a34fa866724a79e8e6800675fb340ca831c8",
+    "ranges": []
+  },
+  "go/domain/models.go": {
+    "role": "Model",
+    "sha256": "06e19b41d40be0e0231f854e9e188123b3b1f0ab9dafe2820834fe495218f658",
+    "ranges": [
+      {
+        "start": 81,
+        "end": 86,
+        "role": "Projection"
+      },
+      {
+        "start": 87,
+        "end": 94,
+        "role": "UseCase"
+      },
+      {
+        "start": 169,
+        "end": 232,
+        "role": "Command"
+      },
+      {
+        "start": 308,
+        "end": 319,
+        "role": "Decider"
+      },
+      {
+        "start": 321,
+        "end": 356,
+        "role": "UseCase"
+      }
+    ]
+  },
+  "go/domain/projection.go": {
+    "role": "Projection",
+    "sha256": "1027a984ca8718ad78f085281d6255b13d6aeb34e847551fcbd01c85b3e93df3",
+    "ranges": []
+  },
+  "go/domain/routing.go": {
+    "role": "Command",
+    "sha256": "0c4783f58e66056c2dc19a6c07d69f4c92242a14e14ba60f2b4cff4e86b15fbd",
+    "ranges": []
+  },
+  "go/main.go": {
+    "role": "Boundary",
+    "sha256": "db9f606ed3cef6d1165b1b945981de91631062e5167d8dfc35a318184497768c",
+    "ranges": []
+  },
+  "go/wire.go": {
+    "role": "Boundary",
+    "sha256": "9b6b94190200e388fb0a778cdf5af2e7242e985f3538aa84f06a9def6563bab3",
+    "ranges": []
+  },
+  "swift/application.swift": {
+    "role": "UseCase",
+    "sha256": "4ebb25cb80366c92824730f61185292fca926305117a383d75e9ef64ea78a75a",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 3,
+        "role": "Boundary"
+      },
+      {
+        "start": 5,
+        "end": 7,
+        "role": "Boundary"
+      }
+    ]
+  },
+  "swift/dcb.swift": {
+    "role": "Library",
+    "sha256": "9aff2a3983a4d5e993905548a64fb3389514d48c6825094fb24bb4d0d8ea4e0f",
+    "ranges": []
+  },
+  "swift/decider.swift": {
+    "role": "Decider",
+    "sha256": "5cef6e425757b6bdff61cdd149d245f0b77fa914e610388f3019fc94031d731a",
+    "ranges": []
+  },
+  "swift/main.swift": {
+    "role": "Boundary",
+    "sha256": "802ab94583fb05edfc1551195f3412343e8a14a21565c78692fb7e75b93b2c2d",
+    "ranges": []
+  },
+  "swift/models.swift": {
+    "role": "Model",
+    "sha256": "2b6590613cfcdbe6af88e4af1ca8f0b8ebbe482aad1a62ce68cb07f56c5b2dec",
+    "ranges": [
+      {
+        "start": 34,
+        "end": 39,
+        "role": "Projection"
+      },
+      {
+        "start": 40,
+        "end": 47,
+        "role": "UseCase"
+      },
+      {
+        "start": 65,
+        "end": 75,
+        "role": "Command"
+      },
+      {
+        "start": 88,
+        "end": 91,
+        "role": "Decider"
+      },
+      {
+        "start": 92,
+        "end": 99,
+        "role": "UseCase"
+      }
+    ]
+  },
+  "swift/projection.swift": {
+    "role": "Projection",
+    "sha256": "1e2ce838e0943660cf4b4e90fbfa1fdb5a70d69514e5793da48e448e60fca9fb",
+    "ranges": []
+  },
+  "swift/routing.swift": {
+    "role": "Command",
+    "sha256": "2f8735a395096ea52eaf3a9359a7436665b678a4f23564a7d8c7f0c951ad5cc5",
+    "ranges": []
+  },
+  "swift/wire.swift": {
+    "role": "Boundary",
+    "sha256": "cab03b2b588256636449482947877dc6574a7091cea3bf0f15520bb9c63b42ee",
+    "ranges": []
+  }
+}
