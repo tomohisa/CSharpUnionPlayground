@@ -6,13 +6,9 @@ import json
 from pathlib import Path
 import sys
 HERE=Path(__file__).resolve().parent
-SOURCES=[('C#','csharp','.cs','Models.cs','Decider.cs','Dcb.cs','Projection.cs',['Routing.cs','Application.cs']),
- ('F#','fsharp','.fs','Models.fs','Decider.fs','Dcb.fs','Projection.fs',['Routing.fs','Application.fs']),
- ('Rust','rust/src','.rs','models.rs','decider.rs','dcb.rs','projection.rs',['routing.rs','application.rs']),
- ('TypeScript＋Zod','typescript','.ts','models.ts','decider.ts','dcb.ts','projection.ts',['routing.ts','application.ts']),
- ('Java','java','.java','Models.java','Decider.java','playground/dcb/Dcb.java','Projection.java',['Routing.java','Application.java']),
- ('Go','go','.go','domain/models.go','domain/decider.go','dcb/store.go','domain/projection.go',['domain/routing.go','application.go']),
- ('Swift','swift','.swift','models.swift','decider.swift','dcb.swift','projection.swift',['routing.swift','application.swift'])]
+SOURCES=[('C#','csharp','.cs'),('F#','fsharp','.fs'),
+ ('Rust','rust/src','.rs'),('TypeScript＋Zod','typescript','.ts'),
+ ('Java','java','.java'),('Go','go','.go'),('Swift','swift','.swift')]
 SKIP={'bin','obj','target','node_modules','.build'}
 TESTS={'LibraryTests.cs','LibraryTests.fs','dcb_tests.rs','dcb.test.ts','DcbTests.java','libraryTests.swift'}
 ROLES=['Model','Decider','Command','Projection','UseCase','Boundary','Library']
@@ -21,7 +17,7 @@ START,END='<!-- code-stats:start -->','<!-- code-stats:end -->'
 def collect():
  manifest=json.loads((HERE/'code_stats_classification.json').read_text())
  seen=set();rows=[]
- for language,root,suffix,*_ in SOURCES:
+ for language,root,suffix in SOURCES:
   directory=HERE/root;groups={r:{'lines':0,'characters':0} for r in ROLES};details=[]
   for path in sorted(directory.rglob('*')):
    if not path.is_file() or path.suffix!=suffix or SKIP.intersection(path.relative_to(directory).parts) or path.name in TESTS or path.name.endswith('_test.go'):continue
