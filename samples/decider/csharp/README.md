@@ -43,7 +43,7 @@ closed推論で派生型を登録し、[csharp/Program.cs](Program.cs#L45)では
 
 [csharp/Decider.csproj](Decider.csproj#L3)はnet11.0を指定し、closedとInferClosedTypePolymorphismを使っています。Java版はJava 21のsealed／recordで書いており、同じ前提のランタイムではありません。既存.NET 10を対象にするなら、abstract＋明示的なJsonDerivedTypeなど別の設計が必要です。
 
-### 2. JSONの宣言が完全に消えるわけではない
+### 2. ケース別の登録は不要だが、入出力ルートのContextは必要
 
 出典：[csharp/Program.cs](Program.cs#L62-L66)
 
@@ -54,7 +54,11 @@ closed推論で派生型を登録し、[csharp/Program.cs](Program.cs#L45)では
 [JsonSerializable(typeof(Output))]
 internal partial class Wire : JsonSerializerContext;
 ```
-[file-basedのClosedInferredJson.cs](../../file-based/ClosedInferredJson.cs#L29)と同じく、JsonSerializerContextには入出力のルートだけを登録します。Input／Outputから参照されるCommand・State・Eventや、closed型の各ケースは標準Generatorがたどるため、個別のJsonSerializableは不要です。ルートがPaymentだけの例では1つ、入出力が別型のこの例では2つの登録が残ります。$typeが先頭でない他言語のJSONを読むためのオプションもあります。[rust/src/models.rs](../rust/src/models.rs#L11)のSerde deriveだけで済むモデル宣言と比べると、アプリ側に持つ設定が増えます。
+[file-basedのClosedInferredJson.cs](../../file-based/ClosedInferredJson.cs#L29)と同じ方式です。登録するのは入出力のルートだけで、Command・State・Eventやclosed型の各ケースを列挙する必要はありません。参照先は標準Source Generatorがたどります。ケース追加時にContextの登録一覧も更新する、という負担はありません。
+
+このCLIは入力と出力が別型なのでInput／Outputの2つを登録しています。Paymentだけを扱うfile-based版は1つです。残る負担はNative AOT向けのJsonSerializerContextとルート登録です。[RustのSerde derive](../rust/src/models.rs#L11)や[TypeScriptのZodスキーマ](../typescript/models.ts#L6)とは、この入口の宣言方法が異なります。
+
+CamelCaseは共通JSON形式の設定です。AllowOutOfOrderMetadataPropertiesは、他言語が$typeを先頭以外に出力しても読めるようにする、この相互交換サンプルの設定です。closed型の推論やNative AOTそのものに必須の設定ではありません。
 
 ### 3. 推論タグ・参照型・エラーコードの管理は残る
 
