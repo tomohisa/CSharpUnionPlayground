@@ -1,0 +1,60 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "unicode-1",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "生徒🌸",
+        "grade": "Year3"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-2",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "基礎🧪",
+        "course": "Foundation",
+        "capacity": 2
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-3",
+      "command": {
+        "$type": "Enroll",
+        "classId": "基礎🧪",
+        "studentId": "生徒🌸"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-4",
+      "command": {
+        "$type": "StartClass",
+        "classId": "基礎🧪",
+        "startedOn": "2026-04-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-5",
+      "command": {
+        "$type": "Attend",
+        "classId": "基礎🧪",
+        "studentId": "生徒🌸"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

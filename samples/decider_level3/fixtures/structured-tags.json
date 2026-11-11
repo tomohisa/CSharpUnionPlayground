@@ -1,0 +1,70 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "structured-1",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "a:b",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "structured-2",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "b",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "structured-3",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "c",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "structured-4",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "c:a",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "structured-5",
+      "command": {
+        "$type": "Enroll",
+        "classId": "c",
+        "studentId": "a:b"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "structured-6",
+      "command": {
+        "$type": "Enroll",
+        "classId": "c:a",
+        "studentId": "b"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

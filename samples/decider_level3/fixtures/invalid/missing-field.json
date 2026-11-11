@@ -1,0 +1,14 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "bad",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f",
+        "course": "Foundation"
+      }
+    }
+  ]
+}

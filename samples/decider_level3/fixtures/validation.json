@@ -1,0 +1,243 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "validation-1",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "",
+        "grade": "Year1"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-2",
+      "command": {
+        "$type": "PromoteStudent",
+        "studentId": "x",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-3",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-4",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 0
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-5",
+      "command": {
+        "$type": "Enroll",
+        "classId": "missing",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-6",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "s",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-7",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "s",
+        "grade": "Year3"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-8",
+      "command": {
+        "$type": "PromoteStudent",
+        "studentId": "s",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-9",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 2
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-10",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f",
+        "course": "Advanced",
+        "capacity": 2
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-11",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "missing"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-12",
+      "command": {
+        "$type": "Drop",
+        "classId": "f",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-13",
+      "command": {
+        "$type": "Attend",
+        "classId": "f",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-14",
+      "command": {
+        "$type": "StartClass",
+        "classId": "f",
+        "startedOn": ""
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-15",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-16",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-17",
+      "command": {
+        "$type": "StartClass",
+        "classId": "f",
+        "startedOn": "2026-04-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-18",
+      "command": {
+        "$type": "Drop",
+        "classId": "f",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-19",
+      "command": {
+        "$type": "Attend",
+        "classId": "f",
+        "studentId": "missing"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-20",
+      "command": {
+        "$type": "Assess",
+        "classId": "f",
+        "studentId": "s",
+        "score": -1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-21",
+      "command": {
+        "$type": "Attend",
+        "classId": "f",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-22",
+      "command": {
+        "$type": "Assess",
+        "classId": "f",
+        "studentId": "s",
+        "score": 0
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-23",
+      "command": {
+        "$type": "CompleteClass",
+        "classId": "f"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-24",
+      "command": {
+        "$type": "StartClass",
+        "classId": "f",
+        "startedOn": "2026-05-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "validation-25",
+      "command": {
+        "$type": "CompleteClass",
+        "classId": "f"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

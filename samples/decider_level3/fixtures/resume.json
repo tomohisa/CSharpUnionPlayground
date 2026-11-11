@@ -1,0 +1,739 @@
+{
+  "history": [
+    {
+      "position": 1,
+      "commandId": "history-1",
+      "eventType": "StudentRegistered",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "alice"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentRegistered",
+        "studentId": "alice",
+        "grade": "Year1"
+      }
+    },
+    {
+      "position": 2,
+      "commandId": "history-2",
+      "eventType": "StudentRegistered",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentRegistered",
+        "studentId": "bob",
+        "grade": "Year2"
+      }
+    },
+    {
+      "position": 3,
+      "commandId": "history-3",
+      "eventType": "ClassOpened",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassOpened",
+        "classId": "f1",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "position": 4,
+      "commandId": "history-4",
+      "eventType": "ClassOpened",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "b1"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassOpened",
+        "classId": "b1",
+        "course": "Advanced",
+        "capacity": 2
+      }
+    },
+    {
+      "position": 5,
+      "commandId": "history-5",
+      "eventType": "StudentPromoted",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "alice"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentPromoted",
+        "studentId": "alice",
+        "grade": "Year2"
+      }
+    },
+    {
+      "position": 6,
+      "commandId": "history-6",
+      "eventType": "StudentEnrolled",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "alice"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f1",
+            "alice"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentEnrolled",
+        "classId": "f1",
+        "studentId": "alice",
+        "course": "Foundation"
+      }
+    },
+    {
+      "position": 7,
+      "commandId": "history-7",
+      "eventType": "StudentDropped",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "alice"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f1",
+            "alice"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentDropped",
+        "classId": "f1",
+        "studentId": "alice"
+      }
+    },
+    {
+      "position": 8,
+      "commandId": "history-8",
+      "eventType": "StudentEnrolled",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentEnrolled",
+        "classId": "f1",
+        "studentId": "bob",
+        "course": "Foundation"
+      }
+    },
+    {
+      "position": 9,
+      "commandId": "history-9",
+      "eventType": "ClassStarted",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassStarted",
+        "classId": "f1",
+        "startedOn": "2026-04-01"
+      }
+    },
+    {
+      "position": 10,
+      "commandId": "history-9",
+      "eventType": "StudyStarted",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudyStarted",
+        "classId": "f1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "position": 11,
+      "commandId": "history-10",
+      "eventType": "AttendanceRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "AttendanceRecorded",
+        "classId": "f1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "position": 12,
+      "commandId": "history-11",
+      "eventType": "ResultRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ResultRecorded",
+        "classId": "f1",
+        "studentId": "bob",
+        "score": 59
+      }
+    },
+    {
+      "position": 13,
+      "commandId": "history-12",
+      "eventType": "ClassCompleted",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "f1"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassCompleted",
+        "classId": "f1",
+        "results": [
+          {
+            "studentId": "bob",
+            "progress": {
+              "$type": "Failed",
+              "score": 59,
+              "reason": "BelowPassMark"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "position": 14,
+      "commandId": "history-13",
+      "eventType": "StudentPromoted",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentPromoted",
+        "studentId": "bob",
+        "grade": "Year3"
+      }
+    },
+    {
+      "position": 15,
+      "commandId": "history-14",
+      "eventType": "ClassOpened",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "f2"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassOpened",
+        "classId": "f2",
+        "course": "Foundation",
+        "capacity": 2
+      }
+    },
+    {
+      "position": 16,
+      "commandId": "history-15",
+      "eventType": "StudentEnrolled",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f2"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f2",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentEnrolled",
+        "classId": "f2",
+        "studentId": "bob",
+        "course": "Foundation"
+      }
+    },
+    {
+      "position": 17,
+      "commandId": "history-16",
+      "eventType": "ClassStarted",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "f2"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassStarted",
+        "classId": "f2",
+        "startedOn": "2026-09-01"
+      }
+    },
+    {
+      "position": 18,
+      "commandId": "history-16",
+      "eventType": "StudyStarted",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f2"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f2",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudyStarted",
+        "classId": "f2",
+        "studentId": "bob"
+      }
+    },
+    {
+      "position": 19,
+      "commandId": "history-17",
+      "eventType": "AttendanceRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f2"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f2",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "AttendanceRecorded",
+        "classId": "f2",
+        "studentId": "bob"
+      }
+    },
+    {
+      "position": 20,
+      "commandId": "history-18",
+      "eventType": "ResultRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f2"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f2",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ResultRecorded",
+        "classId": "f2",
+        "studentId": "bob",
+        "score": 60
+      }
+    },
+    {
+      "position": 21,
+      "commandId": "history-19",
+      "eventType": "ClassCompleted",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "f2"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassCompleted",
+        "classId": "f2",
+        "results": [
+          {
+            "studentId": "bob",
+            "progress": {
+              "$type": "Passed",
+              "score": 60,
+              "credits": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "position": 22,
+      "commandId": "history-20",
+      "eventType": "StudentEnrolled",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "b1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "b1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentEnrolled",
+        "classId": "b1",
+        "studentId": "bob",
+        "course": "Advanced"
+      }
+    },
+    {
+      "position": 23,
+      "commandId": "history-21",
+      "eventType": "ClassStarted",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "b1"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassStarted",
+        "classId": "b1",
+        "startedOn": "2027-04-01"
+      }
+    },
+    {
+      "position": 24,
+      "commandId": "history-21",
+      "eventType": "StudyStarted",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "b1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "b1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudyStarted",
+        "classId": "b1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "position": 25,
+      "commandId": "history-22",
+      "eventType": "AttendanceRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "b1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "b1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "AttendanceRecorded",
+        "classId": "b1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "position": 26,
+      "commandId": "history-23",
+      "eventType": "ResultRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "bob"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "b1"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "b1",
+            "bob"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ResultRecorded",
+        "classId": "b1",
+        "studentId": "bob",
+        "score": 100
+      }
+    },
+    {
+      "position": 27,
+      "commandId": "history-24",
+      "eventType": "ClassCompleted",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "b1"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassCompleted",
+        "classId": "b1",
+        "results": [
+          {
+            "studentId": "bob",
+            "progress": {
+              "$type": "Passed",
+              "score": 100,
+              "credits": 2
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "resume-1",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "b2",
+        "course": "Advanced",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "resume-2",
+      "command": {
+        "$type": "Enroll",
+        "classId": "b2",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

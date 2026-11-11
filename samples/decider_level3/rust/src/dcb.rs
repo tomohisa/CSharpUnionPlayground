@@ -1,0 +1,110 @@
+use serde::{Serialize, Deserialize};
+use std::sync::Mutex;
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Tag { pub category: String, pub keys: Vec<String> }
+#[derive(Clone, Serialize, Deserialize)]
+pub struct QueryItem { pub tags: Vec<Tag>, pub types: Vec<String> }
+#[derive(Clone, Serialize, Deserialize)]
+pub struct Query { pub items: Vec<QueryItem> }
+impl Query {
+    pub fn matches(&self, event_type: &str, tags: &[Tag]) -> bool {
+        self.items.is_empty() || self.items.iter().any(|q| (q.types.is_empty() || q.types.iter().any(|t| t == event_type)) && q.tags.iter().all(|t| tags.contains(t)))
+    }
+}
+#[derive(Clone)]
+pub struct EventDescriptor { pub event_type: String, pub tags: Vec<Tag> }
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all="camelCase")]
+pub struct Recorded<E> { pub position: usize, pub command_id: String, pub event_type: String, pub tags: Vec<Tag>, pub payload: E }
+pub struct ReadResult<E> { pub after: usize, pub events: Vec<Recorded<E>> }
+pub enum AppendResult<E> { Committed(Vec<Recorded<E>>), Conflict }
+pub trait CommandStore<E:Clone+Send>:Sync {
+    fn read(&self,query:&Query)->ReadResult<E>;
+    fn append(&self,command_id:&str,condition:&Query,after:usize,batch:Vec<E>)->AppendResult<E>;
+}
+type Listener<E> = Box<dyn Fn(&[Recorded<E>]) -> bool + Send>;
+struct Inner<E> { log: Vec<Recorded<E>>, listeners: Vec<Listener<E>>, faults: usize }
+// Listener callbacks are synchronous, non-reentrant and must report failure via bool.
+pub struct EventStore<E: Clone + Send> { inner: Mutex<Inner<E>>, describe:Box<dyn Fn(&E)->EventDescriptor+Send+Sync>, copy_payload:Box<dyn Fn(&E)->E+Send+Sync> }
+impl<E: Clone + Send> EventStore<E> {
+    pub fn new(describe:impl Fn(&E)->EventDescriptor+Send+Sync+'static,copy_payload:impl Fn(&E)->E+Send+Sync+'static) -> Self { Self { describe:Box::new(describe),copy_payload:Box::new(copy_payload), inner: Mutex::new(Inner {log: vec![], listeners: vec![], faults: 0}) } }
+    fn copy(&self,e:&Recorded<E>)->Recorded<E>{Recorded{position:e.position,command_id:e.command_id.clone(),event_type:e.event_type.clone(),tags:e.tags.clone(),payload:(self.copy_payload)(&e.payload)}}
+    pub fn read(&self, query: &Query) -> ReadResult<E> {
+        let s = self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        ReadResult {after: s.log.len(), events: s.log.iter().filter(|e| query.matches(&e.event_type,&e.tags)).map(|e|self.copy(e)).collect()}
+    }
+    pub fn append(&self, command_id: &str, condition: &Query, after: usize, batch: Vec<E>) -> AppendResult<E> {
+        let mut s = self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        assert!(!batch.is_empty() && !command_id.is_empty() && after <= s.log.len(), "invalid append");
+        if s.log.iter().any(|e| e.position > after && condition.matches(&e.event_type,&e.tags)) { return AppendResult::Conflict; }
+        let committed: Vec<_> = batch.into_iter().enumerate().map(|(i,payload)| {
+            let payload=(self.copy_payload)(&payload);let e=(self.describe)(&payload);
+            assert!(!e.event_type.is_empty(), "event type required");
+            Recorded {position:s.log.len()+i+1, command_id:command_id.into(), event_type:e.event_type, tags:e.tags, payload}
+        }).collect();
+        let copies:Vec<_>=committed.iter().map(|e|self.copy(e)).collect();
+        s.log.extend(copies);
+        let before = s.listeners.len();
+        s.listeners.retain(|listener| std::panic::catch_unwind(std::panic::AssertUnwindSafe(||listener(&committed.iter().map(|e|self.copy(e)).collect::<Vec<_>>()))).unwrap_or(false));
+        s.faults += before - s.listeners.len();
+        AppendResult::Committed(committed.iter().map(|e|self.copy(e)).collect())
+    }
+    pub fn subscribe(&self, listener: Listener<E>) {
+        let mut s = self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        assert!(listener(&s.log.iter().map(|e|self.copy(e)).collect::<Vec<_>>()), "subscription replay failed"); s.listeners.push(listener);
+    }
+    pub fn load(&self, events: Vec<Recorded<E>>) {
+        let mut s = self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        assert!(s.log.is_empty() && s.listeners.is_empty(), "load only into an empty store");
+        assert!(events.iter().enumerate().all(|(i,e)| e.position == i+1 && !e.command_id.is_empty() && !e.event_type.is_empty() && {let d=(self.describe)(&e.payload);d.event_type==e.event_type && d.tags.len()==e.tags.len() && d.tags.iter().all(|t|e.tags.contains(t))}), "invalid imported log");
+        s.log = events.iter().map(|e|self.copy(e)).collect();
+    }
+    pub fn listener_faults(&self) -> usize { self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner).faults }
+}
+impl<E:Clone+Send> CommandStore<E> for EventStore<E> {
+    fn read(&self,q:&Query)->ReadResult<E>{EventStore::read(self,q)}
+    fn append(&self,id:&str,q:&Query,after:usize,batch:Vec<E>)->AppendResult<E>{EventStore::append(self,id,q,after,batch)}
+}
+pub struct LiveProjection<E,S: Clone> { inner: Mutex<(usize,S)>, reduce: Box<dyn Fn(&mut S,&E)+Send+Sync> }
+impl<E,S: Clone> LiveProjection<E,S> {
+    pub fn new(initial: S, reduce: impl Fn(&mut S,&E)+Send+Sync+'static) -> Self { Self {inner:Mutex::new((0,initial)),reduce:Box::new(reduce)} }
+    pub fn accept(&self, batch: &[Recorded<E>]) -> bool {
+        let mut s = self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner); let (mut position, mut next) = s.clone();
+        for e in batch {
+            if e.position <= position { continue; }
+            if e.position != position+1 { return false; }
+            (self.reduce)(&mut next,&e.payload); position=e.position;
+        }
+        *s = (position,next); true
+    }
+    pub fn snapshot(&self) -> (usize,S) { self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner).clone() }
+}
+pub enum Preparation<E,R> { Emit(Vec<E>), Reject(R) }
+pub struct Ticket<C,E,R> { pub command_id:String, pub command:C, pub query:Query, pub after:usize, pub returned:usize, pub decision:Preparation<E,R> }
+pub struct HandlingResult<R> { pub status:String, pub conflicts:usize, pub appended:usize, pub position:usize, pub errors:Vec<R> }
+pub struct CommandProcessor<'a,C,E:Clone+Send,R> {
+    pub store:&'a dyn CommandStore<E>, pub query_for:&'a dyn Fn(&C)->Query,
+    pub decide:&'a dyn Fn(&[Recorded<E>],&C)->Preparation<E,R>, pub max_conflicts:usize
+}
+impl<'a,C,E:Clone+Send,R> CommandProcessor<'a,C,E,R> {
+    pub fn prepare(&self, command_id:&str, command:C) -> Ticket<C,E,R> {
+        let query=(self.query_for)(&command); let read=self.store.read(&query); let decision=(self.decide)(&read.events,&command);
+        Ticket{command_id:command_id.into(),command,query,after:read.after,returned:read.events.len(),decision}
+    }
+    pub fn commit(&self, mut ticket:Ticket<C,E,R>) -> HandlingResult<R> {
+        let mut conflicts=0;
+        loop {
+            let events=match ticket.decision {
+                Preparation::Reject(error) => return HandlingResult{status:"Rejected".into(),conflicts,appended:0,position:ticket.after,errors:vec![error]},
+                Preparation::Emit(events)=>events
+            };
+            match self.store.append(&ticket.command_id,&ticket.query,ticket.after,events) {
+                AppendResult::Committed(events)=>return HandlingResult{status:"Committed".into(),conflicts,appended:events.len(),position:events.last().unwrap().position,errors:vec![]},
+                AppendResult::Conflict=>{}
+            }
+            conflicts+=1;
+            if conflicts>=self.max_conflicts {return HandlingResult{status:"RetryExhausted".into(),conflicts,appended:0,position:ticket.after,errors:vec![]};}
+            ticket=self.prepare(&ticket.command_id,ticket.command);
+        }
+    }
+}

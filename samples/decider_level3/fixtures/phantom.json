@@ -1,0 +1,42 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Prepare",
+      "key": "a",
+      "commandId": "phantom-a",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "alice",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Prepare",
+      "key": "b",
+      "commandId": "phantom-b",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "alice",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Commit",
+      "key": "a"
+    },
+    {
+      "$type": "Commit",
+      "key": "b"
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

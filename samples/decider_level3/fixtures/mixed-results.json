@@ -1,0 +1,115 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-1",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "a",
+        "grade": "Year3"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-2",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "b",
+        "grade": "Year3"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-3",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 2
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-4",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "a"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-5",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "b"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-6",
+      "command": {
+        "$type": "StartClass",
+        "classId": "f",
+        "startedOn": "2026-01-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-7",
+      "command": {
+        "$type": "Attend",
+        "classId": "f",
+        "studentId": "a"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-8",
+      "command": {
+        "$type": "Attend",
+        "classId": "f",
+        "studentId": "b"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-9",
+      "command": {
+        "$type": "Assess",
+        "classId": "f",
+        "studentId": "a",
+        "score": 60
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-10",
+      "command": {
+        "$type": "Assess",
+        "classId": "f",
+        "studentId": "b",
+        "score": 59
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-results-11",
+      "command": {
+        "$type": "CompleteClass",
+        "classId": "f"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

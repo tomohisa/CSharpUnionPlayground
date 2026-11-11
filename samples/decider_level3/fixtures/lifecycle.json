@@ -1,0 +1,316 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-1",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "alice",
+        "grade": "Year1"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-2",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "bob",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-3",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f1",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-4",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "b1",
+        "course": "Advanced",
+        "capacity": 2
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-5",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f1",
+        "studentId": "alice"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-6",
+      "command": {
+        "$type": "PromoteStudent",
+        "studentId": "alice",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-7",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f1",
+        "studentId": "alice"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-8",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-9",
+      "command": {
+        "$type": "Drop",
+        "classId": "f1",
+        "studentId": "alice"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-10",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-11",
+      "command": {
+        "$type": "StartClass",
+        "classId": "f1",
+        "startedOn": "2026-04-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-12",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f1",
+        "studentId": "alice"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-13",
+      "command": {
+        "$type": "Assess",
+        "classId": "f1",
+        "studentId": "bob",
+        "score": 60
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-14",
+      "command": {
+        "$type": "CompleteClass",
+        "classId": "f1"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-15",
+      "command": {
+        "$type": "Attend",
+        "classId": "f1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-16",
+      "command": {
+        "$type": "Assess",
+        "classId": "f1",
+        "studentId": "bob",
+        "score": 59
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-17",
+      "command": {
+        "$type": "CompleteClass",
+        "classId": "f1"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-18",
+      "command": {
+        "$type": "Enroll",
+        "classId": "b1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-19",
+      "command": {
+        "$type": "PromoteStudent",
+        "studentId": "bob",
+        "grade": "Year3"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-20",
+      "command": {
+        "$type": "Enroll",
+        "classId": "b1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-21",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f2",
+        "course": "Foundation",
+        "capacity": 2
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-22",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f2",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-23",
+      "command": {
+        "$type": "StartClass",
+        "classId": "f2",
+        "startedOn": "2026-09-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-24",
+      "command": {
+        "$type": "Attend",
+        "classId": "f2",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-25",
+      "command": {
+        "$type": "Assess",
+        "classId": "f2",
+        "studentId": "bob",
+        "score": 60
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-26",
+      "command": {
+        "$type": "CompleteClass",
+        "classId": "f2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-27",
+      "command": {
+        "$type": "Enroll",
+        "classId": "b1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-28",
+      "command": {
+        "$type": "StartClass",
+        "classId": "b1",
+        "startedOn": "2027-04-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-29",
+      "command": {
+        "$type": "Assess",
+        "classId": "b1",
+        "studentId": "bob",
+        "score": 101
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-30",
+      "command": {
+        "$type": "Attend",
+        "classId": "b1",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-31",
+      "command": {
+        "$type": "Assess",
+        "classId": "b1",
+        "studentId": "bob",
+        "score": 100
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-32",
+      "command": {
+        "$type": "Assess",
+        "classId": "b1",
+        "studentId": "bob",
+        "score": 100
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "lifecycle-33",
+      "command": {
+        "$type": "CompleteClass",
+        "classId": "b1"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

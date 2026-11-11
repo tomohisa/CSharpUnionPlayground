@@ -1,0 +1,70 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "unicode-order-student-0",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "\ud83d\ude00",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-order-student-1",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "\ue000",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-order-open-0",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "c-\ud83d\ude00",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-order-open-1",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "c-\ue000",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-order-enroll-0",
+      "command": {
+        "$type": "Enroll",
+        "classId": "c-\ud83d\ude00",
+        "studentId": "\ud83d\ude00"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "unicode-order-enroll-1",
+      "command": {
+        "$type": "Enroll",
+        "classId": "c-\ue000",
+        "studentId": "\ue000"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

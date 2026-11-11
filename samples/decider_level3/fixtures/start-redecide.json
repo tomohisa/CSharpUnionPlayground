@@ -1,0 +1,65 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "s-a",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "alice",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "open-f",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "enroll-a",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "alice"
+      }
+    },
+    {
+      "$type": "Prepare",
+      "key": "start",
+      "commandId": "start-redecide-start",
+      "command": {
+        "$type": "StartClass",
+        "classId": "f",
+        "startedOn": "2026-04-01"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "drop-a",
+      "command": {
+        "$type": "Drop",
+        "classId": "f",
+        "studentId": "alice"
+      }
+    },
+    {
+      "$type": "Commit",
+      "key": "start"
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

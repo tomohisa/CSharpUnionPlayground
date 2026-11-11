@@ -1,0 +1,105 @@
+{
+  "history": [
+    {
+      "position": 1,
+      "commandId": "seed-1",
+      "eventType": "StudentRegistered",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "alice"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentRegistered",
+        "studentId": "alice",
+        "grade": "Year2"
+      }
+    },
+    {
+      "position": 2,
+      "commandId": "seed-2",
+      "eventType": "ClassOpened",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "f"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassOpened",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "position": 3,
+      "commandId": "seed-3",
+      "eventType": "StudentEnrolled",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "alice"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f",
+            "alice"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "alice",
+        "course": "Foundation"
+      }
+    },
+    {
+      "position": 4,
+      "commandId": "seed-4",
+      "eventType": "AttendanceRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "alice"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "f"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "f",
+            "alice"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "AttendanceRecorded",
+        "classId": "f",
+        "studentId": "alice"
+      }
+    }
+  ],
+  "operations": []
+}

@@ -1,0 +1,12 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "bad",
+      "command": {
+        "$type": "Unknown"
+      }
+    }
+  ]
+}

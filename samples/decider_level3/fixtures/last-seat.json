@@ -1,0 +1,70 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "s-a",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "alice",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "s-b",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "bob",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "open-f",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Prepare",
+      "key": "a",
+      "commandId": "last-seat-a",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "alice"
+      }
+    },
+    {
+      "$type": "Prepare",
+      "key": "b",
+      "commandId": "last-seat-b",
+      "command": {
+        "$type": "Enroll",
+        "classId": "f",
+        "studentId": "bob"
+      }
+    },
+    {
+      "$type": "Commit",
+      "key": "a"
+    },
+    {
+      "$type": "Commit",
+      "key": "b"
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

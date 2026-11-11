@@ -1,0 +1,64 @@
+name: Decider Level 3 language samples
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'samples/decider_level3/**'
+      - 'scripts/run_payment_java.py'
+      - 'samples/file-based/package*.json'
+      - 'global.json'
+      - '.github/workflows/decider-level3-samples.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'samples/decider_level3/**'
+      - 'scripts/run_payment_java.py'
+      - 'samples/file-based/package*.json'
+      - 'global.json'
+      - '.github/workflows/decider-level3-samples.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  decider:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check README code statistics
+        run: python3 samples/decider_level3/code_stats.py --check
+      - name: Check comparative README excerpts
+        run: python3 samples/decider_level3/check_readmes.py
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.4'
+          cache: false
+      - name: Rust stable
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+      - name: TypeScript type checking
+        run: |
+          npm ci --prefix samples/file-based --ignore-scripts --no-audit --no-fund
+          npm ci --prefix samples/decider_level3/typescript --ignore-scripts --no-audit --no-fund
+          samples/file-based/node_modules/.bin/tsc -p samples/decider_level3/typescript/tsconfig.json
+      - name: Shared scenarios and cross-language event logs
+        run: python3 samples/decider_level3/run.py --verify
+      - name: Domain-free library isolation and conditional races
+        run: python3 samples/decider_level3/tests/library_isolation.py
+      - name: Exhaustiveness with a new progress case
+        run: python3 samples/decider_level3/tests/check_exhaustiveness.py
+      - name: C# Native AOT
+        run: python3 samples/decider_level3/run.py --language csharp --native-aot --verify
