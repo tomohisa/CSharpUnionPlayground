@@ -17,6 +17,14 @@
 
 C#はclosed record、Javaはsealed interface＋recordです。Rust・Swiftはenum、TypeScriptは判別共用体、Goはinterface＋structで同じケースを表します。C#のunionからJSON用の基底型に変換する処理は挟みません。
 
+## 各言語のPros / Cons
+
+この実装での利点と負担を、実コードの引用と他言語の対応箇所へのリンク付きで整理しています。言語一般の順位ではありません。型の網羅性・不変更新・JSON境界・エラー表現を比較し、補助処理の配置の違いも明記しています。
+
+[C#](csharp/README.md) / [Rust](rust/README.md) / [TypeScript](typescript/README.md) / [Java](java/README.md) / [Go](go/README.md) / [Swift](swift/README.md)
+
+引用の出典・行範囲・本文の一致は、CIで確認します。
+
 ## コード量の比較
 
 分類はファイル単位です。**Model**は上の表の型定義ファイル、**Decider**はdecide / evolve / replayのファイル、**その他**は各言語のMain・JSON境界ファイルです。Model内のJSON属性や補助メソッドもModelに含めます。

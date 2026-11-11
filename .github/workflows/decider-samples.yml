@@ -29,6 +29,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check README code statistics
         run: python3 samples/decider/code_stats.py --check
+      - name: Check comparative README excerpts
+        run: python3 samples/decider/check_readmes.py
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
