@@ -1,0 +1,60 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "metadata-order-1",
+      "command": {
+        "studentId": "s",
+        "grade": "Year2",
+        "$type": "RegisterStudent"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "metadata-order-2",
+      "command": {
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 1,
+        "$type": "OpenClass"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "metadata-order-3",
+      "command": {
+        "classId": "f",
+        "studentId": "s",
+        "$type": "Enroll"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "metadata-order-4",
+      "command": {
+        "classId": "f",
+        "studentId": "s",
+        "$type": "Drop"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "metadata-order-5",
+      "command": {
+        "classId": "f",
+        "studentId": "s",
+        "$type": "Enroll"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

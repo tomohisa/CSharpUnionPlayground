@@ -2,6 +2,8 @@
 
 [Level 1の教室登録](../decider/README.md)に、学年・前提科目・授業開始・出席・成績確定を加えた7言語比較です。C#、F#、Rust、TypeScript＋Zod、Java、Go、Swiftで同じコマンドとイベントを扱います。元の小さな例は変更せず残しています。
 
+タグ付きイベントストア・条件付き追記・競合再判断・ライブ一覧投影まで含む比較は[Decider Level 3](../decider_level3/README.md)にあります。
+
 ## コードを読む
 
 | 言語 | Model | Decider | 実行・JSON境界 | この実装のPros / Cons |

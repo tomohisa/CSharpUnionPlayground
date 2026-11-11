@@ -1,0 +1,7855 @@
+{
+  "empty": {
+    "events": [],
+    "steps": [
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [],
+        "classes": [],
+        "enrollments": [],
+        "summaries": []
+      },
+      {
+        "students": [],
+        "classes": [],
+        "enrollments": [],
+        "summaries": []
+      }
+    ],
+    "list": {
+      "students": [],
+      "classes": [],
+      "enrollments": [],
+      "summaries": []
+    },
+    "checkpoint": 0
+  },
+  "lifecycle": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "lifecycle-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "alice",
+          "grade": "Year1"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "lifecycle-2",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "bob",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "lifecycle-3",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f1",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "lifecycle-4",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "b1",
+          "course": "Advanced",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "lifecycle-6",
+        "eventType": "StudentPromoted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentPromoted",
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "lifecycle-7",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f1",
+          "studentId": "alice",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 7,
+        "commandId": "lifecycle-9",
+        "eventType": "StudentDropped",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentDropped",
+          "classId": "f1",
+          "studentId": "alice"
+        }
+      },
+      {
+        "position": 8,
+        "commandId": "lifecycle-10",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f1",
+          "studentId": "bob",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 9,
+        "commandId": "lifecycle-11",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "f1",
+          "startedOn": "2026-04-01"
+        }
+      },
+      {
+        "position": 10,
+        "commandId": "lifecycle-11",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "f1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 11,
+        "commandId": "lifecycle-15",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "f1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 12,
+        "commandId": "lifecycle-16",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "f1",
+          "studentId": "bob",
+          "score": 59
+        }
+      },
+      {
+        "position": 13,
+        "commandId": "lifecycle-17",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "f1",
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "position": 14,
+        "commandId": "lifecycle-19",
+        "eventType": "StudentPromoted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentPromoted",
+          "studentId": "bob",
+          "grade": "Year3"
+        }
+      },
+      {
+        "position": 15,
+        "commandId": "lifecycle-21",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f2",
+          "course": "Foundation",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 16,
+        "commandId": "lifecycle-22",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f2",
+          "studentId": "bob",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 17,
+        "commandId": "lifecycle-23",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "f2",
+          "startedOn": "2026-09-01"
+        }
+      },
+      {
+        "position": 18,
+        "commandId": "lifecycle-23",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "f2",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 19,
+        "commandId": "lifecycle-24",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "f2",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 20,
+        "commandId": "lifecycle-25",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "f2",
+          "studentId": "bob",
+          "score": 60
+        }
+      },
+      {
+        "position": 21,
+        "commandId": "lifecycle-26",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "f2",
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            }
+          ]
+        }
+      },
+      {
+        "position": 22,
+        "commandId": "lifecycle-27",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "b1",
+          "studentId": "bob",
+          "course": "Advanced"
+        }
+      },
+      {
+        "position": 23,
+        "commandId": "lifecycle-28",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "b1",
+          "startedOn": "2027-04-01"
+        }
+      },
+      {
+        "position": 24,
+        "commandId": "lifecycle-28",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "b1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 25,
+        "commandId": "lifecycle-30",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "b1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 26,
+        "commandId": "lifecycle-31",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "b1",
+          "studentId": "bob",
+          "score": 100
+        }
+      },
+      {
+        "position": 27,
+        "commandId": "lifecycle-33",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "b1",
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 100,
+                "credits": 2
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 4,
+        "errors": [
+          "GradeTooLow"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": [
+          "ClassFull"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 7,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 8,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 2,
+        "position": 10,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 10,
+        "errors": [
+          "RegistrationClosed"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 10,
+        "errors": [
+          "NoAttendance"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 10,
+        "errors": [
+          "UnassessedStudents"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 11,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 12,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 13,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 13,
+        "errors": [
+          "GradeTooLow"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 14,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 14,
+        "errors": [
+          "PrerequisiteMissing"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 15,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 16,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 2,
+        "position": 18,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 19,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 20,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 21,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 22,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 2,
+        "position": 24,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 24,
+        "errors": [
+          "InvalidScore"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 25,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 26,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 26,
+        "errors": [
+          "AlreadyAssessed"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 27,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 27,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 27,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 27,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "bob",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "b1",
+              "course": "Advanced",
+              "capacity": 2,
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 100,
+                  "credits": 2
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f1",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 59,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f2",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 60,
+                  "credits": 1
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "b1",
+            "studentId": "bob",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Passed",
+              "score": 100,
+              "credits": 2
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Withdrawn",
+              "reason": "StudentRequest"
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 59,
+              "reason": "BelowPassMark"
+            }
+          },
+          {
+            "classId": "f2",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 60,
+              "credits": 1
+            }
+          }
+        ],
+        "summaries": [
+          "passed:100:2",
+          "withdrawn:StudentRequest",
+          "failed:59:BelowPassMark",
+          "passed:60:1"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "bob",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "b1",
+              "course": "Advanced",
+              "capacity": 2,
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 100,
+                  "credits": 2
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f1",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 59,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f2",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 60,
+                  "credits": 1
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "b1",
+            "studentId": "bob",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Passed",
+              "score": 100,
+              "credits": 2
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Withdrawn",
+              "reason": "StudentRequest"
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 59,
+              "reason": "BelowPassMark"
+            }
+          },
+          {
+            "classId": "f2",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 60,
+              "credits": 1
+            }
+          }
+        ],
+        "summaries": [
+          "passed:100:2",
+          "withdrawn:StudentRequest",
+          "failed:59:BelowPassMark",
+          "passed:60:1"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "bob",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "b1",
+            "course": "Advanced",
+            "capacity": 2,
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 100,
+                "credits": 2
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f1",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f2",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "b1",
+          "studentId": "bob",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Passed",
+            "score": 100,
+            "credits": 2
+          }
+        },
+        {
+          "classId": "f1",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Withdrawn",
+            "reason": "StudentRequest"
+          }
+        },
+        {
+          "classId": "f1",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 59,
+            "reason": "BelowPassMark"
+          }
+        },
+        {
+          "classId": "f2",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 60,
+            "credits": 1
+          }
+        }
+      ],
+      "summaries": [
+        "passed:100:2",
+        "withdrawn:StudentRequest",
+        "failed:59:BelowPassMark",
+        "passed:60:1"
+      ]
+    },
+    "checkpoint": 27
+  },
+  "resume": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "history-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "alice",
+          "grade": "Year1"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "history-2",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "bob",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "history-3",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f1",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "history-4",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "b1",
+          "course": "Advanced",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "history-5",
+        "eventType": "StudentPromoted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentPromoted",
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "history-6",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f1",
+          "studentId": "alice",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 7,
+        "commandId": "history-7",
+        "eventType": "StudentDropped",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentDropped",
+          "classId": "f1",
+          "studentId": "alice"
+        }
+      },
+      {
+        "position": 8,
+        "commandId": "history-8",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f1",
+          "studentId": "bob",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 9,
+        "commandId": "history-9",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "f1",
+          "startedOn": "2026-04-01"
+        }
+      },
+      {
+        "position": 10,
+        "commandId": "history-9",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "f1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 11,
+        "commandId": "history-10",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "f1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 12,
+        "commandId": "history-11",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "f1",
+          "studentId": "bob",
+          "score": 59
+        }
+      },
+      {
+        "position": 13,
+        "commandId": "history-12",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "f1",
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "position": 14,
+        "commandId": "history-13",
+        "eventType": "StudentPromoted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentPromoted",
+          "studentId": "bob",
+          "grade": "Year3"
+        }
+      },
+      {
+        "position": 15,
+        "commandId": "history-14",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f2",
+          "course": "Foundation",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 16,
+        "commandId": "history-15",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f2",
+          "studentId": "bob",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 17,
+        "commandId": "history-16",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "f2",
+          "startedOn": "2026-09-01"
+        }
+      },
+      {
+        "position": 18,
+        "commandId": "history-16",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "f2",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 19,
+        "commandId": "history-17",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "f2",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 20,
+        "commandId": "history-18",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "f2",
+          "studentId": "bob",
+          "score": 60
+        }
+      },
+      {
+        "position": 21,
+        "commandId": "history-19",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f2"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "f2",
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            }
+          ]
+        }
+      },
+      {
+        "position": 22,
+        "commandId": "history-20",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "b1",
+          "studentId": "bob",
+          "course": "Advanced"
+        }
+      },
+      {
+        "position": 23,
+        "commandId": "history-21",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "b1",
+          "startedOn": "2027-04-01"
+        }
+      },
+      {
+        "position": 24,
+        "commandId": "history-21",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "b1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 25,
+        "commandId": "history-22",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "b1",
+          "studentId": "bob"
+        }
+      },
+      {
+        "position": 26,
+        "commandId": "history-23",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b1",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "b1",
+          "studentId": "bob",
+          "score": 100
+        }
+      },
+      {
+        "position": 27,
+        "commandId": "history-24",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b1"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "b1",
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 100,
+                "credits": 2
+              }
+            }
+          ]
+        }
+      },
+      {
+        "position": 28,
+        "commandId": "resume-1",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b2"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "b2",
+          "course": "Advanced",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 29,
+        "commandId": "resume-2",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b2"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b2",
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "b2",
+          "studentId": "bob",
+          "course": "Advanced"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 28,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 29,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 29,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 29,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 29,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "bob",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "b1",
+              "course": "Advanced",
+              "capacity": 2,
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 100,
+                  "credits": 2
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "b2",
+              "course": "Advanced",
+              "capacity": 1,
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              }
+            },
+            "students": [
+              "bob"
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f1",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 59,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f2",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 60,
+                  "credits": 1
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "b1",
+            "studentId": "bob",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Passed",
+              "score": 100,
+              "credits": 2
+            }
+          },
+          {
+            "classId": "b2",
+            "studentId": "bob",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Withdrawn",
+              "reason": "StudentRequest"
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 59,
+              "reason": "BelowPassMark"
+            }
+          },
+          {
+            "classId": "f2",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 60,
+              "credits": 1
+            }
+          }
+        ],
+        "summaries": [
+          "passed:100:2",
+          "reserved",
+          "withdrawn:StudentRequest",
+          "failed:59:BelowPassMark",
+          "passed:60:1"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "bob",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "b1",
+              "course": "Advanced",
+              "capacity": 2,
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 100,
+                  "credits": 2
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "b2",
+              "course": "Advanced",
+              "capacity": 1,
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              }
+            },
+            "students": [
+              "bob"
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f1",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 59,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f2",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "bob",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 60,
+                  "credits": 1
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "b1",
+            "studentId": "bob",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Passed",
+              "score": 100,
+              "credits": 2
+            }
+          },
+          {
+            "classId": "b2",
+            "studentId": "bob",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Withdrawn",
+              "reason": "StudentRequest"
+            }
+          },
+          {
+            "classId": "f1",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 59,
+              "reason": "BelowPassMark"
+            }
+          },
+          {
+            "classId": "f2",
+            "studentId": "bob",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 60,
+              "credits": 1
+            }
+          }
+        ],
+        "summaries": [
+          "passed:100:2",
+          "reserved",
+          "withdrawn:StudentRequest",
+          "failed:59:BelowPassMark",
+          "passed:60:1"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "bob",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "b1",
+            "course": "Advanced",
+            "capacity": 2,
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 100,
+                "credits": 2
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "b2",
+            "course": "Advanced",
+            "capacity": 1,
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            }
+          },
+          "students": [
+            "bob"
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f1",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f2",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "b1",
+          "studentId": "bob",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Passed",
+            "score": 100,
+            "credits": 2
+          }
+        },
+        {
+          "classId": "b2",
+          "studentId": "bob",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Reserved"
+          }
+        },
+        {
+          "classId": "f1",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Withdrawn",
+            "reason": "StudentRequest"
+          }
+        },
+        {
+          "classId": "f1",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 59,
+            "reason": "BelowPassMark"
+          }
+        },
+        {
+          "classId": "f2",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 60,
+            "credits": 1
+          }
+        }
+      ],
+      "summaries": [
+        "passed:100:2",
+        "reserved",
+        "withdrawn:StudentRequest",
+        "failed:59:BelowPassMark",
+        "passed:60:1"
+      ]
+    },
+    "checkpoint": 29
+  },
+  "withdraw": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "withdraw-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "withdraw-2",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "withdraw-3",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "withdraw-4",
+        "eventType": "StudentDropped",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentDropped",
+          "classId": "f",
+          "studentId": "s"
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "withdraw-5",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "s"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "s"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "s"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved"
+      ]
+    },
+    "checkpoint": 5
+  },
+  "validation": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "validation-6",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "validation-9",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "validation-15",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "validation-17",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "f",
+          "startedOn": "2026-04-01"
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "validation-17",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "f",
+          "studentId": "s"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "validation-21",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "f",
+          "studentId": "s"
+        }
+      },
+      {
+        "position": 7,
+        "commandId": "validation-22",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "f",
+          "studentId": "s",
+          "score": 0
+        }
+      },
+      {
+        "position": 8,
+        "commandId": "validation-23",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "f",
+          "results": [
+            {
+              "studentId": "s",
+              "progress": {
+                "$type": "Failed",
+                "score": 0,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "InvalidId"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "UnknownStudent"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "InvalidId"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "InvalidCapacity"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "UnknownClass"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 1,
+        "errors": [
+          "DuplicateStudent"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 1,
+        "errors": [
+          "InvalidPromotion"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 2,
+        "errors": [
+          "DuplicateClass"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 2,
+        "errors": [
+          "UnknownStudent"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 2,
+        "errors": [
+          "NotEnrolled"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 2,
+        "errors": [
+          "NotTeaching"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 2,
+        "errors": [
+          "InvalidDate"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": [
+          "AlreadyEnrolled"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 2,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": [
+          "RegistrationClosed"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": [
+          "NotEnrolled"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": [
+          "InvalidScore"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 7,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 8,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 8,
+        "errors": [
+          "RegistrationClosed"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 8,
+        "errors": [
+          "NotTeaching"
+        ]
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 8,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 8,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 8,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "s",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 0,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 0,
+              "reason": "BelowPassMark"
+            }
+          }
+        ],
+        "summaries": [
+          "failed:0:BelowPassMark"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "s",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 0,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 0,
+              "reason": "BelowPassMark"
+            }
+          }
+        ],
+        "summaries": [
+          "failed:0:BelowPassMark"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "s",
+              "progress": {
+                "$type": "Failed",
+                "score": 0,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 0,
+            "reason": "BelowPassMark"
+          }
+        }
+      ],
+      "summaries": [
+        "failed:0:BelowPassMark"
+      ]
+    },
+    "checkpoint": 8
+  },
+  "unicode": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "unicode-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "生徒🌸"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "生徒🌸",
+          "grade": "Year3"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "unicode-2",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "基礎🧪"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "基礎🧪",
+          "course": "Foundation",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "unicode-3",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "生徒🌸"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "基礎🧪"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "基礎🧪",
+              "生徒🌸"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "基礎🧪",
+          "studentId": "生徒🌸",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "unicode-4",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "基礎🧪"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "基礎🧪",
+          "startedOn": "2026-04-01"
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "unicode-4",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "生徒🌸"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "基礎🧪"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "基礎🧪",
+              "生徒🌸"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "基礎🧪",
+          "studentId": "生徒🌸"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "unicode-5",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "生徒🌸"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "基礎🧪"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "基礎🧪",
+              "生徒🌸"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "基礎🧪",
+          "studentId": "生徒🌸"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 2,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "生徒🌸",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Teaching",
+            "plan": {
+              "classId": "基礎🧪",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "生徒🌸"
+            ],
+            "startedOn": "2026-04-01"
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "基礎🧪",
+            "studentId": "生徒🌸",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Studying",
+              "attendance": 1
+            }
+          }
+        ],
+        "summaries": [
+          "studying:1"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "生徒🌸",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Teaching",
+            "plan": {
+              "classId": "基礎🧪",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "生徒🌸"
+            ],
+            "startedOn": "2026-04-01"
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "基礎🧪",
+            "studentId": "生徒🌸",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Studying",
+              "attendance": 1
+            }
+          }
+        ],
+        "summaries": [
+          "studying:1"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "生徒🌸",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Teaching",
+          "plan": {
+            "classId": "基礎🧪",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "生徒🌸"
+          ],
+          "startedOn": "2026-04-01"
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "基礎🧪",
+          "studentId": "生徒🌸",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Studying",
+            "attendance": 1
+          }
+        }
+      ],
+      "summaries": [
+        "studying:1"
+      ]
+    },
+    "checkpoint": 6
+  },
+  "metadata-order": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "metadata-order-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "metadata-order-2",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "metadata-order-3",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "metadata-order-4",
+        "eventType": "StudentDropped",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentDropped",
+          "classId": "f",
+          "studentId": "s"
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "metadata-order-5",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "s"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 1,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "s"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "s"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved"
+      ]
+    },
+    "checkpoint": 5
+  },
+  "available": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "available-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "a",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "available-2",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "available-3",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "a",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "a",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Available",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "a"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "a",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "a",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Available",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "students": [
+              "a"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "a",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "a",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Available",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "a"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "a",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved"
+      ]
+    },
+    "checkpoint": 3
+  },
+  "mixed-results": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "mixed-results-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "a",
+          "grade": "Year3"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "mixed-results-2",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "b",
+          "grade": "Year3"
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "mixed-results-3",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 2
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "mixed-results-4",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "a",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "mixed-results-5",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "b"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "b",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "mixed-results-6",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "f",
+          "startedOn": "2026-01-01"
+        }
+      },
+      {
+        "position": 7,
+        "commandId": "mixed-results-6",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "f",
+          "studentId": "a"
+        }
+      },
+      {
+        "position": 8,
+        "commandId": "mixed-results-6",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "b"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "f",
+          "studentId": "b"
+        }
+      },
+      {
+        "position": 9,
+        "commandId": "mixed-results-7",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "f",
+          "studentId": "a"
+        }
+      },
+      {
+        "position": 10,
+        "commandId": "mixed-results-8",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "b"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "f",
+          "studentId": "b"
+        }
+      },
+      {
+        "position": 11,
+        "commandId": "mixed-results-9",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "f",
+          "studentId": "a",
+          "score": 60
+        }
+      },
+      {
+        "position": 12,
+        "commandId": "mixed-results-10",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "b"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "f",
+          "studentId": "b",
+          "score": 59
+        }
+      },
+      {
+        "position": 13,
+        "commandId": "mixed-results-11",
+        "eventType": "ClassCompleted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassCompleted",
+          "classId": "f",
+          "results": [
+            {
+              "studentId": "a",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            },
+            {
+              "studentId": "b",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 3,
+        "position": 8,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 9,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 10,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 11,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 12,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 13,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 13,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 13,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 13,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "a",
+            "grade": "Year3"
+          },
+          {
+            "studentId": "b",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "a",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 60,
+                  "credits": 1
+                }
+              },
+              {
+                "studentId": "b",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 59,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "a",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 60,
+              "credits": 1
+            }
+          },
+          {
+            "classId": "f",
+            "studentId": "b",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 59,
+              "reason": "BelowPassMark"
+            }
+          }
+        ],
+        "summaries": [
+          "passed:60:1",
+          "failed:59:BelowPassMark"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "a",
+            "grade": "Year3"
+          },
+          {
+            "studentId": "b",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Completed",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "capacity": 2,
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              }
+            },
+            "results": [
+              {
+                "studentId": "a",
+                "progress": {
+                  "$type": "Passed",
+                  "score": 60,
+                  "credits": 1
+                }
+              },
+              {
+                "studentId": "b",
+                "progress": {
+                  "$type": "Failed",
+                  "score": 59,
+                  "reason": "BelowPassMark"
+                }
+              }
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "a",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 60,
+              "credits": 1
+            }
+          },
+          {
+            "classId": "f",
+            "studentId": "b",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Failed",
+              "score": 59,
+              "reason": "BelowPassMark"
+            }
+          }
+        ],
+        "summaries": [
+          "passed:60:1",
+          "failed:59:BelowPassMark"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "a",
+          "grade": "Year3"
+        },
+        {
+          "studentId": "b",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "a",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            },
+            {
+              "studentId": "b",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "a",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 60,
+            "credits": 1
+          }
+        },
+        {
+          "classId": "f",
+          "studentId": "b",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 59,
+            "reason": "BelowPassMark"
+          }
+        }
+      ],
+      "summaries": [
+        "passed:60:1",
+        "failed:59:BelowPassMark"
+      ]
+    },
+    "checkpoint": 13
+  },
+  "last-seat": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "s-a",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "s-b",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "bob"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "bob",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "open-f",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "last-seat-a",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Prepare",
+        "status": "Prepared",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Prepare",
+        "status": "Prepared",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Commit",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Commit",
+        "status": "Rejected",
+        "conflicts": 1,
+        "appended": 0,
+        "position": 4,
+        "errors": [
+          "ClassFull"
+        ]
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 4,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "bob",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "alice"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "bob",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "alice"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "bob",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "alice"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved"
+      ]
+    },
+    "checkpoint": 4
+  },
+  "phantom": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "phantom-a",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Prepare",
+        "status": "Prepared",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": []
+      },
+      {
+        "operation": "Prepare",
+        "status": "Prepared",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": []
+      },
+      {
+        "operation": "Commit",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Commit",
+        "status": "Rejected",
+        "conflicts": 1,
+        "appended": 0,
+        "position": 1,
+        "errors": [
+          "DuplicateStudent"
+        ]
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 1,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [],
+        "enrollments": [],
+        "summaries": []
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [],
+        "enrollments": [],
+        "summaries": []
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [],
+      "enrollments": [],
+      "summaries": []
+    },
+    "checkpoint": 1
+  },
+  "unrelated": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "s-a",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "open-f",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "open-other",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "other"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "other",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "unrelated-a",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Prepare",
+        "status": "Prepared",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Commit",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 4,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "alice"
+            ]
+          },
+          {
+            "$type": "Available",
+            "plan": {
+              "classId": "other",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": []
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "alice"
+            ]
+          },
+          {
+            "$type": "Available",
+            "plan": {
+              "classId": "other",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": []
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "alice"
+          ]
+        },
+        {
+          "$type": "Available",
+          "plan": {
+            "classId": "other",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": []
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved"
+      ]
+    },
+    "checkpoint": 4
+  },
+  "start-redecide": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "s-a",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "open-f",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "enroll-a",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "drop-a",
+        "eventType": "StudentDropped",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentDropped",
+          "classId": "f",
+          "studentId": "alice"
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "start-redecide-start",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "f",
+          "startedOn": "2026-04-01"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Prepare",
+        "status": "Prepared",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Commit",
+        "status": "Committed",
+        "conflicts": 1,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 5,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Teaching",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [],
+            "startedOn": "2026-04-01"
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Withdrawn",
+              "reason": "StudentRequest"
+            }
+          }
+        ],
+        "summaries": [
+          "withdrawn:StudentRequest"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Teaching",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [],
+            "startedOn": "2026-04-01"
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Withdrawn",
+              "reason": "StudentRequest"
+            }
+          }
+        ],
+        "summaries": [
+          "withdrawn:StudentRequest"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Teaching",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [],
+          "startedOn": "2026-04-01"
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Withdrawn",
+            "reason": "StudentRequest"
+          }
+        }
+      ],
+      "summaries": [
+        "withdrawn:StudentRequest"
+      ]
+    },
+    "checkpoint": 5
+  },
+  "structured-tags": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "structured-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a:b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "a:b",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "structured-2",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "b",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "structured-3",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "c"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "c",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "structured-4",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "c:a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "c:a",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "structured-5",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a:b"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "c"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "c",
+              "a:b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "c",
+          "studentId": "a:b",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "structured-6",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "b"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "c:a"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "c:a",
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "c:a",
+          "studentId": "b",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "a:b",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "b",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "a:b"
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c:a",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "b"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "c",
+            "studentId": "a:b",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "c:a",
+            "studentId": "b",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved",
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "a:b",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "b",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "a:b"
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c:a",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "b"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "c",
+            "studentId": "a:b",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "c:a",
+            "studentId": "b",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved",
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "a:b",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "b",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "c",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "a:b"
+          ]
+        },
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "c:a",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "b"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "c",
+          "studentId": "a:b",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        },
+        {
+          "classId": "c:a",
+          "studentId": "b",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved",
+        "reserved"
+      ]
+    },
+    "checkpoint": 6
+  },
+  "live-snapshots": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "snapshot-register",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "snapshot-open",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "f",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "snapshot-enroll",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "alice"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "f"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "f",
+              "alice"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 3,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [],
+        "classes": [],
+        "enrollments": [],
+        "summaries": []
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [],
+        "enrollments": [],
+        "summaries": []
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Available",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": []
+          }
+        ],
+        "enrollments": [],
+        "summaries": []
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "alice"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "f",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "alice"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "f",
+            "studentId": "alice",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "alice"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved"
+      ]
+    },
+    "checkpoint": 3
+  },
+  "mixed-id-order": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "mixed-id-order-student-0",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "a",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "mixed-id-order-student-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "B"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "B",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "mixed-id-order-open-0",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "c-a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "c-a",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "mixed-id-order-open-1",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "c-B"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "c-B",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "mixed-id-order-enroll-0",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "c-a"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "c-a",
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "c-a",
+          "studentId": "a",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "mixed-id-order-enroll-1",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "B"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "c-B"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "c-B",
+              "B"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "c-B",
+          "studentId": "B",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "B",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "a",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-B",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "B"
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-a",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "a"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "c-B",
+            "studentId": "B",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "c-a",
+            "studentId": "a",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved",
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "B",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "a",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-B",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "B"
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-a",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "a"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "c-B",
+            "studentId": "B",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "c-a",
+            "studentId": "a",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved",
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "B",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "a",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "c-B",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "B"
+          ]
+        },
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "c-a",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "a"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "c-B",
+          "studentId": "B",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        },
+        {
+          "classId": "c-a",
+          "studentId": "a",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved",
+        "reserved"
+      ]
+    },
+    "checkpoint": 6
+  },
+  "unicode-order": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "unicode-order-student-0",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "😀"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "😀",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "unicode-order-student-1",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              ""
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "",
+          "grade": "Year2"
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "unicode-order-open-0",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "c-😀"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "c-😀",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "unicode-order-open-1",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "c-"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "c-",
+          "course": "Foundation",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "unicode-order-enroll-0",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "😀"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "c-😀"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "c-😀",
+              "😀"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "c-😀",
+          "studentId": "😀",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "unicode-order-enroll-1",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              ""
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "c-"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "c-",
+              ""
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "c-",
+          "studentId": "",
+          "course": "Foundation"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 1,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 2,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 3,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 4,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 5,
+        "errors": []
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 6,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "😀",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              ""
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-😀",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "😀"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "c-",
+            "studentId": "",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "c-😀",
+            "studentId": "😀",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved",
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "",
+            "grade": "Year2"
+          },
+          {
+            "studentId": "😀",
+            "grade": "Year2"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              ""
+            ]
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "c-😀",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "😀"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "c-",
+            "studentId": "",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          },
+          {
+            "classId": "c-😀",
+            "studentId": "😀",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "reserved",
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "😀",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "c-",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            ""
+          ]
+        },
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "c-😀",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "😀"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "c-",
+          "studentId": "",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        },
+        {
+          "classId": "c-😀",
+          "studentId": "😀",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "reserved",
+        "reserved"
+      ]
+    },
+    "checkpoint": 6
+  }
+}

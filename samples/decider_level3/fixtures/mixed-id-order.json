@@ -1,0 +1,70 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "mixed-id-order-student-0",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "a",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-id-order-student-1",
+      "command": {
+        "$type": "RegisterStudent",
+        "studentId": "B",
+        "grade": "Year2"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-id-order-open-0",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "c-a",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-id-order-open-1",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "c-B",
+        "course": "Foundation",
+        "capacity": 1
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-id-order-enroll-0",
+      "command": {
+        "$type": "Enroll",
+        "classId": "c-a",
+        "studentId": "a"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "mixed-id-order-enroll-1",
+      "command": {
+        "$type": "Enroll",
+        "classId": "c-B",
+        "studentId": "B"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

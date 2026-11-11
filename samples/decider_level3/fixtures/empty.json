@@ -1,0 +1,14 @@
+{
+  "history": [],
+  "operations": [
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Redeliver"
+    },
+    {
+      "$type": "Rebuild"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "history": [
+    {
+      "position": 2,
+      "commandId": "seed",
+      "eventType": "StudentRegistered",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "a"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentRegistered",
+        "studentId": "a",
+        "grade": "Year2"
+      }
+    }
+  ],
+  "operations": []
+}

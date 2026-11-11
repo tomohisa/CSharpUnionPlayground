@@ -4,11 +4,13 @@
 
 A playground for testing and exploring **C# 15 Union Types** (.NET 11 GA).
 
-## Decider pattern across six languages
+## Decider pattern samples
 
 [Classroom Decider samples](samples/decider/README.md) compare C#, Rust, TypeScript, Java, Go and Swift with the same phase-specific State types, commands, events, pure decide/evolve functions, JSON history replay and shared scenarios.
 
 [Decider Level 2](samples/decider_level2/README.md) adds F# on .NET 11 and compares seven implementations of grade restrictions, prerequisite courses, attendance, assessment and phase-specific enrollment data, with shared JSON scenarios and code-size analysis.
+
+[Decider Level 3](samples/decider_level3/README.md) adds reusable typed DCB libraries, conditional append and conflict redecisions, plus automatically updated live list projections in all seven languages.
 
 ## What's This?
 
