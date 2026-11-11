@@ -45,18 +45,16 @@ closed推論で派生型を登録し、[csharp/Program.cs](Program.cs#L45)では
 
 ### 2. JSONの宣言が完全に消えるわけではない
 
-出典：[csharp/Program.cs](Program.cs#L62-L68)
+出典：[csharp/Program.cs](Program.cs#L62-L66)
 
 ```csharp
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     AllowOutOfOrderMetadataProperties = true)]
 [JsonSerializable(typeof(Input))]
 [JsonSerializable(typeof(Output))]
-[JsonSerializable(typeof(State))]
-[JsonSerializable(typeof(Event[]))]
 internal partial class Wire : JsonSerializerContext;
 ```
-JsonSerializerContextと対象ルートの登録は残ります。$typeが先頭でない他言語のJSONを読むためのオプションもあります。[rust/src/models.rs](../rust/src/models.rs#L11)のSerde deriveだけで済むモデル宣言と比べると、アプリ側に持つ設定が増えます。
+[file-basedのClosedInferredJson.cs](../../file-based/ClosedInferredJson.cs#L29)と同じく、JsonSerializerContextには入出力のルートだけを登録します。Input／Outputから参照されるCommand・State・Eventや、closed型の各ケースは標準Generatorがたどるため、個別のJsonSerializableは不要です。ルートがPaymentだけの例では1つ、入出力が別型のこの例では2つの登録が残ります。$typeが先頭でない他言語のJSONを読むためのオプションもあります。[rust/src/models.rs](../rust/src/models.rs#L11)のSerde deriveだけで済むモデル宣言と比べると、アプリ側に持つ設定が増えます。
 
 ### 3. 推論タグ・参照型・エラーコードの管理は残る
 
