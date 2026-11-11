@@ -71,7 +71,7 @@ extension State: Codable {
 
 ### 2. enumの網羅性と、文字列タグのdecodeは別の管理になる
 
-上のdecodeはStringに対するswitchとdefaultです。Eventの追加で型付きencodeのswitchは検査できますが、decode側の新タグの追加漏れまで自動でコンパイルエラーになるわけではありません。[typescript/wire.ts](../typescript/wire.ts#L29)の手書き検査や[go/wire.go](../go/wire.go#L37)と共通する保守箇所です。
+上のdecodeはStringに対するswitchとdefaultです。Eventの追加で型付きencodeのswitchは検査できますが、decode側の新タグの追加漏れまで自動でコンパイルエラーになるわけではありません。[go/wire.go](../go/wire.go#L37)と共通する保守箇所です。[TypeScriptのZod版](../typescript/models.ts#L16)はスキーマから型を導出するため、この二重管理を避けています。
 
 ### 3. Deciderだけの短さは、コード配置にも左右される
 

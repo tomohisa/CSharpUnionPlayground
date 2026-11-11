@@ -31,7 +31,7 @@ func Snapshot(s State) (string, int, []string) {
 ```go
 		r.students = append(append([]string{}, r.students...), v.StudentID)
 ```
-外へ返す時と更新時の両方で、sliceの背後の配列を共有したまま書き換えないようコピーしています。[typescript/models.ts](../typescript/models.ts#L1)のreadonly型だけで済ませず、実際の配列を分けています。反面、このコードを外すと過去のStateへ影響し得るので、自動的な不変コレクションではありません。
+外へ返す時と更新時の両方で、sliceの背後の配列を共有したまま書き換えないようコピーしています。[typescript/models.ts](../typescript/models.ts#L3)のZod解析時の凍結とは違い、更新時にも実際の配列を分けています。反面、このコードを外すと過去のStateへ影響し得るので、自動的な不変コレクションではありません。
 
 ### 3. Snapshot復元時にフェーズの整合性まで確認している
 

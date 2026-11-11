@@ -36,7 +36,7 @@ record Roster(String name, int capacity, List<String> students) {
     Roster { students = List.copyOf(students); }
 }
 ```
-recordのフィールドがfinalでも、List自身を変更不可にする処理は別です。この例は[List.copyOf](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html#copyOf(java.util.Collection))を通しています。呼び出し元の可変ArrayListを保持し続けず、[typescript/models.ts](../typescript/models.ts#L1)のreadonly型注釈だけの場合より実行時の保護があります。要素はこの例では不変なStringです。
+recordのフィールドがfinalでも、List自身を変更不可にする処理は別です。この例は[List.copyOf](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html#copyOf(java.util.Collection))を通しています。呼び出し元の可変ArrayListを保持し続けず、[typescript/models.ts](../typescript/models.ts#L3)と同じく実行時の保護がありますが、TypeScript版の凍結はZodでparseした値に限られます。要素はこの例では不変なStringです。
 
 ### 3. JSONのタグをJavaの型名から分離できる
 
