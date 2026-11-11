@@ -1,6 +1,6 @@
 # Generated benchmark sources
 
-Measured source commit: `40d0491be56402aaacf71433d12c06a43411ec01`.
+Measured source commit: `5f824aac41e39fec4727061a7d1ccfeb58b8ebe3`.
 
 These are the generated workload files supplied to the compilers/runtimes. Build through the benchmark CLI to obtain the pinned dependencies and recorded optimization settings.
 
@@ -17,4 +17,4 @@ These are the generated workload files supplied to the compilers/runtimes. Build
 - [csharp-wasi](projection/csharp/Program.cs)
 - [rust-wasi](projection/rust/projection.rs)
 
-The experimental C# converter generator is implemented in [PlaygroundTaggedJson.Generator](https://github.com/tomohisa/CSharpUnionPlayground/tree/40d0491be56402aaacf71433d12c06a43411ec01/src/PlaygroundTaggedJson.Generator).
+The experimental C# converter generator is implemented in [PlaygroundTaggedJson.Generator](https://github.com/tomohisa/CSharpUnionPlayground/tree/5f824aac41e39fec4727061a7d1ccfeb58b8ebe3/src/PlaygroundTaggedJson.Generator).

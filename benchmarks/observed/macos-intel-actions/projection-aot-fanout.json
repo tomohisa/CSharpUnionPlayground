@@ -1,0 +1,1682 @@
+{
+  "timestampUtc": "2026-11-11T00:03:12.661476+00:00",
+  "toolchains": {
+    "csharp": "11.0.100"
+  },
+  "timeoutSeconds": 25.0,
+  "maxProjectionSeconds": 8.0,
+  "buildProofs": {},
+  "nativeConfiguration": {
+    "csharpMode": "aot"
+  },
+  "optimization": "Host defaults",
+  "platform": "macOS-15.7.9-x86_64-i386-64bit-Mach-O",
+  "routing": "fanout",
+  "sizes": [
+    1000,
+    10000,
+    100000,
+    1000000
+  ],
+  "samples": 2,
+  "buildKey": {
+    "source": "9c31f9a1eb7dba58caa6180843386b63893cdb02345bc0c036ce0309416e96c8",
+    "languages": [
+      "csharp"
+    ],
+    "engines": [
+      "native"
+    ],
+    "rid": "osx-x64",
+    "swiftSdk": "swift-6.3.1-RELEASE_wasm",
+    "swiftToolchain": "6.3.1",
+    "csharpMode": "aot",
+    "wasiDotnet": "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/intel-aot/dotnet/dotnet",
+    "wasiSdk": "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/intel-aot/tools/wasi-sdk-33.0-arm64-macos"
+  },
+  "commands": {
+    "csharp-native": [
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/benchmarks/projection100/.build/intel-aot/bin/csharp/Projection"
+    ]
+  },
+  "unavailable": {},
+  "results": [
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 1000,
+      "status": "ok",
+      "projectionSeconds": 0.00038535,
+      "eventsPerSecond": 2595043.4669780717,
+      "nsPerEvent": 385.34999999999997,
+      "peakRssMiB": 3.40625,
+      "startupSeconds": 0.021988292000060028,
+      "preparationSeconds": 0.001459212499980822,
+      "wallSeconds": 0.025163721500121028,
+      "exitSeconds": 0.001278625500049202,
+      "stateCount": 10,
+      "retainedItems": 100,
+      "maxHistoryLength": 10,
+      "samples": [
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 201515,
+          "stateCount": 10,
+          "retainedItems": 100,
+          "maxHistoryLength": 10,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0003124,
+              "totalSeconds": 0.0003124,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.029435370000101102,
+          "preparationSeconds": 0.0019161909999638738,
+          "workAndValidationSeconds": 0.0003477519999250944,
+          "exitSeconds": 0.001182504000098561,
+          "wallSeconds": 0.03288181700008863,
+          "peakRssBytes": 3571712
+        },
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 201515,
+          "stateCount": 10,
+          "retainedItems": 100,
+          "maxHistoryLength": 10,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0004583,
+              "totalSeconds": 0.0004583,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.014541214000018954,
+          "preparationSeconds": 0.0010022339999977703,
+          "workAndValidationSeconds": 0.0005274310001368576,
+          "exitSeconds": 0.001374746999999843,
+          "wallSeconds": 0.017445626000153425,
+          "peakRssBytes": 3510272
+        }
+      ]
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 10000,
+      "status": "ok",
+      "projectionSeconds": 0.00262925,
+      "eventsPerSecond": 3803365.9788913187,
+      "nsPerEvent": 262.925,
+      "peakRssMiB": 3.984375,
+      "startupSeconds": 0.015576897500068299,
+      "preparationSeconds": 0.001075094000043464,
+      "wallSeconds": 0.020573946000126853,
+      "exitSeconds": 0.0012099009999246846,
+      "stateCount": 10,
+      "retainedItems": 1000,
+      "maxHistoryLength": 100,
+      "samples": [
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 15590625,
+          "stateCount": 10,
+          "retainedItems": 1000,
+          "maxHistoryLength": 100,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0027314,
+              "totalSeconds": 0.0027314,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.01583229300013045,
+          "preparationSeconds": 0.0008465529999739374,
+          "workAndValidationSeconds": 0.002826456000093458,
+          "exitSeconds": 0.0012150539998856402,
+          "wallSeconds": 0.020720356000083484,
+          "peakRssBytes": 4177920
+        },
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 15590625,
+          "stateCount": 10,
+          "retainedItems": 1000,
+          "maxHistoryLength": 100,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0025271,
+              "totalSeconds": 0.0025271,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.015321502000006149,
+          "preparationSeconds": 0.0013036350001129904,
+          "workAndValidationSeconds": 0.002597651000087353,
+          "exitSeconds": 0.001204747999963729,
+          "wallSeconds": 0.02042753600017022,
+          "peakRssBytes": 4177920
+        }
+      ],
+      "growthExponent": 0.8339765192691192
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.0536827,
+      "eventsPerSecond": 1862797.5120476428,
+      "nsPerEvent": 536.827,
+      "peakRssMiB": 9.60546875,
+      "startupSeconds": 0.016008313000043017,
+      "preparationSeconds": 0.001146853999898667,
+      "wallSeconds": 0.07309040500001629,
+      "exitSeconds": 0.0021158554999374246,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0756061,
+              "totalSeconds": 0.0756061,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.0167775120000897,
+          "preparationSeconds": 0.0013083429998914653,
+          "workAndValidationSeconds": 0.07574638800019784,
+          "exitSeconds": 0.002104808000012781,
+          "wallSeconds": 0.09593705100019179,
+          "peakRssBytes": 10072064
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0317593,
+              "totalSeconds": 0.0317593,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.015239113999996334,
+          "preparationSeconds": 0.000985364999905869,
+          "workAndValidationSeconds": 0.03189237700007652,
+          "exitSeconds": 0.002126902999862068,
+          "wallSeconds": 0.05024375899984079,
+          "peakRssBytes": 10055680
+        }
+      ],
+      "growthExponent": 1.3100024681914821
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.26153760000000004,
+      "eventsPerSecond": 3823542.006961905,
+      "nsPerEvent": 261.53760000000005,
+      "peakRssMiB": 11.25,
+      "startupSeconds": 0.01451378600006592,
+      "preparationSeconds": 0.0012426619999814648,
+      "wallSeconds": 0.27931190150002294,
+      "exitSeconds": 0.0017952229999309566,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.2570528,
+              "totalSeconds": 0.2570528,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.014039154000101917,
+          "preparationSeconds": 0.001331690999904822,
+          "workAndValidationSeconds": 0.2573067410000931,
+          "exitSeconds": 0.0018410089999179036,
+          "wallSeconds": 0.27451859500001774,
+          "peakRssBytes": 11796480
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.2660224,
+              "totalSeconds": 0.2660224,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.014988418000029924,
+          "preparationSeconds": 0.0011536330000581074,
+          "workAndValidationSeconds": 0.2662137199999961,
+          "exitSeconds": 0.0017494369999440096,
+          "wallSeconds": 0.28410520800002814,
+          "peakRssBytes": 11792384
+        }
+      ],
+      "growthExponent": 0.6876997833333163
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "wide",
+      "events": 1000,
+      "status": "ok",
+      "projectionSeconds": 0.00032034999999999995,
+      "eventsPerSecond": 3121585.7655689092,
+      "nsPerEvent": 320.3499999999999,
+      "peakRssMiB": 3.390625,
+      "startupSeconds": 0.015965520000008837,
+      "preparationSeconds": 0.0009063764999837076,
+      "wallSeconds": 0.018360059499968884,
+      "exitSeconds": 0.0011318729999629795,
+      "stateCount": 100,
+      "retainedItems": 100,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 303581,
+          "stateCount": 100,
+          "retainedItems": 100,
+          "maxHistoryLength": 1,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0003382,
+              "totalSeconds": 0.0003382,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.015589015000159634,
+          "preparationSeconds": 0.0009573199999977078,
+          "workAndValidationSeconds": 0.00036013999988426804,
+          "exitSeconds": 0.0011544980000053329,
+          "wallSeconds": 0.018060973000046943,
+          "peakRssBytes": 3555328
+        },
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 303581,
+          "stateCount": 100,
+          "retainedItems": 100,
+          "maxHistoryLength": 1,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0003025,
+              "totalSeconds": 0.0003025,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.01634202499985804,
+          "preparationSeconds": 0.0008554329999697075,
+          "workAndValidationSeconds": 0.000352440000142451,
+          "exitSeconds": 0.0011092479999206262,
+          "wallSeconds": 0.018659145999890825,
+          "peakRssBytes": 3555328
+        }
+      ]
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "wide",
+      "events": 10000,
+      "status": "ok",
+      "projectionSeconds": 0.0032294000000000003,
+      "eventsPerSecond": 3096550.442806713,
+      "nsPerEvent": 322.94000000000005,
+      "peakRssMiB": 4.46484375,
+      "startupSeconds": 0.015141358500045499,
+      "preparationSeconds": 0.0011047449999068704,
+      "wallSeconds": 0.020832329000086247,
+      "exitSeconds": 0.0010973210000884137,
+      "stateCount": 1000,
+      "retainedItems": 1000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 30081889,
+          "stateCount": 1000,
+          "retainedItems": 1000,
+          "maxHistoryLength": 1,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0027563,
+              "totalSeconds": 0.0027563,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.014594546000125774,
+          "preparationSeconds": 0.0008721759998024936,
+          "workAndValidationSeconds": 0.00297992100013289,
+          "exitSeconds": 0.0010996220000834,
+          "wallSeconds": 0.019546265000144558,
+          "peakRssBytes": 4681728
+        },
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 30081889,
+          "stateCount": 1000,
+          "retainedItems": 1000,
+          "maxHistoryLength": 1,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0037025,
+              "totalSeconds": 0.0037025,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.015688170999965223,
+          "preparationSeconds": 0.0013373140000112471,
+          "workAndValidationSeconds": 0.0039978879999580386,
+          "exitSeconds": 0.0010950200000934274,
+          "wallSeconds": 0.022118393000027936,
+          "peakRssBytes": 4681728
+        }
+      ],
+      "growthExponent": 1.0034971126117966
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "wide",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.04160925,
+      "eventsPerSecond": 2403311.763610255,
+      "nsPerEvent": 416.0925,
+      "peakRssMiB": 14.78515625,
+      "startupSeconds": 0.016801951500042378,
+      "preparationSeconds": 0.0012726649999876827,
+      "wallSeconds": 0.07367621100001998,
+      "exitSeconds": 0.002234923499941033,
+      "stateCount": 10000,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 3005328889,
+          "stateCount": 10000,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0419582,
+              "totalSeconds": 0.0419582,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.017485624000073585,
+          "preparationSeconds": 0.0012429729999894334,
+          "workAndValidationSeconds": 0.054054670000141414,
+          "exitSeconds": 0.0023475019997931668,
+          "wallSeconds": 0.0751307689999976,
+          "peakRssBytes": 15503360
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 3005328889,
+          "stateCount": 10000,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0412603,
+              "totalSeconds": 0.0412603,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.01611827900001117,
+          "preparationSeconds": 0.001302356999985932,
+          "workAndValidationSeconds": 0.05267867199995635,
+          "exitSeconds": 0.002122345000088899,
+          "wallSeconds": 0.07222165300004235,
+          "peakRssBytes": 15503360
+        }
+      ],
+      "growthExponent": 1.110068046836041
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "wide",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.48428015,
+      "eventsPerSecond": 2064920.4804285287,
+      "nsPerEvent": 484.28015000000005,
+      "peakRssMiB": 64.9609375,
+      "startupSeconds": 0.015779696499976126,
+      "preparationSeconds": 0.001152531499997167,
+      "wallSeconds": 0.5296967005000397,
+      "exitSeconds": 0.005811701499965238,
+      "stateCount": 100000,
+      "retainedItems": 100000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 300503388889,
+          "stateCount": 100000,
+          "retainedItems": 100000,
+          "maxHistoryLength": 1,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.5053587,
+              "totalSeconds": 0.5053587,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.01755407199993897,
+          "preparationSeconds": 0.0013629990000936232,
+          "workAndValidationSeconds": 0.530802488000063,
+          "exitSeconds": 0.006334109999897919,
+          "wallSeconds": 0.5560536689999935,
+          "peakRssBytes": 68116480
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 300503388889,
+          "stateCount": 100000,
+          "retainedItems": 100000,
+          "maxHistoryLength": 1,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.4632016,
+              "totalSeconds": 0.4632016,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.014005321000013282,
+          "preparationSeconds": 0.0009420639999007108,
+          "workAndValidationSeconds": 0.4831030540001393,
+          "exitSeconds": 0.005289293000032558,
+          "wallSeconds": 0.5033397320000859,
+          "peakRssBytes": 68096000
+        }
+      ],
+      "growthExponent": 1.065906780481766
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 1000,
+      "status": "ok",
+      "projectionSeconds": 0.00040495,
+      "eventsPerSecond": 2469440.671687863,
+      "nsPerEvent": 404.95,
+      "peakRssMiB": 3.375,
+      "startupSeconds": 0.0151689910001096,
+      "preparationSeconds": 0.0011109379998970326,
+      "wallSeconds": 0.018009422500085748,
+      "exitSeconds": 0.0012824274999729823,
+      "stateCount": 10,
+      "retainedItems": 100,
+      "maxHistoryLength": 10,
+      "samples": [
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 201515,
+          "stateCount": 10,
+          "retainedItems": 100,
+          "maxHistoryLength": 10,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0003254,
+              "totalSeconds": 0.0003254,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.014905807000104687,
+          "preparationSeconds": 0.0008572729998377326,
+          "workAndValidationSeconds": 0.0003533870001319883,
+          "exitSeconds": 0.0010545439999987138,
+          "wallSeconds": 0.017171011000073122,
+          "peakRssBytes": 3538944
+        },
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 201515,
+          "stateCount": 10,
+          "retainedItems": 100,
+          "maxHistoryLength": 10,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0004845,
+              "totalSeconds": 0.0004845,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.015432175000114512,
+          "preparationSeconds": 0.0013646029999563325,
+          "workAndValidationSeconds": 0.0005407450000802783,
+          "exitSeconds": 0.0015103109999472508,
+          "wallSeconds": 0.018847834000098374,
+          "peakRssBytes": 3538944
+        }
+      ]
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 10000,
+      "status": "ok",
+      "projectionSeconds": 0.005253,
+      "eventsPerSecond": 1903674.0909956216,
+      "nsPerEvent": 525.3,
+      "peakRssMiB": 5.296875,
+      "startupSeconds": 0.015032280000127685,
+      "preparationSeconds": 0.0008628439999256443,
+      "wallSeconds": 0.02261533350008449,
+      "exitSeconds": 0.0013536789999761822,
+      "stateCount": 10,
+      "retainedItems": 1000,
+      "maxHistoryLength": 100,
+      "samples": [
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 15590625,
+          "stateCount": 10,
+          "retainedItems": 1000,
+          "maxHistoryLength": 100,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0051516,
+              "totalSeconds": 0.0051516,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.015293620000193187,
+          "preparationSeconds": 0.0008628939999653085,
+          "workAndValidationSeconds": 0.005269109999971988,
+          "exitSeconds": 0.0011734790000446083,
+          "wallSeconds": 0.02259910300017509,
+          "peakRssBytes": 5554176
+        },
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 15590625,
+          "stateCount": 10,
+          "retainedItems": 1000,
+          "maxHistoryLength": 100,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0053544,
+              "totalSeconds": 0.0053544,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.014770940000062183,
+          "preparationSeconds": 0.0008627939998859802,
+          "workAndValidationSeconds": 0.005463951000137968,
+          "exitSeconds": 0.0015338789999077562,
+          "wallSeconds": 0.022631563999993887,
+          "peakRssBytes": 5554176
+        }
+      ],
+      "growthExponent": 1.1130059975010833
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.2373099,
+      "eventsPerSecond": 421389.92094303697,
+      "nsPerEvent": 2373.099,
+      "peakRssMiB": 9.88671875,
+      "startupSeconds": 0.01594004900005075,
+      "preparationSeconds": 0.0012229760000082024,
+      "wallSeconds": 0.256937738500028,
+      "exitSeconds": 0.0023362259998975787,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.2333574,
+              "totalSeconds": 0.2333574,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.015853635999974358,
+          "preparationSeconds": 0.0012236070001563348,
+          "workAndValidationSeconds": 0.23350634899998113,
+          "exitSeconds": 0.003039965999960259,
+          "wallSeconds": 0.2536235580000721,
+          "peakRssBytes": 10366976
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.2412624,
+              "totalSeconds": 0.2412624,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.01602646200012714,
+          "preparationSeconds": 0.00122234499986007,
+          "workAndValidationSeconds": 0.2413706260001618,
+          "exitSeconds": 0.0016324859998348984,
+          "wallSeconds": 0.2602519189999839,
+          "peakRssBytes": 10366976
+        }
+      ],
+      "growthExponent": 1.654908455516577
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 21.4312194,
+      "eventsPerSecond": 46660.90068584712,
+      "nsPerEvent": 21431.2194,
+      "peakRssMiB": 16.9609375,
+      "startupSeconds": 0.01712267300001713,
+      "preparationSeconds": 0.0009968125000341388,
+      "wallSeconds": 21.452093678499978,
+      "exitSeconds": 0.0022082709999722283,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 21.4932977,
+              "totalSeconds": 21.4932977,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.017240438000044378,
+          "preparationSeconds": 0.0008880670000053215,
+          "workAndValidationSeconds": 21.493474115000026,
+          "exitSeconds": 0.0018605469999783963,
+          "wallSeconds": 21.513463167000054,
+          "peakRssBytes": 17784832
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 21.3691411,
+              "totalSeconds": 21.3691411,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.017004907999989882,
+          "preparationSeconds": 0.0011055580000629561,
+          "workAndValidationSeconds": 21.370057728999882,
+          "exitSeconds": 0.0025559949999660603,
+          "wallSeconds": 21.3907241899999,
+          "peakRssBytes": 17199104
+        }
+      ],
+      "growthExponent": 1.9557310260438825
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "wide",
+      "events": 1000,
+      "status": "ok",
+      "projectionSeconds": 0.00039565,
+      "eventsPerSecond": 2527486.4147605207,
+      "nsPerEvent": 395.65,
+      "peakRssMiB": 3.4140625,
+      "startupSeconds": 0.01425863450003817,
+      "preparationSeconds": 0.0008885139999392777,
+      "wallSeconds": 0.016855640000017047,
+      "exitSeconds": 0.0012444625000398446,
+      "stateCount": 100,
+      "retainedItems": 100,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 303581,
+          "stateCount": 100,
+          "retainedItems": 100,
+          "maxHistoryLength": 1,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0004639,
+              "totalSeconds": 0.0004639,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.01486317700005202,
+          "preparationSeconds": 0.0008960739999110956,
+          "workAndValidationSeconds": 0.0005387510000218754,
+          "exitSeconds": 0.0014308180000170978,
+          "wallSeconds": 0.017728820000002088,
+          "peakRssBytes": 3579904
+        },
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 303581,
+          "stateCount": 100,
+          "retainedItems": 100,
+          "maxHistoryLength": 1,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0003274,
+              "totalSeconds": 0.0003274,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.01365409200002432,
+          "preparationSeconds": 0.0008809539999674598,
+          "workAndValidationSeconds": 0.0003893069999776344,
+          "exitSeconds": 0.0010581070000625914,
+          "wallSeconds": 0.015982460000032006,
+          "peakRssBytes": 3563520
+        }
+      ]
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "wide",
+      "events": 10000,
+      "status": "ok",
+      "projectionSeconds": 0.00292015,
+      "eventsPerSecond": 3424481.6190949096,
+      "nsPerEvent": 292.015,
+      "peakRssMiB": 4.5625,
+      "startupSeconds": 0.012346353499992802,
+      "preparationSeconds": 0.0008514270000432589,
+      "wallSeconds": 0.017473929999937354,
+      "exitSeconds": 0.0011470824998696116,
+      "stateCount": 1000,
+      "retainedItems": 1000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 30081889,
+          "stateCount": 1000,
+          "retainedItems": 1000,
+          "maxHistoryLength": 1,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0029073,
+              "totalSeconds": 0.0029073,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.01247743400017498,
+          "preparationSeconds": 0.0008799189999990631,
+          "workAndValidationSeconds": 0.0031261760000234062,
+          "exitSeconds": 0.001130257999875539,
+          "wallSeconds": 0.01761378700007299,
+          "peakRssBytes": 4784128
+        },
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 30081889,
+          "stateCount": 1000,
+          "retainedItems": 1000,
+          "maxHistoryLength": 1,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.002933,
+              "totalSeconds": 0.002933,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.012215272999810622,
+          "preparationSeconds": 0.0008229350000874547,
+          "workAndValidationSeconds": 0.0031319580000399583,
+          "exitSeconds": 0.0011639069998636842,
+          "wallSeconds": 0.01733407299980172,
+          "peakRssBytes": 4784128
+        }
+      ],
+      "growthExponent": 0.868093990459931
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "wide",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.04121665,
+      "eventsPerSecond": 2426203.9733942472,
+      "nsPerEvent": 412.16650000000004,
+      "peakRssMiB": 14.5625,
+      "startupSeconds": 0.013676128499923834,
+      "preparationSeconds": 0.0008656160000555246,
+      "wallSeconds": 0.058676209499935794,
+      "exitSeconds": 0.0017584135000561218,
+      "stateCount": 10000,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 3005328889,
+          "stateCount": 10000,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0413649,
+              "totalSeconds": 0.0413649,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.01406889599979877,
+          "preparationSeconds": 0.000929115000189995,
+          "workAndValidationSeconds": 0.04250088099979621,
+          "exitSeconds": 0.0017277290000947687,
+          "wallSeconds": 0.05922662099987974,
+          "peakRssBytes": 15269888
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 3005328889,
+          "stateCount": 10000,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0410684,
+              "totalSeconds": 0.0410684,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.013283361000048899,
+          "preparationSeconds": 0.0008021169999210542,
+          "workAndValidationSeconds": 0.04225122200000442,
+          "exitSeconds": 0.001789098000017475,
+          "wallSeconds": 0.058125797999991846,
+          "peakRssBytes": 15269888
+        }
+      ],
+      "growthExponent": 1.1496675298397303
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "wide",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.47854825,
+      "eventsPerSecond": 2089653.446648274,
+      "nsPerEvent": 478.54824999999994,
+      "peakRssMiB": 63.4765625,
+      "startupSeconds": 0.01497539299998607,
+      "preparationSeconds": 0.0016991234999750304,
+      "wallSeconds": 0.5372429305000423,
+      "exitSeconds": 0.0048471459999746,
+      "stateCount": 100000,
+      "retainedItems": 100000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 300503388889,
+          "stateCount": 100000,
+          "retainedItems": 100000,
+          "maxHistoryLength": 1,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.3946341,
+              "totalSeconds": 0.3946341,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.014314376999891465,
+          "preparationSeconds": 0.0013011519999963639,
+          "workAndValidationSeconds": 0.4295031020001261,
+          "exitSeconds": 0.004660249999915322,
+          "wallSeconds": 0.44977888099992924,
+          "peakRssBytes": 66527232
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 300503388889,
+          "stateCount": 100000,
+          "retainedItems": 100000,
+          "maxHistoryLength": 1,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.5624624,
+              "totalSeconds": 0.5624624,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.015636409000080675,
+          "preparationSeconds": 0.002097094999953697,
+          "workAndValidationSeconds": 0.6019394340000872,
+          "exitSeconds": 0.005034042000033878,
+          "wallSeconds": 0.6247069800001555,
+          "peakRssBytes": 66560000
+        }
+      ],
+      "growthExponent": 1.0648530420366715
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "dense",
+      "events": 1000,
+      "status": "ok",
+      "projectionSeconds": 0.00025354999999999996,
+      "eventsPerSecond": 3943995.2672056803,
+      "nsPerEvent": 253.54999999999993,
+      "peakRssMiB": 3.34375,
+      "startupSeconds": 0.011389446499947553,
+      "preparationSeconds": 0.0007849410001199431,
+      "wallSeconds": 0.013397053499943468,
+      "exitSeconds": 0.0009265185000231213,
+      "stateCount": 10,
+      "retainedItems": 100,
+      "maxHistoryLength": 10,
+      "samples": [
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 201515,
+          "stateCount": 10,
+          "retainedItems": 100,
+          "maxHistoryLength": 10,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0002535,
+              "totalSeconds": 0.0002535,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.011387847999912992,
+          "preparationSeconds": 0.0008222400001614005,
+          "workAndValidationSeconds": 0.000296052999829044,
+          "exitSeconds": 0.0009299079999891546,
+          "wallSeconds": 0.013436048999892591,
+          "peakRssBytes": 3506176
+        },
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 201515,
+          "stateCount": 10,
+          "retainedItems": 100,
+          "maxHistoryLength": 10,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0002536,
+              "totalSeconds": 0.0002536,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.011391044999982114,
+          "preparationSeconds": 0.0007476420000784856,
+          "workAndValidationSeconds": 0.00029624199987665634,
+          "exitSeconds": 0.000923129000057088,
+          "wallSeconds": 0.013358057999994344,
+          "peakRssBytes": 3506176
+        }
+      ]
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "dense",
+      "events": 10000,
+      "status": "ok",
+      "projectionSeconds": 0.00235515,
+      "eventsPerSecond": 4246014.05430652,
+      "nsPerEvent": 235.515,
+      "peakRssMiB": 3.98046875,
+      "startupSeconds": 0.011287433000006786,
+      "preparationSeconds": 0.0008151765000548039,
+      "wallSeconds": 0.01550508799994077,
+      "exitSeconds": 0.0009945794998884594,
+      "stateCount": 10,
+      "retainedItems": 1000,
+      "maxHistoryLength": 100,
+      "samples": [
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 15590625,
+          "stateCount": 10,
+          "retainedItems": 1000,
+          "maxHistoryLength": 100,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.002355,
+              "totalSeconds": 0.002355,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.011438673000156996,
+          "preparationSeconds": 0.0007871289999457076,
+          "workAndValidationSeconds": 0.0024070360000223445,
+          "exitSeconds": 0.0009404719999110966,
+          "wallSeconds": 0.015573310000036145,
+          "peakRssBytes": 4173824
+        },
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 15590625,
+          "stateCount": 10,
+          "retainedItems": 1000,
+          "maxHistoryLength": 100,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0023553,
+              "totalSeconds": 0.0023553,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.011136192999856576,
+          "preparationSeconds": 0.0008432240001639002,
+          "workAndValidationSeconds": 0.002408761999959097,
+          "exitSeconds": 0.0010486869998658221,
+          "wallSeconds": 0.015436865999845395,
+          "peakRssBytes": 4173824
+        }
+      ],
+      "growthExponent": 0.9679549577690137
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "dense",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.02410745,
+      "eventsPerSecond": 4148095.298341384,
+      "nsPerEvent": 241.0745,
+      "peakRssMiB": 9.58203125,
+      "startupSeconds": 0.011895717000015793,
+      "preparationSeconds": 0.0008692814999449183,
+      "wallSeconds": 0.038558349500021905,
+      "exitSeconds": 0.0015622230000644777,
+      "stateCount": 10,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1000,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0233027,
+              "totalSeconds": 0.0233027,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.011509418000059668,
+          "preparationSeconds": 0.0008058549999532261,
+          "workAndValidationSeconds": 0.023392426999862437,
+          "exitSeconds": 0.0014623030001530424,
+          "wallSeconds": 0.03717000300002837,
+          "peakRssBytes": 10047488
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 1505981635,
+          "stateCount": 10,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1000,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0249122,
+              "totalSeconds": 0.0249122,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.012282015999971918,
+          "preparationSeconds": 0.0009327079999366106,
+          "workAndValidationSeconds": 0.025069829000130994,
+          "exitSeconds": 0.001662142999975913,
+          "wallSeconds": 0.039946696000015436,
+          "peakRssBytes": 10047488
+        }
+      ],
+      "growthExponent": 1.0101327020340503
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "dense",
+      "events": 1000000,
+      "status": "ok",
+      "projectionSeconds": 0.23041204999999998,
+      "eventsPerSecond": 4340050.791614414,
+      "nsPerEvent": 230.41205,
+      "peakRssMiB": 11.25390625,
+      "startupSeconds": 0.014538796500005446,
+      "preparationSeconds": 0.0009040529999992941,
+      "wallSeconds": 0.2478937025000505,
+      "exitSeconds": 0.0018584170001076927,
+      "stateCount": 10,
+      "retainedItems": 100000,
+      "maxHistoryLength": 10000,
+      "samples": [
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.222733,
+              "totalSeconds": 0.222733,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.014952510000057373,
+          "preparationSeconds": 0.0009076970000023721,
+          "workAndValidationSeconds": 0.22293073399987406,
+          "exitSeconds": 0.0021499720000974776,
+          "wallSeconds": 0.2409409130000313,
+          "peakRssBytes": 11800576
+        },
+        {
+          "roots": 1000000,
+          "samples": 1,
+          "sink": 150059891645,
+          "stateCount": 10,
+          "retainedItems": 100000,
+          "maxHistoryLength": 10000,
+          "ignored": 9000010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.2380911,
+              "totalSeconds": 0.2380911,
+              "bytes": 800000
+            }
+          ],
+          "startupSeconds": 0.01412508299995352,
+          "preparationSeconds": 0.0009004089999962162,
+          "workAndValidationSeconds": 0.23825413800000206,
+          "exitSeconds": 0.0015668620001179079,
+          "wallSeconds": 0.2548464920000697,
+          "peakRssBytes": 11800576
+        }
+      ],
+      "growthExponent": 0.9803539132224703
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "wide",
+      "events": 1000,
+      "status": "ok",
+      "projectionSeconds": 0.0003476,
+      "eventsPerSecond": 2876869.9654775606,
+      "nsPerEvent": 347.6,
+      "peakRssMiB": 3.37890625,
+      "startupSeconds": 0.01237710550014981,
+      "preparationSeconds": 0.0010514944999613363,
+      "wallSeconds": 0.014875077000169767,
+      "exitSeconds": 0.0010584240001207945,
+      "stateCount": 100,
+      "retainedItems": 100,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 303581,
+          "stateCount": 100,
+          "retainedItems": 100,
+          "maxHistoryLength": 1,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0003978,
+              "totalSeconds": 0.0003978,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.012916682000195578,
+          "preparationSeconds": 0.0010841719999916677,
+          "workAndValidationSeconds": 0.0004242299999077659,
+          "exitSeconds": 0.0010947380001198326,
+          "wallSeconds": 0.015519822000214845,
+          "peakRssBytes": 3543040
+        },
+        {
+          "roots": 1000,
+          "samples": 1,
+          "sink": 303581,
+          "stateCount": 100,
+          "retainedItems": 100,
+          "maxHistoryLength": 1,
+          "ignored": 9010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0002974,
+              "totalSeconds": 0.0002974,
+              "bytes": 800
+            }
+          ],
+          "startupSeconds": 0.011837529000104041,
+          "preparationSeconds": 0.0010188169999310048,
+          "workAndValidationSeconds": 0.00035187599996788776,
+          "exitSeconds": 0.0010221100001217565,
+          "wallSeconds": 0.01423033200012469,
+          "peakRssBytes": 3543040
+        }
+      ]
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "wide",
+      "events": 10000,
+      "status": "ok",
+      "projectionSeconds": 0.00325805,
+      "eventsPerSecond": 3069320.6058838875,
+      "nsPerEvent": 325.805,
+      "peakRssMiB": 4.39453125,
+      "startupSeconds": 0.011904262499911056,
+      "preparationSeconds": 0.0008423870000342504,
+      "wallSeconds": 0.017305022499954248,
+      "exitSeconds": 0.0010873239999682482,
+      "stateCount": 1000,
+      "retainedItems": 1000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 30081889,
+          "stateCount": 1000,
+          "retainedItems": 1000,
+          "maxHistoryLength": 1,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0032809,
+              "totalSeconds": 0.0032809,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.012308341999869299,
+          "preparationSeconds": 0.0008492310000747239,
+          "workAndValidationSeconds": 0.003502042000036454,
+          "exitSeconds": 0.0011078210000050603,
+          "wallSeconds": 0.017767435999985537,
+          "peakRssBytes": 4608000
+        },
+        {
+          "roots": 10000,
+          "samples": 1,
+          "sink": 30081889,
+          "stateCount": 1000,
+          "retainedItems": 1000,
+          "maxHistoryLength": 1,
+          "ignored": 90010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0032352,
+              "totalSeconds": 0.0032352,
+              "bytes": 8000
+            }
+          ],
+          "startupSeconds": 0.011500182999952813,
+          "preparationSeconds": 0.0008355429999937769,
+          "workAndValidationSeconds": 0.003440056000044933,
+          "exitSeconds": 0.0010668269999314361,
+          "wallSeconds": 0.01684260899992296,
+          "peakRssBytes": 4608000
+        }
+      ],
+      "growthExponent": 0.971877977192016
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "wide",
+      "events": 100000,
+      "status": "ok",
+      "projectionSeconds": 0.10246065,
+      "eventsPerSecond": 975984.4389041062,
+      "nsPerEvent": 1024.6064999999999,
+      "peakRssMiB": 12.22265625,
+      "startupSeconds": 0.012587816999939605,
+      "preparationSeconds": 0.0009462490000942125,
+      "wallSeconds": 0.11899346849986614,
+      "exitSeconds": 0.0016315164999696208,
+      "stateCount": 10000,
+      "retainedItems": 10000,
+      "maxHistoryLength": 1,
+      "samples": [
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 3005328889,
+          "stateCount": 10000,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.1051652,
+              "totalSeconds": 0.1051652,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.01354263100006392,
+          "preparationSeconds": 0.0009983810000449012,
+          "workAndValidationSeconds": 0.1064262999998391,
+          "exitSeconds": 0.001598887999989529,
+          "wallSeconds": 0.12256619999993745,
+          "peakRssBytes": 12816384
+        },
+        {
+          "roots": 100000,
+          "samples": 1,
+          "sink": 3005328889,
+          "stateCount": 10000,
+          "retainedItems": 10000,
+          "maxHistoryLength": 1,
+          "ignored": 900010,
+          "measurements": [
+            {
+              "encodeSeconds": 0,
+              "decodeSeconds": 0,
+              "switchSeconds": 0.0997561,
+              "totalSeconds": 0.0997561,
+              "bytes": 80000
+            }
+          ],
+          "startupSeconds": 0.01163300299981529,
+          "preparationSeconds": 0.0008941170001435239,
+          "workAndValidationSeconds": 0.1012294719998863,
+          "exitSeconds": 0.0016641449999497127,
+          "wallSeconds": 0.11542073699979483,
+          "peakRssBytes": 12816384
+        }
+      ],
+      "growthExponent": 1.497599361700682
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "wide",
+      "events": 1000000,
+      "status": "timeout"
+    }
+  ],
+  "notes": [
+    "Peak RSS includes the entire process. For WASI it includes Wasmtime compilation/runtime, not guest allocations alone.",
+    "Events are generated and projected in one streaming pass; event construction and dispatch are inside the projection timer. typescript-native is simple unchecked projection; typescript-zod-native validates/clones payload data only in matching handlers, inside the same timer, and ignores unknown event kinds.",
+    "Capacity is the largest tested point within the time budget, not a language or hardware maximum."
+  ],
+  "testedCapacity": [
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "dense",
+      "largestTestedWithinTimeBudget": 1000000,
+      "timeBudgetSeconds": 8.0
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-append",
+      "profile": "wide",
+      "largestTestedWithinTimeBudget": 1000000,
+      "timeBudgetSeconds": 8.0
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "dense",
+      "largestTestedWithinTimeBudget": 100000,
+      "timeBudgetSeconds": 8.0
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "indexed-copy",
+      "profile": "wide",
+      "largestTestedWithinTimeBudget": 1000000,
+      "timeBudgetSeconds": 8.0
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "dense",
+      "largestTestedWithinTimeBudget": 1000000,
+      "timeBudgetSeconds": 8.0
+    },
+    {
+      "implementation": "csharp-native",
+      "mode": "linear-append",
+      "profile": "wide",
+      "largestTestedWithinTimeBudget": 100000,
+      "timeBudgetSeconds": 8.0
+    }
+  ]
+}

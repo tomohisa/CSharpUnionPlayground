@@ -1,336 +1,336 @@
 | implementation | mode | profile | events | seconds | ns/event | peak RSS MiB | max history | growth p | status |
 |---|---|---|---:|---:|---:|---:|---:|---:|---|
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000 | 0.0613 | 61280.2 | 24.2 | 10 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000 | 0.1099 | 10993.5 | 25.0 | 100 | 0.25 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.1319 | 1318.6 | 30.4 | 1000 | 0.08 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 1.3037 | 1303.7 | 32.5 | 10000 | 1.00 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000 | 0.0664 | 66423.2 | 24.2 | 1 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 10000 | 0.1095 | 10949.6 | 25.3 | 1 | 0.22 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 100000 | 0.1523 | 1523.1 | 35.5 | 1 | 0.14 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000000 | 1.7217 | 1721.7 | 86.2 | 1 | 1.05 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000 | 0.0629 | 62885.4 | 24.1 | 10 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 10000 | 0.0586 | 5863.3 | 25.4 | 100 | -0.03 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.1529 | 1529.4 | 30.7 | 1000 | 0.42 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 2.2520 | 2252.0 | 32.4 | 10000 | 1.17 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000 | 0.0481 | 48108.5 | 24.2 | 1 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 10000 | 0.0591 | 5910.5 | 25.2 | 1 | 0.09 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 100000 | 0.1494 | 1493.6 | 35.2 | 1 | 0.40 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000000 | 1.5269 | 1526.9 | 84.9 | 1 | 1.01 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000 | 0.0418 | 41783.3 | 24.1 | 10 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 10000 | 0.0525 | 5253.4 | 24.9 | 100 | 0.10 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 100000 | 0.1405 | 1404.8 | 30.4 | 1000 | 0.43 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000000 | 0.8050 | 805.0 | 32.7 | 10000 | 0.76 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 1000 | 0.0542 | 54210.3 | 24.3 | 1 | — | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 10000 | 0.0533 | 5327.5 | 25.0 | 1 | -0.01 | ok |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 100000 | 0.8855 | 8854.6 | 33.6 | 1 | 1.22 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000 | 0.0494 | 49422.4 | 24.0 | 10 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000 | 0.0689 | 6894.7 | 24.7 | 100 | 0.14 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.1609 | 1609.3 | 30.6 | 1000 | 0.37 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 1.8687 | 1868.7 | 32.5 | 10000 | 1.06 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000 | 0.0487 | 48669.9 | 24.1 | 1 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 10000 | 0.0589 | 5888.9 | 25.1 | 1 | 0.08 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 100000 | 0.1542 | 1542.4 | 35.6 | 1 | 0.42 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000000 | 2.2586 | 2258.6 | 86.2 | 1 | 1.17 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000 | 0.0667 | 66706.9 | 24.1 | 10 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 10000 | 0.0689 | 6894.1 | 25.3 | 100 | 0.01 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.1730 | 1730.2 | 30.8 | 1000 | 0.40 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 3.4637 | 3463.7 | 32.4 | 10000 | 1.30 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000 | 0.0592 | 59247.7 | 24.3 | 1 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 10000 | 0.1166 | 11655.9 | 25.2 | 1 | 0.29 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 100000 | 0.2310 | 2309.9 | 35.3 | 1 | 0.30 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000000 | 2.0513 | 2051.3 | 84.9 | 1 | 0.95 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000 | 0.0678 | 67836.8 | 24.1 | 10 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 10000 | 0.0888 | 8880.2 | 24.9 | 100 | 0.12 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 100000 | 0.2143 | 2142.8 | 30.6 | 1000 | 0.38 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000000 | 0.8875 | 887.5 | 32.8 | 10000 | 0.62 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 1000 | 0.0584 | 58420.0 | 24.0 | 1 | — | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 10000 | 0.0853 | 8533.9 | 25.1 | 1 | 0.16 | ok |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 100000 | 0.7659 | 7658.8 | 33.7 | 1 | 0.95 | ok |
 | [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 1000000 | — | — | — | — | — | timeout |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000 | 0.0020 | 1953.2 | 0.8 | 10 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000 | 0.0192 | 1917.9 | 0.7 | 100 | 0.99 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.2369 | 2368.9 | 0.9 | 1000 | 1.09 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 2.0676 | 2067.6 | 2.6 | 10000 | 0.94 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000 | 0.0021 | 2110.9 | 0.7 | 1 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 10000 | 0.0203 | 2032.1 | 1.1 | 1 | 0.98 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 100000 | 0.2077 | 2076.6 | 7.3 | 1 | 1.01 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000000 | 2.1131 | 2113.1 | 54.3 | 1 | 1.01 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000 | 0.0020 | 2024.2 | 0.7 | 10 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 10000 | 0.0202 | 2024.2 | 0.8 | 100 | 1.00 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.2120 | 2120.2 | 1.5 | 1000 | 1.02 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 3.4285 | 3428.5 | 6.4 | 10000 | 1.21 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000 | 0.0020 | 2013.4 | 0.7 | 1 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 10000 | 0.0202 | 2022.8 | 1.1 | 1 | 1.00 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 100000 | 0.2086 | 2086.3 | 7.4 | 1 | 1.01 | ok |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000000 | 2.3648 | 2364.8 | 54.3 | 1 | 1.05 | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000 | 0.0021 | 2104.7 | 0.7 | 10 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 10000 | 0.0200 | 1999.7 | 0.7 | 100 | 0.98 | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 100000 | 0.1967 | 1967.1 | 0.8 | 1000 | 0.99 | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000000 | 1.9691 | 1969.1 | 2.6 | 10000 | 1.00 | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000 | 0.0022 | 2227.1 | 0.7 | 1 | — | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 10000 | 0.0201 | 2012.1 | 1.1 | 1 | 0.96 | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 100000 | 0.2445 | 2444.6 | 4.7 | 1 | 1.08 | ok |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000000 | 16.4698 | 16469.8 | 43.1 | 1 | 1.83 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000 | 0.0090 | 9022.7 | 68.5 | 10 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000 | 0.0174 | 1742.5 | 68.6 | 100 | 0.29 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.0716 | 716.0 | 80.4 | 1000 | 0.61 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.5136 | 513.6 | 97.2 | 10000 | 0.86 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000 | 0.0093 | 9297.4 | 69.6 | 1 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 10000 | 0.0198 | 1981.9 | 70.1 | 1 | 0.33 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 100000 | 0.1048 | 1048.3 | 94.0 | 1 | 0.72 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000000 | 0.7349 | 734.9 | 223.8 | 1 | 0.85 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000 | 0.0099 | 9937.5 | 68.5 | 10 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 10000 | 0.0199 | 1985.8 | 71.1 | 100 | 0.30 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.1982 | 1982.4 | 81.8 | 1000 | 1.00 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 6.1866 | 6186.6 | 203.9 | 10000 | 1.49 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000 | 0.0086 | 8567.2 | 68.8 | 1 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 10000 | 0.0208 | 2078.1 | 69.2 | 1 | 0.38 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 100000 | 0.1003 | 1003.3 | 90.2 | 1 | 0.68 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000000 | 1.0509 | 1050.9 | 186.5 | 1 | 1.02 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000 | 0.0162 | 16211.2 | 67.8 | 10 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 10000 | 0.0279 | 2786.4 | 69.3 | 100 | 0.24 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 100000 | 0.0943 | 943.0 | 83.1 | 1000 | 0.53 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000000 | 0.5667 | 566.7 | 96.0 | 10000 | 0.78 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 1000 | 0.0065 | 6488.9 | 69.3 | 1 | — | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 10000 | 0.0255 | 2552.2 | 70.5 | 1 | 0.59 | ok |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 100000 | 0.2285 | 2285.2 | 94.1 | 1 | 0.95 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000 | 0.0019 | 1906.5 | 0.7 | 10 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000 | 0.0270 | 2699.1 | 0.7 | 100 | 1.15 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.1993 | 1993.0 | 0.9 | 1000 | 0.87 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 1.8894 | 1889.4 | 2.6 | 10000 | 0.98 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000 | 0.0021 | 2065.1 | 0.7 | 1 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 10000 | 0.0209 | 2087.4 | 1.1 | 1 | 1.00 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 100000 | 0.1976 | 1975.9 | 7.3 | 1 | 0.98 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000000 | 2.4748 | 2474.8 | 54.3 | 1 | 1.10 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000 | 0.0021 | 2104.7 | 0.7 | 10 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 10000 | 0.0213 | 2126.0 | 0.8 | 100 | 1.00 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.2342 | 2342.1 | 1.6 | 1000 | 1.04 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 2.9746 | 2974.6 | 6.4 | 10000 | 1.10 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000 | 0.0019 | 1892.7 | 0.7 | 1 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 10000 | 0.0161 | 1614.2 | 1.0 | 1 | 0.93 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 100000 | 0.1669 | 1668.6 | 7.4 | 1 | 1.01 | ok |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000000 | 1.9507 | 1950.7 | 54.3 | 1 | 1.07 | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000 | 0.0020 | 2010.1 | 0.7 | 10 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 10000 | 0.0162 | 1621.6 | 0.7 | 100 | 0.91 | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 100000 | 0.1673 | 1672.6 | 0.8 | 1000 | 1.01 | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000000 | 1.7472 | 1747.2 | 2.6 | 10000 | 1.02 | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000 | 0.0019 | 1860.4 | 0.7 | 1 | — | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 10000 | 0.0170 | 1704.9 | 1.1 | 1 | 0.96 | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 100000 | 0.2081 | 2081.4 | 4.6 | 1 | 1.09 | ok |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000000 | 14.5683 | 14568.3 | 43.1 | 1 | 1.85 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000 | 0.0099 | 9929.2 | 68.2 | 10 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000 | 0.0186 | 1860.0 | 69.3 | 100 | 0.27 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.0912 | 912.2 | 80.6 | 1000 | 0.69 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.5888 | 588.8 | 96.4 | 10000 | 0.81 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000 | 0.0091 | 9074.2 | 68.7 | 1 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 10000 | 0.0209 | 2094.0 | 70.8 | 1 | 0.36 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 100000 | 0.1003 | 1003.2 | 94.1 | 1 | 0.68 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000000 | 0.8020 | 802.0 | 224.3 | 1 | 0.90 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000 | 0.0092 | 9215.2 | 68.5 | 10 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 10000 | 0.0204 | 2036.5 | 68.7 | 100 | 0.34 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.1439 | 1438.5 | 81.5 | 1000 | 0.85 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 5.6108 | 5610.8 | 204.0 | 10000 | 1.59 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000 | 0.0095 | 9488.3 | 68.8 | 1 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 10000 | 0.0220 | 2204.2 | 70.9 | 1 | 0.37 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 100000 | 0.1069 | 1069.1 | 91.8 | 1 | 0.69 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000000 | 0.9301 | 930.1 | 189.6 | 1 | 0.94 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000 | 0.0094 | 9444.9 | 68.6 | 10 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 10000 | 0.0184 | 1836.8 | 69.1 | 100 | 0.29 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 100000 | 0.0815 | 814.8 | 82.4 | 1000 | 0.65 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000000 | 0.5937 | 593.7 | 96.2 | 10000 | 0.86 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 1000 | 0.0114 | 11351.8 | 68.9 | 1 | — | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 10000 | 0.0314 | 3140.2 | 70.8 | 1 | 0.44 | ok |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 100000 | 0.3235 | 3235.2 | 94.7 | 1 | 1.01 | ok |
 | [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 1000000 | — | — | — | — | — | timeout |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000 | 0.0222 | 22235.1 | 75.1 | 10 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000 | 0.0253 | 2527.6 | 80.8 | 100 | 0.06 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.1070 | 1070.3 | 91.0 | 1000 | 0.63 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 1.0822 | 1082.2 | 101.8 | 10000 | 1.00 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000 | 0.0185 | 18468.0 | 76.3 | 1 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 10000 | 0.0274 | 2737.4 | 81.4 | 1 | 0.17 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 100000 | 0.1489 | 1489.0 | 101.1 | 1 | 0.74 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000000 | 3.6409 | 3640.9 | 264.8 | 1 | 1.39 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000 | 0.0133 | 13276.3 | 77.2 | 10 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 10000 | 0.0674 | 6739.8 | 82.3 | 100 | 0.71 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.1948 | 1948.4 | 90.9 | 1000 | 0.46 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 5.7271 | 5727.1 | 214.9 | 10000 | 1.47 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000 | 0.0268 | 26809.8 | 75.2 | 1 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 10000 | 0.0336 | 3361.2 | 81.6 | 1 | 0.10 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 100000 | 0.2077 | 2076.9 | 100.7 | 1 | 0.79 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000000 | 0.9659 | 965.9 | 219.2 | 1 | 0.67 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000 | 0.0174 | 17410.8 | 76.0 | 10 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 10000 | 0.0426 | 4258.5 | 80.9 | 100 | 0.39 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 100000 | 0.0997 | 997.2 | 92.2 | 1000 | 0.37 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000000 | 0.9144 | 914.4 | 101.9 | 10000 | 0.96 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 1000 | 0.0128 | 12760.7 | 75.4 | 1 | — | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 10000 | 0.0537 | 5374.6 | 81.3 | 1 | 0.62 | ok |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 100000 | 0.3398 | 3398.2 | 102.1 | 1 | 0.80 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000 | 0.0136 | 13603.8 | 76.1 | 10 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000 | 0.0301 | 3010.8 | 80.7 | 100 | 0.35 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.1256 | 1255.6 | 91.4 | 1000 | 0.62 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 0.8895 | 889.5 | 99.0 | 10000 | 0.85 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000 | 0.0156 | 15609.2 | 75.9 | 1 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 10000 | 0.0389 | 3893.8 | 82.5 | 1 | 0.40 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 100000 | 0.1477 | 1476.9 | 102.8 | 1 | 0.58 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000000 | 0.8429 | 842.9 | 263.4 | 1 | 0.76 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000 | 0.0185 | 18505.0 | 76.3 | 10 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 10000 | 0.0382 | 3823.2 | 81.4 | 100 | 0.32 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.1890 | 1889.6 | 92.1 | 1000 | 0.69 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 4.6114 | 4611.4 | 212.1 | 10000 | 1.39 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000 | 0.0152 | 15234.2 | 75.5 | 1 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 10000 | 0.0286 | 2860.8 | 80.7 | 1 | 0.27 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 100000 | 0.1620 | 1619.8 | 99.1 | 1 | 0.75 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000000 | 0.9844 | 984.4 | 223.7 | 1 | 0.78 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000 | 0.0271 | 27135.8 | 75.8 | 10 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 10000 | 0.0278 | 2776.7 | 81.1 | 100 | 0.01 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 100000 | 0.0969 | 969.5 | 92.5 | 1000 | 0.54 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000000 | 0.6755 | 675.5 | 101.9 | 10000 | 0.84 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 1000 | 0.0114 | 11441.7 | 76.5 | 1 | — | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 10000 | 0.0328 | 3279.5 | 82.3 | 1 | 0.46 | ok |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 100000 | 0.2255 | 2254.8 | 103.7 | 1 | 0.84 | ok |
 | [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 1000000 | — | — | — | — | — | timeout |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000 | 0.1493 | 149287.0 | 38.9 | 10 | — | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000 | 0.2505 | 25053.3 | 49.9 | 100 | 0.22 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.3947 | 3947.2 | 55.8 | 1000 | 0.20 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.7751 | 775.1 | 91.4 | 10000 | 0.29 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000 | 0.1474 | 147395.5 | 38.1 | 1 | — | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 10000 | 0.2200 | 21999.2 | 52.8 | 1 | 0.17 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 100000 | 0.5077 | 5077.0 | 60.5 | 1 | 0.36 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000000 | 0.7889 | 788.9 | 145.2 | 1 | 0.19 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000 | 0.2066 | 206607.0 | 38.3 | 10 | — | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 10000 | 0.3456 | 34558.5 | 52.8 | 100 | 0.22 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 0.3424 | 3423.8 | 84.9 | 1000 | -0.00 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 5.3496 | 5349.6 | 1045.1 | 10000 | 1.19 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000 | 0.1023 | 102337.4 | 39.2 | 1 | — | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 10000 | 0.1783 | 17830.6 | 52.9 | 1 | 0.24 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 100000 | 0.2960 | 2960.3 | 61.2 | 1 | 0.22 | ok |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000000 | 0.5462 | 546.2 | 152.7 | 1 | 0.27 | ok |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000 | 0.1000 | 100045.1 | 39.5 | 10 | — | ok |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 10000 | 0.2064 | 20642.9 | 53.5 | 100 | 0.31 | ok |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 100000 | 0.2778 | 2777.7 | 56.4 | 1000 | 0.13 | ok |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000000 | 0.5627 | 562.7 | 92.0 | 10000 | 0.31 | ok |
-| [java-native](code/projection/java/Projection.java) | linear-append | wide | 1000 | 0.1058 | 105808.8 | 38.2 | 1 | — | ok |
-| [java-native](code/projection/java/Projection.java) | linear-append | wide | 10000 | 0.2226 | 22260.1 | 53.2 | 1 | 0.32 | ok |
-| [java-native](code/projection/java/Projection.java) | linear-append | wide | 100000 | 0.3958 | 3958.0 | 61.0 | 1 | 0.25 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000 | 0.1352 | 135158.7 | 39.4 | 10 | — | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000 | 0.2421 | 24211.5 | 51.1 | 100 | 0.25 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.4448 | 4448.0 | 55.6 | 1000 | 0.26 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.6830 | 683.0 | 89.1 | 10000 | 0.19 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000 | 0.1468 | 146815.3 | 39.4 | 1 | — | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 10000 | 0.4226 | 42258.6 | 50.8 | 1 | 0.46 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 100000 | 0.3797 | 3796.8 | 60.8 | 1 | -0.05 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000000 | 0.7027 | 702.7 | 144.7 | 1 | 0.27 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000 | 0.1231 | 123136.8 | 39.9 | 10 | — | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 10000 | 0.3055 | 30554.1 | 50.5 | 100 | 0.39 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 1.0107 | 10106.7 | 82.1 | 1000 | 0.52 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 8.6628 | 8662.8 | 1328.0 | 10000 | 0.93 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000 | 0.1164 | 116407.0 | 39.6 | 1 | — | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 10000 | 0.3299 | 32986.4 | 52.0 | 1 | 0.45 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 100000 | 0.5098 | 5098.1 | 61.2 | 1 | 0.19 | ok |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000000 | 1.2974 | 1297.4 | 152.6 | 1 | 0.41 | ok |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000 | 0.1300 | 129977.9 | 38.6 | 10 | — | ok |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 10000 | 0.2642 | 26423.1 | 51.6 | 100 | 0.31 | ok |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 100000 | 0.3491 | 3490.6 | 56.1 | 1000 | 0.12 | ok |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000000 | 0.7200 | 720.0 | 89.9 | 10000 | 0.31 | ok |
+| [java-native](code/projection/java/Projection.java) | linear-append | wide | 1000 | 0.1271 | 127063.0 | 38.8 | 1 | — | ok |
+| [java-native](code/projection/java/Projection.java) | linear-append | wide | 10000 | 0.2603 | 26034.8 | 51.1 | 1 | 0.31 | ok |
+| [java-native](code/projection/java/Projection.java) | linear-append | wide | 100000 | 0.4147 | 4146.9 | 61.0 | 1 | 0.20 | ok |
 | [java-native](code/projection/java/Projection.java) | linear-append | wide | 1000000 | — | — | — | — | — | timeout |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000 | 0.0004 | 386.6 | 2.2 | 10 | — | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000 | 0.0059 | 591.9 | 2.6 | 100 | 1.18 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0367 | 367.4 | 6.4 | 1000 | 0.79 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.3944 | 394.4 | 7.5 | 10000 | 1.03 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000 | 0.0014 | 1376.9 | 2.2 | 1 | — | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 10000 | 0.0106 | 1060.7 | 2.9 | 1 | 0.89 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 100000 | 0.0435 | 435.0 | 7.9 | 1 | 0.61 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000000 | 0.5145 | 514.5 | 50.6 | 1 | 1.07 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000 | 0.0005 | 515.5 | 2.2 | 10 | — | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 10000 | 0.0046 | 464.5 | 3.1 | 100 | 0.95 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0550 | 550.1 | 7.6 | 1000 | 1.07 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 2.9152 | 2915.2 | 31.4 | 10000 | 1.72 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000 | 0.0034 | 3361.9 | 2.2 | 1 | — | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 10000 | 0.0036 | 356.5 | 2.9 | 1 | 0.03 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 100000 | 0.0415 | 415.3 | 7.9 | 1 | 1.07 | ok |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000000 | 0.5083 | 508.3 | 52.5 | 1 | 1.09 | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000 | 0.0006 | 564.1 | 2.2 | 10 | — | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 10000 | 0.0036 | 360.4 | 2.5 | 100 | 0.81 | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 100000 | 0.0307 | 307.1 | 6.3 | 1000 | 0.93 | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000000 | 0.3333 | 333.3 | 7.5 | 10000 | 1.04 | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000 | 0.0004 | 412.8 | 2.3 | 1 | — | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 10000 | 0.0079 | 791.7 | 2.8 | 1 | 1.28 | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 100000 | 0.0791 | 791.2 | 7.4 | 1 | 1.00 | ok |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000000 | 16.2100 | 16210.0 | 46.2 | 1 | 2.31 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000 | 0.0146 | 14570.1 | 0.8 | 10 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000 | 0.0653 | 6528.7 | 0.9 | 100 | 0.65 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.6338 | 6337.9 | 1.0 | 1000 | 0.99 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 6.5637 | 6563.7 | 2.5 | 10000 | 1.02 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000 | 0.0060 | 6042.0 | 0.9 | 1 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 10000 | 0.0604 | 6040.9 | 1.2 | 1 | 1.00 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 100000 | 0.6727 | 6727.4 | 4.0 | 1 | 1.05 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000000 | 6.8286 | 6828.6 | 29.9 | 1 | 1.01 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000 | 0.0062 | 6163.3 | 0.8 | 10 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 10000 | 0.0824 | 8242.0 | 0.9 | 100 | 1.13 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 0.7249 | 7248.5 | 1.0 | 1000 | 0.94 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 6.8558 | 6855.8 | 3.1 | 10000 | 0.98 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000 | 0.0062 | 6246.8 | 0.9 | 1 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 10000 | 0.0621 | 6206.7 | 1.2 | 1 | 1.00 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 100000 | 0.6252 | 6251.8 | 4.0 | 1 | 1.00 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000000 | 6.6394 | 6639.4 | 30.0 | 1 | 1.03 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000 | 0.0073 | 7309.5 | 0.8 | 10 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 10000 | 0.0746 | 7455.4 | 0.9 | 100 | 1.01 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 100000 | 0.7148 | 7148.5 | 1.1 | 1000 | 0.98 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000000 | 6.8386 | 6838.6 | 2.5 | 10000 | 0.98 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 1000 | 0.0063 | 6283.7 | 0.9 | 1 | — | ok |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 10000 | 0.0760 | 7604.6 | 1.2 | 1 | 1.08 | ok |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 100000 | 1.8462 | 18461.9 | 3.5 | 1 | 1.39 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000 | 0.0006 | 596.0 | 2.2 | 10 | — | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000 | 0.0051 | 514.5 | 2.5 | 100 | 0.94 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0514 | 513.7 | 6.4 | 1000 | 1.00 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.5284 | 528.4 | 7.6 | 10000 | 1.01 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000 | 0.0006 | 607.0 | 2.3 | 1 | — | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 10000 | 0.0055 | 546.7 | 3.0 | 1 | 0.95 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 100000 | 0.0549 | 548.9 | 7.8 | 1 | 1.00 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000000 | 0.5231 | 523.1 | 53.9 | 1 | 0.98 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000 | 0.0005 | 539.1 | 2.3 | 10 | — | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 10000 | 0.0051 | 513.2 | 3.1 | 100 | 0.98 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0639 | 639.0 | 8.3 | 1000 | 1.10 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 2.8393 | 2839.3 | 27.3 | 10000 | 1.65 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000 | 0.0006 | 567.5 | 2.3 | 1 | — | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 10000 | 0.0053 | 527.0 | 3.0 | 1 | 0.97 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 100000 | 0.0528 | 528.3 | 7.8 | 1 | 1.00 | ok |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000000 | 0.5363 | 536.3 | 49.1 | 1 | 1.01 | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000 | 0.0005 | 520.2 | 2.2 | 10 | — | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 10000 | 0.0045 | 453.6 | 2.5 | 100 | 0.94 | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 100000 | 0.0464 | 464.4 | 6.4 | 1000 | 1.01 | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000000 | 0.4064 | 406.4 | 7.5 | 10000 | 0.94 | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000 | 0.0006 | 601.0 | 2.2 | 1 | — | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 10000 | 0.0056 | 557.0 | 2.9 | 1 | 0.97 | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 100000 | 0.1164 | 1163.7 | 7.1 | 1 | 1.32 | ok |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000000 | 23.1253 | 23125.3 | 45.4 | 1 | 2.30 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000 | 0.0103 | 10322.9 | 0.9 | 10 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000 | 0.0814 | 8138.4 | 0.9 | 100 | 0.90 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.9163 | 9162.6 | 1.1 | 1000 | 1.05 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 10.4554 | 10455.4 | 2.6 | 10000 | 1.06 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000 | 0.0114 | 11435.7 | 0.9 | 1 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 10000 | 0.1232 | 12316.4 | 1.2 | 1 | 1.03 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 100000 | 1.0074 | 10074.3 | 4.1 | 1 | 0.91 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000000 | 10.9434 | 10943.4 | 30.0 | 1 | 1.04 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000 | 0.0124 | 12403.2 | 0.8 | 10 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 10000 | 0.1023 | 10229.6 | 0.9 | 100 | 0.92 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 1.0045 | 10044.7 | 1.6 | 1000 | 0.99 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 11.9089 | 11908.9 | 3.4 | 10000 | 1.07 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000 | 0.0108 | 10774.7 | 0.9 | 1 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 10000 | 0.1474 | 14739.6 | 1.2 | 1 | 1.14 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 100000 | 1.4113 | 14112.6 | 4.0 | 1 | 0.98 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000000 | 12.6480 | 12648.0 | 29.9 | 1 | 0.95 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000 | 0.0096 | 9592.0 | 0.8 | 10 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 10000 | 0.1010 | 10103.0 | 0.9 | 100 | 1.02 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 100000 | 1.2906 | 12905.6 | 1.1 | 1000 | 1.11 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000000 | 10.6070 | 10607.0 | 2.5 | 10000 | 0.91 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 1000 | 0.0108 | 10840.7 | 0.9 | 1 | — | ok |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 10000 | 0.1199 | 11990.7 | 1.1 | 1 | 1.04 | ok |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 100000 | 2.3283 | 23282.7 | 3.6 | 1 | 1.29 | ok |
 | [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 1000000 | — | — | — | — | — | timeout |
 
 | implementation | mode | profile | events | startup s | preparation s | exit s | process wall s |
 |---|---|---|---:|---:|---:|---:|---:|
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000 | 0.1208 | 0.0064 | 0.0606 | 0.2547 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000 | 0.1038 | 0.0055 | 0.0396 | 0.2665 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.1046 | 0.0066 | 0.0068 | 0.2585 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 0.1134 | 0.0056 | 0.0090 | 1.4585 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000 | 0.1290 | 0.0028 | 0.0463 | 0.3070 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 10000 | 0.0966 | 0.0068 | 0.0095 | 0.2581 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 100000 | 0.1330 | 0.0065 | 0.0077 | 0.3227 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000000 | 0.1080 | 0.0050 | 0.0144 | 1.8958 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000 | 0.1109 | 0.0064 | 0.0066 | 0.1928 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 10000 | 0.0897 | 0.0064 | 0.0060 | 0.1671 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.0769 | 0.0073 | 0.0070 | 0.2522 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 0.0816 | 0.0062 | 0.0070 | 2.3556 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000 | 0.0806 | 0.0060 | 0.0066 | 0.1461 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 10000 | 0.0824 | 0.0063 | 0.0060 | 0.1599 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 100000 | 0.0684 | 0.0042 | 0.0063 | 0.2357 |
-| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000000 | 0.1114 | 0.0055 | 0.0142 | 1.7266 |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000 | 0.0673 | 0.0045 | 0.0051 | 0.1223 |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 10000 | 0.0750 | 0.0060 | 0.0056 | 0.1451 |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 100000 | 0.0908 | 0.0063 | 0.0057 | 0.2494 |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000000 | 0.0592 | 0.0042 | 0.0059 | 0.8802 |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 1000 | 0.1063 | 0.0041 | 0.0060 | 0.1742 |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 10000 | 0.0647 | 0.0050 | 0.0047 | 0.1316 |
-| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 100000 | 0.0610 | 0.0052 | 0.0074 | 0.9678 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000 | 0.0177 | 0.0000 | 0.0008 | 0.0205 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000 | 0.0176 | 0.0000 | 0.0008 | 0.0376 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.0194 | 0.0001 | 0.0010 | 0.2572 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 0.0173 | 0.0000 | 0.0012 | 2.0861 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000 | 0.0160 | 0.0000 | 0.0011 | 0.0192 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 10000 | 0.0172 | 0.0000 | 0.0011 | 0.0387 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 100000 | 0.0157 | 0.0000 | 0.0051 | 0.2295 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000000 | 0.0159 | 0.0000 | 0.0589 | 2.1984 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000 | 0.0170 | 0.0000 | 0.0011 | 0.0201 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 10000 | 0.0179 | 0.0000 | 0.0012 | 0.0392 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.0184 | 0.0000 | 0.0010 | 0.2315 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 0.0189 | 0.0000 | 0.0021 | 3.4495 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000 | 0.0166 | 0.0000 | 0.0009 | 0.0195 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 10000 | 0.0158 | 0.0000 | 0.0012 | 0.0374 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 100000 | 0.0173 | 0.0000 | 0.0053 | 0.2322 |
-| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000000 | 0.0152 | 0.0000 | 0.0648 | 2.4554 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000 | 0.0163 | 0.0000 | 0.0010 | 0.0195 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 10000 | 0.0169 | 0.0000 | 0.0010 | 0.0380 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 100000 | 0.0173 | 0.0000 | 0.0011 | 0.2150 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000000 | 0.0182 | 0.0000 | 0.0016 | 1.9891 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000 | 0.0183 | 0.0000 | 0.0010 | 0.0216 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 10000 | 0.0152 | 0.0000 | 0.0010 | 0.0365 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 100000 | 0.0130 | 0.0000 | 0.0027 | 0.2604 |
-| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000000 | 0.0134 | 0.0000 | 0.0502 | 16.5464 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000 | 0.2255 | 0.0004 | 0.0126 | 0.2482 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000 | 0.2511 | 0.0004 | 0.0161 | 0.2857 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.1513 | 0.0004 | 0.0107 | 0.2349 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.1856 | 0.0004 | 0.0142 | 0.7166 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000 | 0.2487 | 0.0004 | 0.0119 | 0.2710 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 10000 | 0.2007 | 0.0005 | 0.0109 | 0.2351 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 100000 | 0.2078 | 0.0005 | 0.0570 | 0.4016 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000000 | 0.2291 | 0.0005 | 0.0311 | 1.0929 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000 | 0.1793 | 0.0004 | 0.0093 | 0.1996 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 10000 | 0.1799 | 0.0002 | 0.0103 | 0.2089 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.2401 | 0.0005 | 0.0114 | 0.4514 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 0.2032 | 0.0005 | 0.0290 | 6.4267 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000 | 0.1717 | 0.0003 | 0.0087 | 0.1905 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 10000 | 0.1617 | 0.0002 | 0.0085 | 0.1949 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 100000 | 0.2041 | 0.0005 | 0.0144 | 0.3379 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000000 | 0.1894 | 0.0005 | 0.0381 | 1.3414 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000 | 0.2264 | 0.0005 | 0.0108 | 0.2547 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 10000 | 0.3303 | 0.0005 | 0.0120 | 0.3715 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 100000 | 0.2195 | 0.0005 | 0.0163 | 0.3318 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000000 | 0.1820 | 0.0004 | 0.0118 | 0.7643 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 1000 | 0.1677 | 0.0003 | 0.0083 | 0.1834 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 10000 | 0.1868 | 0.0005 | 0.0138 | 0.2285 |
-| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 100000 | 0.1853 | 0.0005 | 0.0136 | 0.4458 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000 | 0.3429 | 0.0006 | 0.0100 | 0.3763 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000 | 0.2969 | 0.0002 | 0.0156 | 0.3383 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.5675 | 0.0004 | 0.0181 | 0.6938 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 0.2844 | 0.0005 | 0.0171 | 1.3866 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000 | 0.2706 | 0.0002 | 0.0085 | 0.2888 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 10000 | 0.2737 | 0.0002 | 0.0149 | 0.3180 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 100000 | 0.2743 | 0.0003 | 0.0197 | 0.4517 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000000 | 0.6132 | 0.0006 | 0.1236 | 4.6827 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000 | 0.4026 | 0.0000 | 0.0210 | 0.4385 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 10000 | 0.3231 | 0.0003 | 0.0262 | 0.4157 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.3441 | 0.0002 | 0.0185 | 0.5578 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 0.3249 | 0.0004 | 0.0805 | 6.1495 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000 | 0.3485 | 0.0007 | 0.0093 | 0.3861 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 10000 | 0.3444 | 0.0003 | 0.0183 | 0.3984 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 100000 | 0.4965 | 0.0007 | 0.0160 | 0.7317 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000000 | 0.3172 | 0.0004 | 0.0318 | 1.3693 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000 | 0.3035 | 0.0006 | 0.0119 | 0.3342 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 10000 | 0.4480 | 0.0005 | 0.0168 | 0.5092 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 100000 | 0.2795 | 0.0006 | 0.0170 | 0.3977 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000000 | 0.2957 | 0.0003 | 0.0260 | 1.2407 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 1000 | 0.4025 | 0.0003 | 0.0089 | 0.4253 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 10000 | 0.3849 | 0.0001 | 0.0631 | 0.5043 |
-| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 100000 | 0.4269 | 0.0004 | 0.0186 | 0.7968 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000 | 0.1828 | 0.0275 | 0.0057 | 0.4333 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000 | 0.1383 | 0.0147 | 0.0525 | 0.4957 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.1169 | 0.0152 | 0.0254 | 0.6073 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.1294 | 0.0179 | 0.0090 | 1.0160 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000 | 0.1352 | 0.0245 | 0.0191 | 0.3753 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 10000 | 0.1293 | 0.0179 | 0.0316 | 0.4448 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 100000 | 0.1531 | 0.0199 | 0.0100 | 0.7826 |
-| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000000 | 0.1469 | 0.0207 | 0.0272 | 1.0937 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000 | 0.1534 | 0.0206 | 0.0175 | 0.4510 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 10000 | 0.1639 | 0.0213 | 0.0125 | 0.6009 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 0.1335 | 0.0167 | 0.0178 | 0.5515 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 0.1533 | 0.0163 | 0.1498 | 5.7263 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000 | 0.1297 | 0.0142 | 0.0317 | 0.3140 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 10000 | 0.1402 | 0.0066 | 0.0054 | 0.3585 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 100000 | 0.1086 | 0.0140 | 0.0763 | 0.5349 |
-| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000000 | 0.1142 | 0.0152 | 0.0427 | 0.7893 |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000 | 0.1177 | 0.0148 | 0.0051 | 0.2780 |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 10000 | 0.1147 | 0.0141 | 0.0185 | 0.3869 |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 100000 | 0.1511 | 0.0166 | 0.0471 | 0.5301 |
-| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000000 | 0.1226 | 0.0148 | 0.0073 | 0.7511 |
-| [java-native](code/projection/java/Projection.java) | linear-append | wide | 1000 | 0.1216 | 0.0153 | 0.0341 | 0.3137 |
-| [java-native](code/projection/java/Projection.java) | linear-append | wide | 10000 | 0.1295 | 0.0181 | 0.0409 | 0.4558 |
-| [java-native](code/projection/java/Projection.java) | linear-append | wide | 100000 | 0.1522 | 0.0160 | 0.0436 | 0.6640 |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000 | 0.0283 | 0.0000 | 0.0010 | 0.0297 |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000 | 0.0192 | 0.0000 | 0.0014 | 0.0268 |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0152 | 0.0000 | 0.0010 | 0.0531 |
-| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.0148 | 0.0000 | 0.0015 | 0.4109 |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000 | 0.0418 | 0.0000 | 0.0032 | 0.0468 |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 10000 | 0.0361 | 0.0000 | 0.0021 | 0.0496 |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 100000 | 0.0166 | 0.0000 | 0.0012 | 0.0641 |
-| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000000 | 0.0150 | 0.0000 | 0.0041 | 0.6116 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000 | 0.0183 | 0.0000 | 0.0011 | 0.0200 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 10000 | 0.0166 | 0.0000 | 0.0012 | 0.0227 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0176 | 0.0000 | 0.0014 | 0.0741 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 0.0149 | 0.0000 | 0.0025 | 2.9329 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000 | 0.0207 | 0.0000 | 0.0017 | 0.0260 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 10000 | 0.0102 | 0.0000 | 0.0009 | 0.0153 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 100000 | 0.0145 | 0.0000 | 0.0011 | 0.0596 |
-| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000000 | 0.0168 | 0.0000 | 0.0044 | 0.5873 |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000 | 0.0213 | 0.0000 | 0.0013 | 0.0234 |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 10000 | 0.0183 | 0.0000 | 0.0010 | 0.0230 |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 100000 | 0.0127 | 0.0000 | 0.0010 | 0.0446 |
-| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000000 | 0.0137 | 0.0000 | 0.0010 | 0.3483 |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000 | 0.0156 | 0.0000 | 0.0008 | 0.0168 |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 10000 | 0.0239 | 0.0000 | 0.0014 | 0.0340 |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 100000 | 0.0133 | 0.0000 | 0.0011 | 0.0959 |
-| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000000 | 0.0098 | 0.0000 | 0.0050 | 16.2672 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000 | 0.0175 | 0.0000 | 0.0008 | 0.0331 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000 | 0.0111 | 0.0000 | 0.0009 | 0.0774 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.0110 | 0.0000 | 0.0007 | 0.6457 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 0.0119 | 0.0000 | 0.0010 | 6.5770 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000 | 0.0101 | 0.0000 | 0.0007 | 0.0169 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 10000 | 0.0096 | 0.0000 | 0.0007 | 0.0711 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 100000 | 0.0097 | 0.0000 | 0.0011 | 0.6866 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000000 | 0.0128 | 0.0000 | 0.0033 | 6.8857 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000 | 0.0142 | 0.0000 | 0.0007 | 0.0210 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 10000 | 0.0129 | 0.0000 | 0.0012 | 0.0969 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 0.0133 | 0.0000 | 0.0008 | 0.7392 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 0.0126 | 0.0000 | 0.0009 | 6.8697 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000 | 0.0102 | 0.0000 | 0.0007 | 0.0173 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 10000 | 0.0111 | 0.0000 | 0.0006 | 0.0742 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 100000 | 0.0096 | 0.0000 | 0.0008 | 0.6378 |
-| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000000 | 0.0097 | 0.0000 | 0.0033 | 6.6927 |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000 | 0.0328 | 0.0000 | 0.0008 | 0.0410 |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 10000 | 0.0155 | 0.0000 | 0.0010 | 0.0912 |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 100000 | 0.0143 | 0.0000 | 0.0011 | 0.7309 |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000000 | 0.0108 | 0.0000 | 0.0010 | 6.8509 |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 1000 | 0.0099 | 0.0000 | 0.0007 | 0.0170 |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 10000 | 0.0113 | 0.0000 | 0.0007 | 0.0885 |
-| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 100000 | 0.0100 | 0.0000 | 0.0012 | 1.8606 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000 | 0.1227 | 0.0062 | 0.0051 | 0.1889 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 10000 | 0.1062 | 0.0061 | 0.0066 | 0.1982 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 100000 | 0.2023 | 0.0087 | 0.0064 | 0.3867 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | dense | 1000000 | 0.1372 | 0.0072 | 0.0098 | 2.0311 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000 | 0.0973 | 0.0063 | 0.0057 | 0.1627 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 10000 | 0.0725 | 0.0054 | 0.0061 | 0.1484 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 100000 | 0.1179 | 0.0063 | 0.0266 | 0.3557 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-append | wide | 1000000 | 0.1141 | 0.0067 | 0.0187 | 2.4722 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000 | 0.1225 | 0.0049 | 0.0068 | 0.2121 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 10000 | 0.1204 | 0.0072 | 0.0062 | 0.2124 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 100000 | 0.1493 | 0.0082 | 0.0081 | 0.3537 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | dense | 1000000 | 0.2234 | 0.0209 | 0.0199 | 3.7357 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000 | 0.1214 | 0.0081 | 0.0065 | 0.2008 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 10000 | 0.1215 | 0.0066 | 0.0194 | 0.2753 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 100000 | 0.1767 | 0.0195 | 0.0072 | 0.4434 |
+| [csharp-native](code/projection/csharp/Program.cs) | indexed-copy | wide | 1000000 | 0.1288 | 0.0075 | 0.0246 | 2.3043 |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000 | 0.1430 | 0.0074 | 0.0078 | 0.2313 |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 10000 | 0.1109 | 0.0075 | 0.0318 | 0.2475 |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 100000 | 0.0984 | 0.0165 | 0.0096 | 0.3437 |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | dense | 1000000 | 0.1653 | 0.0065 | 0.0069 | 1.0731 |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 1000 | 0.1197 | 0.0065 | 0.0060 | 0.1966 |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 10000 | 0.1520 | 0.0062 | 0.0061 | 0.2571 |
+| [csharp-native](code/projection/csharp/Program.cs) | linear-append | wide | 100000 | 0.1679 | 0.0062 | 0.0074 | 0.9558 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000 | 0.0186 | 0.0000 | 0.0009 | 0.0215 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 10000 | 0.0218 | 0.0000 | 0.0012 | 0.0500 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 100000 | 0.0160 | 0.0000 | 0.0008 | 0.2161 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | dense | 1000000 | 0.0118 | 0.0000 | 0.0012 | 1.9025 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000 | 0.0138 | 0.0000 | 0.0010 | 0.0170 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 10000 | 0.0159 | 0.0000 | 0.0012 | 0.0380 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 100000 | 0.0152 | 0.0000 | 0.0037 | 0.2172 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-append | wide | 1000000 | 0.0289 | 0.0000 | 0.0606 | 2.5763 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000 | 0.0169 | 0.0000 | 0.0008 | 0.0199 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 10000 | 0.0169 | 0.0000 | 0.0010 | 0.0393 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 100000 | 0.0167 | 0.0000 | 0.0010 | 0.2519 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | dense | 1000000 | 0.0165 | 0.0000 | 0.0013 | 2.9924 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000 | 0.0120 | 0.0000 | 0.0009 | 0.0148 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 10000 | 0.0098 | 0.0000 | 0.0009 | 0.0269 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 100000 | 0.0114 | 0.0000 | 0.0038 | 0.1827 |
+| [rust-native](code/projection/rust/projection.rs) | indexed-copy | wide | 1000000 | 0.0098 | 0.0000 | 0.0418 | 2.0103 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000 | 0.0149 | 0.0000 | 0.0009 | 0.0178 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 10000 | 0.0139 | 0.0000 | 0.0008 | 0.0309 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 100000 | 0.0139 | 0.0000 | 0.0008 | 0.1821 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | dense | 1000000 | 0.0148 | 0.0000 | 0.0010 | 1.7632 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000 | 0.0151 | 0.0000 | 0.0008 | 0.0178 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 10000 | 0.0143 | 0.0000 | 0.0010 | 0.0324 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 100000 | 0.0131 | 0.0000 | 0.0028 | 0.2244 |
+| [rust-native](code/projection/rust/projection.rs) | linear-append | wide | 1000000 | 0.0124 | 0.0000 | 0.0364 | 14.6238 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000 | 0.2488 | 0.0005 | 0.0135 | 0.2735 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 10000 | 0.2085 | 0.0005 | 0.0149 | 0.2432 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 100000 | 0.2082 | 0.0005 | 0.0140 | 0.3149 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | dense | 1000000 | 0.2060 | 0.0005 | 0.0147 | 0.8132 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000 | 0.1975 | 0.0005 | 0.0110 | 0.2188 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 10000 | 0.2154 | 0.0005 | 0.0115 | 0.2515 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 100000 | 0.1979 | 0.0005 | 0.0180 | 0.3349 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-append | wide | 1000000 | 0.1916 | 0.0004 | 0.0832 | 1.1634 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000 | 0.2070 | 0.0003 | 0.0100 | 0.2272 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 10000 | 0.1766 | 0.0005 | 0.0116 | 0.2098 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 100000 | 0.1601 | 0.0004 | 0.0147 | 0.3201 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | dense | 1000000 | 0.1829 | 0.0005 | 0.0230 | 5.8210 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000 | 0.1735 | 0.0004 | 0.0093 | 0.1936 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 10000 | 0.2332 | 0.0005 | 0.0100 | 0.2692 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 100000 | 0.1949 | 0.0005 | 0.0164 | 0.3351 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | indexed-copy | wide | 1000000 | 0.1849 | 0.0005 | 0.0319 | 1.2122 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000 | 0.1764 | 0.0005 | 0.0097 | 0.1968 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 10000 | 0.1638 | 0.0005 | 0.0100 | 0.1933 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 100000 | 0.1702 | 0.0005 | 0.0151 | 0.2681 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | dense | 1000000 | 0.1856 | 0.0005 | 0.0120 | 0.7955 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 1000 | 0.2103 | 0.0005 | 0.0102 | 0.2335 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 10000 | 0.2154 | 0.0005 | 0.0091 | 0.2588 |
+| [ts-simple (native)](code/projection/typescript/projection.ts) | linear-append | wide | 100000 | 0.2595 | 0.0005 | 0.0145 | 0.6198 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000 | 0.2560 | 0.0004 | 0.0313 | 0.3018 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 10000 | 0.2731 | 0.0004 | 0.0149 | 0.3192 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 100000 | 0.3763 | 0.0004 | 0.0303 | 0.5336 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | dense | 1000000 | 0.3912 | 0.0009 | 0.0121 | 1.2969 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000 | 0.3763 | 0.0005 | 0.0116 | 0.4048 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 10000 | 0.4208 | 0.0004 | 0.0184 | 0.4809 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 100000 | 0.3059 | 0.0004 | 0.0107 | 0.4713 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-append | wide | 1000000 | 0.2760 | 0.0004 | 0.0291 | 1.2141 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000 | 0.4228 | 0.0005 | 0.0141 | 0.4572 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 10000 | 0.3862 | 0.0007 | 0.0173 | 0.4432 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 100000 | 0.3186 | 0.0006 | 0.0187 | 0.5279 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | dense | 1000000 | 0.3721 | 0.0005 | 0.0263 | 5.0132 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000 | 0.3187 | 0.0004 | 0.0099 | 0.3451 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 10000 | 0.3084 | 0.0005 | 0.0139 | 0.3537 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 100000 | 0.3727 | 0.0004 | 0.0184 | 0.5651 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | indexed-copy | wide | 1000000 | 0.2765 | 0.0004 | 0.0353 | 1.3684 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000 | 0.3297 | 0.0004 | 0.0219 | 0.3797 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 10000 | 0.2634 | 0.0004 | 0.0137 | 0.3059 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 100000 | 0.2673 | 0.0004 | 0.0140 | 0.3793 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | dense | 1000000 | 0.2419 | 0.0004 | 0.0102 | 0.9301 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 1000 | 0.2316 | 0.0003 | 0.0088 | 0.2528 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 10000 | 0.2040 | 0.0003 | 0.0111 | 0.2504 |
+| [ts-zod (native)](code/projection/typescript-zod/projection-zod.ts) | linear-append | wide | 100000 | 0.2252 | 0.0003 | 0.0128 | 0.4722 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000 | 0.1956 | 0.0200 | 0.0110 | 0.4372 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 10000 | 0.1536 | 0.0237 | 0.0154 | 0.4761 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 100000 | 0.3182 | 0.0262 | 0.0393 | 0.9228 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | dense | 1000000 | 0.1375 | 0.0201 | 0.0216 | 0.9840 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000 | 0.2290 | 0.0209 | 0.0324 | 0.4754 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 10000 | 0.2468 | 0.0605 | 0.0145 | 0.8623 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 100000 | 0.1581 | 0.0193 | 0.0080 | 0.6831 |
+| [java-native](code/projection/java/Projection.java) | indexed-append | wide | 1000000 | 0.1865 | 0.0215 | 0.0220 | 1.0437 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000 | 0.1940 | 0.0205 | 0.0423 | 0.4911 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 10000 | 0.1958 | 0.0194 | 0.0521 | 0.7536 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 100000 | 0.2444 | 0.0425 | 0.0192 | 1.4465 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | dense | 1000000 | 0.1432 | 0.0178 | 0.0873 | 8.9737 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000 | 0.1289 | 0.0164 | 0.0115 | 0.3211 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 10000 | 0.1512 | 0.0165 | 0.0453 | 0.5988 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 100000 | 0.1490 | 0.0190 | 0.0318 | 0.7651 |
+| [java-native](code/projection/java/Projection.java) | indexed-copy | wide | 1000000 | 0.2116 | 0.0270 | 0.0251 | 1.7307 |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000 | 0.1944 | 0.0165 | 0.0067 | 0.3965 |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 10000 | 0.1561 | 0.0245 | 0.0105 | 0.5952 |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 100000 | 0.1622 | 0.0245 | 0.0348 | 0.6703 |
+| [java-native](code/projection/java/Projection.java) | linear-append | dense | 1000000 | 0.1301 | 0.0193 | 0.0398 | 0.9694 |
+| [java-native](code/projection/java/Projection.java) | linear-append | wide | 1000 | 0.1452 | 0.0158 | 0.0407 | 0.3728 |
+| [java-native](code/projection/java/Projection.java) | linear-append | wide | 10000 | 0.1324 | 0.0162 | 0.0573 | 0.5146 |
+| [java-native](code/projection/java/Projection.java) | linear-append | wide | 100000 | 0.1376 | 0.0158 | 0.0307 | 0.6581 |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000 | 0.0418 | 0.0000 | 0.0009 | 0.0432 |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 10000 | 0.0214 | 0.0000 | 0.0016 | 0.0283 |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 100000 | 0.0212 | 0.0000 | 0.0017 | 0.0745 |
+| [go-native](code/projection/go/projection.go) | indexed-append | dense | 1000000 | 0.0247 | 0.0000 | 0.0024 | 0.5558 |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000 | 0.0257 | 0.0000 | 0.0018 | 0.0281 |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 10000 | 0.0198 | 0.0000 | 0.0015 | 0.0272 |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 100000 | 0.0196 | 0.0000 | 0.0012 | 0.0797 |
+| [go-native](code/projection/go/projection.go) | indexed-append | wide | 1000000 | 0.0179 | 0.0000 | 0.0045 | 0.6089 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000 | 0.0183 | 0.0000 | 0.0010 | 0.0201 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 10000 | 0.0194 | 0.0000 | 0.0012 | 0.0259 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 100000 | 0.0191 | 0.0000 | 0.0015 | 0.0848 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | dense | 1000000 | 0.0184 | 0.0000 | 0.0028 | 2.8613 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000 | 0.0186 | 0.0000 | 0.0012 | 0.0205 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 10000 | 0.0192 | 0.0000 | 0.0013 | 0.0263 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 100000 | 0.0185 | 0.0000 | 0.0014 | 0.0772 |
+| [go-native](code/projection/go/projection.go) | indexed-copy | wide | 1000000 | 0.0177 | 0.0000 | 0.0043 | 0.6176 |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000 | 0.0189 | 0.0000 | 0.0011 | 0.0207 |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 10000 | 0.0171 | 0.0000 | 0.0010 | 0.0229 |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 100000 | 0.0174 | 0.0000 | 0.0014 | 0.0655 |
+| [go-native](code/projection/go/projection.go) | linear-append | dense | 1000000 | 0.0159 | 0.0000 | 0.0015 | 0.4240 |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000 | 0.0183 | 0.0000 | 0.0012 | 0.0203 |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 10000 | 0.0188 | 0.0000 | 0.0012 | 0.0261 |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 100000 | 0.0173 | 0.0000 | 0.0014 | 0.1383 |
+| [go-native](code/projection/go/projection.go) | linear-append | wide | 1000000 | 0.0194 | 0.0000 | 0.0043 | 23.2265 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000 | 0.0172 | 0.0000 | 0.0009 | 0.0287 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 10000 | 0.0125 | 0.0000 | 0.0008 | 0.0949 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 100000 | 0.0125 | 0.0000 | 0.0009 | 0.9299 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | dense | 1000000 | 0.0203 | 0.0000 | 0.0016 | 10.4777 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000 | 0.0236 | 0.0000 | 0.0008 | 0.0361 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 10000 | 0.0194 | 0.0000 | 0.0009 | 0.1440 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 100000 | 0.0164 | 0.0000 | 0.0012 | 1.0281 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-append | wide | 1000000 | 0.0171 | 0.0000 | 0.0034 | 11.0306 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000 | 0.0193 | 0.0000 | 0.0009 | 0.0328 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 10000 | 0.0183 | 0.0000 | 0.0009 | 0.1218 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 100000 | 0.0158 | 0.0001 | 0.0011 | 1.0217 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | dense | 1000000 | 0.0183 | 0.0000 | 0.0015 | 11.9291 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000 | 0.0202 | 0.0000 | 0.0009 | 0.0317 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 10000 | 0.0413 | 0.0001 | 0.0021 | 0.1898 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 100000 | 0.0252 | 0.0000 | 0.0017 | 1.4431 |
+| [swift-native](code/projection/swift/Projection.swift) | indexed-copy | wide | 1000000 | 0.0181 | 0.0000 | 0.0431 | 13.0706 |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000 | 0.0340 | 0.0000 | 0.0007 | 0.0400 |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 10000 | 0.0192 | 0.0000 | 0.0011 | 0.1212 |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 100000 | 0.0218 | 0.0000 | 0.0013 | 1.3139 |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | dense | 1000000 | 0.0142 | 0.0000 | 0.0014 | 10.6229 |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 1000 | 0.0180 | 0.0000 | 0.0009 | 0.0299 |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 10000 | 0.0173 | 0.0000 | 0.0010 | 0.1386 |
+| [swift-native](code/projection/swift/Projection.swift) | linear-append | wide | 100000 | 0.0178 | 0.0000 | 0.0037 | 2.3524 |

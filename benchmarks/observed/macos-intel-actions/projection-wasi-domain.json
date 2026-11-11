@@ -1,5 +1,5 @@
 {
-  "timestampUtc": "2026-11-10T21:57:18.402090+00:00",
+  "timestampUtc": "2026-11-11T00:15:25.973221+00:00",
   "toolchains": {
     "csharp": "11.0.100",
     "rust": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
@@ -30,7 +30,7 @@
         "_MonoAotCrossCompilerPath": "/Users/runner/work/_temp/wasi-tools/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.wasi-wasm/11.0.0/tools/mono-aot-cross"
       },
       "sourceSha256": "7b3174f2f776386d4285f9c09850bbb4c2f1ea6ef1dcdd260f29369cccfa8d99",
-      "wasmSha256": "f0cd31e3043433cc1c2474842b36583c2907be97081c29a902234a0164834f42",
+      "wasmSha256": "b2d62e405516baef394d1c6553c4be9cca173a0f073d4d869b8f40e119a2ce29",
       "wasmBytes": 9678940,
       "aotModule": "mono_aot_module_Projection_info",
       "registeredAotModules": 5,
@@ -51,7 +51,7 @@
   ],
   "samples": 2,
   "buildKey": {
-    "source": "16019b5001581beaaeb9a3680c8f17777bba7fe66a1e85609fba64855f1feede",
+    "source": "9c31f9a1eb7dba58caa6180843386b63893cdb02345bc0c036ce0309416e96c8",
     "languages": [
       "csharp",
       "rust"
@@ -93,14 +93,14 @@
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.028225899999999998,
-      "eventsPerSecond": 3542845.400855243,
-      "nsPerEvent": 282.25899999999996,
-      "peakRssMiB": 138.2734375,
-      "startupSeconds": 1.1229057489997558,
-      "preparationSeconds": 0.010791002500127433,
-      "wallSeconds": 2.400299790999952,
-      "exitSeconds": 1.2330681985001775,
+      "projectionSeconds": 0.0355085,
+      "eventsPerSecond": 2816227.1005533887,
+      "nsPerEvent": 355.085,
+      "peakRssMiB": 138.26953125,
+      "startupSeconds": 0.26747847749993525,
+      "preparationSeconds": 0.007992064000291066,
+      "wallSeconds": 1.8499688595002226,
+      "exitSeconds": 1.5328025750002325,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -117,17 +117,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.031449,
-              "totalSeconds": 0.031449,
+              "switchSeconds": 0.0352703,
+              "totalSeconds": 0.0352703,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 2.061621742999705,
-          "preparationSeconds": 0.016327650000221183,
-          "workAndValidationSeconds": 0.0376118949998272,
-          "exitSeconds": 1.0995591640003113,
-          "wallSeconds": 3.2151204520000647,
-          "peakRssBytes": 144990208
+          "startupSeconds": 0.26535970399982034,
+          "preparationSeconds": 0.008379600000353093,
+          "workAndValidationSeconds": 0.0413135109997711,
+          "exitSeconds": 1.6993638130002182,
+          "wallSeconds": 2.0144166280001627,
+          "peakRssBytes": 144875520
         },
         {
           "roots": 100000,
@@ -141,17 +141,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.0250028,
-              "totalSeconds": 0.0250028,
+              "switchSeconds": 0.0357467,
+              "totalSeconds": 0.0357467,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.1841897549998066,
-          "preparationSeconds": 0.005254355000033684,
-          "workAndValidationSeconds": 0.029457786999955715,
-          "exitSeconds": 1.3665772330000436,
-          "wallSeconds": 1.5854791299998396,
-          "peakRssBytes": 144965632
+          "startupSeconds": 0.26959725100005016,
+          "preparationSeconds": 0.007604528000229038,
+          "workAndValidationSeconds": 0.04207797499975641,
+          "exitSeconds": 1.3662413370002469,
+          "wallSeconds": 1.6855210910002825,
+          "peakRssBytes": 144986112
         }
       ]
     },
@@ -161,14 +161,14 @@
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 0.20511775,
-      "eventsPerSecond": 4875248.485321237,
-      "nsPerEvent": 205.11775,
-      "peakRssMiB": 140.62109375,
-      "startupSeconds": 0.19228282750009384,
-      "preparationSeconds": 0.005716141499988225,
-      "wallSeconds": 1.4651847000002363,
-      "exitSeconds": 1.0566835100000844,
+      "projectionSeconds": 0.2753195,
+      "eventsPerSecond": 3632143.7457208806,
+      "nsPerEvent": 275.3195,
+      "peakRssMiB": 140.58203125,
+      "startupSeconds": 0.2542070119998243,
+      "preparationSeconds": 0.009667200999956549,
+      "wallSeconds": 1.9699981375001698,
+      "exitSeconds": 1.4244815340002788,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -185,17 +185,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.2173257,
-              "totalSeconds": 0.2173257,
+              "switchSeconds": 0.2910469,
+              "totalSeconds": 0.2910469,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.1906349340001725,
-          "preparationSeconds": 0.006692679000025237,
-          "workAndValidationSeconds": 0.22349536000001535,
-          "exitSeconds": 1.1359851560000607,
-          "wallSeconds": 1.5568081290002738,
-          "peakRssBytes": 147386368
+          "startupSeconds": 0.27809040099964477,
+          "preparationSeconds": 0.012444895000044198,
+          "workAndValidationSeconds": 0.29733614099995975,
+          "exitSeconds": 1.3942464600004314,
+          "wallSeconds": 1.9821178970000801,
+          "peakRssBytes": 147410944
         },
         {
           "roots": 1000000,
@@ -209,20 +209,20 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.1929098,
-              "totalSeconds": 0.1929098,
+              "switchSeconds": 0.2595921,
+              "totalSeconds": 0.2595921,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.19393072100001518,
-          "preparationSeconds": 0.004739603999951214,
-          "workAndValidationSeconds": 0.19750908200012418,
-          "exitSeconds": 0.9773818640001082,
-          "wallSeconds": 1.3735612710001988,
-          "peakRssBytes": 147451904
+          "startupSeconds": 0.23032362300000386,
+          "preparationSeconds": 0.0068895069998689,
+          "workAndValidationSeconds": 0.26594864000026064,
+          "exitSeconds": 1.4547166080001261,
+          "wallSeconds": 1.9578783780002595,
+          "peakRssBytes": 147390464
         }
       ],
-      "growthExponent": 0.8613554453927901
+      "growthExponent": 0.889504645561657
     },
     {
       "implementation": "csharp-wasi",
@@ -230,14 +230,14 @@
       "profile": "dense",
       "events": 10000000,
       "status": "ok",
-      "projectionSeconds": 1.98805585,
-      "eventsPerSecond": 5030039.774788017,
-      "nsPerEvent": 198.805585,
-      "peakRssMiB": 154.265625,
-      "startupSeconds": 0.17884648149993154,
-      "preparationSeconds": 0.004785501000014847,
-      "wallSeconds": 3.2369618349998746,
-      "exitSeconds": 1.0590005914998528,
+      "projectionSeconds": 2.49391345,
+      "eventsPerSecond": 4009762.247362674,
+      "nsPerEvent": 249.391345,
+      "peakRssMiB": 154.296875,
+      "startupSeconds": 0.21942584149996947,
+      "preparationSeconds": 0.0063004955002270435,
+      "wallSeconds": 3.9656342385001153,
+      "exitSeconds": 1.239797377000059,
       "stateCount": 10,
       "retainedItems": 1000000,
       "maxHistoryLength": 100000,
@@ -254,17 +254,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 2.033971,
-              "totalSeconds": 2.033971,
+              "switchSeconds": 2.4950256,
+              "totalSeconds": 2.4950256,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.18028509299983853,
-          "preparationSeconds": 0.004764990999774454,
-          "workAndValidationSeconds": 2.039590526000211,
-          "exitSeconds": 0.9838814419999835,
-          "wallSeconds": 3.2085220519998074,
-          "peakRssBytes": 161759232
+          "startupSeconds": 0.22264207099988198,
+          "preparationSeconds": 0.007416511000428727,
+          "workAndValidationSeconds": 2.5007920959997136,
+          "exitSeconds": 1.2532311059999302,
+          "wallSeconds": 3.9840817839999545,
+          "peakRssBytes": 161792000
         },
         {
           "roots": 10000000,
@@ -278,20 +278,20 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 1.9421407,
-              "totalSeconds": 1.9421407,
+              "switchSeconds": 2.4928013,
+              "totalSeconds": 2.4928013,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.17740787000002456,
-          "preparationSeconds": 0.004806011000255239,
-          "workAndValidationSeconds": 1.9490679959999397,
-          "exitSeconds": 1.1341197409997221,
-          "wallSeconds": 3.2654016179999417,
-          "peakRssBytes": 161738752
+          "startupSeconds": 0.21620961200005695,
+          "preparationSeconds": 0.00518448000002536,
+          "workAndValidationSeconds": 2.499428953000006,
+          "exitSeconds": 1.2263636480001878,
+          "wallSeconds": 3.947186693000276,
+          "peakRssBytes": 161771520
         }
       ],
-      "growthExponent": 0.9864253368141512
+      "growthExponent": 0.9570444052621497
     },
     {
       "implementation": "csharp-wasi",
@@ -299,14 +299,14 @@
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 1.1024820499999999,
-      "eventsPerSecond": 90704.42462079089,
-      "nsPerEvent": 11024.8205,
-      "peakRssMiB": 156.58984375,
-      "startupSeconds": 0.1766586764999829,
-      "preparationSeconds": 0.004996773000129906,
-      "wallSeconds": 2.25764149250017,
-      "exitSeconds": 0.9692779020001581,
+      "projectionSeconds": 1.42385925,
+      "eventsPerSecond": 70231.66088923466,
+      "nsPerEvent": 14238.5925,
+      "peakRssMiB": 156.609375,
+      "startupSeconds": 0.2365041084999575,
+      "preparationSeconds": 0.008909456499850421,
+      "wallSeconds": 2.9862234819997866,
+      "exitSeconds": 1.310844293999935,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -323,17 +323,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 1.112048,
-              "totalSeconds": 1.112048,
+              "switchSeconds": 1.390785,
+              "totalSeconds": 1.390785,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.17599990999997317,
-          "preparationSeconds": 0.004756317000101262,
-          "workAndValidationSeconds": 1.1162201259999165,
-          "exitSeconds": 0.9803524710000602,
-          "wallSeconds": 2.277328824000051,
-          "peakRssBytes": 164171776
+          "startupSeconds": 0.20762754799989125,
+          "preparationSeconds": 0.006088800999805244,
+          "workAndValidationSeconds": 1.3967490930003805,
+          "exitSeconds": 1.3393089689998305,
+          "wallSeconds": 2.9497744109999076,
+          "peakRssBytes": 164163584
         },
         {
           "roots": 100000,
@@ -347,17 +347,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 1.0929161,
-              "totalSeconds": 1.0929161,
+              "switchSeconds": 1.4569335,
+              "totalSeconds": 1.4569335,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.17731744299999264,
-          "preparationSeconds": 0.00523722900015855,
-          "workAndValidationSeconds": 1.0971961559998817,
-          "exitSeconds": 0.958203333000256,
-          "wallSeconds": 2.237954161000289,
-          "peakRssBytes": 164196352
+          "startupSeconds": 0.26538066900002377,
+          "preparationSeconds": 0.011730111999895598,
+          "workAndValidationSeconds": 1.4631821529997069,
+          "exitSeconds": 1.2823796190000394,
+          "wallSeconds": 3.0226725529996656,
+          "peakRssBytes": 164216832
         }
       ]
     },
@@ -381,14 +381,14 @@
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.0350705305,
-      "eventsPerSecond": 2851396.8444246943,
-      "nsPerEvent": 350.705305,
-      "peakRssMiB": 9.88671875,
-      "startupSeconds": 0.06285099149999951,
-      "preparationSeconds": 2.527049991840613e-05,
-      "wallSeconds": 0.10099576649986375,
-      "exitSeconds": 0.0028827499997987616,
+      "projectionSeconds": 0.025216465,
+      "eventsPerSecond": 3965662.9111177954,
+      "nsPerEvent": 252.16465,
+      "peakRssMiB": 9.98828125,
+      "startupSeconds": 0.02795378349992461,
+      "preparationSeconds": 1.91950000498764e-05,
+      "wallSeconds": 0.055723558999943634,
+      "exitSeconds": 0.0024117225000281906,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -405,17 +405,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.021937761,
-              "totalSeconds": 0.021937761,
+              "switchSeconds": 0.023121575,
+              "totalSeconds": 0.023121575,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.05155375300000742,
-          "preparationSeconds": 1.1728999652405037e-05,
-          "workAndValidationSeconds": 0.02203805600038322,
-          "exitSeconds": 0.0019262299997535592,
-          "wallSeconds": 0.0755297679997966,
-          "peakRssBytes": 10366976
+          "startupSeconds": 0.027590827000040008,
+          "preparationSeconds": 2.6486000024306122e-05,
+          "workAndValidationSeconds": 0.02325518599991483,
+          "exitSeconds": 0.002249015999950643,
+          "wallSeconds": 0.053121514999929786,
+          "peakRssBytes": 10350592
         },
         {
           "roots": 100000,
@@ -429,17 +429,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.0482033,
-              "totalSeconds": 0.0482033,
+              "switchSeconds": 0.027311355,
+              "totalSeconds": 0.027311355,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.0741482299999916,
-          "preparationSeconds": 3.8812000184407225e-05,
-          "workAndValidationSeconds": 0.04843545299991092,
-          "exitSeconds": 0.003839269999843964,
-          "wallSeconds": 0.1264617649999309,
-          "peakRssBytes": 10366976
+          "startupSeconds": 0.028316739999809215,
+          "preparationSeconds": 1.1904000075446675e-05,
+          "workAndValidationSeconds": 0.027422529999967082,
+          "exitSeconds": 0.002574429000105738,
+          "wallSeconds": 0.05832560299995748,
+          "peakRssBytes": 10473472
         }
       ]
     },
@@ -449,14 +449,14 @@
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 0.297725381,
-      "eventsPerSecond": 3358799.9674102357,
-      "nsPerEvent": 297.725381,
-      "peakRssMiB": 11.125,
-      "startupSeconds": 0.04530218100012462,
-      "preparationSeconds": 2.4075000055745477e-05,
-      "wallSeconds": 0.34573618050012556,
-      "exitSeconds": 0.0025540074998389173,
+      "projectionSeconds": 0.2865767975,
+      "eventsPerSecond": 3489466.030480015,
+      "nsPerEvent": 286.5767975,
+      "peakRssMiB": 11.1875,
+      "startupSeconds": 0.027842249000059383,
+      "preparationSeconds": 2.3611999949935125e-05,
+      "wallSeconds": 0.31710665150012574,
+      "exitSeconds": 0.0024337750000995584,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -473,17 +473,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.348266528,
-              "totalSeconds": 0.348266528,
+              "switchSeconds": 0.272807623,
+              "totalSeconds": 0.272807623,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.061445275000096444,
-          "preparationSeconds": 1.5204000192170497e-05,
-          "workAndValidationSeconds": 0.3482890810000754,
-          "exitSeconds": 0.002265863999582507,
-          "wallSeconds": 0.4120154239999465,
-          "peakRssBytes": 11665408
+          "startupSeconds": 0.026810560000285477,
+          "preparationSeconds": 2.738899956966634e-05,
+          "workAndValidationSeconds": 0.27297511400001895,
+          "exitSeconds": 0.0025313280002592364,
+          "wallSeconds": 0.30234439100013333,
+          "peakRssBytes": 11677696
         },
         {
           "roots": 1000000,
@@ -497,20 +497,20 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.247184234,
-              "totalSeconds": 0.247184234,
+              "switchSeconds": 0.300345972,
+              "totalSeconds": 0.300345972,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.029159087000152795,
-          "preparationSeconds": 3.294599991932046e-05,
-          "workAndValidationSeconds": 0.24742275300013716,
-          "exitSeconds": 0.0028421510000953276,
-          "wallSeconds": 0.2794569370003046,
-          "peakRssBytes": 11636736
+          "startupSeconds": 0.028873937999833288,
+          "preparationSeconds": 1.983500033020391e-05,
+          "workAndValidationSeconds": 0.30063891700001477,
+          "exitSeconds": 0.0023362219999398803,
+          "wallSeconds": 0.33186891200011814,
+          "peakRssBytes": 11730944
         }
       ],
-      "growthExponent": 0.9288735243438151
+      "growthExponent": 1.05555682070256
     },
     {
       "implementation": "rust-wasi",
@@ -518,14 +518,14 @@
       "profile": "dense",
       "events": 10000000,
       "status": "ok",
-      "projectionSeconds": 2.355844073,
-      "eventsPerSecond": 4244763.10406474,
-      "nsPerEvent": 235.5844073,
-      "peakRssMiB": 20.56640625,
-      "startupSeconds": 0.0416973709998274,
-      "preparationSeconds": 5.2090000281168614e-05,
-      "wallSeconds": 2.4009519759999876,
-      "exitSeconds": 0.0025856535000912118,
+      "projectionSeconds": 2.7116546075,
+      "eventsPerSecond": 3687785.299920429,
+      "nsPerEvent": 271.16546074999997,
+      "peakRssMiB": 20.45703125,
+      "startupSeconds": 0.03104942850018233,
+      "preparationSeconds": 3.151700002490543e-05,
+      "wallSeconds": 2.746898489500154,
+      "exitSeconds": 0.0033154225000089355,
       "stateCount": 10,
       "retainedItems": 1000000,
       "maxHistoryLength": 100000,
@@ -542,17 +542,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 2.432264727,
-              "totalSeconds": 2.432264727,
+              "switchSeconds": 2.724254598,
+              "totalSeconds": 2.724254598,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.059901296999669285,
-          "preparationSeconds": 9.177700030704727e-05,
-          "workAndValidationSeconds": 2.433037229999627,
-          "exitSeconds": 0.0025055650003196206,
-          "wallSeconds": 2.495535868999923,
-          "peakRssBytes": 21565440
+          "startupSeconds": 0.031114991000322334,
+          "preparationSeconds": 3.7445000089064706e-05,
+          "workAndValidationSeconds": 2.7252774889998364,
+          "exitSeconds": 0.0034085329998561065,
+          "wallSeconds": 2.759838458000104,
+          "peakRssBytes": 21430272
         },
         {
           "roots": 10000000,
@@ -566,20 +566,20 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 2.279423419,
-              "totalSeconds": 2.279423419,
+              "switchSeconds": 2.699054617,
+              "totalSeconds": 2.699054617,
               "bytes": 8000000
             }
           ],
-          "startupSeconds": 0.023493444999985513,
-          "preparationSeconds": 1.2403000255289953e-05,
-          "workAndValidationSeconds": 2.2801964929999485,
-          "exitSeconds": 0.002665741999862803,
-          "wallSeconds": 2.306368083000052,
-          "peakRssBytes": 21532672
+          "startupSeconds": 0.030983866000042326,
+          "preparationSeconds": 2.558899996074615e-05,
+          "workAndValidationSeconds": 2.6997267540000394,
+          "exitSeconds": 0.0032223120001617644,
+          "wallSeconds": 2.733958521000204,
+          "peakRssBytes": 21450752
         }
       ],
-      "growthExponent": 0.8983306825793782
+      "growthExponent": 0.9759933460591712
     },
     {
       "implementation": "rust-wasi",
@@ -587,14 +587,14 @@
       "profile": "dense",
       "events": 100000,
       "status": "ok",
-      "projectionSeconds": 0.025793418,
-      "eventsPerSecond": 3876958.067364318,
-      "nsPerEvent": 257.93418,
-      "peakRssMiB": 10.01171875,
-      "startupSeconds": 0.023024725499908527,
-      "preparationSeconds": 1.1868500223499723e-05,
-      "wallSeconds": 0.05131554600029631,
-      "exitSeconds": 0.0023982610002803995,
+      "projectionSeconds": 0.029936878,
+      "eventsPerSecond": 3340361.676992504,
+      "nsPerEvent": 299.36877999999996,
+      "peakRssMiB": 10.0078125,
+      "startupSeconds": 0.028268667999782338,
+      "preparationSeconds": 2.2785500050304108e-05,
+      "wallSeconds": 0.060984822999898824,
+      "exitSeconds": 0.002605833499956134,
       "stateCount": 10,
       "retainedItems": 10000,
       "maxHistoryLength": 1000,
@@ -611,17 +611,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.025899202,
-              "totalSeconds": 0.025899202,
+              "switchSeconds": 0.029608627,
+              "totalSeconds": 0.029608627,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.02279340199993385,
-          "preparationSeconds": 1.1689000075421063e-05,
-          "workAndValidationSeconds": 0.025982399999975314,
-          "exitSeconds": 0.002804630000355246,
-          "wallSeconds": 0.05159212100033983,
-          "peakRssBytes": 10498048
+          "startupSeconds": 0.027573219999794674,
+          "preparationSeconds": 2.3051999960443936e-05,
+          "workAndValidationSeconds": 0.029762079000192898,
+          "exitSeconds": 0.0028147859998171043,
+          "wallSeconds": 0.06017313699976512,
+          "peakRssBytes": 10493952
         },
         {
           "roots": 100000,
@@ -635,17 +635,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.025687634,
-              "totalSeconds": 0.025687634,
+              "switchSeconds": 0.030265129,
+              "totalSeconds": 0.030265129,
               "bytes": 80000
             }
           ],
-          "startupSeconds": 0.023256048999883205,
-          "preparationSeconds": 1.2048000371578382e-05,
-          "workAndValidationSeconds": 0.02577898199979245,
-          "exitSeconds": 0.001991892000205553,
-          "wallSeconds": 0.051038971000252786,
-          "peakRssBytes": 10498048
+          "startupSeconds": 0.02896411599977,
+          "preparationSeconds": 2.251900014016428e-05,
+          "workAndValidationSeconds": 0.0304129930000272,
+          "exitSeconds": 0.0023968810000951635,
+          "wallSeconds": 0.06179650900003253,
+          "peakRssBytes": 10493952
         }
       ]
     },
@@ -655,14 +655,14 @@
       "profile": "dense",
       "events": 1000000,
       "status": "ok",
-      "projectionSeconds": 0.5142874725,
-      "eventsPerSecond": 1944437.7968977264,
-      "nsPerEvent": 514.2874724999999,
-      "peakRssMiB": 12.171875,
-      "startupSeconds": 0.024573890000056053,
-      "preparationSeconds": 1.747549981701013e-05,
-      "wallSeconds": 0.5411735264999606,
-      "exitSeconds": 0.0021860094998373825,
+      "projectionSeconds": 0.6036859855000001,
+      "eventsPerSecond": 1656490.334410786,
+      "nsPerEvent": 603.6859855000001,
+      "peakRssMiB": 12.21484375,
+      "startupSeconds": 0.029205471499835767,
+      "preparationSeconds": 1.8515499959903536e-05,
+      "wallSeconds": 0.6357519004998267,
+      "exitSeconds": 0.002674996000223473,
       "stateCount": 10,
       "retainedItems": 100000,
       "maxHistoryLength": 10000,
@@ -679,17 +679,17 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.502941814,
-              "totalSeconds": 0.502941814,
+              "switchSeconds": 0.609120734,
+              "totalSeconds": 0.609120734,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.02586134100010895,
-          "preparationSeconds": 1.6442999822174897e-05,
-          "workAndValidationSeconds": 0.5030622580002273,
-          "exitSeconds": 0.002087165999910212,
-          "wallSeconds": 0.5310272080000686,
-          "peakRssBytes": 12763136
+          "startupSeconds": 0.027683630999945308,
+          "preparationSeconds": 1.6121000044222455e-05,
+          "workAndValidationSeconds": 0.6092622439996376,
+          "exitSeconds": 0.0026555680001365545,
+          "wallSeconds": 0.6396175639997637,
+          "peakRssBytes": 12656640
         },
         {
           "roots": 1000000,
@@ -703,20 +703,20 @@
             {
               "encodeSeconds": 0,
               "decodeSeconds": 0,
-              "switchSeconds": 0.525633131,
-              "totalSeconds": 0.525633131,
+              "switchSeconds": 0.598251237,
+              "totalSeconds": 0.598251237,
               "bytes": 800000
             }
           ],
-          "startupSeconds": 0.023286439000003156,
-          "preparationSeconds": 1.8507999811845366e-05,
-          "workAndValidationSeconds": 0.5257300450002731,
-          "exitSeconds": 0.002284852999764553,
-          "wallSeconds": 0.5513198449998526,
-          "peakRssBytes": 12664832
+          "startupSeconds": 0.030727311999726226,
+          "preparationSeconds": 2.0909999875584617e-05,
+          "workAndValidationSeconds": 0.5984435909999775,
+          "exitSeconds": 0.0026944240003103914,
+          "wallSeconds": 0.6318862369998897,
+          "peakRssBytes": 12808192
         }
       ],
-      "growthExponent": 1.2996970492590496
+      "growthExponent": 1.3046045863801983
     },
     {
       "implementation": "rust-wasi",
