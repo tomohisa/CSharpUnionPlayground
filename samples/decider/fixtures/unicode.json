@@ -1,0 +1,17 @@
+{
+  "commands": [
+    {
+      "$type": "Create",
+      "name": "教室 A",
+      "capacity": 1
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "太郎"
+    },
+    {
+      "$type": "Drop",
+      "studentId": "太郎"
+    }
+  ]
+}

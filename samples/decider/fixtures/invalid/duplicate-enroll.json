@@ -1,0 +1,18 @@
+{
+  "commands": [],
+  "history": [
+    {
+      "$type": "RoomCreated",
+      "name": "R",
+      "capacity": 2
+    },
+    {
+      "$type": "StudentEnrolled",
+      "studentId": "a"
+    },
+    {
+      "$type": "StudentEnrolled",
+      "studentId": "a"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "commands": [
+    {
+      "$type": "Enroll",
+      "studentId": "alice"
+    },
+    {
+      "$type": "Create",
+      "name": "Room A",
+      "capacity": 2
+    },
+    {
+      "$type": "Create",
+      "name": "Again",
+      "capacity": 2
+    },
+    {
+      "$type": "Enroll",
+      "studentId": ""
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "alice"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "alice"
+    },
+    {
+      "$type": "Drop",
+      "studentId": "nobody"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "bob"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "carol"
+    },
+    {
+      "$type": "Drop",
+      "studentId": "alice"
+    },
+    {
+      "$type": "Enroll",
+      "studentId": "carol"
+    },
+    {
+      "$type": "Drop",
+      "studentId": "bob"
+    },
+    {
+      "$type": "Drop",
+      "studentId": "carol"
+    },
+    {
+      "$type": "Drop",
+      "studentId": "carol"
+    }
+  ]
+}
