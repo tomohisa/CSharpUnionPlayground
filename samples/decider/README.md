@@ -17,6 +17,49 @@
 
 C#はclosed record、Javaはsealed interface＋recordです。Rust・Swiftはenum、TypeScriptは判別共用体、Goはinterface＋structで同じケースを表します。C#のunionからJSON用の基底型に変換する処理は挟みません。
 
+## コード量の比較
+
+分類はファイル単位です。**Model**は上の表の型定義ファイル、**Decider**はdecide / evolve / replayのファイル、**その他**は各言語のMain・JSON境界ファイルです。Model内のJSON属性や補助メソッドもModelに含めます。
+
+- 行数：空行・コメント・括弧だけの行を含む物理行数。最終行に改行がなくても1行と数えます。
+- 空白以外の文字数：Unicodeの空白文字（スペース・タブ・改行など）をすべて除いた文字数。UTF-8のバイト数ではありません。コメント・括弧・属性は含め、文字列リテラルやコメント中の空白も除きます。
+- 対象：各言語の手書きソースだけ。設定・プロジェクトファイル、依存ロック、fixtures、README、共通Python実行器、集計スクリプト、CI、生成物は除外します。
+- 合計：Model＋Decider＋その他。同じソースを一度だけ数えます。
+
+<!-- code-stats:start -->
+
+### 行数（空行を含む）
+
+| 言語 | Model | Decider | その他 | 合計 |
+|---|---:|---:|---:|---:|
+| C# | 28 | 78 | 68 | 174 |
+| Rust | 41 | 113 | 74 | 228 |
+| TypeScript | 19 | 72 | 79 | 170 |
+| Java | 46 | 74 | 43 | 163 |
+| Go | 57 | 105 | 180 | 342 |
+| Swift | 53 | 43 | 118 | 214 |
+
+### 空白以外の文字数
+
+| 言語 | Model | Decider | その他 | 合計 |
+|---|---:|---:|---:|---:|
+| C# | 990 | 2,397 | 2,233 | 5,620 |
+| Rust | 864 | 2,447 | 1,355 | 4,666 |
+| TypeScript | 731 | 2,670 | 2,767 | 6,168 |
+| Java | 1,763 | 2,376 | 1,514 | 5,653 |
+| Go | 1,206 | 2,056 | 3,901 | 7,163 |
+| Swift | 1,024 | 1,855 | 3,595 | 6,474 |
+
+<!-- code-stats:end -->
+
+[集計スクリプト](code_stats.py)で再計算できます。各ファイルの内訳はJSONでも出力できます。CIはREADMEの値が最新であることを確認します。
+
+```bash
+python3 samples/decider/code_stats.py --write
+python3 samples/decider/code_stats.py --check
+python3 samples/decider/code_stats.py --json
+```
+
 ## Stateのフェーズが切り替わる
 
 ```mermaid

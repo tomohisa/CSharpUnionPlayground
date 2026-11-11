@@ -27,6 +27,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+      - name: Check README code statistics
+        run: python3 samples/decider/code_stats.py --check
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
