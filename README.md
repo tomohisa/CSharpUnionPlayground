@@ -8,6 +8,8 @@ A playground for testing and exploring **C# 15 Union Types** (.NET 11 GA).
 
 [Classroom Decider samples](samples/decider/README.md) compare C#, Rust, TypeScript, Java, Go and Swift with the same phase-specific State types, commands, events, pure decide/evolve functions, JSON history replay and shared scenarios.
 
+[Decider Level 2](samples/decider_level2/README.md) adds F# on .NET 11 and compares seven implementations of grade restrictions, prerequisite courses, attendance, assessment and phase-specific enrollment data, with shared JSON scenarios and code-size analysis.
+
 ## What's This?
 
 This repository contains experiments to test the capabilities and limitations of the new `union` keyword in C# 15, including:

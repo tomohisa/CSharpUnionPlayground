@@ -1,0 +1,21 @@
+{
+  "commands": [],
+  "history": [
+    {
+      "$type": "StudentRegistered",
+      "studentId": "s",
+      "grade": "Year3"
+    },
+    {
+      "$type": "ClassOpened",
+      "classId": "b",
+      "course": "Advanced",
+      "capacity": 1
+    },
+    {
+      "$type": "StudentEnrolled",
+      "classId": "b",
+      "studentId": "s"
+    }
+  ]
+}

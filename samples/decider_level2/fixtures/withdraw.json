@@ -1,0 +1,31 @@
+{
+  "commands": [
+    {
+      "$type": "RegisterStudent",
+      "studentId": "s",
+      "grade": "Year2"
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "f",
+      "course": "Foundation",
+      "capacity": 1
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "Drop",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f",
+      "studentId": "s"
+    }
+  ],
+  "history": []
+}

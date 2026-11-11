@@ -1,0 +1,10 @@
+{
+  "commands": [
+    {
+      "$type": "OpenClass",
+      "classId": "f",
+      "course": "Foundation"
+    }
+  ],
+  "history": []
+}

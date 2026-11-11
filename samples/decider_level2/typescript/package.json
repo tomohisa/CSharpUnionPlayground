@@ -1,0 +1,6 @@
+{
+  "name": "playground-decider-typescript",
+  "private": true,
+  "type": "module",
+  "dependencies": { "zod": "4.6.7" }
+}

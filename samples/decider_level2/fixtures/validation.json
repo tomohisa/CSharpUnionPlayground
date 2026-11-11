@@ -1,0 +1,134 @@
+{
+  "commands": [
+    {
+      "$type": "RegisterStudent",
+      "studentId": "",
+      "grade": "Year1"
+    },
+    {
+      "$type": "PromoteStudent",
+      "studentId": "x",
+      "grade": "Year2"
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "",
+      "course": "Foundation",
+      "capacity": 1
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "f",
+      "course": "Foundation",
+      "capacity": 0
+    },
+    {
+      "$type": "Enroll",
+      "classId": "missing",
+      "studentId": "s"
+    },
+    {
+      "$type": "RegisterStudent",
+      "studentId": "s",
+      "grade": "Year2"
+    },
+    {
+      "$type": "RegisterStudent",
+      "studentId": "s",
+      "grade": "Year3"
+    },
+    {
+      "$type": "PromoteStudent",
+      "studentId": "s",
+      "grade": "Year2"
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "f",
+      "course": "Foundation",
+      "capacity": 2
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "f",
+      "course": "Advanced",
+      "capacity": 2
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f",
+      "studentId": "missing"
+    },
+    {
+      "$type": "Drop",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "Attend",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "StartClass",
+      "classId": "f",
+      "startedOn": ""
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "StartClass",
+      "classId": "f",
+      "startedOn": "2026-04-01"
+    },
+    {
+      "$type": "Drop",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "Attend",
+      "classId": "f",
+      "studentId": "missing"
+    },
+    {
+      "$type": "Assess",
+      "classId": "f",
+      "studentId": "s",
+      "score": -1
+    },
+    {
+      "$type": "Attend",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "Assess",
+      "classId": "f",
+      "studentId": "s",
+      "score": 0
+    },
+    {
+      "$type": "CompleteClass",
+      "classId": "f"
+    },
+    {
+      "$type": "StartClass",
+      "classId": "f",
+      "startedOn": "2026-05-01"
+    },
+    {
+      "$type": "CompleteClass",
+      "classId": "f"
+    }
+  ],
+  "history": []
+}

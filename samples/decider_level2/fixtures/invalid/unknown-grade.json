@@ -1,0 +1,10 @@
+{
+  "commands": [
+    {
+      "$type": "RegisterStudent",
+      "studentId": "s",
+      "grade": "Year4"
+    }
+  ],
+  "history": []
+}

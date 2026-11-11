@@ -1,0 +1,175 @@
+{
+  "commands": [
+    {
+      "$type": "RegisterStudent",
+      "studentId": "alice",
+      "grade": "Year1"
+    },
+    {
+      "$type": "RegisterStudent",
+      "studentId": "bob",
+      "grade": "Year2"
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "f1",
+      "course": "Foundation",
+      "capacity": 1
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "b1",
+      "course": "Advanced",
+      "capacity": 2
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f1",
+      "studentId": "alice"
+    },
+    {
+      "$type": "PromoteStudent",
+      "studentId": "alice",
+      "grade": "Year2"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f1",
+      "studentId": "alice"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "Drop",
+      "classId": "f1",
+      "studentId": "alice"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "StartClass",
+      "classId": "f1",
+      "startedOn": "2026-04-01"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f1",
+      "studentId": "alice"
+    },
+    {
+      "$type": "Assess",
+      "classId": "f1",
+      "studentId": "bob",
+      "score": 60
+    },
+    {
+      "$type": "CompleteClass",
+      "classId": "f1"
+    },
+    {
+      "$type": "Attend",
+      "classId": "f1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "Assess",
+      "classId": "f1",
+      "studentId": "bob",
+      "score": 59
+    },
+    {
+      "$type": "CompleteClass",
+      "classId": "f1"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "b1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "PromoteStudent",
+      "studentId": "bob",
+      "grade": "Year3"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "b1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "f2",
+      "course": "Foundation",
+      "capacity": 2
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f2",
+      "studentId": "bob"
+    },
+    {
+      "$type": "StartClass",
+      "classId": "f2",
+      "startedOn": "2026-09-01"
+    },
+    {
+      "$type": "Attend",
+      "classId": "f2",
+      "studentId": "bob"
+    },
+    {
+      "$type": "Assess",
+      "classId": "f2",
+      "studentId": "bob",
+      "score": 60
+    },
+    {
+      "$type": "CompleteClass",
+      "classId": "f2"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "b1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "StartClass",
+      "classId": "b1",
+      "startedOn": "2027-04-01"
+    },
+    {
+      "$type": "Assess",
+      "classId": "b1",
+      "studentId": "bob",
+      "score": 101
+    },
+    {
+      "$type": "Attend",
+      "classId": "b1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "Assess",
+      "classId": "b1",
+      "studentId": "bob",
+      "score": 100
+    },
+    {
+      "$type": "Assess",
+      "classId": "b1",
+      "studentId": "bob",
+      "score": 100
+    },
+    {
+      "$type": "CompleteClass",
+      "classId": "b1"
+    }
+  ],
+  "history": []
+}
