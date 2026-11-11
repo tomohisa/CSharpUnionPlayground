@@ -40,7 +40,7 @@ C#はclosed record、Javaはsealed interface＋recordです。Rust・Swiftはenu
 
 | 言語 | Model | Decider | その他 | 合計 |
 |---|---:|---:|---:|---:|
-| C# | 28 | 78 | 68 | 174 |
+| C# | 28 | 78 | 66 | 172 |
 | Rust | 41 | 113 | 74 | 228 |
 | TypeScript | 19 | 72 | 79 | 170 |
 | Java | 46 | 74 | 43 | 163 |
@@ -51,7 +51,7 @@ C#はclosed record、Javaはsealed interface＋recordです。Rust・Swiftはenu
 
 | 言語 | Model | Decider | その他 | 合計 |
 |---|---:|---:|---:|---:|
-| C# | 990 | 2,397 | 2,233 | 5,620 |
+| C# | 990 | 2,397 | 2,165 | 5,552 |
 | Rust | 864 | 2,447 | 1,355 | 4,666 |
 | TypeScript | 731 | 2,670 | 2,767 | 6,168 |
 | Java | 1,763 | 2,376 | 1,514 | 5,653 |
@@ -164,7 +164,7 @@ State / Command / Eventで`$type`を揃えます。たとえば満員のStateは
 {"$type":"Full","roster":{"name":"Lab","capacity":2,"students":["alice","bob"]}}
 ```
 
-- C#：標準STJのclosed型推論とJsonSerializerContext。独自コンバーターなし、JSONリフレクション無効。Native AOTでも同じコードです。
+- C#：標準STJのclosed型推論とJsonSerializerContext。[file-based版](../file-based/ClosedInferredJson.cs#L29)と同じく、JsonSerializableは入出力のルート（Input／Output）だけに付けます。参照先のCommand・State・Eventとそのケースは自動的に生成対象になります。独自コンバーターなし、JSONリフレクション無効。Native AOTでも同じコードです。
 - Rust：Serdeのinternally tagged enum。
 - Java：JacksonのJsonTypeInfo / JsonSubTypes。
 - TypeScript：型定義とは別に、wire.tsでJSON入力を構造検査。

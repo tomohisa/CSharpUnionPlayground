@@ -63,6 +63,4 @@ public sealed record Output(State Initial, State State, Event[] Events, Step[] S
     AllowOutOfOrderMetadataProperties = true)]
 [JsonSerializable(typeof(Input))]
 [JsonSerializable(typeof(Output))]
-[JsonSerializable(typeof(State))]
-[JsonSerializable(typeof(Event[]))]
 internal partial class Wire : JsonSerializerContext;
