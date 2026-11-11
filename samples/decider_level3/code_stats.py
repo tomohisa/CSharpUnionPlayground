@@ -1,49 +1,73 @@
 #!/usr/bin/env python3
 """Count maintained sources, separating domain code from reusable DCB infrastructure."""
+import hashlib
 import argparse
 import json
 from pathlib import Path
 import sys
 HERE=Path(__file__).resolve().parent
-SOURCES=[('C#','csharp','.cs','Models.cs','Decider.cs','Dcb.cs','Projection.cs',['Routing.cs','Application.cs']),
- ('F#','fsharp','.fs','Models.fs','Decider.fs','Dcb.fs','Projection.fs',['Routing.fs','Application.fs']),
- ('Rust','rust/src','.rs','models.rs','decider.rs','dcb.rs','projection.rs',['routing.rs','application.rs']),
- ('TypeScript＋Zod','typescript','.ts','models.ts','decider.ts','dcb.ts','projection.ts',['routing.ts','application.ts']),
- ('Java','java','.java','Models.java','Decider.java','playground/dcb/Dcb.java','Projection.java',['Routing.java','Application.java']),
- ('Go','go','.go','domain/models.go','domain/decider.go','dcb/store.go','domain/projection.go',['domain/routing.go','application.go']),
- ('Swift','swift','.swift','models.swift','decider.swift','dcb.swift','projection.swift',['routing.swift','application.swift'])]
+SOURCES=[('C#','csharp','.cs'),('F#','fsharp','.fs'),
+ ('Rust','rust/src','.rs'),('TypeScript＋Zod','typescript','.ts'),
+ ('Java','java','.java'),('Go','go','.go'),('Swift','swift','.swift')]
 SKIP={'bin','obj','target','node_modules','.build'}
 TESTS={'LibraryTests.cs','LibraryTests.fs','dcb_tests.rs','dcb.test.ts','DcbTests.java','libraryTests.swift'}
-ROLES=['Model','Decider','Library','Projection','Application','Boundary']
+ROLES=['Model','Decider','Command','Projection','UseCase','Boundary','Library']
+LABELS=['Model','Decider','コマンド・ハンドラー','ドメイン投影','ユースケース','アプリ設定・JSON・CLI','共通ライブラリ']
 START,END='<!-- code-stats:start -->','<!-- code-stats:end -->'
 def collect():
- rows=[]
- for language,root,suffix,model,decider,library,projection,application in SOURCES:
+ manifest=json.loads((HERE/'code_stats_classification.json').read_text())
+ seen=set();rows=[]
+ for language,root,suffix in SOURCES:
   directory=HERE/root;groups={r:{'lines':0,'characters':0} for r in ROLES};details=[]
   for path in sorted(directory.rglob('*')):
    if not path.is_file() or path.suffix!=suffix or SKIP.intersection(path.relative_to(directory).parts) or path.name in TESTS or path.name.endswith('_test.go'):continue
-   name=path.relative_to(directory).as_posix()
-   role='Model' if name==model else 'Decider' if name==decider else 'Library' if name==library else 'Projection' if name==projection else 'Application' if name in application else 'Boundary'
-   text=path.read_text();metrics={'lines':len(text.splitlines()),'characters':sum(not c.isspace() for c in text)}
-   for k,v in metrics.items():groups[role][k]+=v
-   details.append({'path':path.relative_to(HERE).as_posix(),'role':role,**metrics})
-  for name in [model,decider,library,projection,*application]:
-   if not any(f['path']==(directory/name).relative_to(HERE).as_posix() for f in details):raise ValueError(language+': required source missing '+name)
-  groups['その他']={k:sum(groups[r][k] for r in ROLES[2:]) for k in ['lines','characters']}
-  groups['合計']={k:sum(groups[r][k] for r in ROLES) for k in ['lines','characters']}
+   name=path.relative_to(HERE).as_posix();seen.add(name)
+   if name not in manifest:raise ValueError('Source needs classification: '+name)
+   entry=manifest[name];raw=path.read_bytes()
+   if hashlib.sha256(raw).hexdigest()!=entry['sha256']:raise ValueError('Review classification and refresh SHA256 after source change: '+name)
+   lines=raw.decode().splitlines();roles=[entry['role']]*len(lines);assigned=set()
+   for region in entry['ranges']:
+    start,end,role=region['start'],region['end'],region['role']
+    if not 1<=start<=end<=len(lines):raise ValueError('Invalid range: '+name)
+    for index in range(start-1,end):
+     if index in assigned:raise ValueError('Overlapping range: '+name)
+     assigned.add(index);roles[index]=role
+   segments=[]
+   for index,(line,role) in enumerate(zip(lines,roles),1):
+    if role not in ROLES:raise ValueError('Unknown role: '+role)
+    groups[role]['lines']+=1
+    groups[role]['characters']+=sum(not c.isspace() for c in line)
+    if segments and segments[-1]['role']==role:segments[-1]['end']=index
+    else:segments.append({'start':index,'end':index,'role':role})
+   details.append({'path':name,'lines':len(lines),'characters':sum(not c.isspace() for c in raw.decode()),'segments':segments})
+  for key in ['lines','characters']:
+   groups.setdefault('ApplicationTotal',{})[key]=sum(groups[r][key] for r in ROLES if r!='Library')
+   groups.setdefault('Total',{})[key]=sum(groups[r][key] for r in ROLES)
+   if groups['Total'][key]!=sum(f[key] for f in details):raise ValueError('Partition does not match source total')
   rows.append({'language':language,'groups':groups,'files':details})
+ if seen!=set(manifest):raise ValueError('Stale classification: '+str(set(manifest)-seen))
  return rows
 
 def markdown(rows):
  out=[]
  for metric,title in [('lines','行数（空行を含む）'),('characters','空白以外の文字数')]:
-  for detail in [False,True]:
-   columns=ROLES[2:] if detail else ['Model','Decider','その他','合計']
-   labels=['共通ライブラリ','投影','アプリ接続','JSON・CLI'] if detail else columns
-   out += ['### '+title+('：その他の内訳' if detail else ''),'','| 言語 | '+' | '.join(labels)+' |','|---|'+ '|'.join('---:' for _ in columns)+'|']
-   for row in rows:out.append('| '+row['language']+' | '+' | '.join(f"{row['groups'][r][metric]:,}" for r in columns)+' |')
-   out.append('')
+  columns=ROLES[:-1]+['ApplicationTotal','Library']
+  labels=LABELS[:-1]+['アプリ側合計（ライブラリ除外）','共通ライブラリ（別枠）']
+  out += ['### '+title,'','| 言語 | '+' | '.join(labels)+' |','|---|'+ '|'.join('---:' for _ in columns)+'|']
+  for row in rows:out.append('| '+row['language']+' | '+' | '.join(f"{row['groups'][r][metric]:,}" for r in columns)+' |')
+  out.append('')
+ out+=['### 分類したソース範囲','','同じファイルの中も責務で分けています。以下は行数・文字数に共通の分類です。','', '| 言語 | 分類 | ソース範囲 |','|---|---|---|']
+ for row in rows:
+  for role,label in zip(ROLES,LABELS):
+   links=[]
+   for f in row['files']:
+    for segment in f['segments']:
+     if segment['role']==role:
+      start,end=segment['start'],segment['end'];path=f['path']
+      links.append(f'[{path}:{start}–{end}]({path}#L{start}-L{end})')
+   out.append('| '+row['language']+' | '+label+' | '+' / '.join(links)+' |')
  return '\n'.join(out).rstrip()+'\n'
+
 def main():
  p=argparse.ArgumentParser(description=__doc__);m=p.add_mutually_exclusive_group();m.add_argument('--write',action='store_true');m.add_argument('--check',action='store_true');m.add_argument('--json',action='store_true');a=p.parse_args();rows=collect();generated=markdown(rows)
  if a.json:print(json.dumps(rows,ensure_ascii=False,indent=2));return 0
