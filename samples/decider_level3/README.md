@@ -225,7 +225,7 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 | C# | 3,075 | 5,504 | 2,638 | 4,381 | 2,701 | 1,930 | 20,229 | 5,677 |
 | F# | 3,604 | 5,024 | 2,858 | 3,376 | 2,711 | 1,532 | 19,105 | 4,462 |
 | Rust | 3,055 | 5,645 | 3,107 | 3,889 | 3,116 | 1,406 | 20,218 | 6,657 |
-| TypeScript＋Zod | 3,938 | 5,218 | 3,774 | 3,792 | 3,041 | 1,281 | 21,044 | 5,841 |
+| TypeScript＋Zod | 4,063 | 5,218 | 3,676 | 3,824 | 2,982 | 1,281 | 21,044 | 5,841 |
 | Java | 6,302 | 6,066 | 4,517 | 4,935 | 3,877 | 1,429 | 27,126 | 6,543 |
 | Go | 4,167 | 5,412 | 4,054 | 4,279 | 3,056 | 17,849 | 38,817 | 6,117 |
 | Swift | 2,597 | 5,620 | 2,940 | 3,468 | 2,511 | 13,374 | 30,510 | 7,170 |
@@ -257,11 +257,11 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 | Rust | ユースケース | [rust/src/application.rs:9–15](rust/src/application.rs#L9-L15) / [rust/src/application.rs:20–32](rust/src/application.rs#L20-L32) / [rust/src/models.rs:68–77](rust/src/models.rs#L68-L77) / [rust/src/models.rs:141–150](rust/src/models.rs#L141-L150) |
 | Rust | アプリ設定・JSON・CLI | [rust/src/application.rs:1–8](rust/src/application.rs#L1-L8) / [rust/src/application.rs:16–19](rust/src/application.rs#L16-L19) / [rust/src/main.rs:1–10](rust/src/main.rs#L1-L10) |
 | Rust | 共通ライブラリ | [rust/src/dcb.rs:1–110](rust/src/dcb.rs#L1-L110) |
-| TypeScript＋Zod | Model | [typescript/models.ts:1–48](typescript/models.ts#L1-L48) / [typescript/models.ts:51–51](typescript/models.ts#L51-L51) / [typescript/models.ts:54–54](typescript/models.ts#L54-L54) / [typescript/models.ts:67–84](typescript/models.ts#L67-L84) / [typescript/models.ts:100–100](typescript/models.ts#L100-L100) |
+| TypeScript＋Zod | Model | [typescript/models.ts:1–51](typescript/models.ts#L1-L51) / [typescript/models.ts:54–54](typescript/models.ts#L54-L54) / [typescript/models.ts:57–57](typescript/models.ts#L57-L57) / [typescript/models.ts:70–84](typescript/models.ts#L70-L84) / [typescript/models.ts:100–100](typescript/models.ts#L100-L100) |
 | TypeScript＋Zod | Decider | [typescript/decider.ts:1–96](typescript/decider.ts#L1-L96) / [typescript/models.ts:85–89](typescript/models.ts#L85-L89) |
-| TypeScript＋Zod | コマンド・ハンドラー | [typescript/models.ts:55–66](typescript/models.ts#L55-L66) / [typescript/routing.ts:1–42](typescript/routing.ts#L1-L42) |
-| TypeScript＋Zod | ドメイン投影 | [typescript/models.ts:49–50](typescript/models.ts#L49-L50) / [typescript/projection.ts:1–50](typescript/projection.ts#L1-L50) |
-| TypeScript＋Zod | ユースケース | [typescript/application.ts:7–7](typescript/application.ts#L7-L7) / [typescript/application.ts:12–30](typescript/application.ts#L12-L30) / [typescript/models.ts:52–53](typescript/models.ts#L52-L53) / [typescript/models.ts:90–99](typescript/models.ts#L90-L99) |
+| TypeScript＋Zod | コマンド・ハンドラー | [typescript/models.ts:58–69](typescript/models.ts#L58-L69) / [typescript/routing.ts:1–42](typescript/routing.ts#L1-L42) |
+| TypeScript＋Zod | ドメイン投影 | [typescript/models.ts:52–53](typescript/models.ts#L52-L53) / [typescript/projection.ts:1–50](typescript/projection.ts#L1-L50) |
+| TypeScript＋Zod | ユースケース | [typescript/application.ts:7–7](typescript/application.ts#L7-L7) / [typescript/application.ts:12–30](typescript/application.ts#L12-L30) / [typescript/models.ts:55–56](typescript/models.ts#L55-L56) / [typescript/models.ts:90–99](typescript/models.ts#L90-L99) |
 | TypeScript＋Zod | アプリ設定・JSON・CLI | [typescript/application.ts:1–6](typescript/application.ts#L1-L6) / [typescript/application.ts:8–11](typescript/application.ts#L8-L11) / [typescript/main.ts:1–5](typescript/main.ts#L1-L5) / [typescript/models.ts:101–101](typescript/models.ts#L101-L101) / [typescript/wire.ts:1–4](typescript/wire.ts#L1-L4) |
 | TypeScript＋Zod | 共通ライブラリ | [typescript/dcb.ts:1–93](typescript/dcb.ts#L1-L93) |
 | Java | Model | [java/Models.java:1–45](java/Models.java#L1-L45) / [java/Models.java:61–143](java/Models.java#L61-L143) / [java/Models.java:210–285](java/Models.java#L210-L285) / [java/Models.java:303–303](java/Models.java#L303-L303) |

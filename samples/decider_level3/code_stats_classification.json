@@ -251,18 +251,18 @@
     "sha256": "ca764b9b43fedb12dac142e01aab66c706d9350b919bf35729794afc9fb4a588",
     "ranges": [
       {
-        "start": 49,
-        "end": 50,
+        "start": 52,
+        "end": 53,
         "role": "Projection"
       },
       {
-        "start": 52,
-        "end": 53,
+        "start": 55,
+        "end": 56,
         "role": "UseCase"
       },
       {
-        "start": 55,
-        "end": 66,
+        "start": 58,
+        "end": 69,
         "role": "Command"
       },
       {
