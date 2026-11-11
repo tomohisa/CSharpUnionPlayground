@@ -34,6 +34,7 @@ def build(language, native_aot=False):
              '--target-dir', BUILD/'rust', *(['--locked'] if (HERE/'rust/Cargo.lock').exists() else [])], cwd=REPO)
         return [str(BUILD/'rust/release/classroom-decider')]
     if language == 'typescript':
+        run(['npm', 'ci', '--ignore-scripts', '--no-audit', '--no-fund'], cwd=HERE/'typescript')
         return ['node', str(HERE/'typescript/main.ts')]
     if language == 'java':
         sys.path.insert(0, str(REPO/'scripts'))

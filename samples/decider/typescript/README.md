@@ -1,78 +1,118 @@
-# TypeScript：判別共用体＋手書きJSON検査
+# TypeScript：Zodスキーマから導出する判別共用体
 
-$typeがそのまま型判別と保存形式に使えます。オブジェクトの更新は短い一方、型定義と実行時のJSON検査を別々に保守しています。
+このDeciderのTypeScript版はZodを標準にします。外部JSONを読むため、型定義と実行時検証を同じスキーマで保守する利点を優先しました。以前の手書き検証もタグ・フィールド・安全な整数を確認していました。「Zodなしでは検証できない」という理由ではありません。
 
-対象はこのClassroom Deciderの実装です。言語一般の順位ではありません。[共通仕様・検証](../README.md)／[コード量の集計](../README.md#コード量の比較)も併せて参照してください。以下の引用は現行ソースの抜粋で、出典リンクから該当行へ移動できます。
+[Zodの型導出とparse](https://zod.dev/basics)を使い、スキーマからz.inferで型を得ます。[discriminatedUnion](https://zod.dev/api#discriminated-unions)で$typeのケースを宣言し、未知のタグや欠落・型違いをJSON境界で拒否します。型だけを付けたJSON.parseの結果を信用しません。
+
+対象はこのClassroom Deciderの実装です。言語一般の順位ではありません。[共通仕様・検証](../README.md)／[コード量の集計](../README.md#コード量の比較)も参照してください。
 
 ## Pros
 
-### 1. 継承用の基底クラスなしでフェーズを表せる
+### 1. ケース宣言と実行時検証を一か所に集められる
 
-出典：[typescript/models.ts](models.ts#L2-L5)
-
-```typescript
-export type State =
-  | Readonly<{ $type: "NotCreated" }>
-  | Readonly<{ $type: "Available"; roster: Roster }>
-  | Readonly<{ $type: "Full"; roster: Roster }>;
-```
-Stateは普通のオブジェクトのunionです。[csharp/Models.cs](../csharp/Models.cs#L9)の派生recordや[java/Models.java](../java/Models.java#L15)のimplements／permitsは不要で、$typeも通常のフィールドです。JSON出力もJSON.stringifyを使い、別のエンコード用switchはありません。
-
-### 2. 更新するフィールドを絞って書ける
-
-出典：[typescript/decider.ts](decider.ts#L61-L61)
+出典：[typescript/models.ts](models.ts#L6-L10)
 
 ```typescript
-      return classify({ ...state.roster, students: [...state.roster.students, event.studentId] });
+export const StateSchema = z.discriminatedUnion("$type", [
+  z.object({ $type: z.literal("NotCreated") }),
+  z.object({ $type: z.literal("Available"), roster: RosterSchema }),
+  z.object({ $type: z.literal("Full"), roster: RosterSchema })
+]).readonly();
 ```
-rosterの未変更フィールドを繰り返しません。[swift/decider.swift](../swift/decider.swift#L35)のRoster再構築や[java/Decider.java](../java/Decider.java#L52)と対照的です。ただしspreadと配列生成にはコピーがあり、記述が短いことを実行コストの小ささとは扱いません。
+出典：[typescript/models.ts](models.ts#L22-L24)
 
-### 3. neverで「残ったケース」を検査できる
+```typescript
+export type State = z.infer<typeof StateSchema>;
+export type Command = z.infer<typeof CommandSchema>;
+export type Event = z.infer<typeof EventSchema>;
+```
+
+Stateのケース追加はスキーマを変更すれば型にも反映されます。以前のwire.tsのタグ別switchは不要です。[JavaのpermitsとJsonSubTypes](../java/Models.java#L11)のような別リストの同期がありません。[RustのSerde](../rust/src/models.rs#L11)と同様に宣言をまとめられますが、Zodは実行時ライブラリです。
+
+### 2. 型付きswitchの網羅性を保てる
 
 出典：[typescript/decider.ts](decider.ts#L32-L32)
 
 ```typescript
     default: return unreachable(command);
 ```
-出典：[typescript/models.ts](models.ts#L17-L19)
+出典：[typescript/models.ts](models.ts#L28-L30)
 
 ```typescript
 export function unreachable(value: never): never {
   throw new Error("Unknown case: " + JSON.stringify(value));
 }
 ```
-commandのunionに未処理ケースが残れば、neverへ渡せなくなります。[go/domain/decider.go](../go/domain/decider.go#L26)の単なる実行時拒否とは違います。この検査はNodeで実行するだけでなく、tsconfigのstrict型チェックで行っています。
+
+z.inferで導出したCommandも判別共用体なので、未処理ケースをneverへ渡すと型エラーになります。[Goの実行時default](../go/domain/decider.go#L26)とは違います。Nodeでの実行だけでは型検査されないため、CIではtscのstrict検査も実行します。
+
+### 3. 更新は通常のオブジェクトで書ける
+
+出典：[typescript/decider.ts](decider.ts#L61-L61)
+
+```typescript
+      return classify({ ...state.roster, students: [...state.roster.students, event.studentId] });
+```
+
+Zod専用のクラスを継承せずにspreadで更新できます。[JavaのRoster再構築](../java/Decider.java#L52)より未変更フィールドの繰り返しが少なく、JSON出力もJSON.stringifyです。コピーや割当がなくなるわけではありません。
 
 ## Cons
 
-### 1. JSONを読むだけでは型は復元・検証されない
+### 1. 依存と実行時の検証コストが増える
 
-出典：[typescript/wire.ts](wire.ts#L20-L28)
-
-```typescript
-export function command(value: unknown): Command {
-  const v = object(value);
-  switch (v.$type) {
-    case "Create": return { $type: "Create", name: text(v.name), capacity: integer(v.capacity) };
-    case "Enroll": return { $type: "Enroll", studentId: text(v.studentId) };
-    case "Drop": return { $type: "Drop", studentId: text(v.studentId) };
-    default: throw new Error("unknown_command");
-  }
-}
-```
-未知のJSONから各フィールドを検査してCommandを作り直します。[rust/src/models.rs](../rust/src/models.rs#L20)のSerde deriveや[csharp/Models.cs](../csharp/Models.cs#L15)の標準STJ推論より、手書きの境界コードが増えています。
-
-### 2. モデルと検査のケース一覧を二重に保守する
-
-Eventを増やすとmodels.ts、decider.ts、wire.tsの更新が必要です。Deciderのnever検査は有効ですが、上のwireの入力はunknownから作った辞書です。ドメイン側を更新しても、wireの新しいタグ対応漏れまで自動で網羅性エラーになる構成ではありません。Zod等から型を導出する別案はありますが、この版では使っていません。
-
-### 3. readonlyは実行時の凍結ではない
-
-出典：[typescript/models.ts](models.ts#L1-L1)
+出典：[typescript/wire.ts](wire.ts#L4-L11)
 
 ```typescript
-export type Roster = Readonly<{ name: string; capacity: number; students: readonly string[] }>;
+export const InputSchema = z.object({
+  commands: z.array(CommandSchema),
+  history: z.array(EventSchema).nullish().transform(value => value ?? [])
+});
+export const EventsSchema = z.array(EventSchema);
+export const input = (value: unknown) => InputSchema.parse(value);
+export const events = (value: unknown) => EventsSchema.parse(value);
+export const state = (value: unknown) => StateSchema.parse(value);
 ```
-Rosterだけでなくstudentsにもreadonlyを指定していますが、Object.freezeは呼んでいません。[公式説明](https://www.typescriptlang.org/docs/handbook/2/objects.html#readonly-properties)の通り、readonlyは型チェック上の制約です。[csharp/Models.cs](../csharp/Models.cs#L6)や[java/Models.java](../java/Models.java#L6)のコレクションと同じ実行時の保証ではありません。anyや型検査を通らない呼び出し元まで保護しません。
 
-さらに、capacityのnumberという型だけでは整数も定員1〜10も表せず、[typescript/wire.ts](wire.ts#L12)とdecideの検査に分けています。Fullタグがあるだけで満員という業務条件まで保証するわけではありません。
+[package.json](package.json)とロックファイルにZodを固定します。[C#の標準STJ](../csharp/Program.cs#L62)やSwiftのFoundationと違い、外部依存です。parseは入力を検査して別の値を作るので、型アサーションだけのJSON.parseと同じ実行コストではありません。このDeciderでは速度を測っていません。既存のunion100ベンチマークの結果を、この処理の速度として引用しません。
+
+通常のz.objectは余分なキーを除去します。以前の手書き復元と同じ方針です。余分なキーも拒否する契約にしたいならz.strictObjectへ変更する必要があります。ZodErrorの詳細は得られますが、他言語とエラーメッセージの形式を揃える実装ではありません。
+
+### 2. スキーマ検査と業務上の整合性は別
+
+出典：[typescript/models.ts](models.ts#L11-L15)
+
+```typescript
+export const CommandSchema = z.discriminatedUnion("$type", [
+  z.object({ $type: z.literal("Create"), name: z.string(), capacity: z.int() }),
+  z.object({ $type: z.literal("Enroll"), studentId: z.string() }),
+  z.object({ $type: z.literal("Drop"), studentId: z.string() })
+]).readonly();
+```
+
+z.intで安全な整数まで検査しますが、定員1〜10や空の名前の拒否はdecide、イベント履歴の順序・重複はevolveが担当します。たとえばcapacity: 0のCreateはJSONとして読めてもinvalid_capacityになります。Fullのスキーマに合うだけで「登録者数＝定員」まで保証する設計ではありません。直接作ったオブジェクトはparseを通らず、TypeScriptのnumber型も整数の範囲を表しません。[C#のclosed record](../csharp/Models.cs#L9)でも型の閉じ方と業務条件は別です。
+
+### 3. readonlyの範囲を理解する必要がある
+
+出典：[typescript/models.ts](models.ts#L3-L5)
+
+```typescript
+export const RosterSchema = z.object({
+  name: z.string(), capacity: z.int(), students: z.array(z.string()).readonly()
+}).readonly();
+```
+
+この版では配列・Roster・各unionに.readonly()を指定しています。[Zodのreadonly](https://zod.dev/api#readonly)はparseした対象をObject.freezeし、readonly型も導出します。State→Roster→studentsは各段で指定しているため解析後はそれぞれ凍結されます。ただし任意のネストを自動で深く凍結する機能ではありません。
+
+Deciderがspreadで新しく作るState／配列にはparseを再実行していないため、実行時には凍結されません。更新しない規約と型チェックは引き続き必要です。[C#のImmutableArray](../csharp/Models.cs#L6)のように、生成経路によらず不変なコレクションになるわけではありません。
+
+## 検証と実行
+
+```bash
+npm ci --prefix samples/file-based
+npm ci --prefix samples/decider/typescript
+samples/file-based/node_modules/.bin/tsc -p samples/decider/typescript/tsconfig.json
+node --test samples/decider/tests/typescript-boundary.mts
+python3 samples/decider/run.py --language typescript --verify
+```
+
+[境界テスト](../tests/typescript-boundary.mts)で欠落・型違い・小数・安全な整数範囲外・未知タグ・ネストした不正値、履歴null、余分なキー、業務拒否との分担、解析後の凍結を確認します。共通実行器でも全言語のJSON契約と保存済みイベントの再生を検証します。

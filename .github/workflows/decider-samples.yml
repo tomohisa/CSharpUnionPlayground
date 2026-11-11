@@ -52,7 +52,10 @@ jobs:
       - name: TypeScript type checking
         run: |
           npm ci --prefix samples/file-based --ignore-scripts --no-audit --no-fund
+          npm ci --prefix samples/decider/typescript --ignore-scripts --no-audit --no-fund
           samples/file-based/node_modules/.bin/tsc -p samples/decider/typescript/tsconfig.json
+      - name: TypeScript Zod boundary checks
+        run: node --test samples/decider/tests/typescript-boundary.mts
       - name: Shared scenarios and cross-language event logs
         run: python3 samples/decider/run.py --verify
       - name: C# Native AOT

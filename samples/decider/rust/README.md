@@ -18,7 +18,7 @@ pub enum State {
     Full { roster: Roster },
 }
 ```
-StateのenumとSerdeのタグが同じ場所にあります。[java/Models.java](../java/Models.java#L15)のpermitsとJsonSubTypes、[typescript/wire.ts](../typescript/wire.ts#L38)の別のケース列挙と比べ、復元対象を登録する手間が少ない実装です。Serialize／Deserializeはderiveで生成し、JSONの手書きswitchはありません。
+StateのenumとSerdeのタグが同じ場所にあります。[TypeScriptのZodスキーマ](../typescript/models.ts#L6)と同様にケース宣言をまとめられます。[Java](../java/Models.java#L15)のpermitsとJsonSubTypesの別リスト管理と比べ、復元対象を登録する手間が少ない実装です。Serialize／Deserializeはderiveで生成し、JSONの手書きswitchはありません。
 
 ### 2. 入力を変更しないAPIと、失敗の伝播を型に表せる
 

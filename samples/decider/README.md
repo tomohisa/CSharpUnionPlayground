@@ -31,7 +31,7 @@ C#はclosed record、Javaはsealed interface＋recordです。Rust・Swiftはenu
 
 - 行数：空行・コメント・括弧だけの行を含む物理行数。最終行に改行がなくても1行と数えます。
 - 空白以外の文字数：Unicodeの空白文字（スペース・タブ・改行など）をすべて除いた文字数。UTF-8のバイト数ではありません。コメント・括弧・属性は含め、文字列リテラルやコメント中の空白も除きます。
-- 対象：各言語の手書きソースだけ。設定・プロジェクトファイル、依存ロック、fixtures、README、共通Python実行器、集計スクリプト、CI、生成物は除外します。
+- 対象：各言語の手書きソースだけ。設定・プロジェクトファイル、依存ロック、fixtures、境界テスト、README、共通Python実行器、集計スクリプト、CI、生成物は除外します。
 - 合計：Model＋Decider＋その他。同じソースを一度だけ数えます。
 
 <!-- code-stats:start -->
@@ -42,7 +42,7 @@ C#はclosed record、Javaはsealed interface＋recordです。Rust・Swiftはenu
 |---|---:|---:|---:|---:|
 | C# | 28 | 78 | 66 | 172 |
 | Rust | 41 | 113 | 74 | 228 |
-| TypeScript | 19 | 72 | 79 | 170 |
+| TypeScript | 30 | 72 | 35 | 137 |
 | Java | 46 | 74 | 43 | 163 |
 | Go | 57 | 105 | 180 | 342 |
 | Swift | 53 | 43 | 118 | 214 |
@@ -53,7 +53,7 @@ C#はclosed record、Javaはsealed interface＋recordです。Rust・Swiftはenu
 |---|---:|---:|---:|---:|
 | C# | 990 | 2,397 | 2,165 | 5,552 |
 | Rust | 864 | 2,447 | 1,355 | 4,666 |
-| TypeScript | 731 | 2,670 | 2,767 | 6,168 |
+| TypeScript | 1,249 | 2,670 | 1,291 | 5,210 |
 | Java | 1,763 | 2,376 | 1,514 | 5,653 |
 | Go | 1,206 | 2,056 | 3,901 | 7,163 |
 | Swift | 1,024 | 1,855 | 3,595 | 6,474 |
@@ -141,6 +141,7 @@ python3 samples/decider/run.py --language csharp --native-aot --verify
 
 # Nodeでの実行と型チェックは別
 npm ci --prefix samples/file-based
+npm ci --prefix samples/decider/typescript
 samples/file-based/node_modules/.bin/tsc -p samples/decider/typescript/tsconfig.json
 ```
 
@@ -167,7 +168,7 @@ State / Command / Eventで`$type`を揃えます。たとえば満員のStateは
 - C#：標準STJのclosed型推論とJsonSerializerContext。[file-based版](../file-based/ClosedInferredJson.cs#L29)と同じく、JsonSerializableは入出力のルート（Input／Output）だけに付けます。参照先のCommand・State・Eventとそのケースは自動的に生成対象になります。独自コンバーターなし、JSONリフレクション無効。Native AOTでも同じコードです。
 - Rust：Serdeのinternally tagged enum。
 - Java：JacksonのJsonTypeInfo / JsonSubTypes。
-- TypeScript：型定義とは別に、wire.tsでJSON入力を構造検査。
+- TypeScript：Zodの判別共用体スキーマから型を導出し、wire.tsでJSON入力を検証。採用理由は[TypeScript README](typescript/README.md)を参照。
 - Swift：通常のCodable合成形式とは違うため、wire.swiftで共通の`$type`形式へ対応。
 - Go：wire.goでタグを読んで具象structへ復元。
 

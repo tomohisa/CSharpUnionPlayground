@@ -19,6 +19,6 @@ for (const command of input.commands) {
     steps.push({ phase: phase(state), emitted: [], error: decision.error });
   }
 }
-const events = wire.array(JSON.parse(JSON.stringify(history)), wire.event);
+const events = wire.events(JSON.parse(JSON.stringify(history)));
 const restored = wire.state(JSON.parse(JSON.stringify(state)));
 console.log(JSON.stringify({ initial, state, events, steps, restored, replayed: replay(events) }));
