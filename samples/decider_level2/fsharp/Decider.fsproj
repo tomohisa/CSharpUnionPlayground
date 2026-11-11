@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net11.0</TargetFramework>
+    <WarningsAsErrors>25;3261</WarningsAsErrors><Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Runtime.TieredCompilation" Value="true" />
+    <RuntimeHostConfigurationOption Include="System.Runtime.TieredPGO" Value="true" />
+    <Compile Include="Models.fs" /><Compile Include="Decider.fs" /><Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>

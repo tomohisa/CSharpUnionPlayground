@@ -1,0 +1,1957 @@
+{
+  "empty": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "events": [],
+    "steps": [],
+    "summaries": []
+  },
+  "lifecycle": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "bob",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f1",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "b1",
+            "course": "Advanced",
+            "capacity": 2,
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 100,
+                "credits": 2
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f2",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f1",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Withdrawn",
+            "reason": "StudentRequest"
+          }
+        },
+        {
+          "classId": "f1",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 59,
+            "reason": "BelowPassMark"
+          }
+        },
+        {
+          "classId": "f2",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 60,
+            "credits": 1
+          }
+        },
+        {
+          "classId": "b1",
+          "studentId": "bob",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Passed",
+            "score": 100,
+            "credits": 2
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "alice",
+        "grade": "Year1"
+      },
+      {
+        "$type": "StudentRegistered",
+        "studentId": "bob",
+        "grade": "Year2"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f1",
+        "course": "Foundation",
+        "capacity": 1
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "b1",
+        "course": "Advanced",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentPromoted",
+        "studentId": "alice",
+        "grade": "Year2"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f1",
+        "studentId": "alice"
+      },
+      {
+        "$type": "StudentDropped",
+        "classId": "f1",
+        "studentId": "alice"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "f1",
+        "startedOn": "2026-04-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "f1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "f1",
+        "studentId": "bob",
+        "score": 59
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "f1"
+      },
+      {
+        "$type": "StudentPromoted",
+        "studentId": "bob",
+        "grade": "Year3"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f2",
+        "course": "Foundation",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f2",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "f2",
+        "startedOn": "2026-09-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "f2",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "f2",
+        "studentId": "bob",
+        "score": 60
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "f2"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "b1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "b1",
+        "startedOn": "2027-04-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "b1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "b1",
+        "studentId": "bob",
+        "score": 100
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "b1"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "alice",
+            "grade": "Year1"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "bob",
+            "grade": "Year2"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "f1",
+            "course": "Foundation",
+            "capacity": 1
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "b1",
+            "course": "Advanced",
+            "capacity": 2
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "GradeTooLow"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentPromoted",
+            "studentId": "alice",
+            "grade": "Year2"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f1",
+            "studentId": "alice"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "ClassFull"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentDropped",
+            "classId": "f1",
+            "studentId": "alice"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f1",
+            "studentId": "bob"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassStarted",
+            "classId": "f1",
+            "startedOn": "2026-04-01"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "RegistrationClosed"
+      },
+      {
+        "$type": "Rejected",
+        "code": "NoAttendance"
+      },
+      {
+        "$type": "Rejected",
+        "code": "UnassessedStudents"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "AttendanceRecorded",
+            "classId": "f1",
+            "studentId": "bob"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ResultRecorded",
+            "classId": "f1",
+            "studentId": "bob",
+            "score": 59
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassCompleted",
+            "classId": "f1"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "GradeTooLow"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentPromoted",
+            "studentId": "bob",
+            "grade": "Year3"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "PrerequisiteMissing"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "f2",
+            "course": "Foundation",
+            "capacity": 2
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f2",
+            "studentId": "bob"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassStarted",
+            "classId": "f2",
+            "startedOn": "2026-09-01"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "AttendanceRecorded",
+            "classId": "f2",
+            "studentId": "bob"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ResultRecorded",
+            "classId": "f2",
+            "studentId": "bob",
+            "score": 60
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassCompleted",
+            "classId": "f2"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "b1",
+            "studentId": "bob"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassStarted",
+            "classId": "b1",
+            "startedOn": "2027-04-01"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "InvalidScore"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "AttendanceRecorded",
+            "classId": "b1",
+            "studentId": "bob"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ResultRecorded",
+            "classId": "b1",
+            "studentId": "bob",
+            "score": 100
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "AlreadyAssessed"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassCompleted",
+            "classId": "b1"
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      "withdrawn:StudentRequest",
+      "failed:59:BelowPassMark",
+      "passed:60:1",
+      "passed:100:2"
+    ]
+  },
+  "resume": {
+    "initial": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "bob",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f1",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "b1",
+            "course": "Advanced",
+            "capacity": 2,
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 100,
+                "credits": 2
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f2",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f1",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Withdrawn",
+            "reason": "StudentRequest"
+          }
+        },
+        {
+          "classId": "f1",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 59,
+            "reason": "BelowPassMark"
+          }
+        },
+        {
+          "classId": "f2",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 60,
+            "credits": 1
+          }
+        },
+        {
+          "classId": "b1",
+          "studentId": "bob",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Passed",
+            "score": 100,
+            "credits": 2
+          }
+        }
+      ]
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "alice",
+          "grade": "Year2"
+        },
+        {
+          "studentId": "bob",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f1",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "b1",
+            "course": "Advanced",
+            "capacity": 2,
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 100,
+                "credits": 2
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f2",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "bob",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "b2",
+            "course": "Advanced",
+            "capacity": 1,
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            }
+          },
+          "students": [
+            "bob"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f1",
+          "studentId": "alice",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Withdrawn",
+            "reason": "StudentRequest"
+          }
+        },
+        {
+          "classId": "f1",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 59,
+            "reason": "BelowPassMark"
+          }
+        },
+        {
+          "classId": "f2",
+          "studentId": "bob",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 60,
+            "credits": 1
+          }
+        },
+        {
+          "classId": "b1",
+          "studentId": "bob",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Passed",
+            "score": 100,
+            "credits": 2
+          }
+        },
+        {
+          "classId": "b2",
+          "studentId": "bob",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "alice",
+        "grade": "Year1"
+      },
+      {
+        "$type": "StudentRegistered",
+        "studentId": "bob",
+        "grade": "Year2"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f1",
+        "course": "Foundation",
+        "capacity": 1
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "b1",
+        "course": "Advanced",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentPromoted",
+        "studentId": "alice",
+        "grade": "Year2"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f1",
+        "studentId": "alice"
+      },
+      {
+        "$type": "StudentDropped",
+        "classId": "f1",
+        "studentId": "alice"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "f1",
+        "startedOn": "2026-04-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "f1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "f1",
+        "studentId": "bob",
+        "score": 59
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "f1"
+      },
+      {
+        "$type": "StudentPromoted",
+        "studentId": "bob",
+        "grade": "Year3"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f2",
+        "course": "Foundation",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f2",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "f2",
+        "startedOn": "2026-09-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "f2",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "f2",
+        "studentId": "bob",
+        "score": 60
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "f2"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "b1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "b1",
+        "startedOn": "2027-04-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "b1",
+        "studentId": "bob"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "b1",
+        "studentId": "bob",
+        "score": 100
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "b1"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "b2",
+        "course": "Advanced",
+        "capacity": 1
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "b2",
+        "studentId": "bob"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "b2",
+            "course": "Advanced",
+            "capacity": 1
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "b2",
+            "studentId": "bob"
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      "withdrawn:StudentRequest",
+      "failed:59:BelowPassMark",
+      "passed:60:1",
+      "passed:100:2",
+      "reserved"
+    ]
+  },
+  "withdraw": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "s"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "s",
+        "grade": "Year2"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 1
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "s"
+      },
+      {
+        "$type": "StudentDropped",
+        "classId": "f",
+        "studentId": "s"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "s"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 1
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentDropped",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      "reserved"
+    ]
+  },
+  "validation": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "s",
+              "progress": {
+                "$type": "Failed",
+                "score": 0,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 0,
+            "reason": "BelowPassMark"
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "s",
+        "grade": "Year2"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "s"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "f",
+        "startedOn": "2026-04-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "f",
+        "studentId": "s"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "f",
+        "studentId": "s",
+        "score": 0
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "f"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Rejected",
+        "code": "InvalidId"
+      },
+      {
+        "$type": "Rejected",
+        "code": "UnknownStudent"
+      },
+      {
+        "$type": "Rejected",
+        "code": "InvalidId"
+      },
+      {
+        "$type": "Rejected",
+        "code": "InvalidCapacity"
+      },
+      {
+        "$type": "Rejected",
+        "code": "UnknownClass"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "DuplicateStudent"
+      },
+      {
+        "$type": "Rejected",
+        "code": "InvalidPromotion"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "DuplicateClass"
+      },
+      {
+        "$type": "Rejected",
+        "code": "UnknownStudent"
+      },
+      {
+        "$type": "Rejected",
+        "code": "NotEnrolled"
+      },
+      {
+        "$type": "Rejected",
+        "code": "NotTeaching"
+      },
+      {
+        "$type": "Rejected",
+        "code": "InvalidDate"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "AlreadyEnrolled"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassStarted",
+            "classId": "f",
+            "startedOn": "2026-04-01"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "RegistrationClosed"
+      },
+      {
+        "$type": "Rejected",
+        "code": "NotEnrolled"
+      },
+      {
+        "$type": "Rejected",
+        "code": "InvalidScore"
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "AttendanceRecorded",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ResultRecorded",
+            "classId": "f",
+            "studentId": "s",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassCompleted",
+            "classId": "f"
+          }
+        ]
+      },
+      {
+        "$type": "Rejected",
+        "code": "RegistrationClosed"
+      },
+      {
+        "$type": "Rejected",
+        "code": "NotTeaching"
+      }
+    ],
+    "summaries": [
+      "failed:0:BelowPassMark"
+    ]
+  },
+  "unicode": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "生徒🌸",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Teaching",
+          "plan": {
+            "classId": "基礎🧪",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "生徒🌸"
+          ],
+          "startedOn": "2026-04-01"
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "基礎🧪",
+          "studentId": "生徒🌸",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Studying",
+            "attendance": 1
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "生徒🌸",
+        "grade": "Year3"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "基礎🧪",
+        "course": "Foundation",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "基礎🧪",
+        "studentId": "生徒🌸"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "基礎🧪",
+        "startedOn": "2026-04-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "基礎🧪",
+        "studentId": "生徒🌸"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "生徒🌸",
+            "grade": "Year3"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "基礎🧪",
+            "course": "Foundation",
+            "capacity": 2
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "基礎🧪",
+            "studentId": "生徒🌸"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassStarted",
+            "classId": "基礎🧪",
+            "startedOn": "2026-04-01"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "AttendanceRecorded",
+            "classId": "基礎🧪",
+            "studentId": "生徒🌸"
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      "studying:1"
+    ]
+  },
+  "metadata-order": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "s",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 1,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "s"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "s",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "s",
+        "grade": "Year2"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 1
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "s"
+      },
+      {
+        "$type": "StudentDropped",
+        "classId": "f",
+        "studentId": "s"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "s"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "s",
+            "grade": "Year2"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 1
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentDropped",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "s"
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      "reserved"
+    ]
+  },
+  "available": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "a",
+          "grade": "Year2"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Available",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "students": [
+            "a"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "a",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "a",
+        "grade": "Year2"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "a"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "a",
+            "grade": "Year2"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "a"
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      "reserved"
+    ]
+  },
+  "mixed-results": {
+    "initial": {
+      "students": [],
+      "classes": [],
+      "enrollments": []
+    },
+    "state": {
+      "students": [
+        {
+          "studentId": "a",
+          "grade": "Year3"
+        },
+        {
+          "studentId": "b",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Completed",
+          "plan": {
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2,
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            }
+          },
+          "results": [
+            {
+              "studentId": "a",
+              "progress": {
+                "$type": "Passed",
+                "score": 60,
+                "credits": 1
+              }
+            },
+            {
+              "studentId": "b",
+              "progress": {
+                "$type": "Failed",
+                "score": 59,
+                "reason": "BelowPassMark"
+              }
+            }
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "f",
+          "studentId": "a",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 60,
+            "credits": 1
+          }
+        },
+        {
+          "classId": "f",
+          "studentId": "b",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Failed",
+            "score": 59,
+            "reason": "BelowPassMark"
+          }
+        }
+      ]
+    },
+    "events": [
+      {
+        "$type": "StudentRegistered",
+        "studentId": "a",
+        "grade": "Year3"
+      },
+      {
+        "$type": "StudentRegistered",
+        "studentId": "b",
+        "grade": "Year3"
+      },
+      {
+        "$type": "ClassOpened",
+        "classId": "f",
+        "course": "Foundation",
+        "capacity": 2
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "a"
+      },
+      {
+        "$type": "StudentEnrolled",
+        "classId": "f",
+        "studentId": "b"
+      },
+      {
+        "$type": "ClassStarted",
+        "classId": "f",
+        "startedOn": "2026-01-01"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "f",
+        "studentId": "a"
+      },
+      {
+        "$type": "AttendanceRecorded",
+        "classId": "f",
+        "studentId": "b"
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "f",
+        "studentId": "a",
+        "score": 60
+      },
+      {
+        "$type": "ResultRecorded",
+        "classId": "f",
+        "studentId": "b",
+        "score": 59
+      },
+      {
+        "$type": "ClassCompleted",
+        "classId": "f"
+      }
+    ],
+    "steps": [
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "a",
+            "grade": "Year3"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentRegistered",
+            "studentId": "b",
+            "grade": "Year3"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassOpened",
+            "classId": "f",
+            "course": "Foundation",
+            "capacity": 2
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "a"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "StudentEnrolled",
+            "classId": "f",
+            "studentId": "b"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassStarted",
+            "classId": "f",
+            "startedOn": "2026-01-01"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "AttendanceRecorded",
+            "classId": "f",
+            "studentId": "a"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "AttendanceRecorded",
+            "classId": "f",
+            "studentId": "b"
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ResultRecorded",
+            "classId": "f",
+            "studentId": "a",
+            "score": 60
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ResultRecorded",
+            "classId": "f",
+            "studentId": "b",
+            "score": 59
+          }
+        ]
+      },
+      {
+        "$type": "Accepted",
+        "events": [
+          {
+            "$type": "ClassCompleted",
+            "classId": "f"
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      "passed:60:1",
+      "failed:59:BelowPassMark"
+    ]
+  }
+}

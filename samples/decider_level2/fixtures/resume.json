@@ -1,0 +1,140 @@
+{
+  "commands": [
+    {
+      "$type": "OpenClass",
+      "classId": "b2",
+      "course": "Advanced",
+      "capacity": 1
+    },
+    {
+      "$type": "Enroll",
+      "classId": "b2",
+      "studentId": "bob"
+    }
+  ],
+  "history": [
+    {
+      "$type": "StudentRegistered",
+      "studentId": "alice",
+      "grade": "Year1"
+    },
+    {
+      "$type": "StudentRegistered",
+      "studentId": "bob",
+      "grade": "Year2"
+    },
+    {
+      "$type": "ClassOpened",
+      "classId": "f1",
+      "course": "Foundation",
+      "capacity": 1
+    },
+    {
+      "$type": "ClassOpened",
+      "classId": "b1",
+      "course": "Advanced",
+      "capacity": 2
+    },
+    {
+      "$type": "StudentPromoted",
+      "studentId": "alice",
+      "grade": "Year2"
+    },
+    {
+      "$type": "StudentEnrolled",
+      "classId": "f1",
+      "studentId": "alice"
+    },
+    {
+      "$type": "StudentDropped",
+      "classId": "f1",
+      "studentId": "alice"
+    },
+    {
+      "$type": "StudentEnrolled",
+      "classId": "f1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "ClassStarted",
+      "classId": "f1",
+      "startedOn": "2026-04-01"
+    },
+    {
+      "$type": "AttendanceRecorded",
+      "classId": "f1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "ResultRecorded",
+      "classId": "f1",
+      "studentId": "bob",
+      "score": 59
+    },
+    {
+      "$type": "ClassCompleted",
+      "classId": "f1"
+    },
+    {
+      "$type": "StudentPromoted",
+      "studentId": "bob",
+      "grade": "Year3"
+    },
+    {
+      "$type": "ClassOpened",
+      "classId": "f2",
+      "course": "Foundation",
+      "capacity": 2
+    },
+    {
+      "$type": "StudentEnrolled",
+      "classId": "f2",
+      "studentId": "bob"
+    },
+    {
+      "$type": "ClassStarted",
+      "classId": "f2",
+      "startedOn": "2026-09-01"
+    },
+    {
+      "$type": "AttendanceRecorded",
+      "classId": "f2",
+      "studentId": "bob"
+    },
+    {
+      "$type": "ResultRecorded",
+      "classId": "f2",
+      "studentId": "bob",
+      "score": 60
+    },
+    {
+      "$type": "ClassCompleted",
+      "classId": "f2"
+    },
+    {
+      "$type": "StudentEnrolled",
+      "classId": "b1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "ClassStarted",
+      "classId": "b1",
+      "startedOn": "2027-04-01"
+    },
+    {
+      "$type": "AttendanceRecorded",
+      "classId": "b1",
+      "studentId": "bob"
+    },
+    {
+      "$type": "ResultRecorded",
+      "classId": "b1",
+      "studentId": "bob",
+      "score": 100
+    },
+    {
+      "$type": "ClassCompleted",
+      "classId": "b1"
+    }
+  ]
+}

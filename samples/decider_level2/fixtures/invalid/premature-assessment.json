@@ -1,0 +1,32 @@
+{
+  "commands": [],
+  "history": [
+    {
+      "$type": "StudentRegistered",
+      "studentId": "s",
+      "grade": "Year2"
+    },
+    {
+      "$type": "ClassOpened",
+      "classId": "f",
+      "course": "Foundation",
+      "capacity": 1
+    },
+    {
+      "$type": "StudentEnrolled",
+      "classId": "f",
+      "studentId": "s"
+    },
+    {
+      "$type": "ClassStarted",
+      "classId": "f",
+      "startedOn": "2026-01-01"
+    },
+    {
+      "$type": "ResultRecorded",
+      "classId": "f",
+      "studentId": "s",
+      "score": 90
+    }
+  ]
+}

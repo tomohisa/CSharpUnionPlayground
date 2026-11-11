@@ -2,6 +2,8 @@
 
 同じ教室への登録・解除を、C#・Rust・TypeScript・Java・Go・Swiftで実装します。まず各言語の **Models → Decider → Main** を読むと、型と処理の対応を追えます。
 
+より複雑な学年制限・前提科目・成績確定とF#を加えた比較は[Decider Level 2](../decider_level2/README.md)にあります。
+
 参照したのは[SekibanのImmutableModels](https://github.com/J-Tech-Japan/Sekiban/tree/main/templates/Sekiban.Dcb.Templates/content/Sekiban.Dcb.Orleans.Decider/SekibanDcbDecider.ImmutableModels)です。とくに[AvailableClassRoomState](https://github.com/J-Tech-Japan/Sekiban/blob/main/templates/Sekiban.Dcb.Templates/content/Sekiban.Dcb.Orleans.Decider/SekibanDcbDecider.ImmutableModels/States/ClassRoom/AvailableClassRoomState.cs)と[イベント別のValidate / Evolve](https://github.com/J-Tech-Japan/Sekiban/blob/main/templates/Sekiban.Dcb.Templates/content/Sekiban.Dcb.Orleans.Decider/SekibanDcbDecider.ImmutableModels/States/ClassRoom/Deciders/StudentEnrolledInClassRoomDecider.cs)を題材にしています。Sekibanそのものを移植したものではなく、1つの教室ストリームに絞った比較用サンプルです。
 
 ## 型と処理を読む

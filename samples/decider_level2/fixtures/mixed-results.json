@@ -1,0 +1,62 @@
+{
+  "commands": [
+    {
+      "$type": "RegisterStudent",
+      "studentId": "a",
+      "grade": "Year3"
+    },
+    {
+      "$type": "RegisterStudent",
+      "studentId": "b",
+      "grade": "Year3"
+    },
+    {
+      "$type": "OpenClass",
+      "classId": "f",
+      "course": "Foundation",
+      "capacity": 2
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f",
+      "studentId": "a"
+    },
+    {
+      "$type": "Enroll",
+      "classId": "f",
+      "studentId": "b"
+    },
+    {
+      "$type": "StartClass",
+      "classId": "f",
+      "startedOn": "2026-01-01"
+    },
+    {
+      "$type": "Attend",
+      "classId": "f",
+      "studentId": "a"
+    },
+    {
+      "$type": "Attend",
+      "classId": "f",
+      "studentId": "b"
+    },
+    {
+      "$type": "Assess",
+      "classId": "f",
+      "studentId": "a",
+      "score": 60
+    },
+    {
+      "$type": "Assess",
+      "classId": "f",
+      "studentId": "b",
+      "score": 59
+    },
+    {
+      "$type": "CompleteClass",
+      "classId": "f"
+    }
+  ],
+  "history": []
+}
