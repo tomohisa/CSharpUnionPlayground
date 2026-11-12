@@ -123,8 +123,9 @@ def report(data,path):
            '| implementation | build | store | wall s | operations s | read/rebuild/list s | 4KiB revisions s | restart wall s | peak RSS MiB | DB MiB | SQLite |',
            '| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |']
     for r in data['results']:
+        source=os.path.relpath(LEVEL/r['language'],path.parent)
         p=r['phases'];restart=r.get('restart',{}).get('wallSeconds');db=r.get('databaseBytes')
-        lines.append(f"| [{'ts-zod' if r['language']=='typescript' else r['language']}](../../{r['language']}) | {r['build']} | {r['store']} | {r['wallSeconds']:.3f} | {p['operations']:.3f} | {p['read_rebuild_snapshot']:.3f} | {r['document']['seconds']:.3f} | {restart:.3f} | {r['peakRssMiB']:.1f} | {db/1048576:.1f} | {r['sqliteVersion']} |" if restart is not None else f"| [{'ts-zod' if r['language']=='typescript' else r['language']}](../../{r['language']}) | {r['build']} | {r['store']} | {r['wallSeconds']:.3f} | {p['operations']:.3f} | {p['read_rebuild_snapshot']:.3f} | {r['document']['seconds']:.3f} | — | {r['peakRssMiB']:.1f} | — | — |")
+        lines.append(f"| [{'ts-zod' if r['language']=='typescript' else r['language']}]({source}) | {r['build']} | {r['store']} | {r['wallSeconds']:.3f} | {p['operations']:.3f} | {p['read_rebuild_snapshot']:.3f} | {r['document']['seconds']:.3f} | {restart:.3f} | {r['peakRssMiB']:.1f} | {db/1048576:.1f} | {r['sqliteVersion']} |" if restart is not None else f"| [{'ts-zod' if r['language']=='typescript' else r['language']}]({source}) | {r['build']} | {r['store']} | {r['wallSeconds']:.3f} | {p['operations']:.3f} | {p['read_rebuild_snapshot']:.3f} | {r['document']['seconds']:.3f} | — | {r['peakRssMiB']:.1f} | — | — |")
     lines+=['','| implementation | store | tagged reads 1000 s | projection + JSON 1000 s | input/open/replay s | response/close/exit s |',
             '| --- | --- | ---: | ---: | ---: | ---: |']
     for r in data['results']:

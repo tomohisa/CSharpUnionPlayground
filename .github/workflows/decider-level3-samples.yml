@@ -31,6 +31,7 @@ jobs:
         run: |
           python3 samples/decider_level3/code_stats.py --check
           python3 samples/decider_level3/tests/code_stats_test.py
+          python3 samples/decider_level3/tests/intel_publication.py
       - name: Check comparative README excerpts
         run: python3 samples/decider_level3/check_readmes.py
       - uses: actions/setup-dotnet@v4

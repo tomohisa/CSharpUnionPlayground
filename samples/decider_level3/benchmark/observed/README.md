@@ -1,5 +1,7 @@
 # Local ES benchmark observations
 
+[Intel GitHub Actionsの結果](macos-intel-actions/README.md)は別ページに掲載します。
+
 Apple M4 Max / 128 GiB RAM / macOS arm64。7言語を同じホストで順番に実行しました。各実装・各storeにつき1回の大きな業務負荷であり、統計的な順位ではありません。
 
 | 共通学生数 | 結果 | Raw data | 校正 |
