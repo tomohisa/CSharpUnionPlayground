@@ -108,3 +108,31 @@ impl<'a,C,E:Clone+Send,R> CommandProcessor<'a,C,E,R> {
         }
     }
 }
+
+pub trait CommandHandler<C,E,R> {
+    fn validate(&self,command:&C)->Vec<R>;
+    fn query_for(&self,command:&C)->Query;
+    fn handle(&self,events:&[Recorded<E>],command:&C)->Preparation<E,R>;
+}
+pub struct PreparedCommand<'a,R> {
+    pub query:Query, pub after:usize, pub returned:usize, pub was_read:bool,
+    commit:Box<dyn FnOnce()->HandlingResult<R>+'a>
+}
+impl<R> PreparedCommand<'_,R> { pub fn commit(self)->HandlingResult<R>{(self.commit)()} }
+pub struct DcbExecutor<'a,E:Clone+Send> { pub store:&'a dyn CommandStore<E> }
+impl<'a,E:Clone+Send+'a> DcbExecutor<'a,E> {
+    pub fn prepare<C:'a,R:'a,H:CommandHandler<C,E,R>+'a>(&self,id:&str,command:C,handler:&'a H)->PreparedCommand<'a,R> {
+        assert!(!id.trim().is_empty(),"command id required");
+        let errors=handler.validate(&command);
+        if !errors.is_empty(){return PreparedCommand{query:Query{items:vec![]},after:0,returned:0,was_read:false,
+            commit:Box::new(move||HandlingResult{status:"Rejected".into(),conflicts:0,appended:0,position:0,errors})};}
+        let query=handler.query_for(&command);let read=self.store.read(&query);
+        let decision=handler.handle(&read.events,&command);
+        let ticket=Ticket{command_id:id.into(),command,query:query.clone(),after:read.after,returned:read.events.len(),decision};
+        let store=self.store;
+        PreparedCommand{query,after:read.after,returned:read.events.len(),was_read:true,commit:Box::new(move||{
+            CommandProcessor{store,query_for:&|c|handler.query_for(c),decide:&|events,c|handler.handle(events,c),max_conflicts:3}.commit(ticket)
+        })}
+    }
+    pub fn execute<C:'a,R:'a,H:CommandHandler<C,E,R>+'a>(&self,id:&str,command:C,handler:&'a H)->HandlingResult<R>{self.prepare(id,command,handler).commit()}
+}

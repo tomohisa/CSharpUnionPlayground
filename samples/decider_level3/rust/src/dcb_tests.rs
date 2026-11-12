@@ -5,7 +5,16 @@ fn tag(key:&str)->Tag{Tag{category:"counter".into(),keys:vec![key.into()]}}
 fn query(key:&str)->Query{Query{items:vec![QueryItem{tags:vec![tag(key)],types:vec![]}]}}
 fn describe(e:&Counter)->EventDescriptor{EventDescriptor{event_type:"CounterDelta".into(),tags:vec![tag(&e.key),Tag{category:"scope".into(),keys:vec!["test".into()]}]}}
 fn event(key:&str,delta:i32)->Counter{Counter{key:key.into(),delta}}
+struct CounterHandler;
+impl CommandHandler<i32,Counter,String> for CounterHandler{
+    fn validate(&self,n:&i32)->Vec<String>{if *n>0{vec![]}else{vec!["positive delta required".into()]}}
+    fn query_for(&self,n:&i32)->Query{assert!(*n>0);query("executor")}
+    fn handle(&self,_:&[Recorded<Counter>],n:&i32)->Preparation<Counter,String>{Preparation::Emit(vec![event("executor",*n)])}
+}
 pub fn run(){
+    let executor_store=EventStore::new(describe,Clone::clone);let executor=DcbExecutor{store:&executor_store};
+    assert_eq!(executor.execute("valid",5,&CounterHandler).appended,1);
+    assert_eq!(executor.execute("invalid",0,&CounterHandler).status,"Rejected");assert_eq!(executor_store.read(&Query{items:vec![]}).after,1);
     let store=EventStore::new(describe,Clone::clone);let p=Arc::new(LiveProjection::new(0,|s:&mut i32,e:&Counter|*s+=e.delta));let listener=p.clone();store.subscribe(Box::new(move|e|listener.accept(e)));
     store.subscribe(Box::new(|e|if e.is_empty(){true}else{panic!("expected listener failure")}));
     assert!(matches!(store.append("first",&query("a"),0,vec![event("a",1),event("a",2)]),AppendResult::Committed(_)));

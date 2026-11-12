@@ -62,16 +62,6 @@ func DescribeEvent(event Event) dcb.EventDescriptor {
 		panic("unknown event")
 	}
 }
-func PrepareDecision(events []dcb.Recorded[Event], command Command) dcb.Preparation[Event, Rejection] {
-	switch decision := Decide(Fold(events).DecisionModel(), command).(type) {
-	case Accepted:
-		return dcb.Preparation[Event, Rejection]{Events: decision.Events, Errors: []Rejection{}}
-	case Rejected:
-		return dcb.Preparation[Event, Rejection]{Events: []Event{}, Errors: []Rejection{decision.Code}}
-	default:
-		panic("unknown decision")
-	}
-}
 func CopyEvent(e Event) Event {
 	if x, ok := e.(ClassCompleted); ok {
 		x.Results = append([]ClassResult{}, x.Results...)

@@ -7,7 +7,7 @@ enum Grade { Year1, Year2, Year3 }
 enum Course { Foundation, Advanced }
 enum FailureReason { BelowPassMark }
 enum WithdrawalReason { StudentRequest }
-enum Rejection { InvalidId, InvalidCapacity, InvalidScore, InvalidDate, DuplicateStudent, UnknownStudent, InvalidPromotion, DuplicateClass, UnknownClass, GradeTooLow, PrerequisiteMissing, AlreadyEnrolled, ClassFull, RegistrationClosed, NotEnrolled, NotTeaching, NoAttendance, AlreadyAssessed, UnassessedStudents, InvalidHistory }
+enum Rejection { InvalidId, InvalidCapacity, InvalidScore, InvalidDate, DuplicateStudent, UnknownStudent, InvalidPromotion, DuplicateClass, UnknownClass, GradeTooLow, PrerequisiteMissing, AlreadyEnrolled, ClassFull, RegistrationClosed, NotEnrolled, NotTeaching, NoAttendance, AlreadyAssessed, UnassessedStudents, InvalidHistory, InvalidCommand }
 record Student(String studentId, Grade grade) {
     public Student {
         Objects.requireNonNull(studentId);

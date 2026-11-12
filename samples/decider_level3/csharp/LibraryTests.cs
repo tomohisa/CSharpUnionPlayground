@@ -8,8 +8,18 @@ public static class LibraryTests
     private static EventDescriptor Describe(Counter e)=>new("CounterDelta",[Tag(e.Key),new("scope",["test"])]);
     private static Query Query(string key)=>new([new([Tag(key)],[])]);
     private static void Check(bool value){if(!value)throw new Exception("DCB library probe failed");}
+    private sealed class CounterHandler:ICommandHandler<int,Counter,string>
+    {
+        public ImmutableArray<string> Validate(int n)=>n>0?[]:["positive delta required"];
+        public Query QueryFor(int n){Check(n>0);return Query("executor");}
+        public Preparation<Counter,string> Handle(ImmutableArray<Recorded<Counter>> _,int n)=>new Emit<Counter,string>([new("executor",n)]);
+    }
     public static void Run()
     {
+        var executorStore=new EventStore<Counter>(Describe,e=>e);
+        IDcbExecutor<Counter,string> executor=new DcbExecutor<Counter,string>(executorStore);
+        Check(executor.Execute("valid",5,new CounterHandler()).Appended==1);
+        Check(executor.Execute("invalid",0,new CounterHandler()).Status=="Rejected" && executorStore.Read(new([])).After==1);
         Check(Tag("a")==Tag("a"));Check(new HashSet<Tag>{Tag("a"),Tag("a")}.Count==1);
         var store=new EventStore<Counter>(Describe,e=>e);
         var p=new LiveProjection<Counter,int>(0,(s,e)=>s+e.Delta,s=>s);store.Subscribe(p.Accept);

@@ -16,11 +16,19 @@ public protocol CommandStore<Payload>: Sendable {
 }
 ```
 
-出典：[swift/routing.swift](routing.swift#L33-L35)
+出典：[handlers.swift](handlers.swift#L1-L11)
 
 ```swift
-func prepareDecision(_ events:[Recorded<Event>],_ command:Command)->Preparation<Event,Rejection>{
-switch decide(fold(events).decisionModel(),command){case .accepted(let events):return .emit(events);case .rejected(let code):return .reject(code)}
+import Foundation
+struct SchoolHandler:CommandHandler {
+    func validate(_ command:Command)->[Rejection]{ValidatedCommand.validate(command)}
+    func queryFor(_ command:Command)->Query{schoolQueryFor(command)}
+    func handle(_ events:[Recorded<Event>],_ command:Command)->Preparation<Event,Rejection>{
+        do{
+            let validated=try ValidatedCommand.create(command)
+            switch decide(fold(events).decisionModel(),validated){case .accepted(let events):return .emit(events);case .rejected(let code):return .reject(code)}
+        }catch let error as Rejection{return .reject(error)}catch{preconditionFailure("unexpected validator error")}
+    }
 }
 ```
 
@@ -93,3 +101,13 @@ extension Operation: Codable {
 ```
 
 このサンプルは他言語と同じ同期の読み取り・追記・購読契約をNSLockで実装します。購読は非throwingでfalseを返し、fatal errorを回復する仕組みではありません。actorや分散ストアへ移すなら、非同期I/Oと配信順の契約を別に設計する必要があります。
+
+## コマンド・検証・履歴復元の更新
+
+名目的なstructの検証付きinitと、保存済みの値を扱うfromEventを分けます。ValidatedCommandはprivate initを持ち、Deciderへの入口を制約します。Resultの網羅的matchより、ここではthrowsと型付きのRejectionへの変換が短く書けました。Codableの手書き部分は引き続き必要で、検証コードが短くてもJSONの総量は小さくありません。
+
+[handlers.swift](handlers.swift)は入力検証とDecider接続、[valueObjects.swift](valueObjects.swift)は値の制約と検証済み入力、[domainTests.swift](domainTests.swift)はドメインテストです。Routingはタグ・読み取り条件・イベントのメタ情報を担当し、業務ハンドラーとは別分類です。
+
+現在のポリシーで値を検証するcreate系factoryと、過去の事実を再検証しないfromEvent／restore系factoryを区別します。イベント・JSONの保存形と一覧DTOはプリミティブを保ち、投影で復元した値を取り出して使います。全てのStateの全フィールドを名目的なVOへ置き換えた実装ではありません。ValidatedCommandも永続化せず、新しいコマンドを受ける境界だけに使います。
+
+76ケースのGWTではExecutor経由の結果と正確なイベントpayload、拒否時の無追記、投影と再構築の一致を確認します。これとは別に、ストアを使わないDeciderの3例、VOのfactoryと履歴復元、最後の1席の競合再判断もテストします。言語固有の不正入力ケースも追加しています。テスト全体をコード量の別枠へ計上しています。

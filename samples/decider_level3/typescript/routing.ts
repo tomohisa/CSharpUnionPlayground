@@ -36,7 +36,3 @@ export function describeEvent(event: Event): EventDescriptor {
     default: return unreachable(event);
   }
 }
-export function prepareDecision(events: readonly Recorded<Event>[], command: Command): Preparation<Event,Rejection> {
-  const decision=decide(decisionModel(fold(events)),command);
-  return decision.$type === "Accepted" ? {kind:"Emit",events:decision.events} : {kind:"Reject",error:decision.code};
-}

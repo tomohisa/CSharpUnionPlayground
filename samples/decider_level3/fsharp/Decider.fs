@@ -87,7 +87,8 @@ module Decider =
             else accept (Event.ClassOpened(id, course, capacity))
         | (Command.Enroll(id, _) | Command.Drop(id, _) | Command.StartClass(id, _)
           | Command.Attend(id, _) | Command.Assess(id, _, _) | Command.CompleteClass id) as command -> decideClass state command id
-    let decide state command =
+    let decide state validated =
+        let command=ValidatedCommand.value validated
         match decideOne state command with
         | Decision.Accepted [Event.ClassStarted(id, date)] ->
             Decision.Accepted(Event.ClassStarted(id, date) :: (state.Enrollments |> List.filter (fun e -> e.ClassId = id && e.Progress = Progress.Reserved) |> List.map (fun e -> Event.StudyStarted(id, e.StudentId))))

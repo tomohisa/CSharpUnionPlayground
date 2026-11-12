@@ -10,7 +10,7 @@ module ClassRegister =
     let apply classes event =
         match event with
         | Event.ClassOpened(id,course,capacity) ->
-            let plan={ ClassId=id;Course=course;Capacity=capacity;MinimumGrade=(if course=Foundation then Year2 else Year3)
+            let plan={ ClassId=id;Course=course;Capacity=SeatCapacity.value(SeatCapacity.fromEvent capacity);MinimumGrade=(if course=Foundation then Year2 else Year3)
                        Prerequisite=(if course=Foundation then Prerequisite.NoPrerequisite else Prerequisite.PassedCourse Foundation) }
             Map.add id (ClassState.Available(plan,[])) classes
         | Event.StudentEnrolled(id,_,_) | Event.StudentDropped(id,_) | Event.ClassStarted(id,_) | Event.ClassCompleted(id,_) ->
@@ -23,7 +23,7 @@ module ClassRegister =
                              let students=Decider.members room @ [student]
                              if students.Length=plan.Capacity then ClassState.Full(plan,students) else ClassState.Available(plan,students)
                          | Event.StudentDropped(_,student) -> ClassState.Available(plan,Decider.members room |> List.filter ((<>) student))
-                         | Event.ClassStarted(_,date) -> ClassState.Teaching(plan,Decider.members room,date)
+                         | Event.ClassStarted(_,date) -> ClassState.Teaching(plan,Decider.members room,SchoolDate.value(SchoolDate.fromEvent date))
                          | Event.ClassCompleted(_,results) -> ClassState.Completed(plan,results)
                          | _ -> failwith "invariant"
                 Map.add id next classes
@@ -40,7 +40,7 @@ module EnrollmentRegister =
                              | Event.StudentDropped _ -> Progress.Withdrawn StudentRequest
                              | Event.StudyStarted _ -> Progress.Studying 0
                              | Event.AttendanceRecorded _ -> match record.Progress with Progress.Studying n -> Progress.Studying(n+1) | _ -> failwith "invalid committed event"
-                             | Event.ResultRecorded(_,_,score) -> if score>=60 then Progress.Passed(score,if record.Course=Foundation then 1 else 2) else Progress.Failed(score,BelowPassMark)
+                             | Event.ResultRecorded(_,_,score) -> if score>=60 then Progress.Passed(AssessmentScore.value(AssessmentScore.fromEvent score),if record.Course=Foundation then 1 else 2) else Progress.Failed(AssessmentScore.value(AssessmentScore.fromEvent score),BelowPassMark)
                              | _ -> failwith "invariant"
                 Map.add (id,student) {record with Progress=progress} records
         | _ -> records

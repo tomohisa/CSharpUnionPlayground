@@ -21,8 +21,8 @@ final class Projection {
         var next=new HashMap<>(old);
         if(event instanceof ClassOpened e){
             Plan plan=switch(e.course()){
-                case Foundation->new Plan(e.classId(),e.course(),Grade.Year2,new NoPrerequisite(),e.capacity());
-                case Advanced->new Plan(e.classId(),e.course(),Grade.Year3,new PassedCourse(Course.Foundation),e.capacity());
+                case Foundation->new Plan(e.classId(),e.course(),Grade.Year2,new NoPrerequisite(),SeatCapacity.fromEvent(e.capacity()).value());
+                case Advanced->new Plan(e.classId(),e.course(),Grade.Year3,new PassedCourse(Course.Foundation),SeatCapacity.fromEvent(e.capacity()).value());
             };next.put(e.classId(),new Available(plan,List.of()));return next;
         }
         if(!(event instanceof StudentEnrolled || event instanceof StudentDropped || event instanceof ClassStarted || event instanceof ClassCompleted))return old;
@@ -32,7 +32,7 @@ final class Projection {
         ClassState updated=switch(event){
             case StudentEnrolled e->{var members=new ArrayList<>(Decider.members(room));members.add(e.studentId());yield members.size()==plan.capacity()?new Full(plan,members):new Available(plan,members);}
             case StudentDropped e->new Available(plan,Decider.members(room).stream().filter(s->!s.equals(e.studentId())).toList());
-            case ClassStarted e->new Teaching(plan,Decider.members(room),e.startedOn());case ClassCompleted e->new Completed(plan,e.results());default->throw new IllegalStateException();
+            case ClassStarted e->new Teaching(plan,Decider.members(room),SchoolDate.fromEvent(e.startedOn()).value());case ClassCompleted e->new Completed(plan,e.results());default->throw new IllegalStateException();
         };next.put(id,updated);return next;
     }
     static Map<Key,Enrollment> enrollment(Map<Key,Enrollment> old,Event event){
@@ -44,7 +44,7 @@ final class Projection {
         Progress progress=switch(event){
             case StudentDropped e->new Withdrawn(WithdrawalReason.StudentRequest);case StudyStarted e->new Studying(0);
             case AttendanceRecorded e-> {if(!(record.progress() instanceof Studying p))throw new IllegalStateException("invalid committed event");yield new Studying(p.attendance()+1);}
-            case ResultRecorded e->e.score()>=60?new Passed(e.score(),record.course()==Course.Foundation?1:2):new Failed(e.score(),FailureReason.BelowPassMark);
+            case ResultRecorded e->e.score()>=60?new Passed(AssessmentScore.fromEvent(e.score()).value(),record.course()==Course.Foundation?1:2):new Failed(AssessmentScore.fromEvent(e.score()).value(),FailureReason.BelowPassMark);
             default->throw new IllegalStateException();
         };next.put(key,new Enrollment(record.classId(),record.studentId(),record.course(),progress));return next;
     }

@@ -18,6 +18,7 @@ type WithdrawalReason =
     | [<JsonPropertyName("StudentRequest")>] StudentRequest
 
 type Rejection =
+    | [<JsonPropertyName("InvalidCommand")>] InvalidCommand
     | [<JsonPropertyName("InvalidId")>] InvalidId
     | [<JsonPropertyName("InvalidCapacity")>] InvalidCapacity
     | [<JsonPropertyName("InvalidScore")>] InvalidScore

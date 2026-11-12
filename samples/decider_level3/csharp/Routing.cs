@@ -32,10 +32,4 @@ public static class Routing
         ClassCompleted x => new("ClassCompleted",[Class(x.ClassId)]),
         StudyStarted x => new("StudyStarted",[Student(x.StudentId),Class(x.ClassId),Enrollment(x.ClassId,x.StudentId)]),
     };
-    public static Preparation<Event,Rejection> Decide(ImmutableArray<Recorded<Event>> events,Command command) =>
-        Decider.Decide(Registers.Fold(events).DecisionModel(),command) switch
-        {
-            Accepted a => new Emit<Event,Rejection>(a.Events),
-            Rejected r => new Reject<Event,Rejection>(r.Code)
-        };
 }

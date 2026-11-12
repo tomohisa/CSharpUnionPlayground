@@ -96,7 +96,8 @@ final class Decider {
         }
         throw new IllegalStateException("invariant");
     }
-    static Decision decide(DecisionModel state, Command command) {
+    static Decision decide(DecisionModel state, ValidatedCommand validated) {
+        var command=validated.value();
         var decision = decideOne(state, command);
         if (decision instanceof Accepted a && a.events().getFirst() instanceof ClassStarted e) {
             var events = new ArrayList<Event>(a.events());

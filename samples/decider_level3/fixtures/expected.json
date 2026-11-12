@@ -1001,7 +1001,7 @@
         "status": "Rejected",
         "conflicts": 0,
         "appended": 0,
-        "position": 24,
+        "position": 0,
         "errors": [
           "InvalidScore"
         ]
@@ -3379,7 +3379,7 @@
         "status": "Rejected",
         "conflicts": 0,
         "appended": 0,
-        "position": 2,
+        "position": 0,
         "errors": [
           "InvalidDate"
         ]
@@ -3435,7 +3435,7 @@
         "status": "Rejected",
         "conflicts": 0,
         "appended": 0,
-        "position": 5,
+        "position": 0,
         "errors": [
           "InvalidScore"
         ]
@@ -7851,5 +7851,506 @@
       ]
     },
     "checkpoint": 6
+  },
+  "historical-values": {
+    "events": [
+      {
+        "position": 1,
+        "commandId": "historic",
+        "eventType": "StudentRegistered",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentRegistered",
+          "studentId": "s",
+          "grade": "Year3"
+        }
+      },
+      {
+        "position": 2,
+        "commandId": "historic",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "a",
+          "course": "Foundation",
+          "capacity": 25
+        }
+      },
+      {
+        "position": 3,
+        "commandId": "historic",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "a",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "a",
+          "studentId": "s",
+          "course": "Foundation"
+        }
+      },
+      {
+        "position": 4,
+        "commandId": "historic",
+        "eventType": "ClassStarted",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "a"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassStarted",
+          "classId": "a",
+          "startedOn": "Spring 2020"
+        }
+      },
+      {
+        "position": 5,
+        "commandId": "historic",
+        "eventType": "StudyStarted",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "a",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudyStarted",
+          "classId": "a",
+          "studentId": "s"
+        }
+      },
+      {
+        "position": 6,
+        "commandId": "historic",
+        "eventType": "AttendanceRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "a",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "AttendanceRecorded",
+          "classId": "a",
+          "studentId": "s"
+        }
+      },
+      {
+        "position": 7,
+        "commandId": "historic",
+        "eventType": "ResultRecorded",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "a"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "a",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ResultRecorded",
+          "classId": "a",
+          "studentId": "s",
+          "score": 120
+        }
+      },
+      {
+        "position": 8,
+        "commandId": "historic",
+        "eventType": "ClassOpened",
+        "tags": [
+          {
+            "category": "class",
+            "keys": [
+              "b"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "ClassOpened",
+          "classId": "b",
+          "course": "Advanced",
+          "capacity": 1
+        }
+      },
+      {
+        "position": 9,
+        "commandId": "eligible",
+        "eventType": "StudentEnrolled",
+        "tags": [
+          {
+            "category": "student",
+            "keys": [
+              "s"
+            ]
+          },
+          {
+            "category": "class",
+            "keys": [
+              "b"
+            ]
+          },
+          {
+            "category": "enrollment",
+            "keys": [
+              "b",
+              "s"
+            ]
+          }
+        ],
+        "payload": {
+          "$type": "StudentEnrolled",
+          "classId": "b",
+          "studentId": "s",
+          "course": "Advanced"
+        }
+      }
+    ],
+    "steps": [
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "InvalidCapacity"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "InvalidDate"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Rejected",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 0,
+        "errors": [
+          "InvalidScore"
+        ]
+      },
+      {
+        "operation": "Execute",
+        "status": "Committed",
+        "conflicts": 0,
+        "appended": 1,
+        "position": 9,
+        "errors": []
+      },
+      {
+        "operation": "ListAll",
+        "status": "Listed",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 9,
+        "errors": []
+      },
+      {
+        "operation": "Rebuild",
+        "status": "Rebuilt",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 9,
+        "errors": []
+      },
+      {
+        "operation": "Redeliver",
+        "status": "Redelivered",
+        "conflicts": 0,
+        "appended": 0,
+        "position": 9,
+        "errors": []
+      }
+    ],
+    "lists": [
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Teaching",
+            "plan": {
+              "classId": "a",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 25
+            },
+            "students": [
+              "s"
+            ],
+            "startedOn": "Spring 2020"
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "b",
+              "course": "Advanced",
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "s"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "a",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 120,
+              "credits": 1
+            }
+          },
+          {
+            "classId": "b",
+            "studentId": "s",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "passed:120:1",
+          "reserved"
+        ]
+      },
+      {
+        "students": [
+          {
+            "studentId": "s",
+            "grade": "Year3"
+          }
+        ],
+        "classes": [
+          {
+            "$type": "Teaching",
+            "plan": {
+              "classId": "a",
+              "course": "Foundation",
+              "minimumGrade": "Year2",
+              "prerequisite": {
+                "$type": "NoPrerequisite"
+              },
+              "capacity": 25
+            },
+            "students": [
+              "s"
+            ],
+            "startedOn": "Spring 2020"
+          },
+          {
+            "$type": "Full",
+            "plan": {
+              "classId": "b",
+              "course": "Advanced",
+              "minimumGrade": "Year3",
+              "prerequisite": {
+                "$type": "PassedCourse",
+                "course": "Foundation"
+              },
+              "capacity": 1
+            },
+            "students": [
+              "s"
+            ]
+          }
+        ],
+        "enrollments": [
+          {
+            "classId": "a",
+            "studentId": "s",
+            "course": "Foundation",
+            "progress": {
+              "$type": "Passed",
+              "score": 120,
+              "credits": 1
+            }
+          },
+          {
+            "classId": "b",
+            "studentId": "s",
+            "course": "Advanced",
+            "progress": {
+              "$type": "Reserved"
+            }
+          }
+        ],
+        "summaries": [
+          "passed:120:1",
+          "reserved"
+        ]
+      }
+    ],
+    "list": {
+      "students": [
+        {
+          "studentId": "s",
+          "grade": "Year3"
+        }
+      ],
+      "classes": [
+        {
+          "$type": "Teaching",
+          "plan": {
+            "classId": "a",
+            "course": "Foundation",
+            "minimumGrade": "Year2",
+            "prerequisite": {
+              "$type": "NoPrerequisite"
+            },
+            "capacity": 25
+          },
+          "students": [
+            "s"
+          ],
+          "startedOn": "Spring 2020"
+        },
+        {
+          "$type": "Full",
+          "plan": {
+            "classId": "b",
+            "course": "Advanced",
+            "minimumGrade": "Year3",
+            "prerequisite": {
+              "$type": "PassedCourse",
+              "course": "Foundation"
+            },
+            "capacity": 1
+          },
+          "students": [
+            "s"
+          ]
+        }
+      ],
+      "enrollments": [
+        {
+          "classId": "a",
+          "studentId": "s",
+          "course": "Foundation",
+          "progress": {
+            "$type": "Passed",
+            "score": 120,
+            "credits": 1
+          }
+        },
+        {
+          "classId": "b",
+          "studentId": "s",
+          "course": "Advanced",
+          "progress": {
+            "$type": "Reserved"
+          }
+        }
+      ],
+      "summaries": [
+        "passed:120:1",
+        "reserved"
+      ]
+    },
+    "checkpoint": 9
   }
 }

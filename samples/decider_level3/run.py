@@ -53,11 +53,11 @@ def build(language, native_aot=False):
         return ['java', '--class-path', str(out)+os.pathsep+cp, 'Main']
     if language == 'go':
         out = BUILD/'go-decider'
-        run(['go', 'build', '-o', out, '.'], cwd=HERE/'go')
+        run(['go', 'build', '-o', out, '.'], cwd=HERE/'go', env={**os.environ,'GOCACHE':os.environ.get('GOCACHE',str(BUILD/'go-cache'))})
         return [str(out)]
     if language == 'swift':
         out = BUILD/'swift-decider'
-        run(['swiftc', '-O', *sorted((HERE/'swift').glob('*.swift')), '-o', out])
+        run(['swiftc', '-O', '-module-cache-path', BUILD/'swift-modules', *sorted((HERE/'swift').glob('*.swift')), '-o', out])
         return [str(out)]
     raise ValueError(language)
 

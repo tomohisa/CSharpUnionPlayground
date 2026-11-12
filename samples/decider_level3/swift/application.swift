@@ -4,10 +4,10 @@ struct RunOutput:Codable {let events:[Recorded<Event>];let steps:[Trace];let lis
 func runSchool(_ history:[Recorded<Event>],_ operations:[Operation])->RunOutput{
     let store=EventStore<Event>(describe:describeEvent,copyPayload:{$0})
     store.load(history);let projection=LiveProjection(Registers(),reduce,{$0});store.subscribe(projection.accept)
-    let processor=CommandProcessor(store:store,queryFor:queryFor,decide:prepareDecision,maxConflicts:3)
-    var tickets:[String:Ticket<Command,Event,Rejection>]=[:],steps:[Trace]=[],lists:[SchoolList]=[],reads:[ReadAudit]=[]
-    func prepare(_ id:String,_ c:Command)->Ticket<Command,Event,Rejection>{let t=processor.prepare(id,c);reads.append(ReadAudit(query:t.query,after:t.after,returned:t.returned));return t}
-    func commit(_ op:String,_ t:Ticket<Command,Event,Rejection>){let r=processor.commit(t);steps.append(Trace(operation:op,status:r.status,conflicts:r.conflicts,appended:r.appended,position:r.position,errors:r.errors))}
+    let executor=DcbExecutor(store:store),handler=SchoolHandler()
+    var tickets:[String:PreparedCommand<Rejection>]=[:],steps:[Trace]=[],lists:[SchoolList]=[],reads:[ReadAudit]=[]
+    func prepare(_ id:String,_ c:Command)->PreparedCommand<Rejection>{let t=executor.prepare(id,c,handler);if t.wasRead{reads.append(ReadAudit(query:t.query,after:t.after,returned:t.returned))};return t}
+    func commit(_ op:String,_ t:PreparedCommand<Rejection>){let r=t.commit();steps.append(Trace(operation:op,status:r.status,conflicts:r.conflicts,appended:r.appended,position:r.position,errors:r.errors))}
     for operation in operations{switch operation{
     case .execute(let id,let c):commit("Execute",prepare(id,c))
     case .prepare(let key,let id,let c):precondition(tickets[key] == nil,"duplicate ticket");let t=prepare(id,c);tickets[key]=t;steps.append(Trace(operation:"Prepare",status:"Prepared",conflicts:0,appended:0,position:t.after,errors:[]))

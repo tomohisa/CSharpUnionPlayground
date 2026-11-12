@@ -1,18 +1,19 @@
-import { CommandProcessor, EventStore, LiveProjection, sameTag } from "./dcb.ts";
-import type { Query, Recorded, Ticket } from "./dcb.ts";
+import { DcbExecutor, EventStore, LiveProjection, sameTag } from "./dcb.ts";
+import type { Query, Recorded, PreparedCommand } from "./dcb.ts";
 import type { Command, Event, Operation, Rejection, SchoolList, Trace } from "./models.ts";
 import { EventSchema } from "./models.ts";
-import { describeEvent, prepareDecision, queryFor } from "./routing.ts";
+import { describeEvent } from "./routing.ts";
+import { schoolHandler } from "./handlers.ts";
 import { empty, copy, reduce, list } from "./projection.ts";
 export function run(history: readonly Recorded<Event>[], operations: readonly Operation[]) {
   const store=new EventStore<Event>(describeEvent,e=>EventSchema.parse(e));
   store.load(history);
   const projection=new LiveProjection(empty(),reduce,copy);store.subscribe(projection.accept);
-  const processor=new CommandProcessor(store,queryFor,prepareDecision);
-  const tickets=new Map<string,Ticket<Command,Event,Rejection>>(), steps:Trace[]=[], lists:SchoolList[]=[];
+  const executor=new DcbExecutor<Event,Rejection>(store);
+  const tickets=new Map<string,PreparedCommand<Rejection>>(), steps:Trace[]=[], lists:SchoolList[]=[];
   const reads:{query:Query;after:number;returned:number}[]=[];
-  const prepare=(id:string,command:Command)=>{const t=processor.prepare(id,command);reads.push({query:t.query,after:t.after,returned:t.returned});return t;};
-  const commit=(operation:string,t:Ticket<Command,Event,Rejection>)=>steps.push({operation,...processor.commit(t)});
+  const prepare=(id:string,command:Command)=>{const t=executor.prepare(id,command,schoolHandler);if(t.wasRead)reads.push({query:t.query,after:t.after,returned:t.returned});return t;};
+  const commit=(operation:string,t:PreparedCommand<Rejection>)=>steps.push({operation,...t.commit()});
   for(const operation of operations){
     switch(operation.$type){
       case "Execute":commit("Execute",prepare(operation.commandId,operation.command));break;

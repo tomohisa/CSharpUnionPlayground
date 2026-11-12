@@ -112,8 +112,9 @@ public static class Decider
         }
         throw new InvalidOperationException("invariant");
     }
-    public static Decision Decide(DecisionModel state, Command command)
+    public static Decision Decide(DecisionModel state, ValidatedCommand validated)
     {
+        var command=validated.Value;
         var decision = DecideOne(state, command);
         if (decision is Accepted a && a.Events[0] is ClassStarted e)
             return new Accepted([e, .. state.Enrollments.Where(r => r.ClassId == e.ClassId && r.Progress is Reserved).Select(r => (Event)new StudyStarted(e.ClassId, r.StudentId))]);

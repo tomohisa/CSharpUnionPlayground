@@ -7,7 +7,16 @@ final class DcbTests{
     static Dcb.Query query(String key){return new Dcb.Query(List.of(new Dcb.QueryItem(List.of(tag(key)),List.of())));}
     static Dcb.EventDescriptor describe(Counter e){return new Dcb.EventDescriptor("CounterDelta",List.of(tag(e.key()),new Dcb.Tag("scope",List.of("test"))));}
     static void check(boolean value){if(!value)throw new IllegalStateException("DCB library probe failed");}
+    static final class CounterHandler implements Dcb.CommandHandler<Integer,Counter,String>{
+        public List<String> validate(Integer n){return n>0?List.of():List.of("positive delta required");}
+        public Dcb.Query queryFor(Integer n){check(n>0);return query("executor");}
+        public Dcb.Preparation<Counter,String> handle(List<Dcb.Recorded<Counter>> events,Integer n){return new Dcb.Emit<>(List.of(new Counter("executor",n)));}
+    }
     static void run()throws Exception{
+        var executorStore=new Dcb.EventStore<Counter>(DcbTests::describe,e->e);Dcb.Executor<Counter,String> executor=new Dcb.DcbExecutor<>(executorStore);
+        check(executor.execute("valid",5,new CounterHandler()).appended()==1);
+        check(executor.execute("invalid",0,new CounterHandler()).status().equals("Rejected") && executorStore.read(new Dcb.Query(List.of())).after()==1);
+
         var store=new Dcb.EventStore<Counter>(DcbTests::describe,e->e);var p=new Dcb.LiveProjection<Counter,Integer>(0,(s,e)->s+e.delta(),s->s);store.subscribe(p::accept);
         store.subscribe(events->{if(!events.isEmpty())throw new AssertionError("expected listener failure");return true;});
         var first=store.append("first",query("a"),0,List.of(new Counter("a",1),new Counter("a",2)));check(first.committed()&&first.events().size()==2&&store.listenerFaults()==1&&p.snapshot().state()==3&&p.snapshot().position()==2);

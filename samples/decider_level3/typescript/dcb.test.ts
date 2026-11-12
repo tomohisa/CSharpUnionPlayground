@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {test} from "node:test";
-import {EventStore,LiveProjection,CommandProcessor} from "./dcb.ts";
-import type {Tag,Query,EventDescriptor} from "./dcb.ts";
+import {EventStore,LiveProjection,CommandProcessor,DcbExecutor} from "./dcb.ts";
+import type {Tag,Query,EventDescriptor,CommandHandler} from "./dcb.ts";
 type Counter={readonly key:string;readonly delta:number};
 const tag=(key:string):Tag=>({category:"counter",keys:[key]});
 const query=(key:string):Query=>({items:[{tags:[tag(key)],types:[]}]});
@@ -32,4 +32,12 @@ test("two prepared writers: exactly one conditional append wins on the JS event 
   const store=new EventStore(describe,structuredClone),reads=[store.read(query("a")),store.read(query("a"))];
   const results=await Promise.all(reads.map((r,i)=>Promise.resolve().then(()=>store.append("race-"+i,query("a"),r.after,[{key:"a",delta:1}]))));
   assert.equal(results.filter(r=>r.status==="Committed").length,1);assert.equal(store.read({items:[]}).after,1);
+});
+
+test("executor accepts an unrelated typed command / handler pair",()=>{
+  const store=new EventStore<Counter>(describe,structuredClone),executor=new DcbExecutor<Counter,string>(store);
+  const handler:CommandHandler<number,Counter,string>={validate:n=>n>0?[]:["positive delta required"],snapshot:n=>n,
+    queryFor:n=>{assert.ok(n>0);return query("executor");},handle:(_,n)=>({kind:"Emit",events:[{key:"executor",delta:n}]})};
+  assert.equal(executor.execute("valid",5,handler).appended,1);
+  assert.equal(executor.execute("invalid",0,handler).status,"Rejected");assert.equal(store.read({items:[]}).after,1);
 });

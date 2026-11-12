@@ -13,12 +13,12 @@ public static class Application
         var projection=new LiveProjection<Event,Registers>(Registers.Empty,Registers.Reduce,s=>s);
         store.Subscribe(projection.Accept);
         var reads=new List<ReadAudit>();
-        Preparation<Event,Rejection> Decide(ImmutableArray<Recorded<Event>> events,Command c) => Routing.Decide(events,c);
-        var processor=new CommandProcessor<Command,Event,Rejection>(store,Routing.QueryFor,Decide);
-        var tickets=new Dictionary<string,Ticket<Command,Event,Rejection>>();
+        IDcbExecutor<Event,Rejection> executor=new DcbExecutor<Event,Rejection>(store);
+        var handler=new SchoolHandler();
+        var tickets=new Dictionary<string,PreparedCommand<Rejection>>();
         var steps=new List<Trace>();var lists=new List<SchoolList>();
-        Ticket<Command,Event,Rejection> Prepare(string id,Command c) {var t=processor.Prepare(id,c);reads.Add(new(t.Query,t.After,t.Returned));return t;}
-        void Commit(string op,Ticket<Command,Event,Rejection> t) {var r=processor.Commit(t);steps.Add(new(op,r.Status,r.Conflicts,r.Appended,r.Position,r.Errors));}
+        PreparedCommand<Rejection> Prepare(string id,Command c) {var t=executor.Prepare(id,c,handler);if(t.WasRead)reads.Add(new(t.Query,t.After,t.Returned));return t;}
+        void Commit(string op,PreparedCommand<Rejection> t) {var r=t.Commit();steps.Add(new(op,r.Status,r.Conflicts,r.Appended,r.Position,r.Errors));}
         foreach(var operation in operations)
         {
             switch(operation)

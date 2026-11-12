@@ -11,8 +11,8 @@ SOURCES=[('C#','csharp','.cs'),('F#','fsharp','.fs'),
  ('Java','java','.java'),('Go','go','.go'),('Swift','swift','.swift')]
 SKIP={'bin','obj','target','node_modules','.build'}
 TESTS={'LibraryTests.cs','LibraryTests.fs','dcb_tests.rs','dcb.test.ts','DcbTests.java','libraryTests.swift'}
-ROLES=['Model','Decider','Command','Projection','UseCase','Boundary','Library']
-LABELS=['Model','Decider','コマンド・ハンドラー','ドメイン投影','ユースケース','アプリ設定・JSON・CLI','共通ライブラリ']
+ROLES=['Model','Decider','Command','Connection','Projection','UseCase','Boundary','Library','DomainTest']
+LABELS=['Model・値オブジェクト','Decider','コマンド・ハンドラー・入力検証','DCB接続・メタ情報','ドメイン投影','ユースケース','アプリ設定・JSON・CLI','共通ライブラリ','ドメインテスト']
 START,END='<!-- code-stats:start -->','<!-- code-stats:end -->'
 def collect():
  manifest=json.loads((HERE/'code_stats_classification.json').read_text())
@@ -20,7 +20,7 @@ def collect():
  for language,root,suffix in SOURCES:
   directory=HERE/root;groups={r:{'lines':0,'characters':0} for r in ROLES};details=[]
   for path in sorted(directory.rglob('*')):
-   if not path.is_file() or path.suffix!=suffix or SKIP.intersection(path.relative_to(directory).parts) or path.name in TESTS or path.name.endswith('_test.go'):continue
+   if not path.is_file() or path.suffix!=suffix or SKIP.intersection(path.relative_to(directory).parts) or path.name in TESTS or (path.name.endswith('_test.go') and path.name!='domain_test.go'):continue
    name=path.relative_to(HERE).as_posix();seen.add(name)
    if name not in manifest:raise ValueError('Source needs classification: '+name)
    entry=manifest[name];raw=path.read_bytes()
@@ -29,6 +29,7 @@ def collect():
    for region in entry['ranges']:
     start,end,role=region['start'],region['end'],region['role']
     if not 1<=start<=end<=len(lines):raise ValueError('Invalid range: '+name)
+    if region.get('startText',lines[start-1])!=lines[start-1] or region.get('endText',lines[end-1])!=lines[end-1]:raise ValueError('Range boundary changed: '+name)
     for index in range(start-1,end):
      if index in assigned:raise ValueError('Overlapping range: '+name)
      assigned.add(index);roles[index]=role
@@ -41,7 +42,7 @@ def collect():
     else:segments.append({'start':index,'end':index,'role':role})
    details.append({'path':name,'lines':len(lines),'characters':sum(not c.isspace() for c in raw.decode()),'segments':segments})
   for key in ['lines','characters']:
-   groups.setdefault('ApplicationTotal',{})[key]=sum(groups[r][key] for r in ROLES if r!='Library')
+   groups.setdefault('ApplicationTotal',{})[key]=sum(groups[r][key] for r in ROLES if r not in ['Library','DomainTest'])
    groups.setdefault('Total',{})[key]=sum(groups[r][key] for r in ROLES)
    if groups['Total'][key]!=sum(f[key] for f in details):raise ValueError('Partition does not match source total')
   rows.append({'language':language,'groups':groups,'files':details})
@@ -51,8 +52,8 @@ def collect():
 def markdown(rows):
  out=[]
  for metric,title in [('lines','行数（空行を含む）'),('characters','空白以外の文字数')]:
-  columns=ROLES[:-1]+['ApplicationTotal','Library']
-  labels=LABELS[:-1]+['アプリ側合計（ライブラリ除外）','共通ライブラリ（別枠）']
+  columns=ROLES[:-2]+['ApplicationTotal','Library','DomainTest']
+  labels=LABELS[:-2]+['アプリ側合計（ライブラリ・テスト除外）','共通ライブラリ（別枠）','ドメインテスト（別枠）']
   out += ['### '+title,'','| 言語 | '+' | '.join(labels)+' |','|---|'+ '|'.join('---:' for _ in columns)+'|']
   for row in rows:out.append('| '+row['language']+' | '+' | '.join(f"{row['groups'][r][metric]:,}" for r in columns)+' |')
   out.append('')

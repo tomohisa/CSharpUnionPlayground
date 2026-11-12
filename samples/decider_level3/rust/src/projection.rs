@@ -8,7 +8,7 @@ pub fn apply_student(s:&mut Registers,e:&Event) {
 pub fn apply_class(s:&mut Registers,e:&Event) {
     if let Event::ClassOpened {class_id,course,capacity}=e {
         let (minimum_grade,prerequisite)=match course {Course::Foundation=>(Grade::Year2,Prerequisite::NoPrerequisite),Course::Advanced=>(Grade::Year3,Prerequisite::PassedCourse{course:Course::Foundation})};
-        s.classes.insert(class_id.clone(),ClassState::Available {plan:Plan{class_id:class_id.clone(),course:*course,minimum_grade,prerequisite,capacity:*capacity},students:vec![]});return;
+        s.classes.insert(class_id.clone(),ClassState::Available {plan:Plan{class_id:class_id.clone(),course:*course,minimum_grade,prerequisite,capacity:*crate::value_objects::SeatCapacity::from_event(*capacity).value()},students:vec![]});return;
     }
     let id=match e {Event::StudentEnrolled{class_id,..}|Event::StudentDropped{class_id,..}|Event::ClassStarted{class_id,..}|Event::ClassCompleted{class_id,..}=>class_id,_=>return};
     let Some(room)=s.classes.get(id) else{return};
@@ -16,7 +16,7 @@ pub fn apply_class(s:&mut Registers,e:&Event) {
     let next=match e {
         Event::StudentEnrolled{student_id,..}=>{let mut students=decider::members(room);students.push(student_id.clone());if students.len()==plan.capacity as usize {ClassState::Full{plan,students}}else{ClassState::Available{plan,students}}},
         Event::StudentDropped{student_id,..}=>ClassState::Available{plan,students:decider::members(room).into_iter().filter(|x|x!=student_id).collect()},
-        Event::ClassStarted{started_on,..}=>ClassState::Teaching{plan,students:decider::members(room),started_on:started_on.clone()},
+        Event::ClassStarted{started_on,..}=>ClassState::Teaching{plan,students:decider::members(room),started_on:crate::value_objects::SchoolDate::from_event(started_on.clone()).value().clone()},
         Event::ClassCompleted{results,..}=>ClassState::Completed{plan,results:results.clone()},_=>unreachable!()
     };s.classes.insert(id.clone(),next);
 }
@@ -29,7 +29,7 @@ pub fn apply_enrollment(s:&mut Registers,e:&Event) {
     record.progress=match e {
         Event::StudentDropped{..}=>Progress::Withdrawn{reason:WithdrawalReason::StudentRequest},Event::StudyStarted{..}=>Progress::Studying{attendance:0},
         Event::AttendanceRecorded{..}=>match record.progress {Progress::Studying{attendance}=>Progress::Studying{attendance:attendance+1},_=>panic!("invalid committed event")},
-        Event::ResultRecorded{score,..}=>if *score>=60 {Progress::Passed{score:*score,credits:if record.course==Course::Foundation{1}else{2}}}else{Progress::Failed{score:*score,reason:FailureReason::BelowPassMark}},_=>unreachable!()
+        Event::ResultRecorded{score,..}=>if *score>=60 {Progress::Passed{score:*crate::value_objects::AssessmentScore::from_event(*score).value(),credits:if record.course==Course::Foundation{1}else{2}}}else{Progress::Failed{score:*crate::value_objects::AssessmentScore::from_event(*score).value(),reason:FailureReason::BelowPassMark}},_=>unreachable!()
     };
 }
 pub fn reduce(s:&mut Registers,e:&Event){apply_student(s,e);apply_class(s,e);apply_enrollment(s,e);}

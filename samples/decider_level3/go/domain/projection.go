@@ -59,7 +59,7 @@ func ApplyClass(s Registers, event Event) {
 			prerequisite = PassedCourse{Foundation}
 			grade = Year3
 		}
-		s.Classes[e.ClassId] = Available{Plan{e.ClassId, e.Course, grade, prerequisite, e.Capacity}, []string{}}
+		s.Classes[e.ClassId] = Available{Plan{e.ClassId, e.Course, grade, prerequisite, RestoreSeatCapacity(e.Capacity).Value()}, []string{}}
 		return
 	}
 	var id string
@@ -97,7 +97,7 @@ func ApplyClass(s Registers, event Event) {
 		}
 		s.Classes[id] = Available{plan, students}
 	case ClassStarted:
-		s.Classes[id] = Teaching{plan, members(room), e.StartedOn}
+		s.Classes[id] = Teaching{plan, members(room), RestoreSchoolDate(e.StartedOn).Value()}
 	case ClassCompleted:
 		s.Classes[id] = Completed{plan, append([]ClassResult{}, e.Results...)}
 	}
@@ -138,9 +138,9 @@ func ApplyEnrollment(s Registers, event Event) {
 			if r.Course == Advanced {
 				credits = 2
 			}
-			r.Progress = Passed{e.Score, credits}
+			r.Progress = Passed{RestoreAssessmentScore(e.Score).Value(), credits}
 		} else {
-			r.Progress = Failed{e.Score, BelowPassMark}
+			r.Progress = Failed{RestoreAssessmentScore(e.Score).Value(), BelowPassMark}
 		}
 	}
 	s.Enrollments[key] = r

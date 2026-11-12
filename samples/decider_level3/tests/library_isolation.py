@@ -51,15 +51,15 @@ def verify(language):
         run(['javac','--release','21','-d',root,root/'Dcb.java',root/'DcbTests.java',root/'Probe.java']);run(['java','--class-path',root,'Probe'])
     elif language=='go':
         # Only this package and the standard library are compiled; -race checks real goroutines.
-        run(['go','test','-race','./dcb'],cwd=HERE/'go')
-        dependencies=run(['go','list','-deps','./dcb'],cwd=HERE/'go').stdout
+        run(['go','test','-race','./dcb'],cwd=HERE/'go',env={**os.environ,'GOCACHE':os.environ.get('GOCACHE',str(HERE/'.build/go-cache'))})
+        dependencies=run(['go','list','-deps','./dcb'],cwd=HERE/'go',env={**os.environ,'GOCACHE':os.environ.get('GOCACHE',str(HERE/'.build/go-cache'))}).stdout
         if 'dcb-school/domain' in dependencies:raise AssertionError('Go library imports school')
     elif language=='swift':
         shutil.copyfile(HERE/'swift/dcb.swift',root/'dcb.swift')
         (root/'libraryTests.swift').write_text('import PlaygroundDcb\n'+(HERE/'swift/libraryTests.swift').read_text())
         (root/'main.swift').write_text('libraryTests();print("PASS")\n')
-        run(['swiftc','-O','-emit-library','-emit-module','-module-name','PlaygroundDcb',root/'dcb.swift','-o',root/('libPlaygroundDcb.dylib' if sys.platform=='darwin' else 'libPlaygroundDcb.so'),'-emit-module-path',root/'PlaygroundDcb.swiftmodule'])
-        run(['swiftc','-O','-I',root,'-L',root,'-lPlaygroundDcb',root/'libraryTests.swift',root/'main.swift','-o',root/'probe','-Xlinker','-rpath','-Xlinker',root]);run([root/'probe'])
+        run(['swiftc','-O','-module-cache-path',root/'modules','-emit-library','-emit-module','-module-name','PlaygroundDcb',root/'dcb.swift','-o',root/('libPlaygroundDcb.dylib' if sys.platform=='darwin' else 'libPlaygroundDcb.so'),'-emit-module-path',root/'PlaygroundDcb.swiftmodule'])
+        run(['swiftc','-O','-module-cache-path',root/'modules','-I',root,'-L',root,'-lPlaygroundDcb',root/'libraryTests.swift',root/'main.swift','-o',root/'probe','-Xlinker','-rpath','-Xlinker',root]);run([root/'probe'])
     print(language+': standalone counter + library isolation + conditional race PASS',flush=True)
 
 def main():

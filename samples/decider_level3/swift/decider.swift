@@ -88,7 +88,8 @@ func describe(_ progress: Progress) -> String {
     }
 }
 func failed(_ p: Progress) -> Bool { if case .failed = p { return true }; return false }
-func decide(_ state: DecisionModel, _ command: Command) -> Decision {
+func decide(_ state: DecisionModel, _ validated: ValidatedCommand) -> Decision {
+    let command=validated.value
     let decision = decideOne(state, command)
     if case .accepted(let events) = decision, case .classStarted(let id, _) = events[0] {
         let starts = state.enrollments.filter { e in if e.classId == id, case .reserved = e.progress { return true }; return false }.map { Event.studyStarted(classId: id, studentId: $0.studentId) }

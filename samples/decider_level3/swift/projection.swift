@@ -15,7 +15,7 @@ func applyStudent(_ s:inout Registers,_ e:Event){
 }
 func applyClass(_ s:inout Registers,_ e:Event){
     if case .classOpened(let id,let course,let capacity)=e {
-        let plan=Plan(classId:id,course:course,minimumGrade:course == .foundation ? .year2 : .year3,prerequisite:course == .foundation ? .noPrerequisite : .passedCourse(course:.foundation),capacity:capacity)
+        let plan=Plan(classId:id,course:course,minimumGrade:course == .foundation ? .year2 : .year3,prerequisite:course == .foundation ? .noPrerequisite : .passedCourse(course:.foundation),capacity:SeatCapacity.fromEvent(capacity).value)
         s.classes[id] = .available(plan:plan,students:[]);return
     }
     let id:String
@@ -25,7 +25,7 @@ func applyClass(_ s:inout Registers,_ e:Event){
     switch e {
     case .studentEnrolled(_,let student,_):let students=members(room)+[student];s.classes[id]=students.count == p.capacity ? .full(plan:p,students:students) : .available(plan:p,students:students)
     case .studentDropped(_,let student):s.classes[id] = .available(plan:p,students:members(room).filter{$0 != student})
-    case .classStarted(_,let date):s.classes[id] = .teaching(plan:p,students:members(room),startedOn:date)
+    case .classStarted(_,let date):s.classes[id] = .teaching(plan:p,students:members(room),startedOn:SchoolDate.fromEvent(date).value)
     case .classCompleted(_,let results):s.classes[id] = .completed(plan:p,results:results)
     default:preconditionFailure("invariant")
     }
@@ -40,7 +40,7 @@ func applyEnrollment(_ s:inout Registers,_ e:Event){
     case .studentDropped:progress = .withdrawn(reason:.studentRequest)
     case .studyStarted:progress = .studying(attendance:0)
     case .attendanceRecorded:guard case .studying(let n)=r.progress else{preconditionFailure("invalid committed event")};progress = .studying(attendance:n+1)
-    case .resultRecorded(_,_,let score):progress=score>=60 ? .passed(score:score,credits:r.course == .foundation ? 1 : 2) : .failed(score:score,reason:.belowPassMark)
+    case .resultRecorded(_,_,let score):progress=score>=60 ? .passed(score:AssessmentScore.fromEvent(score).value,credits:r.course == .foundation ? 1 : 2) : .failed(score:AssessmentScore.fromEvent(score).value,reason:.belowPassMark)
     default:preconditionFailure("invariant")
     }
     s.enrollments[key]=Enrollment(classId:r.classId,studentId:r.studentId,course:r.course,progress:progress)

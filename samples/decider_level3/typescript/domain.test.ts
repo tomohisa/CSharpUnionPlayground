@@ -1,0 +1,140 @@
+import {ValidatedCommand} from "./valueObjects.ts";
+import {decide} from "./decider.ts";
+import {decisionModel} from "./projection.ts";
+import {StudentIdSchema,ClassIdSchema,SeatCapacitySchema,AssessmentScoreSchema,SchoolDateSchema,restoreSeatCapacity,restoreAssessmentScore,restoreSchoolDate} from "./valueObjects.ts";
+import assert from "node:assert/strict";
+import {DcbExecutor,EventStore,LiveProjection} from "./dcb.ts";
+import type {CommandStore,Query,EventDescriptor} from "./dcb.ts";
+import type {Command,Event,Rejection} from "./models.ts";
+import {EventSchema} from "./models.ts";
+import {schoolHandler} from "./handlers.ts";
+import {describeEvent} from "./routing.ts";
+import {empty as emptyRegisters,copy,reduce,list,fold} from "./projection.ts";
+
+function givenHistory(events:readonly Event[]){
+  const store=new EventStore<Event>(describeEvent,e=>EventSchema.parse(e));
+  if(events.length)store.append("given",{items:[]},0,events);
+  const projection=new LiveProjection(emptyRegisters(),reduce,copy);store.subscribe(projection.accept);
+  let reads=0;
+  const port:CommandStore<Event>={read:q=>{reads++;return store.read(q);},append:(...args)=>store.append(...args)};
+  return {store,projection,executor:new DcbExecutor<Event,Rejection>(port),reads:()=>reads};
+}
+function checkProjection(g:ReturnType<typeof givenHistory>){
+  const events=g.store.read({items:[]}).events,snapshot=g.projection.snapshot();
+  assert.equal(snapshot.position,events.length);
+  assert.deepEqual(list(snapshot.state),list(fold(events)));
+}
+function check(name:string,given:readonly Event[],when:Command,thenEvents:readonly Event[],thenErrors:readonly Rejection[],invalid:boolean){
+  const g=givenHistory(given); // Given
+  const prepared=g.executor.prepare("when",when,schoolHandler); // When: direct calls still use Zod validation.
+  assert.equal(prepared.wasRead,!invalid,name+": validated before reading");assert.equal(g.reads(),invalid?0:1,name);
+  const result=prepared.commit(),appended=g.store.read({items:[]}).events.slice(given.length);
+  assert.equal(result.status,thenErrors.length?"Rejected":"Committed",name); // Then
+  assert.deepEqual(result.errors,thenErrors,name);assert.deepEqual(appended.map(e=>e.payload),thenEvents,name);
+  assert.equal(result.appended,thenEvents.length,name);assert.equal(result.conflicts,0,name);checkProjection(g);
+}
+export function runDomainTests(){
+        const empty:readonly Event[]=[];
+        const registered:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"}];
+        const opened:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1}];
+        const enrolled:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"}];
+        const teaching:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"}];
+        const attended:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"},{$type:"AttendanceRecorded",classId:"a",studentId:"s"}];
+        const passed:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"},{$type:"AttendanceRecorded",classId:"a",studentId:"s"},{$type:"ResultRecorded",classId:"a",studentId:"s",score:60}];
+        const failed:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"},{$type:"AttendanceRecorded",classId:"a",studentId:"s"},{$type:"ResultRecorded",classId:"a",studentId:"s",score:59}];
+        const advanced:readonly Event[]=[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"},{$type:"AttendanceRecorded",classId:"a",studentId:"s"},{$type:"ResultRecorded",classId:"a",studentId:"s",score:60},{$type:"ClassOpened",classId:"b",course:"Advanced",capacity:1}];
+        check("register student",empty,{$type:"RegisterStudent",studentId:"s",grade:"Year3"},[{$type:"StudentRegistered",studentId:"s",grade:"Year3"}],[],false);
+        check("duplicate student",registered,{$type:"RegisterStudent",studentId:"s",grade:"Year3"},[],["DuplicateStudent"],false);
+        check("promote one grade",[{$type:"StudentRegistered",studentId:"s",grade:"Year1"}],{$type:"PromoteStudent",studentId:"s",grade:"Year2"},[{$type:"StudentPromoted",studentId:"s",grade:"Year2"}],[],false);
+        check("promotion cannot skip",[{$type:"StudentRegistered",studentId:"s",grade:"Year1"}],{$type:"PromoteStudent",studentId:"s",grade:"Year3"},[],["InvalidPromotion"],false);
+        check("promotion cannot go backwards",registered,{$type:"PromoteStudent",studentId:"s",grade:"Year2"},[],["InvalidPromotion"],false);
+        check("unknown student promotion",empty,{$type:"PromoteStudent",studentId:"s",grade:"Year2"},[],["UnknownStudent"],false);
+        check("open foundation",registered,{$type:"OpenClass",classId:"a",course:"Foundation",capacity:1},[{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1}],[],false);
+        check("open advanced",registered,{$type:"OpenClass",classId:"b",course:"Advanced",capacity:10},[{$type:"ClassOpened",classId:"b",course:"Advanced",capacity:10}],[],false);
+        check("capacity upper bound",empty,{$type:"OpenClass",classId:"a",course:"Foundation",capacity:10},[{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:10}],[],false);
+        check("duplicate class",opened,{$type:"OpenClass",classId:"a",course:"Foundation",capacity:1},[],["DuplicateClass"],false);
+        check("enroll",opened,{$type:"Enroll",classId:"a",studentId:"s"},[{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"}],[],false);
+        check("unknown class",registered,{$type:"Enroll",classId:"a",studentId:"s"},[],["UnknownClass"],false);
+        check("unknown student enrollment",[{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1}],{$type:"Enroll",classId:"a",studentId:"s"},[],["UnknownStudent"],false);
+        check("grade below minimum",[{$type:"StudentRegistered",studentId:"s",grade:"Year1"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1}],{$type:"Enroll",classId:"a",studentId:"s"},[],["GradeTooLow"],false);
+        check("grade exactly minimum",[{$type:"StudentRegistered",studentId:"s",grade:"Year2"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1}],{$type:"Enroll",classId:"a",studentId:"s"},[{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"}],[],false);
+        check("missing prerequisite",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"b",course:"Advanced",capacity:1}],{$type:"Enroll",classId:"b",studentId:"s"},[],["PrerequisiteMissing"],false);
+        check("failed prerequisite",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"},{$type:"AttendanceRecorded",classId:"a",studentId:"s"},{$type:"ResultRecorded",classId:"a",studentId:"s",score:59},{$type:"ClassOpened",classId:"b",course:"Advanced",capacity:1}],{$type:"Enroll",classId:"b",studentId:"s"},[],["PrerequisiteMissing"],false);
+        check("passed prerequisite",advanced,{$type:"Enroll",classId:"b",studentId:"s"},[{$type:"StudentEnrolled",classId:"b",studentId:"s",course:"Advanced"}],[],false);
+        check("duplicate enrollment",enrolled,{$type:"Enroll",classId:"a",studentId:"s"},[],["AlreadyEnrolled"],false);
+        check("last seat occupied",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"StudentRegistered",studentId:"t",grade:"Year3"}],{$type:"Enroll",classId:"a",studentId:"t"},[],["ClassFull"],false);
+        check("enrollment after start",teaching,{$type:"Enroll",classId:"a",studentId:"s"},[],["RegistrationClosed"],false);
+        check("drop reservation",enrolled,{$type:"Drop",classId:"a",studentId:"s"},[{$type:"StudentDropped",classId:"a",studentId:"s"}],[],false);
+        check("drop nonmember",opened,{$type:"Drop",classId:"a",studentId:"s"},[],["NotEnrolled"],false);
+        check("drop after start",teaching,{$type:"Drop",classId:"a",studentId:"s"},[],["RegistrationClosed"],false);
+        check("reenroll after withdrawal",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"StudentDropped",classId:"a",studentId:"s"}],{$type:"Enroll",classId:"a",studentId:"s"},[{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"}],[],false);
+        check("start empty class",opened,{$type:"StartClass",classId:"a",startedOn:"2026-04-01"},[{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"}],[],false);
+        check("start emits study event atomically",enrolled,{$type:"StartClass",classId:"a",startedOn:"2026-04-01"},[{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"}],[],false);
+        check("start twice",teaching,{$type:"StartClass",classId:"a",startedOn:"2026-04-01"},[],["RegistrationClosed"],false);
+        check("valid leap date",opened,{$type:"StartClass",classId:"a",startedOn:"2028-02-29"},[{$type:"ClassStarted",classId:"a",startedOn:"2028-02-29"}],[],false);
+        check("attendance before start",enrolled,{$type:"Attend",classId:"a",studentId:"s"},[],["NotTeaching"],false);
+        check("attendance",teaching,{$type:"Attend",classId:"a",studentId:"s"},[{$type:"AttendanceRecorded",classId:"a",studentId:"s"}],[],false);
+        check("attendance nonmember",teaching,{$type:"Attend",classId:"a",studentId:"t"},[],["NotEnrolled"],false);
+        check("assessment without attendance",teaching,{$type:"Assess",classId:"a",studentId:"s",score:60},[],["NoAttendance"],false);
+        check("assessment boundary 0",attended,{$type:"Assess",classId:"a",studentId:"s",score:0},[{$type:"ResultRecorded",classId:"a",studentId:"s",score:0}],[],false);
+        check("assessment boundary 59",attended,{$type:"Assess",classId:"a",studentId:"s",score:59},[{$type:"ResultRecorded",classId:"a",studentId:"s",score:59}],[],false);
+        check("assessment boundary 60",attended,{$type:"Assess",classId:"a",studentId:"s",score:60},[{$type:"ResultRecorded",classId:"a",studentId:"s",score:60}],[],false);
+        check("assessment boundary 100",attended,{$type:"Assess",classId:"a",studentId:"s",score:100},[{$type:"ResultRecorded",classId:"a",studentId:"s",score:100}],[],false);
+        check("assessment before start",enrolled,{$type:"Assess",classId:"a",studentId:"s",score:60},[],["NotTeaching"],false);
+        check("assessment nonmember",attended,{$type:"Assess",classId:"a",studentId:"t",score:60},[],["NotEnrolled"],false);
+        check("assessment twice",passed,{$type:"Assess",classId:"a",studentId:"s",score:60},[],["AlreadyAssessed"],false);
+        check("attendance after assessment",passed,{$type:"Attend",classId:"a",studentId:"s"},[],["AlreadyAssessed"],false);
+        check("completion before start",opened,{$type:"CompleteClass",classId:"a"},[],["NotTeaching"],false);
+        check("completion with unassessed student",teaching,{$type:"CompleteClass",classId:"a"},[],["UnassessedStudents"],false);
+        check("complete passed",passed,{$type:"CompleteClass",classId:"a"},[{$type:"ClassCompleted",classId:"a",results:[{studentId:"s",progress:{$type:"Passed",score:60,credits:1}}]}],[],false);
+        check("complete failed",failed,{$type:"CompleteClass",classId:"a"},[{$type:"ClassCompleted",classId:"a",results:[{studentId:"s",progress:{$type:"Failed",score:59,reason:"BelowPassMark"}}]}],[],false);
+        check("complete empty class",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"}],{$type:"CompleteClass",classId:"a"},[{$type:"ClassCompleted",classId:"a",results:[]}],[],false);
+        check("unknown class Drop",registered,{$type:"Drop",classId:"missing",studentId:"s"},[],["UnknownClass"],false);
+        check("unknown class StartClass",registered,{$type:"StartClass",classId:"missing",startedOn:"2026-04-01"},[],["UnknownClass"],false);
+        check("unknown class Attend",registered,{$type:"Attend",classId:"missing",studentId:"s"},[],["UnknownClass"],false);
+        check("unknown class Assess",registered,{$type:"Assess",classId:"missing",studentId:"s",score:60},[],["UnknownClass"],false);
+        check("unknown class CompleteClass",registered,{$type:"CompleteClass",classId:"missing"},[],["UnknownClass"],false);
+        check("invalid id RegisterStudent",empty,{$type:"RegisterStudent",studentId:" ",grade:"Year2"},[],["InvalidId"],true);
+        check("invalid id PromoteStudent",empty,{$type:"PromoteStudent",studentId:"",grade:"Year2"},[],["InvalidId"],true);
+        check("invalid id OpenClass",empty,{$type:"OpenClass",classId:"",course:"Foundation",capacity:1},[],["InvalidId"],true);
+        check("invalid id Enroll",empty,{$type:"Enroll",classId:"a",studentId:""},[],["InvalidId"],true);
+        check("invalid id Drop",empty,{$type:"Drop",classId:"",studentId:"s"},[],["InvalidId"],true);
+        check("invalid id StartClass",empty,{$type:"StartClass",classId:"",startedOn:"2026-04-01"},[],["InvalidId"],true);
+        check("invalid id Attend",empty,{$type:"Attend",classId:"a",studentId:"\t"},[],["InvalidId"],true);
+        check("invalid id Assess",empty,{$type:"Assess",classId:"",studentId:"s",score:60},[],["InvalidId"],true);
+        check("invalid id CompleteClass",empty,{$type:"CompleteClass",classId:""},[],["InvalidId"],true);
+        check("invalid capacity 0",empty,{$type:"OpenClass",classId:"a",course:"Foundation",capacity:0},[],["InvalidCapacity"],true);
+        check("invalid capacity 11",empty,{$type:"OpenClass",classId:"a",course:"Foundation",capacity:11},[],["InvalidCapacity"],true);
+        check("invalid score -1",empty,{$type:"Assess",classId:"a",studentId:"s",score:-1},[],["InvalidScore"],true);
+        check("invalid score 101",empty,{$type:"Assess",classId:"a",studentId:"s",score:101},[],["InvalidScore"],true);
+        check("invalid date ",empty,{$type:"StartClass",classId:"a",startedOn:""},[],["InvalidDate"],true);
+        check("invalid date 2026-02-29",empty,{$type:"StartClass",classId:"a",startedOn:"2026-02-29"},[],["InvalidDate"],true);
+        check("invalid date 2026-04-31",empty,{$type:"StartClass",classId:"a",startedOn:"2026-04-31"},[],["InvalidDate"],true);
+        check("invalid date 2026-1-01",empty,{$type:"StartClass",classId:"a",startedOn:"2026-1-01"},[],["InvalidDate"],true);
+        check("invalid date 0000-01-01",empty,{$type:"StartClass",classId:"a",startedOn:"0000-01-01"},[],["InvalidDate"],true);
+        check("invalid date 2026-13-01",empty,{$type:"StartClass",classId:"a",startedOn:"2026-13-01"},[],["InvalidDate"],true);
+        check("historical capacity remains replayable",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:25}],{$type:"Enroll",classId:"a",studentId:"s"},[{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"}],[],false);
+        check("historical date remains replayable",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"Spring 2020"},{$type:"StudyStarted",classId:"a",studentId:"s"}],{$type:"Attend",classId:"a",studentId:"s"},[{$type:"AttendanceRecorded",classId:"a",studentId:"s"}],[],false);
+        check("historical score remains replayable",[{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1},{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"},{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"},{$type:"StudyStarted",classId:"a",studentId:"s"},{$type:"AttendanceRecorded",classId:"a",studentId:"s"},{$type:"ResultRecorded",classId:"a",studentId:"s",score:120},{$type:"ClassOpened",classId:"b",course:"Advanced",capacity:1}],{$type:"Enroll",classId:"b",studentId:"s"},[{$type:"StudentEnrolled",classId:"b",studentId:"s",course:"Advanced"}],[],false);
+        check("new command cannot use historical capacity",empty,{$type:"OpenClass",classId:"a",course:"Foundation",capacity:25},[],["InvalidCapacity"],true);
+        check("new command cannot use historical date",empty,{$type:"StartClass",classId:"a",startedOn:"Spring 2020"},[],["InvalidDate"],true);
+        check("new command cannot use historical score",empty,{$type:"Assess",classId:"a",studentId:"s",score:120},[],["InvalidScore"],true);
+  const g=givenHistory([{$type:"StudentRegistered",studentId:"s",grade:"Year3"},{$type:"StudentRegistered",studentId:"t",grade:"Year3"},{$type:"ClassOpened",classId:"a",course:"Foundation",capacity:1}]);
+  const first=g.executor.prepare("first",{$type:"Enroll",classId:"a",studentId:"s"} as Command,schoolHandler);
+  const source:Command={$type:"Enroll",classId:"a",studentId:"t"};
+  const second=g.executor.prepare("second",source,schoolHandler);
+  // Mutating the caller's object must not change the prepared command or its retries.
+  (source as {studentId:string}).studentId="s";
+  assert.equal(first.commit().status,"Committed");const conflict=second.commit();
+  assert.equal(conflict.conflicts,1);assert.deepEqual(conflict.errors,["ClassFull"]);assert.equal(g.store.read({items:[]}).events.length,4);checkProjection(g);
+  check("wrong runtime field type",empty,{$type:"Assess",classId:"a",studentId:"s",score:"60"} as unknown as Command,[],["InvalidCommand"],true);
+  check("missing runtime field",empty,{$type:"Enroll",classId:"a"} as unknown as Command,[],["InvalidCommand"],true);
+  const pure=decisionModel(opened.reduce(reduce,emptyRegisters()));
+  assert.deepEqual(decide(pure,ValidatedCommand.create({$type:"Enroll",classId:"a",studentId:"s"})),{$type:"Accepted",events:[{$type:"StudentEnrolled",classId:"a",studentId:"s",course:"Foundation"}]});
+  assert.deepEqual(decide(pure,ValidatedCommand.create({$type:"Enroll",classId:"a",studentId:"missing"})),{$type:"Rejected",code:"UnknownStudent"});
+  assert.deepEqual(decide(pure,ValidatedCommand.create({$type:"StartClass",classId:"a",startedOn:"2026-04-01"})),{$type:"Accepted",events:[{$type:"ClassStarted",classId:"a",startedOn:"2026-04-01"}]});
+  assert.equal(StudentIdSchema.parse("s"),"s");assert.equal(ClassIdSchema.safeParse(" ").success,false);
+  assert.equal(SeatCapacitySchema.safeParse(25).success,false);assert.equal(AssessmentScoreSchema.safeParse(120).success,false);assert.equal(SchoolDateSchema.safeParse("Spring 2020").success,false);
+  assert.equal(restoreSeatCapacity(25),25);assert.equal(restoreAssessmentScore(120),120);assert.equal(restoreSchoolDate("Spring 2020"),"Spring 2020");
+  console.log("domain: 76 GWT cases + conflict / snapshot + 2 runtime boundary cases PASS");
+}

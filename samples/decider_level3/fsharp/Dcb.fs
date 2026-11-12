@@ -88,3 +88,30 @@ type CommandProcessor<'C,'E,'R>(store: ICommandStore<'E>, queryFor: 'C -> Query,
                 | Conflict when conflicts+1 >= maxConflicts -> { Status="RetryExhausted"; Conflicts=conflicts+1; Appended=0; Position=ticket.After; Errors=[] }
                 | Conflict -> attempt (this.Prepare(ticket.CommandId,ticket.Command)) (conflicts+1)
         attempt ticket 0
+
+// Function records keep the domain handler separate from the generic executor.
+type CommandHandler<'C,'E,'R> = {
+    Validate: 'C -> 'R list
+    QueryFor: 'C -> Query
+    Handle: Recorded<'E> list -> 'C -> Preparation<'E,'R> }
+type PreparedCommand<'R> = {
+    Query: Query; After: int; Returned: int; WasRead: bool
+    Commit: unit -> HandlingResult<'R> }
+type IDcbExecutor<'E,'R> =
+    abstract Prepare<'C>: string * 'C * CommandHandler<'C,'E,'R> -> PreparedCommand<'R>
+    abstract Execute<'C>: string * 'C * CommandHandler<'C,'E,'R> -> HandlingResult<'R>
+type DcbExecutor<'E,'R>(store:ICommandStore<'E>,maxConflicts:int) =
+    member _.Prepare(id,command,handler:CommandHandler<'C,'E,'R>) =
+        if System.String.IsNullOrWhiteSpace id then invalidArg "id" "command id required"
+        let errors=handler.Validate command
+        if not(List.isEmpty errors) then
+            {Query={Items=[]};After=0;Returned=0;WasRead=false
+             Commit=fun () -> {Status="Rejected";Conflicts=0;Appended=0;Position=0;Errors=errors}}
+        else
+            let processor=CommandProcessor(store,handler.QueryFor,handler.Handle,maxConflicts)
+            let ticket=processor.Prepare(id,command)
+            {Query=ticket.Query;After=ticket.After;Returned=ticket.Returned;WasRead=true;Commit=fun () -> processor.Commit ticket}
+    member this.Execute(id,command,handler) = (this.Prepare(id,command,handler)).Commit()
+    interface IDcbExecutor<'E,'R> with
+        member this.Prepare(id,command,handler) = this.Prepare(id,command,handler)
+        member this.Execute(id,command,handler) = this.Execute(id,command,handler)

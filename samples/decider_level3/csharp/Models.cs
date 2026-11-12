@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolDomain;
 
@@ -16,7 +17,7 @@ public enum FailureReason { BelowPassMark }
 public enum WithdrawalReason { StudentRequest }
 
 [JsonConverter(typeof(JsonStringEnumConverter<Rejection>))]
-public enum Rejection { InvalidId, InvalidCapacity, InvalidScore, InvalidDate, DuplicateStudent, UnknownStudent, InvalidPromotion, DuplicateClass, UnknownClass, GradeTooLow, PrerequisiteMissing, AlreadyEnrolled, ClassFull, RegistrationClosed, NotEnrolled, NotTeaching, NoAttendance, AlreadyAssessed, UnassessedStudents, InvalidHistory }
+public enum Rejection { InvalidId, InvalidCapacity, InvalidScore, InvalidDate, DuplicateStudent, UnknownStudent, InvalidPromotion, DuplicateClass, UnknownClass, GradeTooLow, PrerequisiteMissing, AlreadyEnrolled, ClassFull, RegistrationClosed, NotEnrolled, NotTeaching, NoAttendance, AlreadyAssessed, UnassessedStudents, InvalidHistory, InvalidCommand }
 
 public sealed record Student(string StudentId, Grade Grade);
 public sealed record Plan(string ClassId, Course Course, Grade MinimumGrade, Prerequisite Prerequisite, int Capacity);
@@ -48,15 +49,15 @@ public sealed record Completed(Plan Plan, ImmutableArray<ClassResult> Results) :
 
 [JsonPolymorphic(InferClosedTypePolymorphism = true)]
 public closed record Command;
-public sealed record RegisterStudent(string StudentId, Grade Grade) : Command;
-public sealed record PromoteStudent(string StudentId, Grade Grade) : Command;
-public sealed record OpenClass(string ClassId, Course Course, int Capacity) : Command;
-public sealed record Enroll(string ClassId, string StudentId) : Command;
-public sealed record Drop(string ClassId, string StudentId) : Command;
-public sealed record StartClass(string ClassId, string StartedOn) : Command;
-public sealed record Attend(string ClassId, string StudentId) : Command;
-public sealed record Assess(string ClassId, string StudentId, int Score) : Command;
-public sealed record CompleteClass(string ClassId) : Command;
+public sealed record RegisterStudent([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string StudentId, [property:EnumDataType(typeof(Grade),ErrorMessage=nameof(Rejection.InvalidCommand))] Grade Grade) : Command;
+public sealed record PromoteStudent([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string StudentId, [property:EnumDataType(typeof(Grade),ErrorMessage=nameof(Rejection.InvalidCommand))] Grade Grade) : Command;
+public sealed record OpenClass([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId, [property:EnumDataType(typeof(Course),ErrorMessage=nameof(Rejection.InvalidCommand))] Course Course, [property:SeatCapacity(ErrorMessage=nameof(Rejection.InvalidCapacity))] int Capacity) : Command;
+public sealed record Enroll([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId, [property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string StudentId) : Command;
+public sealed record Drop([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId, [property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string StudentId) : Command;
+public sealed record StartClass([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId, [property:SchoolDate(ErrorMessage=nameof(Rejection.InvalidDate))] string StartedOn) : Command;
+public sealed record Attend([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId, [property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string StudentId) : Command;
+public sealed record Assess([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId, [property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string StudentId, [property:AssessmentScore(ErrorMessage=nameof(Rejection.InvalidScore))] int Score) : Command;
+public sealed record CompleteClass([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId) : Command;
 
 [JsonPolymorphic(InferClosedTypePolymorphism = true)]
 public closed record Event;

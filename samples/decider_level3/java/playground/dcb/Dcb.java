@@ -104,4 +104,30 @@ public final class Dcb {
             }
         }
     }
+
+    public interface CommandHandler<C,E,R> {
+        List<R> validate(C command);
+        Query queryFor(C command);
+        Preparation<E,R> handle(List<Recorded<E>> events,C command);
+    }
+    public record PreparedCommand<R>(Query query,int after,int returned,boolean wasRead,java.util.function.Supplier<HandlingResult<R>> action) {
+        public HandlingResult<R> commit(){return action.get();}
+    }
+    public interface Executor<E,R> {
+        <C> PreparedCommand<R> prepare(String id,C command,CommandHandler<C,E,R> handler);
+        <C> HandlingResult<R> execute(String id,C command,CommandHandler<C,E,R> handler);
+    }
+    public static final class DcbExecutor<E,R> implements Executor<E,R> {
+        private final CommandStore<E> store;
+        public DcbExecutor(CommandStore<E> store){this.store=store;}
+        public <C> PreparedCommand<R> prepare(String id,C command,CommandHandler<C,E,R> handler){
+            if(id==null || id.isBlank())throw new IllegalArgumentException("command id required");
+            var errors=List.copyOf(handler.validate(command));
+            if(!errors.isEmpty())return new PreparedCommand<>(new Query(List.of()),0,0,false,()->new HandlingResult<>("Rejected",0,0,0,errors));
+            var processor=new CommandProcessor<C,E,R>(store,handler::queryFor,handler::handle,3);
+            var ticket=processor.prepare(id,command);
+            return new PreparedCommand<>(ticket.query(),ticket.after(),ticket.returned(),true,()->processor.commit(ticket));
+        }
+        public <C> HandlingResult<R> execute(String id,C command,CommandHandler<C,E,R> handler){return prepare(id,command,handler).commit();}
+    }
 }

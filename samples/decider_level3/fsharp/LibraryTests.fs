@@ -9,6 +9,14 @@ module LibraryTests =
     let describe (e:Counter):EventDescriptor={EventType="CounterDelta";Tags=[tag e.Key;{Category="scope";Keys=["test"]}]}
     let check value=if not value then failwith "DCB library probe failed"
     let run()=
+        let executorStore=EventStore(describe,id)
+        let executor:IDcbExecutor<Counter,string>=DcbExecutor(executorStore,3)
+        let handler:CommandHandler<int,Counter,string>={
+            Validate=fun n->if n>0 then [] else ["positive delta required"]
+            QueryFor=fun n->check(n>0);query "executor"
+            Handle=fun _ n->Emit [{Key="executor";Delta=n}] }
+        check(executor.Execute("valid",5,handler).Appended=1)
+        check(executor.Execute("invalid",0,handler).Status="Rejected" && (executorStore.Read {Items=[]}).After=1)
         let store=EventStore(describe,id)
         let p=LiveProjection(0,(fun s e->s+e.Delta),id)
         store.Subscribe p.Accept

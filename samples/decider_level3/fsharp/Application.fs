@@ -9,15 +9,15 @@ module Application =
         store.Load history
         let projection=LiveProjection(Registers.empty,Registers.reduce,id)
         store.Subscribe projection.Accept
-        let processor=CommandProcessor<Command,Event,Rejection>(store,Routing.queryFor,Routing.decide,3)
-        let mutable tickets=Map.empty<string,Ticket<Command,Event,Rejection>>
+        let executor:IDcbExecutor<Event,Rejection>=DcbExecutor<Event,Rejection>(store,3)
+        let mutable tickets=Map.empty<string,PreparedCommand<Rejection>>
         let steps,lists,reads=ResizeArray<Trace>(),ResizeArray<SchoolList>(),ResizeArray<ReadAudit>()
         let prepare id command =
-            let ticket=processor.Prepare(id,command)
-            reads.Add {Query=ticket.Query;After=ticket.After;Returned=ticket.Returned}
+            let ticket=executor.Prepare(id,command,Handlers.school)
+            if ticket.WasRead then reads.Add {Query=ticket.Query;After=ticket.After;Returned=ticket.Returned}
             ticket
-        let commit op ticket =
-            let r=processor.Commit ticket
+        let commit op (ticket:PreparedCommand<Rejection>) =
+            let r=ticket.Commit()
             steps.Add {Operation=op;Status=r.Status;Conflicts=r.Conflicts;Appended=r.Appended;Position=r.Position;Errors=r.Errors}
         for operation in operations do
             match operation with
