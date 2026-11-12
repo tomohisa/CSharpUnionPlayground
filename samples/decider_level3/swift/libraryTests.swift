@@ -10,7 +10,15 @@ private final class Wins:@unchecked Sendable{
     func add(){gate.lock();value+=1;gate.unlock()}
     func get()->Int{gate.lock();defer{gate.unlock()};return value}
 }
+private struct CounterHandler:CommandHandler{
+    func validate(_ n:Int)->[String]{n>0 ? []:["positive delta required"]}
+    func queryFor(_ n:Int)->Query{precondition(n>0);return counterQuery("executor")}
+    func handle(_ events:[Recorded<Counter>],_ n:Int)->Preparation<Counter,String>{.emit([Counter(key:"executor",delta:n)])}
+}
 func libraryTests(){
+    let executorStore=EventStore(describe:describeCounter,copyPayload:{$0}),executor=DcbExecutor(store:executorStore)
+    precondition(executor.execute("valid",5,CounterHandler()).appended==1)
+    precondition(executor.execute("invalid",0,CounterHandler()).status=="Rejected" && executorStore.read(Query(items:[])).after==1)
     precondition(counterTag("\u{00e9}") != counterTag("e\u{0301}"))
     let store=EventStore(describe:describeCounter,copyPayload:{$0}),p=LiveProjection<Counter,Int>(0,{$0+$1.delta},{$0});store.subscribe(p.accept)
     store.subscribe{$0.isEmpty} // A reported consumer failure must not turn commit into failure.

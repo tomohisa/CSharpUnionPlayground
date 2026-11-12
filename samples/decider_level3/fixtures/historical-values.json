@@ -1,0 +1,253 @@
+{
+  "history": [
+    {
+      "position": 1,
+      "commandId": "historic",
+      "eventType": "StudentRegistered",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "s"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentRegistered",
+        "studentId": "s",
+        "grade": "Year3"
+      }
+    },
+    {
+      "position": 2,
+      "commandId": "historic",
+      "eventType": "ClassOpened",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "a"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassOpened",
+        "classId": "a",
+        "course": "Foundation",
+        "capacity": 25
+      }
+    },
+    {
+      "position": 3,
+      "commandId": "historic",
+      "eventType": "StudentEnrolled",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "s"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "a"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "a",
+            "s"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudentEnrolled",
+        "classId": "a",
+        "studentId": "s",
+        "course": "Foundation"
+      }
+    },
+    {
+      "position": 4,
+      "commandId": "historic",
+      "eventType": "ClassStarted",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "a"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassStarted",
+        "classId": "a",
+        "startedOn": "Spring 2020"
+      }
+    },
+    {
+      "position": 5,
+      "commandId": "historic",
+      "eventType": "StudyStarted",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "s"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "a"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "a",
+            "s"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "StudyStarted",
+        "classId": "a",
+        "studentId": "s"
+      }
+    },
+    {
+      "position": 6,
+      "commandId": "historic",
+      "eventType": "AttendanceRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "s"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "a"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "a",
+            "s"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "AttendanceRecorded",
+        "classId": "a",
+        "studentId": "s"
+      }
+    },
+    {
+      "position": 7,
+      "commandId": "historic",
+      "eventType": "ResultRecorded",
+      "tags": [
+        {
+          "category": "student",
+          "keys": [
+            "s"
+          ]
+        },
+        {
+          "category": "class",
+          "keys": [
+            "a"
+          ]
+        },
+        {
+          "category": "enrollment",
+          "keys": [
+            "a",
+            "s"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ResultRecorded",
+        "classId": "a",
+        "studentId": "s",
+        "score": 120
+      }
+    },
+    {
+      "position": 8,
+      "commandId": "historic",
+      "eventType": "ClassOpened",
+      "tags": [
+        {
+          "category": "class",
+          "keys": [
+            "b"
+          ]
+        }
+      ],
+      "payload": {
+        "$type": "ClassOpened",
+        "classId": "b",
+        "course": "Advanced",
+        "capacity": 1
+      }
+    }
+  ],
+  "operations": [
+    {
+      "$type": "Execute",
+      "commandId": "bad-capacity",
+      "command": {
+        "$type": "OpenClass",
+        "classId": "c",
+        "course": "Foundation",
+        "capacity": 25
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "bad-date",
+      "command": {
+        "$type": "StartClass",
+        "classId": "a",
+        "startedOn": "Spring 2020"
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "bad-score",
+      "command": {
+        "$type": "Assess",
+        "classId": "a",
+        "studentId": "s",
+        "score": 120
+      }
+    },
+    {
+      "$type": "Execute",
+      "commandId": "eligible",
+      "command": {
+        "$type": "Enroll",
+        "classId": "b",
+        "studentId": "s"
+      }
+    },
+    {
+      "$type": "ListAll"
+    },
+    {
+      "$type": "Rebuild"
+    },
+    {
+      "$type": "Redeliver"
+    }
+  ]
+}

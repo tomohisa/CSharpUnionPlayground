@@ -29,8 +29,3 @@ pub fn describe(event:&Event)->EventDescriptor{
         Event::StudyStarted{class_id,student_id,..}=>("StudyStarted",vec![student(student_id),classroom(class_id),enrollment(class_id,student_id)]),
     };EventDescriptor{event_type:event_type.into(),tags}
 }
-pub fn decide(events:&[Recorded<Event>],command:&Command)->Preparation<Event,Rejection>{
-    match decider::decide(&projection::decision_model(&projection::fold(events)),command){
-        Decision::Accepted{events}=>Preparation::Emit(events),Decision::Rejected{code}=>Preparation::Reject(code)
-    }
-}

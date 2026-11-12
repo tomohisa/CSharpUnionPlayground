@@ -35,8 +35,8 @@ public static class ClassRegister
         {
             var plan = opened.Course switch
             {
-                Course.Foundation => new Plan(opened.ClassId,opened.Course,Grade.Year2,new NoPrerequisite(),opened.Capacity),
-                Course.Advanced => new Plan(opened.ClassId,opened.Course,Grade.Year3,new PassedCourse(Course.Foundation),opened.Capacity),
+                Course.Foundation => new Plan(opened.ClassId,opened.Course,Grade.Year2,new NoPrerequisite(),SeatCapacity.FromEvent(opened.Capacity).Value),
+                Course.Advanced => new Plan(opened.ClassId,opened.Course,Grade.Year3,new PassedCourse(Course.Foundation),SeatCapacity.FromEvent(opened.Capacity).Value),
                 _ => throw new ArgumentException("course")
             };
             return classes.SetItem(opened.ClassId,new Available(plan,[]));
@@ -50,7 +50,7 @@ public static class ClassRegister
         {
             StudentEnrolled x => Decider.Members(room).Add(x.StudentId) is var members && members.Length == p.Capacity ? new Full(p,members) : new Available(p,Decider.Members(room).Add(x.StudentId)),
             StudentDropped x => new Available(p,[.. Decider.Members(room).Where(s => s != x.StudentId)]),
-            ClassStarted x => new Teaching(p,Decider.Members(room),x.StartedOn),
+            ClassStarted x => new Teaching(p,Decider.Members(room),SchoolDate.FromEvent(x.StartedOn).Value),
             ClassCompleted x => new Completed(p,x.Results),
             _ => room
         };
@@ -69,7 +69,7 @@ public static class EnrollmentRegister
         {
             StudentDropped => new Withdrawn(WithdrawalReason.StudentRequest), StudyStarted => new Studying(0),
             AttendanceRecorded => record.Progress is Studying p ? new Studying(p.Attendance+1) : throw new InvalidOperationException("invalid committed event"),
-            ResultRecorded x => x.Score >= 60 ? new Passed(x.Score,record.Course == Course.Foundation ? 1 : 2) : new Failed(x.Score,FailureReason.BelowPassMark),
+            ResultRecorded x => x.Score >= 60 ? new Passed(AssessmentScore.FromEvent(x.Score).Value,record.Course == Course.Foundation ? 1 : 2) : new Failed(AssessmentScore.FromEvent(x.Score).Value,FailureReason.BelowPassMark),
             _ => record.Progress
         };
         return records.SetItem(key,record with {Progress=progress});

@@ -128,3 +128,37 @@ public sealed class CommandProcessor<C,E,R>(ICommandStore<E> store, Func<C,Query
         }
     }
 }
+
+// The handler belongs to the domain; the executor owns persistence and retries.
+public interface ICommandHandler<C,E,R>
+{
+    ImmutableArray<R> Validate(C command);
+    Query QueryFor(C command);
+    Preparation<E,R> Handle(ImmutableArray<Recorded<E>> events,C command);
+}
+public sealed class PreparedCommand<R>(Query query,int after,int returned,bool wasRead,Func<HandlingResult<R>> commit)
+{
+    public Query Query {get;}=query;
+    public int After {get;}=after;
+    public int Returned {get;}=returned;
+    public bool WasRead {get;}=wasRead;
+    public HandlingResult<R> Commit() => commit();
+}
+public interface IDcbExecutor<E,R>
+{
+    PreparedCommand<R> Prepare<C>(string id,C command,ICommandHandler<C,E,R> handler);
+    HandlingResult<R> Execute<C>(string id,C command,ICommandHandler<C,E,R> handler);
+}
+public sealed class DcbExecutor<E,R>(ICommandStore<E> store,int maxConflicts=3):IDcbExecutor<E,R>
+{
+    public PreparedCommand<R> Prepare<C>(string id,C command,ICommandHandler<C,E,R> handler)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(id);
+        var errors=handler.Validate(command);
+        if(!errors.IsEmpty) return new(new([]),0,0,false,()=>new("Rejected",0,0,0,errors));
+        var processor=new CommandProcessor<C,E,R>(store,handler.QueryFor,handler.Handle,maxConflicts);
+        var ticket=processor.Prepare(id,command);
+        return new(ticket.Query,ticket.After,ticket.Returned,true,()=>processor.Commit(ticket));
+    }
+    public HandlingResult<R> Execute<C>(string id,C command,ICommandHandler<C,E,R> handler) => Prepare(id,command,handler).Commit();
+}

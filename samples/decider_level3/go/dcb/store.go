@@ -3,6 +3,7 @@ package dcb
 
 import (
 	"slices"
+	"strings"
 	"sync"
 )
 
@@ -292,4 +293,41 @@ func (p CommandProcessor[C, E, R]) Commit(ticket Ticket[C, E, R]) HandlingResult
 		}
 		ticket = p.Prepare(ticket.CommandId, ticket.Command)
 	}
+}
+
+// Domain handlers are passed per command, not registered through reflection.
+type CommandHandler[C, E, R any] interface {
+	Validate(C) []R
+	QueryFor(C) Query
+	Handle([]Recorded[E], C) Preparation[E, R]
+}
+type PreparedCommand[R any] struct {
+	Query           Query
+	After, Returned int
+	WasRead         bool
+	commit          func() HandlingResult[R]
+}
+
+func (p PreparedCommand[R]) Commit() HandlingResult[R] { return p.commit() }
+
+type Executor[C, E, R any] interface {
+	Prepare(string, C, CommandHandler[C, E, R]) PreparedCommand[R]
+	Execute(string, C, CommandHandler[C, E, R]) HandlingResult[R]
+}
+type DcbExecutor[C, E, R any] struct{ Store CommandStore[E] }
+
+func (e DcbExecutor[C, E, R]) Prepare(id string, command C, handler CommandHandler[C, E, R]) PreparedCommand[R] {
+	if strings.TrimSpace(id) == "" {
+		panic("command id required")
+	}
+	errors := handler.Validate(command)
+	if len(errors) > 0 {
+		return PreparedCommand[R]{Query: Query{Items: []QueryItem{}}, commit: func() HandlingResult[R] { return HandlingResult[R]{Status: "Rejected", Errors: errors} }}
+	}
+	processor := CommandProcessor[C, E, R]{e.Store, handler.QueryFor, handler.Handle, 3}
+	ticket := processor.Prepare(id, command)
+	return PreparedCommand[R]{ticket.Query, ticket.After, ticket.Returned, true, func() HandlingResult[R] { return processor.Commit(ticket) }}
+}
+func (e DcbExecutor[C, E, R]) Execute(id string, command C, handler CommandHandler[C, E, R]) HandlingResult[R] {
+	return e.Prepare(id, command, handler).Commit()
 }

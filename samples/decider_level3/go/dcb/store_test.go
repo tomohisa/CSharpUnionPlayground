@@ -110,3 +110,31 @@ func TestDomainFreeLibrary(t *testing.T) {
 	}
 	check(winners == 1 && racing.Read(Query{Items: []QueryItem{}}).After == 1)
 }
+
+type counterHandler struct{}
+
+func (counterHandler) Validate(n int) []string {
+	if n > 0 {
+		return []string{}
+	}
+	return []string{"positive delta required"}
+}
+func (counterHandler) QueryFor(n int) Query {
+	if n <= 0 {
+		panic("validation did not precede query")
+	}
+	return counterQuery("executor")
+}
+func (counterHandler) Handle(_ []Recorded[counter], n int) Preparation[counter, string] {
+	return Preparation[counter, string]{Events: []counter{{Key: "executor", Delta: n}}, Errors: []string{}}
+}
+func TestExecutorWithUnrelatedCommand(t *testing.T) {
+	store := NewStore(describeCounter, func(e counter) counter { return e })
+	var executor Executor[int, counter, string] = DcbExecutor[int, counter, string]{Store: store}
+	if executor.Execute("valid", 5, counterHandler{}).Appended != 1 {
+		t.Fatal("valid command")
+	}
+	if executor.Execute("invalid", 0, counterHandler{}).Status != "Rejected" || store.Read(Query{}).After != 1 {
+		t.Fatal("invalid command advanced")
+	}
+}

@@ -15,12 +15,20 @@
     }
 ```
 
-出典：[java/Routing.java](Routing.java#L31-L33)
+出典：[SchoolHandler.java](SchoolHandler.java#L1-L11)
 
 ```java
-    static Dcb.Preparation<Event,Rejection> decide(List<Dcb.Recorded<Event>> events,Command command){return switch(Decider.decide(Projection.fold(events).decisionModel(),command)){
-        case Accepted a->new Dcb.Emit<>(a.events());case Rejected r->new Dcb.Reject<>(r.code());
-    };}
+import playground.dcb.Dcb;
+import java.util.List;
+final class SchoolHandler implements Dcb.CommandHandler<Command,Event,Rejection> {
+    public List<Rejection> validate(Command command){return ValidatedCommand.validate(command);}
+    public Dcb.Query queryFor(Command command){return Routing.queryFor(command);}
+    public Dcb.Preparation<Event,Rejection> handle(List<Dcb.Recorded<Event>> events,Command command){
+        return switch(Decider.decide(Projection.fold(events).decisionModel(),ValidatedCommand.create(command))){
+            case Accepted a->new Dcb.Emit<>(a.events()); case Rejected r->new Dcb.Reject<>(r.code());
+        };
+    }
+}
 ```
 
 ライブラリはplayground.dcbパッケージです。学校側のEventをEへ渡すため、学校のコードではケース別recordとdefaultなしのswitchを使えます。カウンターの独立ビルドは別パッケージから同じAPIを使います。
@@ -87,3 +95,13 @@ mutableなローカルコピーから、Map.copyOfを持つ新しいRegistersを
 ```
 
 共通処理はEとRを保ち、型消去のある言語でも学校のイベント集合はドメイン側で閉じています。購読のRuntimeExceptionは追記結果から分離しますが、同期・非再入のAPIという制約は残ります。
+
+## コマンド・検証・履歴復元の更新
+
+ID・定員・点数・日付のfactoryがInputViolationを投げ、Handlerが型付きのRejectionへ変換します。Commandのrecordコンストラクターはnullを拒否します。検証済みコマンドはprivateコンストラクターで作成経路を限定します。外部のBean Validationは追加していません。値の不変性は保てますが、値型ごとのfactory・getterの宣言量は多くなります。
+
+[SchoolHandler.java](SchoolHandler.java)は入力検証とDecider接続、[ValueObjects.java](ValueObjects.java)は値の制約と検証済み入力、[DomainTests.java](DomainTests.java)はドメインテストです。Routingはタグ・読み取り条件・イベントのメタ情報を担当し、業務ハンドラーとは別分類です。
+
+現在のポリシーで値を検証するcreate系factoryと、過去の事実を再検証しないfromEvent／restore系factoryを区別します。イベント・JSONの保存形と一覧DTOはプリミティブを保ち、投影で復元した値を取り出して使います。全てのStateの全フィールドを名目的なVOへ置き換えた実装ではありません。ValidatedCommandも永続化せず、新しいコマンドを受ける境界だけに使います。
+
+76ケースのGWTではExecutor経由の結果と正確なイベントpayload、拒否時の無追記、投影と再構築の一致を確認します。これとは別に、ストアを使わないDeciderの3例、VOのfactoryと履歴復元、最後の1席の競合再判断もテストします。言語固有の不正入力ケースも追加しています。テスト全体をコード量の別枠へ計上しています。

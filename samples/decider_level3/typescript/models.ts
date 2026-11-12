@@ -8,7 +8,7 @@ export const FailureReasonSchema = z.enum(["BelowPassMark"]);
 export type FailureReason = z.infer<typeof FailureReasonSchema>;
 export const WithdrawalReasonSchema = z.enum(["StudentRequest"]);
 export type WithdrawalReason = z.infer<typeof WithdrawalReasonSchema>;
-export const RejectionSchema = z.enum(["InvalidId", "InvalidCapacity", "InvalidScore", "InvalidDate", "DuplicateStudent", "UnknownStudent", "InvalidPromotion", "DuplicateClass", "UnknownClass", "GradeTooLow", "PrerequisiteMissing", "AlreadyEnrolled", "ClassFull", "RegistrationClosed", "NotEnrolled", "NotTeaching", "NoAttendance", "AlreadyAssessed", "UnassessedStudents", "InvalidHistory"]);
+export const RejectionSchema = z.enum(["InvalidId", "InvalidCapacity", "InvalidScore", "InvalidDate", "DuplicateStudent", "UnknownStudent", "InvalidPromotion", "DuplicateClass", "UnknownClass", "GradeTooLow", "PrerequisiteMissing", "AlreadyEnrolled", "ClassFull", "RegistrationClosed", "NotEnrolled", "NotTeaching", "NoAttendance", "AlreadyAssessed", "UnassessedStudents", "InvalidHistory", "InvalidCommand"]);
 export type Rejection = z.infer<typeof RejectionSchema>;
 
 export const PrerequisiteSchema = z.discriminatedUnion("$type", [

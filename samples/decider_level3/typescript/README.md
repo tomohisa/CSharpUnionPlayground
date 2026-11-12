@@ -15,13 +15,25 @@ export interface CommandStore<E> {
 }
 ```
 
-出典：[typescript/routing.ts](routing.ts#L39-L42)
+出典：[handlers.ts](handlers.ts#L1-L16)
 
 ```typescript
-export function prepareDecision(events: readonly Recorded<Event>[], command: Command): Preparation<Event,Rejection> {
-  const decision=decide(decisionModel(fold(events)),command);
-  return decision.$type === "Accepted" ? {kind:"Emit",events:decision.events} : {kind:"Reject",error:decision.code};
-}
+import type {CommandHandler} from "./dcb.ts";
+import {CommandSchema} from "./models.ts";
+import type {Command,Event,Rejection} from "./models.ts";
+import {queryFor} from "./routing.ts";
+import {decide} from "./decider.ts";
+import {fold,decisionModel} from "./projection.ts";
+import {ValidatedCommand} from "./valueObjects.ts";
+export const schoolHandler:CommandHandler<Command,Event,Rejection> = {
+  validate:command=>ValidatedCommand.validate(command),
+  snapshot:command=>CommandSchema.parse(command),
+  queryFor,
+  handle(events,command){
+    const decision=decide(decisionModel(fold(events)),ValidatedCommand.create(command));
+    return decision.$type==="Accepted"?{kind:"Emit",events:decision.events}:{kind:"Reject",error:decision.code};
+  }
+};
 ```
 
 ライブラリのdcb.tsにはZodのimportも学校の型もありません。学校側はスキーマから得たEvent／Command／Rejectionを渡すだけです。デシリアライズはwire.tsの境界に残します。
@@ -42,7 +54,7 @@ export function describeEvent(event: Event): EventDescriptor {
 
 ### 3. 複合キーと投影コピーを標準の機能で表せる
 
-出典：[typescript/projection.ts](projection.ts#L7-L8)
+出典：[typescript/projection.ts](projection.ts#L8-L9)
 
 ```typescript
 export const copy = (s: Registers): Registers => structuredClone(s);
@@ -84,3 +96,13 @@ structuredCloneのようなジェネリック関数からEがunknownへ引っ張
 ```
 
 同期のcheck-and-appendにawaitを挟まないため、その範囲では原子的です。Promiseで同じ読み取りから競合させますが、他6言語の2スレッド実験と同じ並列メモリ共有ではありません。Workersやプロセス間で使うには別のストア実装が必要です。
+
+## コマンド・検証・履歴復元の更新
+
+ZodのbrandでStudentIdとClassIdを名目的に分け、safeParseで実行時にも検証します。CLIだけでなくExecutorからの直接呼び出しでも検証します。prepare時にCommandSchema.parseでコピーを凍結するため、呼び出し元が元オブジェクトを変更しても再判断の入力は変わりません。asによる型の偽装そのものは可能なので、入口の実行時検証が必要です。
+
+[handlers.ts](handlers.ts)は入力検証とDecider接続、[valueObjects.ts](valueObjects.ts)は値の制約と検証済み入力、[domain.test.ts](domain.test.ts)はドメインテストです。Routingはタグ・読み取り条件・イベントのメタ情報を担当し、業務ハンドラーとは別分類です。
+
+現在のポリシーで値を検証するcreate系factoryと、過去の事実を再検証しないfromEvent／restore系factoryを区別します。イベント・JSONの保存形と一覧DTOはプリミティブを保ち、投影で復元した値を取り出して使います。全てのStateの全フィールドを名目的なVOへ置き換えた実装ではありません。ValidatedCommandも永続化せず、新しいコマンドを受ける境界だけに使います。
+
+76ケースのGWTではExecutor経由の結果と正確なイベントpayload、拒否時の無追記、投影と再構築の一致を確認します。これとは別に、ストアを使わないDeciderの3例、VOのfactoryと履歴復元、最後の1席の競合再判断もテストします。言語固有の不正入力ケースも追加しています。テスト全体をコード量の別枠へ計上しています。

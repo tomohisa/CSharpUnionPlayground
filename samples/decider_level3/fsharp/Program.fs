@@ -15,7 +15,10 @@ module Program =
     [<EntryPoint>]
     let main args =
         try
-            if Array.contains "--self-test" args then
+            if Array.contains "--domain-test" args then
+                DomainTests.run()
+                0
+            elif Array.contains "--self-test" args then
                 LibraryTests.run()
                 Console.WriteLine("{\"library\":\"PASS\"}")
                 0

@@ -260,7 +260,8 @@ func Describe(progress Progress) string {
 		panic("unknown progress")
 	}
 }
-func Decide(state DecisionModel, command Command) Decision {
+func Decide(state DecisionModel, validated ValidatedCommand) Decision {
+	command := validated.Value()
 	decision := decideOne(state, command)
 	if a, ok := decision.(Accepted); ok {
 		if e, ok := a.Events[0].(ClassStarted); ok {

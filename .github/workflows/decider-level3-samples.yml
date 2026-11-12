@@ -28,7 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check README code statistics
-        run: python3 samples/decider_level3/code_stats.py --check
+        run: |
+          python3 samples/decider_level3/code_stats.py --check
+          python3 samples/decider_level3/tests/code_stats_test.py
       - name: Check comparative README excerpts
         run: python3 samples/decider_level3/check_readmes.py
       - uses: actions/setup-dotnet@v4
@@ -54,6 +56,8 @@ jobs:
           npm ci --prefix samples/file-based --ignore-scripts --no-audit --no-fund
           npm ci --prefix samples/decider_level3/typescript --ignore-scripts --no-audit --no-fund
           samples/file-based/node_modules/.bin/tsc -p samples/decider_level3/typescript/tsconfig.json
+      - name: Native domain tests (value objects, deciders, executors)
+        run: python3 samples/decider_level3/tests/domain_tests.py
       - name: Shared scenarios and cross-language event logs
         run: python3 samples/decider_level3/run.py --verify
       - name: Domain-free library isolation and conditional races
@@ -61,4 +65,6 @@ jobs:
       - name: Exhaustiveness with a new progress case
         run: python3 samples/decider_level3/tests/check_exhaustiveness.py
       - name: C# Native AOT
-        run: python3 samples/decider_level3/run.py --language csharp --native-aot --verify
+        run: |
+          python3 samples/decider_level3/run.py --language csharp --native-aot --verify
+          python3 samples/decider_level3/tests/domain_tests.py --language csharp --native-aot

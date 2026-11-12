@@ -91,3 +91,31 @@ export class CommandProcessor<C,E,R> {
     }
   }
 }
+
+export interface CommandHandler<C,E,R> {
+  validate(command:C):readonly R[];
+  queryFor(command:C):Query;
+  handle(events:readonly Recorded<E>[],command:C):Preparation<E,R>;
+  snapshot(command:C):C;
+}
+export type PreparedCommand<R> = Readonly<{
+  query:Query; after:number; returned:number; wasRead:boolean; commit:()=>HandlingResult<R>;
+}>;
+export interface DcbExecutorApi<E,R> {
+  prepare<C>(id:string,command:C,handler:CommandHandler<C,E,R>):PreparedCommand<R>;
+  execute<C>(id:string,command:C,handler:CommandHandler<C,E,R>):HandlingResult<R>;
+}
+export class DcbExecutor<E,R> implements DcbExecutorApi<E,R> {
+  private readonly store:CommandStore<E>;
+  constructor(store:CommandStore<E>){this.store=store;}
+  prepare<C>(id:string,command:C,handler:CommandHandler<C,E,R>):PreparedCommand<R> {
+    if(!id.trim())throw new Error("command id required");
+    const errors=handler.validate(command);
+    if(errors.length)return {query:{items:[]},after:0,returned:0,wasRead:false,commit:()=>({status:"Rejected",conflicts:0,appended:0,position:0,errors})};
+    const snapshot=handler.snapshot(command);
+    const processor=new CommandProcessor<C,E,R>(this.store,c=>handler.queryFor(c),(events,c)=>handler.handle(events,c));
+    const ticket=processor.prepare(id,snapshot);
+    return {query:ticket.query,after:ticket.after,returned:ticket.returned,wasRead:true,commit:()=>processor.commit(ticket)};
+  }
+  execute<C>(id:string,command:C,handler:CommandHandler<C,E,R>):HandlingResult<R> {return this.prepare(id,command,handler).commit();}
+}

@@ -104,3 +104,39 @@ public struct CommandProcessor<C,E: Sendable,R> {
         }
     }
 }
+
+public protocol CommandHandler {
+    associatedtype CommandInput
+    associatedtype EventOutput:Sendable
+    associatedtype Rejection
+    func validate(_ command:CommandInput)->[Rejection]
+    func queryFor(_ command:CommandInput)->Query
+    func handle(_ events:[Recorded<EventOutput>],_ command:CommandInput)->Preparation<EventOutput,Rejection>
+}
+public struct PreparedCommand<R> {
+    public let query:Query
+    public let after:Int
+    public let returned:Int
+    public let wasRead:Bool
+    private let action:()->HandlingResult<R>
+    public init(query:Query,after:Int,returned:Int,wasRead:Bool,action:@escaping()->HandlingResult<R>){self.query=query;self.after=after;self.returned=returned;self.wasRead=wasRead;self.action=action}
+    public func commit()->HandlingResult<R>{action()}
+}
+public protocol DcbExecutorApi {
+    associatedtype Payload:Sendable
+    func prepare<H:CommandHandler>(_ id:String,_ command:H.CommandInput,_ handler:H)->PreparedCommand<H.Rejection> where H.EventOutput == Payload
+}
+public struct DcbExecutor<E:Sendable>:DcbExecutorApi {
+    public typealias Payload=E
+    public let store:any CommandStore<E>
+    public init(store:any CommandStore<E>){self.store=store}
+    public func prepare<H:CommandHandler>(_ id:String,_ command:H.CommandInput,_ handler:H)->PreparedCommand<H.Rejection> where H.EventOutput == E {
+        precondition(!id.trimmingCharacters(in:.whitespacesAndNewlines).isEmpty,"command id required")
+        let errors=handler.validate(command)
+        if !errors.isEmpty{return PreparedCommand(query:Query(items:[]),after:0,returned:0,wasRead:false){HandlingResult(status:"Rejected",conflicts:0,appended:0,position:0,errors:errors)}}
+        let processor=CommandProcessor(store:store,queryFor:handler.queryFor,decide:handler.handle,maxConflicts:3)
+        let ticket=processor.prepare(id,command)
+        return PreparedCommand(query:ticket.query,after:ticket.after,returned:ticket.returned,wasRead:true){processor.commit(ticket)}
+    }
+    public func execute<H:CommandHandler>(_ id:String,_ command:H.CommandInput,_ handler:H)->HandlingResult<H.Rejection> where H.EventOutput == E {prepare(id,command,handler).commit()}
+}

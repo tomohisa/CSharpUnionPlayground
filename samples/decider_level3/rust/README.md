@@ -15,13 +15,23 @@ pub trait CommandStore<E:Clone+Send>:Sync {
 }
 ```
 
-出典：[rust/src/routing.rs](src/routing.rs#L32-L35)
+出典：[src/handlers.rs](src/handlers.rs#L1-L14)
 
 ```rust
-pub fn decide(events:&[Recorded<Event>],command:&Command)->Preparation<Event,Rejection>{
-    match decider::decide(&projection::decision_model(&projection::fold(events)),command){
-        Decision::Accepted{events}=>Preparation::Emit(events),Decision::Rejected{code}=>Preparation::Reject(code)
+use crate::{dcb::*,models::*,routing,decider,projection,value_objects::ValidatedCommand};
+pub struct SchoolHandler;
+impl CommandHandler<Command,Event,Rejection> for SchoolHandler {
+    fn validate(&self,c:&Command)->Vec<Rejection>{ValidatedCommand::create(c.clone()).err().into_iter().collect()}
+    fn query_for(&self,c:&Command)->Query{routing::query_for(c)}
+    fn handle(&self,events:&[Recorded<Event>],command:&Command)->Preparation<Event,Rejection>{
+        match ValidatedCommand::create(command.clone()){
+            Err(error)=>Preparation::Reject(error),
+            Ok(validated)=>match decider::decide(&projection::decision_model(&projection::fold(events)),&validated){
+                Decision::Accepted{events}=>Preparation::Emit(events),Decision::Rejected{code}=>Preparation::Reject(code)
+            }
+        }
     }
+}
 ```
 
 dyn CommandStoreやクロージャを使っても、payloadをdyn Anyへ変えていません。Event enumとRejectionを型引数として保持します。別のCounter型だけを含む独立crateで同じ部品を検証します。
@@ -88,3 +98,13 @@ pub struct CommandProcessor<'a,C,E:Clone+Send,R> {
 ```
 
 レビューを受けてunwindを捕捉し、追記済みなのに失敗に見えたり、Mutexがpoisonされたりすることを防ぎました。abort設定のpanicや不正なコールバック契約まで回復できるわけではありません。
+
+## コマンド・検証・履歴復元の更新
+
+privateフィールドのnewtypeとTryFrom、Resultの?で制約を合成します。所有権を持つPreparedCommandはcommitで消費されます。学校型をライブラリへ登録しません。借用を保ったHandlerとストアの寿命が型へ現れる分、Executorのシグネチャとテスト用portはC#やJavaより複雑です。
+
+[src/handlers.rs](src/handlers.rs)は入力検証とDecider接続、[src/value_objects.rs](src/value_objects.rs)は値の制約と検証済み入力、[src/domain_tests.rs](src/domain_tests.rs)はドメインテストです。Routingはタグ・読み取り条件・イベントのメタ情報を担当し、業務ハンドラーとは別分類です。
+
+現在のポリシーで値を検証するcreate系factoryと、過去の事実を再検証しないfromEvent／restore系factoryを区別します。イベント・JSONの保存形と一覧DTOはプリミティブを保ち、投影で復元した値を取り出して使います。全てのStateの全フィールドを名目的なVOへ置き換えた実装ではありません。ValidatedCommandも永続化せず、新しいコマンドを受ける境界だけに使います。
+
+76ケースのGWTではExecutor経由の結果と正確なイベントpayload、拒否時の無追記、投影と再構築の一致を確認します。これとは別に、ストアを使わないDeciderの3例、VOのfactoryと履歴復元、最後の1席の競合再判断もテストします。言語固有の不正入力ケースも追加しています。テスト全体をコード量の別枠へ計上しています。

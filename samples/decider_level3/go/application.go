@@ -27,18 +27,21 @@ func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOu
 	store.Load(history)
 	projection := dcb.NewProjection(d.EmptyRegisters(), d.Reduce, d.CopyRegisters)
 	store.Subscribe(projection.Accept)
-	processor := dcb.CommandProcessor[d.Command, d.Event, d.Rejection]{Store: store, QueryFor: d.QueryFor, Decide: d.PrepareDecision, MaxConflicts: 3}
-	tickets := map[string]dcb.Ticket[d.Command, d.Event, d.Rejection]{}
+	var executor dcb.Executor[d.Command, d.Event, d.Rejection] = dcb.DcbExecutor[d.Command, d.Event, d.Rejection]{Store: store}
+	handler := d.SchoolHandler{}
+	tickets := map[string]dcb.PreparedCommand[d.Rejection]{}
 	steps := []d.Trace{}
 	lists := []d.SchoolList{}
 	reads := []ReadAudit{}
-	prepare := func(id string, c d.Command) dcb.Ticket[d.Command, d.Event, d.Rejection] {
-		t := processor.Prepare(id, c)
-		reads = append(reads, ReadAudit{t.Query, t.After, t.Returned})
+	prepare := func(id string, c d.Command) dcb.PreparedCommand[d.Rejection] {
+		t := executor.Prepare(id, c, handler)
+		if t.WasRead {
+			reads = append(reads, ReadAudit{t.Query, t.After, t.Returned})
+		}
 		return t
 	}
-	commit := func(op string, t dcb.Ticket[d.Command, d.Event, d.Rejection]) {
-		r := processor.Commit(t)
+	commit := func(op string, t dcb.PreparedCommand[d.Rejection]) {
+		r := t.Commit()
 		steps = append(steps, d.Trace{op, r.Status, r.Conflicts, r.Appended, r.Position, r.Errors})
 	}
 	for _, operation := range operations {

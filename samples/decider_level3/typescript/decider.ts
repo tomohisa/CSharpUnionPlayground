@@ -86,7 +86,8 @@ function decideOne(state: DecisionModel, command: Command): Decision {
   }
   return reject("UnknownClass");
 }
-export function decide(state: DecisionModel, command: Command): Decision {
+export function decide(state: DecisionModel, validated: import("./valueObjects.ts").ValidatedCommand): Decision {
+  const command=validated.value;
   const decision = decideOne(state, command);
   if (decision.$type === "Accepted") {
     const event = decision.events[0];

@@ -3,6 +3,7 @@
 import argparse
 import importlib.util
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -70,7 +71,7 @@ func TestMissingCase(t *testing.T) {
     Describe(PendingReview{})
 }
 ''')
-        runner.run(['go', 'test', './domain'], cwd=target)
+        runner.run(['go', 'test', './domain'], cwd=target,env={**os.environ,'GOCACHE':os.environ.get('GOCACHE',str(BUILD/'go-cache'))})
         print('go: new case compiles; missing branch reaches runtime default (confirmed)', flush=True)
     return 0
 

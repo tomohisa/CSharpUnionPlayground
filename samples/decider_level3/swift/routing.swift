@@ -3,7 +3,7 @@ func studentTag(_ id:String)->DcbTag{DcbTag(category:"student",keys:[id])}
 func classTag(_ id:String)->DcbTag{DcbTag(category:"class",keys:[id])}
 func enrollmentTag(_ c:String,_ s:String)->DcbTag{DcbTag(category:"enrollment",keys:[c,s])}
 func one(_ tags:DcbTag...)->Query{Query(items:tags.map{QueryItem(tags:[$0],types:[])})}
-func queryFor(_ command:Command)->Query{switch command{
+func schoolQueryFor(_ command:Command)->Query{switch command{
 case .registerStudent(let studentId,_):return one(studentTag(studentId))
 case .promoteStudent(let studentId,_):return one(studentTag(studentId))
 case .openClass(let classId,_,_):return one(classTag(classId))
@@ -29,7 +29,4 @@ case .classCompleted(let classId,_):type="ClassCompleted";tags=[classTag(classId
 case .studyStarted(let classId,let studentId):type="StudyStarted";tags=[studentTag(studentId),classTag(classId),enrollmentTag(classId,studentId)]
 }
 return EventDescriptor(eventType:type,tags:tags)
-}
-func prepareDecision(_ events:[Recorded<Event>],_ command:Command)->Preparation<Event,Rejection>{
-switch decide(fold(events).decisionModel(),command){case .accepted(let events):return .emit(events);case .rejected(let code):return .reject(code)}
 }

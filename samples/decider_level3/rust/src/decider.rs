@@ -88,7 +88,8 @@ fn validate(s: &DecisionModel, command: &Command) -> Result<Event, Rejection> {
         Command::RegisterStudent {..} | Command::PromoteStudent {..} | Command::OpenClass {..} => unreachable!()
     }
 }
-pub fn decide(s: &DecisionModel, command: &Command) -> Decision {
+pub fn decide(s: &DecisionModel, validated: &crate::value_objects::ValidatedCommand) -> Decision {
+    let command=validated.value();
     match validate(s, command) { Ok(e) => {
         let mut events = vec![e.clone()];
         if let Event::ClassStarted {class_id,..} = e { events.extend(s.enrollments.iter().filter(|r| r.class_id == class_id && matches!(r.progress, Progress::Reserved)).map(|r| Event::StudyStarted {class_id: class_id.clone(), student_id: r.student_id.clone()})); }

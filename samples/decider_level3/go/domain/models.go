@@ -50,6 +50,7 @@ const (
 	AlreadyAssessed     Rejection = "AlreadyAssessed"
 	UnassessedStudents  Rejection = "UnassessedStudents"
 	InvalidHistory      Rejection = "InvalidHistory"
+    InvalidCommand Rejection = "InvalidCommand"
 )
 
 type Student struct {

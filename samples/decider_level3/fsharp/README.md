@@ -16,13 +16,22 @@ type Ticket<'C,'E,'R> = { CommandId: string; Command: 'C; Query: Query; After: i
 type HandlingResult<'R> = { Status: string; Conflicts: int; Appended: int; Position: int; Errors: 'R list }
 ```
 
-出典：[fsharp/Routing.fs](Routing.fs#L32-L35)
+出典：[Handlers.fs](Handlers.fs#L1-L13)
 
 ```fsharp
-    let decide events command =
-        match Decider.decide (Registers.decisionModel (Registers.fold events)) command with
-        | Decision.Accepted events -> Emit events
-        | Decision.Rejected code -> Reject code
+namespace SchoolDomain
+open Playground.Dcb
+module Handlers =
+    let school:CommandHandler<Command,Event,Rejection> = {
+        Validate=ValidatedCommand.validate
+        QueryFor=Routing.queryFor
+        Handle=fun events command ->
+            match ValidatedCommand.create command with
+            | Error error -> Reject error
+            | Ok validated ->
+                match Decider.decide (Registers.decisionModel (Registers.fold events)) validated with
+                | Decision.Accepted events -> Emit events
+                | Decision.Rejected code -> Reject code }
 ```
 
 共通部品のEmitに入るのは学校のEvent listです。汎用イベントを受けてダウンキャストする処理はなく、ProgressやEventのmatchはドメイン側に残ります。カウンターのDUではない独立したrecordでも同じライブラリを利用できます。
@@ -105,3 +114,13 @@ Recorded、ReadResult、Ticket、学校のレジストリで似たフィール�
 ```
 
 購読失敗でコミットの事実を失敗へ戻さず、障害数を持って配信を止める設計を加えました。不変データだけでこの運用上の問題が解消するわけではありません。購読は同期・非再入で、イベントバスのようなI/O処理は対象外です。
+
+## コマンド・検証・履歴復元の更新
+
+privateな単一ケースDUとResultで、値の生成成功／拒否を表現します。Handlerは関数のrecordなのでクラス階層を増やさずExecutorへ渡せます。ValidatedCommandのprivateケースを通した入力だけをDeciderへ渡します。CLR経由のnull注入まで型だけでなくせるわけではありません。今回はJIT＋PGOで検証します。
+
+[Handlers.fs](Handlers.fs)は入力検証とDecider接続、[ValueObjects.fs](ValueObjects.fs)は値の制約と検証済み入力、[DomainTests.fs](DomainTests.fs)はドメインテストです。Routingはタグ・読み取り条件・イベントのメタ情報を担当し、業務ハンドラーとは別分類です。
+
+現在のポリシーで値を検証するcreate系factoryと、過去の事実を再検証しないfromEvent／restore系factoryを区別します。イベント・JSONの保存形と一覧DTOはプリミティブを保ち、投影で復元した値を取り出して使います。全てのStateの全フィールドを名目的なVOへ置き換えた実装ではありません。ValidatedCommandも永続化せず、新しいコマンドを受ける境界だけに使います。
+
+76ケースのGWTではExecutor経由の結果と正確なイベントpayload、拒否時の無追記、投影と再構築の一致を確認します。これとは別に、ストアを使わないDeciderの3例、VOのfactoryと履歴復元、最後の1席の競合再判断もテストします。言語固有の不正入力ケースも追加しています。テスト全体をコード量の別枠へ計上しています。

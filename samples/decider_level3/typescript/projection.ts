@@ -2,6 +2,7 @@ import {Buffer} from "node:buffer";
 import type { Recorded } from "./dcb.ts";
 import type { Student, ClassState, Enrollment, Event, Plan, DecisionModel, SchoolList, Progress } from "./models.ts";
 import { describe, members, planOf } from "./decider.ts";
+import {restoreSeatCapacity,restoreSchoolDate,restoreAssessmentScore} from "./valueObjects.ts";
 export type Registers = { students: Map<string,Student>; classes: Map<string,ClassState>; enrollments: Map<string,Enrollment> };
 export const empty = (): Registers => ({students:new Map(),classes:new Map(),enrollments:new Map()});
 export const copy = (s: Registers): Registers => structuredClone(s);
@@ -11,7 +12,7 @@ export function applyStudent(s: Registers, e: Event): void {
 }
 export function applyClass(s: Registers,e: Event): void {
   if (e.$type === "ClassOpened") {
-    const plan: Plan={classId:e.classId,course:e.course,capacity:e.capacity,minimumGrade:e.course === "Foundation" ? "Year2" : "Year3",
+    const plan: Plan={classId:e.classId,course:e.course,capacity:restoreSeatCapacity(e.capacity),minimumGrade:e.course === "Foundation" ? "Year2" : "Year3",
       prerequisite:e.course === "Foundation" ? {$type:"NoPrerequisite"} : {$type:"PassedCourse",course:"Foundation"}};
     s.classes.set(e.classId,{$type:"Available",plan,students:[]});return;
   }
@@ -21,7 +22,7 @@ export function applyClass(s: Registers,e: Event): void {
   switch(e.$type) {
     case "StudentEnrolled": {const students=[...members(room),e.studentId];s.classes.set(e.classId,{$type:students.length === plan.capacity ? "Full" : "Available",plan,students});break;}
     case "StudentDropped": s.classes.set(e.classId,{$type:"Available",plan,students:members(room).filter(x=>x!==e.studentId)});break;
-    case "ClassStarted": s.classes.set(e.classId,{$type:"Teaching",plan,students:members(room),startedOn:e.startedOn});break;
+    case "ClassStarted": s.classes.set(e.classId,{$type:"Teaching",plan,students:members(room),startedOn:restoreSchoolDate(e.startedOn)});break;
     case "ClassCompleted": s.classes.set(e.classId,{$type:"Completed",plan,results:e.results});break;
   }
 }
@@ -35,7 +36,7 @@ export function applyEnrollment(s: Registers,e: Event): void {
     case "StudentDropped": progress={$type:"Withdrawn",reason:"StudentRequest"};break;
     case "StudyStarted": progress={$type:"Studying",attendance:0};break;
     case "AttendanceRecorded": if (progress.$type !== "Studying") throw new Error("invalid committed event");progress={$type:"Studying",attendance:progress.attendance+1};break;
-    case "ResultRecorded": progress=e.score >= 60 ? {$type:"Passed",score:e.score,credits:record.course === "Foundation" ? 1 : 2} : {$type:"Failed",score:e.score,reason:"BelowPassMark"};break;
+    case "ResultRecorded": progress=e.score >= 60 ? {$type:"Passed",score:restoreAssessmentScore(e.score),credits:record.course === "Foundation" ? 1 : 2} : {$type:"Failed",score:restoreAssessmentScore(e.score),reason:"BelowPassMark"};break;
   }
   s.enrollments.set(k,{...record,progress});
 }

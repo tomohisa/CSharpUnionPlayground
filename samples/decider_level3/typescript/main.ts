@@ -1,5 +1,9 @@
+import {runDomainTests} from "./domain.test.ts";
 import {readFileSync} from "node:fs";
 import {InputSchema} from "./wire.ts";
 import {run} from "./application.ts";
+if(process.argv.includes("--domain-test")){runDomainTests();}else{
 const input=InputSchema.parse(JSON.parse(readFileSync(0,"utf8")));
 console.log(JSON.stringify(run(input.history,input.operations)));
+
+}

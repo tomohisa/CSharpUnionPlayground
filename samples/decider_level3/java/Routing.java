@@ -28,7 +28,4 @@ final class Routing {
         case ClassCompleted e->new Dcb.EventDescriptor("ClassCompleted",List.of(classroom(e.classId())));
         case StudyStarted e->new Dcb.EventDescriptor("StudyStarted",List.of(student(e.studentId()),classroom(e.classId()),enrollment(e.classId(),e.studentId())));
     };}
-    static Dcb.Preparation<Event,Rejection> decide(List<Dcb.Recorded<Event>> events,Command command){return switch(Decider.decide(Projection.fold(events).decisionModel(),command)){
-        case Accepted a->new Dcb.Emit<>(a.events());case Rejected r->new Dcb.Reject<>(r.code());
-    };}
 }

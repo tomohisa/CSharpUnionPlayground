@@ -29,7 +29,3 @@ module Routing =
             | Event.ClassCompleted(classId,results) -> "ClassCompleted",[classroom classId]
             | Event.StudyStarted(classId,studentId) -> "StudyStarted",[student studentId;classroom classId;enrollment classId studentId]
         {EventType=eventType;Tags=tags}
-    let decide events command =
-        match Decider.decide (Registers.decisionModel (Registers.fold events)) command with
-        | Decision.Accepted events -> Emit events
-        | Decision.Rejected code -> Reject code
