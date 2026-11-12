@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -60,6 +61,17 @@ def render_index(results,folder):
            f"[Actions run]({a['runUrl']}) / [Measured source](https://github.com/{a['repository']}/tree/{data['sourceCommit']}/samples/decider_level3).",'',
            '全サイズ・7言語のSQLite／メモリJSONを、同じx64ジョブで順次測定しました。ビルドは計測外です。C#・F#はRelease JIT＋Dynamic PGOです。','',
            '| 学生数 | 結果 | Raw data |','|---:|---|---|']
+    versions=data['runtimeVersions']
+    dotnet=versions.get('dotnet','')
+    sdk=re.search(r'Version:\s+(\S+)',dotnet)
+    runtime=re.search(r'Host:\s+Version:\s+(\S+)',dotnet)
+    configuration=['','## 測定環境','',f"OS: `{data['platform']}` / architecture: `{data['machine']}`。",'',
+                   '| 言語 | 実測ツールチェーン |','|---|---|']
+    configuration.append('| C# / F# | .NET SDK '+(sdk[1] if sdk else 'see raw data')+' / runtime '+(runtime[1] if runtime else 'see raw data')+' |')
+    for label,key in [('TypeScript + Zod (Node)','node'),('Rust','rust'),('Java','java'),('Go','go'),('Swift','swift')]:
+        value=versions.get(key,'unavailable').splitlines()[0]
+        configuration.append(f'| {label} | {value.replace("|","/")} |')
+    lines[6:6]=configuration+['','## 結果','']
     for name,d in results:lines.append(f"| {d['students']:,} | [SQLite／メモリJSON]({Path(name).with_suffix('.md').name}) | [JSON]({name}) |")
     lines+=['','## データ量による変化','','| 実装 | '+' | '.join(f"{d['students']:,}人 SQLite秒 / RSS MiB"for _,d in results)+' |', '|---|'+ '|'.join('---:'for _ in results)+'|']
     for language in LANGUAGES:
