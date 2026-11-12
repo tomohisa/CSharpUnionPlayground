@@ -395,14 +395,14 @@
     {
       "path": "rust/src/main.rs",
       "role": "Boundary",
-      "sha256": "50842b14dbabc5da0b714ea86e11af8f34d3b674f0c9ae004d1f228f7296b9cc",
+      "sha256": "f8c281b17b4171bf495dba50d23ec589d2d6b58227bfebcd2f26b657c45d7d54",
       "ranges": [
         {
           "start": 116,
-          "end": 224,
+          "end": 210,
           "role": "UseCase",
-          "startText": "    fn handle(&self, request: &mut tiny_http::Request) -> HttpResult {",
-          "endText": "    }"
+          "startText": "    fn handle(&self, method: &str, uri: &str, content: &str, raw: &[u8]) -> HttpResult {",
+          "endText": "}"
         }
       ]
     },

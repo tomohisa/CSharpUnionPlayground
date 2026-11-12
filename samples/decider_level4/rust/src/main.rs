@@ -25,7 +25,6 @@ use school_projection::SchoolProjection;
 use serde_json::{Value, json};
 use std::{
     collections::HashMap,
-    io::Read,
     sync::{Arc, Mutex},
     time::{Duration, Instant},
 };
@@ -98,6 +97,7 @@ struct Engine {
     tickets: Mutex<HashMap<String, Ticket>>,
     ttl: Duration,
     next: std::sync::atomic::AtomicU64,
+    workers: Arc<tokio::sync::Semaphore>,
 }
 impl Engine {
     fn commit(&self, t: OwnedPrepared<Rejection>) -> HttpResult {
@@ -113,8 +113,8 @@ impl Engine {
             json!({"status":r.status,"conflicts":r.conflicts,"appended":r.appended,"position":r.position,"errors":r.errors,"projectionPosition":self.projection.checkpoint()}),
         ))
     }
-    fn handle(&self, request: &mut tiny_http::Request) -> HttpResult {
-        let route = request.url().split('?').next().unwrap().to_owned();
+    fn handle(&self, method: &str, uri: &str, content: &str, raw: &[u8]) -> HttpResult {
+        let route = uri.split('?').next().unwrap().to_owned();
         let get = ["/health", "/school", "/status"].contains(&route.as_str())
             || route.starts_with("/students/");
         let post = ["/commands", "/tickets"].contains(&route.as_str())
@@ -124,7 +124,7 @@ impl Engine {
         if !get && !post {
             return Err((404, "NotFound"));
         }
-        if request.method().as_str() != if get { "GET" } else { "POST" } {
+        if method != if get { "GET" } else { "POST" } {
             return Err((405, "MethodNotAllowed"));
         }
         if get {
@@ -156,25 +156,10 @@ impl Engine {
             ));
         }
         if route == "/commands" || route == "/tickets" {
-            let content = request
-                .headers()
-                .iter()
-                .find(|h| h.field.equiv("Content-Type"))
-                .map(|h| h.value.as_str())
-                .unwrap_or("");
             if content.split(';').next().unwrap().trim() != "application/json" {
                 return Err((415, "UnsupportedMediaType"));
             }
-            let mut raw = vec![];
-            request
-                .as_reader()
-                .take(1048577)
-                .read_to_end(&mut raw)
-                .map_err(|_| (400, "InvalidRequest"))?;
-            if raw.len() > 1048576 {
-                return Err((413, "PayloadTooLarge"));
-            }
-            let input: Value = serde_json::from_slice(&raw).map_err(|_| (400, "InvalidRequest"))?;
+            let input: Value = serde_json::from_slice(raw).map_err(|_| (400, "InvalidRequest"))?;
             validate(&input, &self.schemas["CommandRequest"], &self.schemas)?;
             let mut command_value = input["command"].clone();
             for value in command_value.as_object_mut().unwrap().values_mut() {
@@ -223,7 +208,8 @@ impl Engine {
         }
     }
 }
-fn main() {
+#[tokio::main(worker_threads = 2)]
+async fn main() {
     let schemas: Value =
         serde_json::from_str(&std::fs::read_to_string(std::env::var("API_SPEC").unwrap()).unwrap())
             .unwrap();
@@ -252,35 +238,63 @@ fn main() {
                 .unwrap(),
         ),
         next: std::sync::atomic::AtomicU64::new(1),
+        workers: Arc::new(tokio::sync::Semaphore::new(8)),
     });
-    let server = Arc::new(
-        tiny_http::Server::http(format!(
-            "127.0.0.1:{}",
-            std::env::var("PORT").unwrap_or("8080".into())
-        ))
-        .unwrap(),
-    );
-    let workers: Vec<_> = (0..8)
-        .map(|_| {
-            let server = server.clone();
-            let engine = engine.clone();
-            std::thread::spawn(move || {
-                for mut request in server.incoming_requests() {
-                    let (code, body) = engine
-                        .handle(&mut request)
-                        .unwrap_or_else(|(c, e)| (c, json!({"error":e})));
-                    let response = tiny_http::Response::from_string(body.to_string())
-                        .with_status_code(code)
-                        .with_header(
-                            tiny_http::Header::from_bytes("Content-Type", "application/json")
-                                .unwrap(),
-                        );
-                    let _ = request.respond(response);
-                }
-            })
+    let listener = tokio::net::TcpListener::bind(format!(
+        "127.0.0.1:{}",
+        std::env::var("PORT").unwrap_or("8080".into())
+    ))
+    .await
+    .unwrap();
+    let router = axum::Router::new().fallback(dispatch).with_state(engine);
+    axum::serve(listener, router)
+        .with_graceful_shutdown(async {
+            let mut term =
+                tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate()).unwrap();
+            term.recv().await;
         })
-        .collect();
-    for worker in workers {
-        worker.join().unwrap();
-    }
+        .await
+        .unwrap();
+}
+
+async fn dispatch(
+    axum::extract::State(engine): axum::extract::State<Arc<Engine>>,
+    request: axum::extract::Request,
+) -> (axum::http::StatusCode, axum::Json<Value>) {
+    let (parts, body) = request.into_parts();
+    let raw = match axum::body::to_bytes(body, 1048576).await {
+        Ok(raw) => raw,
+        Err(_) => {
+            return (
+                axum::http::StatusCode::PAYLOAD_TOO_LARGE,
+                axum::Json(json!({"error":"PayloadTooLarge"})),
+            );
+        }
+    };
+    let permit = engine.workers.clone().acquire_owned().await.unwrap();
+    let result = tokio::task::spawn_blocking(move || {
+        let _permit = permit;
+        engine.handle(
+            parts.method.as_str(),
+            &parts.uri.to_string(),
+            parts
+                .headers
+                .get("content-type")
+                .and_then(|v| v.to_str().ok())
+                .unwrap_or(""),
+            &raw,
+        )
+    })
+    .await;
+    let (code, body) = match result {
+        Ok(result) => result.unwrap_or_else(|(code, error)| (code, json!({"error":error}))),
+        Err(error) => {
+            eprintln!("{error}");
+            (500, json!({"error":"InternalError"}))
+        }
+    };
+    (
+        axum::http::StatusCode::from_u16(code).unwrap(),
+        axum::Json(body),
+    )
 }
