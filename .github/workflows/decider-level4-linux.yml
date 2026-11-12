@@ -1,0 +1,82 @@
+name: Decider Level 4 Linux x64 benchmark
+on:
+  workflow_dispatch:
+    inputs:
+      sizes:
+        description: Shared student counts (comma-separated multiples of ten)
+        type: string
+        default: '10000'
+      concurrency:
+        description: Shared HTTP client concurrency
+        type: number
+        default: 8
+permissions:
+  contents: read
+concurrency:
+  group: decider-level4-linux-x64-benchmark
+  cancel-in-progress: false
+jobs:
+  benchmark:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 180
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+      BENCHMARK_SIZES: ${{ inputs.sizes }}
+      BENCHMARK_RUNNER_LABEL: ubuntu-26.04
+      DECIDER_JAVA_RELEASE: '27'
+      BENCHMARK_CONCURRENCY: ${{ inputs.concurrency }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify native Linux x64 host
+        run: test "$(uname -m)" = x86_64
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26.13.1'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '27'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.4'
+          cache: false
+      - name: Rust stable
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - name: Install stable Swift and Linux SQLite headers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsqlite3-dev libcurl4-openssl-dev libxml2-dev libncurses-dev libz3-dev
+          curl --fail --location --retry 3 https://download.swift.org/swift-6.4.2-release/ubuntu2604/swift-6.4.2-RELEASE/swift-6.4.2-RELEASE-ubuntu26.04.tar.gz -o "$RUNNER_TEMP/swift.tar.gz"
+          mkdir "$RUNNER_TEMP/swift"
+          tar -xzf "$RUNNER_TEMP/swift.tar.gz" -C "$RUNNER_TEMP/swift" --strip-components=1
+          echo "$RUNNER_TEMP/swift/usr/bin" >> "$GITHUB_PATH"
+      - name: Check cohort publication and code statistics
+        run: |
+          python3 samples/decider_level4/tests/actions_publication.py
+          python3 samples/decider_level4/code_stats.py --check
+          python3 samples/decider_level4/tests/code_stats_test.py
+      - name: Verify native HTTP contracts, conflicts and persistence
+        run: python3 samples/decider_level4/tests/http_tests.py
+      - name: Measure all languages and stores sequentially
+        run: python3 samples/decider_level4/benchmark/actions.py run --sizes "$BENCHMARK_SIZES" --concurrency "$BENCHMARK_CONCURRENCY"
+      - name: Job summary
+        run: cat samples/decider_level4/benchmark/observed/linux-x64-actions/README.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: level4-linux-x64-observations
+          path: samples/decider_level4/benchmark/observed/linux-x64-actions/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Upload diagnostic server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: level4-linux-server-logs
+          path: samples/decider_level4/.build/*-server.log
+          if-no-files-found: ignore

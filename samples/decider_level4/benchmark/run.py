@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local sequential seven-host HTTP benchmark, same work and HTTP client."""
+"""Sequential seven-host HTTP benchmark, same work and HTTP client."""
 import argparse,concurrent.futures,hashlib,http.client,importlib.util,json,math,os,platform,signal,subprocess,tempfile,threading,time
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parent
@@ -109,11 +109,12 @@ def measure(language,command,store,n,workers):
 
 def report(data,path):
     path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
-    lines=['# Local HTTP API benchmark','',f"`{data['platform']}` / `{data['machine']}`。同じホストで言語・ストアを順次測定。各ストアのデータ量・リクエスト構成・同時接続数は共通です。",'',
+    title='Linux x64 Actions HTTP API benchmark' if data.get('actions') else 'Local HTTP API benchmark'
+    lines=['# '+title,'',f"`{data['platform']}` / `{data['machine']}`。同じホストで言語・ストアを順次測定。各ストアのデータ量・リクエスト構成・同時接続数は共通です。",'',
            'SQLiteとメモリJSONは別プロセス・別ストアです。100人の業務ウォームアップ後に測定し、その100人も状態検証とメモリには含めます。ビルド・起動・終了・SQLite再起動はwall計測から分離しています。','',
            '| 実装 | store | wall s | req/s | p50 ms | p95 ms | p99 ms | unexpected error % | expected rejection | sampled RSS MiB | start s | stop s |','|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
     for r in data['results']:
-        name='ts-zod'if r['language']=='typescript'else r['language'];label=f"[{name}](../../{r['language']})";p=r['latencyMs']
+        name='ts-zod'if r['language']=='typescript'else r['language'];label=f"[{name}]({os.path.relpath(ROOT/r['language'],path.parent)})";p=r['latencyMs']
         lines.append(f"| {label} | {r['store']} | {r['seconds']:.3f} | {r['requestsPerSecond']:.1f} | {p['p50']:.3f} | {p['p95']:.3f} | {p['p99']:.3f} | {100*r['errorRate']:.2f} | {r['expectedRejections']} | {r['sampledPeakRssMiB']:.1f} | {r['startupSeconds']:.3f} | {r['shutdownSeconds']:.3f} |")
     lines+=['','全行で状態ハッシュ・イベント数・リクエスト数・期待した拒否数・競合数を照合済みです。SQLiteでは再起動後の状態ハッシュも一致します。詳細なフェーズ、API種別ごとの遅延、実行環境・版、クライアントCPU負荷は[raw data]('+path.name+')を参照してください。','',
             'RSSはサーバープロセスを100ms間隔で観測した最大値であり、OSのhigh-water markではありません。stopは負荷終了後のSIGTERMからプロセス終了までです。ウォームアップを含むサーバー全体のメモリです。','',
@@ -129,9 +130,10 @@ if __name__=='__main__':
     versions={}
     for name,cmd in {'dotnet':['dotnet','--info'],'node':['node','--version'],'rust':['rustc','--version'],'java':['java','-version'],'go':['go','version'],'swift':['swift','--version']}.items():
         r=subprocess.run(cmd,capture_output=True,text=True);versions[name]=(r.stdout+r.stderr).strip()
-    hardware={'cpu':platform.processor(),'memoryBytes':os.sysconf('SC_PAGE_SIZE')*os.sysconf('SC_PHYS_PAGES')}
+    hardware={'cpu':platform.processor(),'memoryBytes':os.sysconf('SC_PAGE_SIZE')*os.sysconf('SC_PHYS_PAGES'),'logicalCpuCount':os.cpu_count()}
     if platform.system()=='Darwin':hardware['cpu']=subprocess.run(['sysctl','-n','machdep.cpu.brand_string'],capture_output=True,text=True).stdout.strip()
     elif Path('/proc/cpuinfo').exists():hardware['cpu']=next((s.split(':',1)[1].strip()for s in Path('/proc/cpuinfo').read_text().splitlines()if s.startswith('model name')),platform.processor())
+    if platform.system()=='Linux':hardware.update(osRelease=Path('/etc/os-release').read_text(),kernel=platform.release())
     data={'formatVersion':1,'platform':platform.platform(),'machine':platform.machine(),'hardware':hardware,'sourceDirty':bool(subprocess.run(['git','status','--porcelain','--',str(ROOT),str(ROOT.parent/'decider_level3')],capture_output=True,text=True).stdout.strip()),'measuredAt':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'sourceCommit':subprocess.run(['git','rev-parse','HEAD'],capture_output=True,text=True).stdout.strip(),'students':a.students,'concurrency':a.concurrency,'commands':commands,'runtimeVersions':versions,'openapiSha256':hashlib.sha256((ROOT/'openapi.json').read_bytes()).hexdigest(),'sourceManifest':{str(f.relative_to(ROOT.parent)):hashlib.sha256(f.read_bytes()).hexdigest()for folder in [ROOT,ROOT.parent/'decider_level3']for f in folder.rglob('*')if f.is_file()and not any(x in f.parts for x in ['.build','bin','obj','target','node_modules','__pycache__','observed'])and f.suffix in ['.cs','.fs','.rs','.ts','.go','.java','.swift','.json','.toml','.lock','.mod','.sum','.py','.csproj','.fsproj','.resolved','.sql','.h','.modulemap']},'results':[]}
     for language in languages:
         for store in ['sqlite','memory-json']if a.store=='both'else[a.store]:

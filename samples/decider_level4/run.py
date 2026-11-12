@@ -46,7 +46,11 @@ def build(language):
         for file in (HERE/'swift').glob('*.swift'):
             if file.name!='Package.swift':(source/file.name).symlink_to(file)
         call(['swift','build','-c','release','--package-path',stage])
-        shutil.copyfile(stage/'Package.resolved',HERE/'swift/Package.resolved')
+        resolved=stage/'Package.resolved'
+        maintained=HERE/'swift/Package.resolved'
+        if maintained.exists():
+            if json.loads(resolved.read_text())['pins']!=json.loads(maintained.read_text())['pins']:raise RuntimeError('Swift dependency pins changed; review Package.resolved')
+        else:shutil.copyfile(resolved,maintained)
         return [str(stage/'.build/release/Server')]
     raise ValueError(language)
 
