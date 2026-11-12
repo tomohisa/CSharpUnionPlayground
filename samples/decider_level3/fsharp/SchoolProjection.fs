@@ -91,4 +91,5 @@ type SchoolProjection() =
     member _.RowCount=index.RowCount
     member _.Work=index.Work
     member _.Student id=index.Read(fun rows->match rows[StudentKey id] with StudentRow s->s | _->failwith "not a student") |> snd
+    member _.FindStudent id=index.Read(fun rows->match rows.TryGetValue(StudentKey id) with true,StudentRow s->Some s | _->None)
     member _.Snapshot()=index.Read(SchoolIndex.list)

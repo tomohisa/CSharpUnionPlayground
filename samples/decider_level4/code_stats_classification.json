@@ -1,0 +1,963 @@
+{
+  "C#": [
+    {
+      "path": "../decider_level3/csharp/Dcb.cs",
+      "role": "Library",
+      "sha256": "4d2913c4acde3c5e1eb3373a2b0eec2e68c3b48ec94bf25f3eb9238c7badaafe",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/csharp/Decider.cs",
+      "role": "Decider",
+      "sha256": "209eb9bee2e9b8de4b4a2823bfa13d6b0814a7cd47a889992422618567db562b",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/csharp/DomainTests.cs",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "48f78fb6a34586524bacd60395161d2f9b3e507c92c8c880cb4a0b49eb503717"
+    },
+    {
+      "path": "../decider_level3/csharp/Handlers.cs",
+      "role": "Command",
+      "ranges": [],
+      "sha256": "b3635591060c06f8d3bcc633c6989de126c38c9236bdf786d5a1fd1d24068eab"
+    },
+    {
+      "path": "../decider_level3/csharp/Models.cs",
+      "role": "Model",
+      "sha256": "0c6b27daf4a3e340385083136f8b66f08bd757dcc6dbde739aa392072451a657",
+      "ranges": [
+        {
+          "start": 27,
+          "end": 27,
+          "role": "Projection",
+          "startText": "public sealed record SchoolList(ImmutableArray<Student> Students, ImmutableArray<ClassState> Classes, ImmutableArray<Enrollment> Enrollments, ImmutableArray<string> Summaries);",
+          "endText": "public sealed record SchoolList(ImmutableArray<Student> Students, ImmutableArray<ClassState> Classes, ImmutableArray<Enrollment> Enrollments, ImmutableArray<string> Summaries);"
+        },
+        {
+          "start": 28,
+          "end": 28,
+          "role": "UseCase",
+          "startText": "public sealed record Trace(string Operation, string Status, int Conflicts, int Appended, int Position, ImmutableArray<Rejection> Errors);",
+          "endText": "public sealed record Trace(string Operation, string Status, int Conflicts, int Appended, int Position, ImmutableArray<Rejection> Errors);"
+        },
+        {
+          "start": 50,
+          "end": 60,
+          "role": "Command",
+          "startText": "[JsonPolymorphic(InferClosedTypePolymorphism = true)]",
+          "endText": "public sealed record CompleteClass([property:Required(ErrorMessage=nameof(Rejection.InvalidId))] string ClassId) : Command;"
+        },
+        {
+          "start": 75,
+          "end": 78,
+          "role": "Decider",
+          "startText": "[JsonPolymorphic(InferClosedTypePolymorphism = true)]",
+          "endText": "public sealed record Rejected(Rejection Code) : Decision;"
+        },
+        {
+          "start": 80,
+          "end": 87,
+          "role": "UseCase",
+          "startText": "[JsonPolymorphic(InferClosedTypePolymorphism = true)]",
+          "endText": "public sealed record Redeliver() : Operation;"
+        }
+      ]
+    },
+    {
+      "path": "../decider_level3/csharp/Projection.cs",
+      "role": "Projection",
+      "sha256": "d834148f2a2bdb96582b10b4d150dba37d326280a283fdc8f2c962a4e551086d",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/csharp/ProjectionTests.cs",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "84773bff5c9aa15431b7656ba8d5dc18096aeeae25d8a610bd0e3dc794fc59d2"
+    },
+    {
+      "path": "../decider_level3/csharp/Routing.cs",
+      "role": "Connection",
+      "sha256": "9238035e4db15b755f818ce561a6bf0c457008052907c0236953751e32a84aaa",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/csharp/SchoolProjection.cs",
+      "role": "Projection",
+      "ranges": [],
+      "sha256": "292c5df3690bda33e96242ee51924864f89cf1d2cec9d409898edece571254d1"
+    },
+    {
+      "path": "../decider_level3/csharp/ValueObjects.cs",
+      "role": "Model",
+      "ranges": [
+        {
+          "start": 65,
+          "end": 104,
+          "role": "Command",
+          "startText": "// The platform generator reads property attributes at compile time; no TryValidateObject/reflection.",
+          "endText": "}"
+        }
+      ],
+      "sha256": "1e8750cac75140298f11fa48c06b68a93d8ed4a4156594998815a4d9b21bfae7"
+    },
+    {
+      "path": "../decider_level3/csharp/JsonStore.cs",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "e1cd158b8c5753a289b42897fc194723d1571f38f5ae0eec7384081dc891c6bf"
+    },
+    {
+      "path": "../decider_level3/csharp/SqliteJournal.cs",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "a23ee0bc846cd2ce8053603f59bcbcd1fb72be9662e68950193ea66dde5b25cc"
+    },
+    {
+      "path": "csharp/Program.cs",
+      "role": "Boundary",
+      "sha256": "c6c228a6e99277c887e3b93f64a919e4cb6a1cfadaf00567dfbd69e386e60cc0",
+      "ranges": [
+        {
+          "start": 44,
+          "end": 86,
+          "role": "UseCase",
+          "startText": "app.Run(async context =>",
+          "endText": "});"
+        }
+      ]
+    },
+    {
+      "path": "tests/http_tests.py",
+      "role": "HttpTest",
+      "sha256": "b9b28aa627ca06227da0f9024b34791f815b0deaad8916e2508c4f9813a0e4a3",
+      "ranges": []
+    }
+  ],
+  "F#": [
+    {
+      "path": "../decider_level3/fsharp/Dcb.fs",
+      "role": "Library",
+      "sha256": "5f965432a69e552f9d3425a693bc44e6c7c5230c5a72c18e9bbe188a691fd1e7",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/fsharp/Decider.fs",
+      "role": "Decider",
+      "sha256": "b8fe41431e98728e09a687020f0804f6b2171c76c3a34512b55879c3b723ae15",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/fsharp/DomainTests.fs",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "069a1029ab137ee1a32ad7e1653fffac94100939ad8d51e2df2e3b99851e0fa9"
+    },
+    {
+      "path": "../decider_level3/fsharp/Handlers.fs",
+      "role": "Command",
+      "ranges": [],
+      "sha256": "cea88ec22fb2138a03d5ee450f255df4b453ac9b988de615a86a3f5414782474"
+    },
+    {
+      "path": "../decider_level3/fsharp/Models.fs",
+      "role": "Model",
+      "sha256": "841a798022ac313b240dcffc362bdab4e692a3e8a74306f3fefac9490ee6bbba",
+      "ranges": [
+        {
+          "start": 73,
+          "end": 73,
+          "role": "Projection",
+          "startText": "type SchoolList = { Students: Student list; Classes: ClassState list; Enrollments: Enrollment list; Summaries: string list }",
+          "endText": "type SchoolList = { Students: Student list; Classes: ClassState list; Enrollments: Enrollment list; Summaries: string list }"
+        },
+        {
+          "start": 75,
+          "end": 75,
+          "role": "UseCase",
+          "startText": "type Trace = { Operation: string; Status: string; Conflicts: int; Appended: int; Position: int; Errors: Rejection list }",
+          "endText": "type Trace = { Operation: string; Status: string; Conflicts: int; Appended: int; Position: int; Errors: Rejection list }"
+        },
+        {
+          "start": 77,
+          "end": 87,
+          "role": "Command",
+          "startText": "[<RequireQualifiedAccess>]",
+          "endText": "    | [<JsonPropertyName(\"CompleteClass\")>] CompleteClass of classId: string"
+        },
+        {
+          "start": 102,
+          "end": 105,
+          "role": "Decider",
+          "startText": "[<RequireQualifiedAccess>]",
+          "endText": "    | [<JsonPropertyName(\"Rejected\")>] Rejected of code: Rejection"
+        },
+        {
+          "start": 107,
+          "end": 114,
+          "role": "UseCase",
+          "startText": "[<RequireQualifiedAccess>]",
+          "endText": "    | [<JsonPropertyName(\"Redeliver\")>] Redeliver"
+        }
+      ]
+    },
+    {
+      "path": "../decider_level3/fsharp/Projection.fs",
+      "role": "Projection",
+      "sha256": "e05d974e5e2f6af5d721c9cc37148f8e761e19baf61280fa93a6a1b9107409b8",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/fsharp/ProjectionTests.fs",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "ce8f4a78375408a06bdfd1de6d637d30427e4c6ac94caa66ee9bd702384782fc"
+    },
+    {
+      "path": "../decider_level3/fsharp/Routing.fs",
+      "role": "Connection",
+      "sha256": "78b17b14feb761543ee9aa702c557e6f3bc81049448bf659e761f78620e3b6c9",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/fsharp/SchoolProjection.fs",
+      "role": "Projection",
+      "ranges": [],
+      "sha256": "a4d5cb090a01929ad05d22ca5ae58ad2ce05be054fd52eaebcf6a86b4bd66ff4"
+    },
+    {
+      "path": "../decider_level3/fsharp/ValueObjects.fs",
+      "role": "Model",
+      "ranges": [
+        {
+          "start": 34,
+          "end": 49,
+          "role": "Command",
+          "startText": "type ValidatedCommand = private ValidatedCommand of Command",
+          "endText": "    let validate command = match create command with Ok _->[] | Error e->[e]"
+        }
+      ],
+      "sha256": "e0e05e102c4642e5269c93ded5b7362b6a66be7ac08c75054c6a0616464a6e3d"
+    },
+    {
+      "path": "../decider_level3/fsharp/SqliteJournal.fs",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "93a85a5a51c5bcbd78f72d6cf5df8576ae2e336afb5ec4bea3fc8e16892e3c8d"
+    },
+    {
+      "path": "../decider_level3/fsharp/JsonStore.fs",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "b167ad19a2cc7417ccf98bd47598547e32ff8d961e09bbff3d7d19245272ce6d"
+    },
+    {
+      "path": "fsharp/Program.fs",
+      "role": "Boundary",
+      "sha256": "3c417f3906a12675108a5109a0f2d8a0e2021457adc775dc8e1a6f969cf71bf9",
+      "ranges": [
+        {
+          "start": 81,
+          "end": 148,
+          "role": "UseCase",
+          "startText": "let handle (context:HttpContext):Task=(task {",
+          "endText": "} :> Task)"
+        }
+      ]
+    },
+    {
+      "path": "tests/http_tests.py",
+      "role": "HttpTest",
+      "sha256": "b9b28aa627ca06227da0f9024b34791f815b0deaad8916e2508c4f9813a0e4a3",
+      "ranges": []
+    }
+  ],
+  "Rust": [
+    {
+      "path": "../decider_level3/rust/src/dcb.rs",
+      "role": "Library",
+      "sha256": "aa378abcaa24bb052dd08c47137103aa01722ad7d91d9d511e09a61234f3998f",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/rust/src/decider.rs",
+      "role": "Decider",
+      "sha256": "8af3d94f8370acf76ff116e4702c06d4cdca1976bbdfa868faeda46d3403fc87",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/rust/src/domain_tests.rs",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "691dfb1cf2ee2f8843a49a28386ed9ad4fed30b06dcb6b98505fb02e8e51206b"
+    },
+    {
+      "path": "../decider_level3/rust/src/handlers.rs",
+      "role": "Command",
+      "ranges": [],
+      "sha256": "c8a920f9ad5baa78577c66216bb96df317c1f08d2b5fb17e62a3e089e2e280b0"
+    },
+    {
+      "path": "../decider_level3/rust/src/models.rs",
+      "role": "Model",
+      "sha256": "9904b160eec31d04c7fed8e9978bdc7f0103095ad835a461ea6fb3f201e60206",
+      "ranges": [
+        {
+          "start": 59,
+          "end": 66,
+          "role": "Projection",
+          "startText": "#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]",
+          "endText": "}"
+        },
+        {
+          "start": 68,
+          "end": 77,
+          "role": "UseCase",
+          "startText": "#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]",
+          "endText": "}"
+        },
+        {
+          "start": 105,
+          "end": 117,
+          "role": "Command",
+          "startText": "#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]",
+          "endText": "}"
+        },
+        {
+          "start": 134,
+          "end": 139,
+          "role": "Decider",
+          "startText": "#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]",
+          "endText": "}"
+        },
+        {
+          "start": 141,
+          "end": 150,
+          "role": "UseCase",
+          "startText": "#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]",
+          "endText": "}"
+        }
+      ]
+    },
+    {
+      "path": "../decider_level3/rust/src/projection.rs",
+      "role": "Projection",
+      "sha256": "601e5e5a02a038f86b7fcfb2edfe70e959bb092794b29e2fbbfab3bead87b7a2",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/rust/src/projection_tests.rs",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "d44e9dc949fba925c14b0adac0cd1b1d6b5c8c8a94a8ef2aecbab3ae4fc13106"
+    },
+    {
+      "path": "../decider_level3/rust/src/routing.rs",
+      "role": "Connection",
+      "sha256": "f5db02b9ba6d5f2ad962ee4546ee5cd240ca3bfee37ffa2d78c246ca754bc3de",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/rust/src/school_projection.rs",
+      "role": "Projection",
+      "ranges": [],
+      "sha256": "993cc24dec3d3b4cb8167ba304106f81a8621068cfac6603fb5c89c60832467e"
+    },
+    {
+      "path": "../decider_level3/rust/src/value_objects.rs",
+      "role": "Model",
+      "ranges": [
+        {
+          "start": 30,
+          "end": 44,
+          "role": "Command",
+          "startText": "pub struct ValidatedCommand(Command);",
+          "endText": "}"
+        }
+      ],
+      "sha256": "076b784b5aa9226728a56873f88b809e253809761146faecc90e93b4b5750f63"
+    },
+    {
+      "path": "../decider_level3/rust/src/json_store.rs",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "89f5379c7f486b060c62aa3d6c7fa0cd6582c07f62587cdb099bb7c63ed4ad34"
+    },
+    {
+      "path": "../decider_level3/rust/src/sqlite_journal.rs",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "2ec34c7d2729a5704b2b72accf3157ba98ba0d098dcb76032211cd3ec41389f6"
+    },
+    {
+      "path": "rust/src/main.rs",
+      "role": "Boundary",
+      "sha256": "50842b14dbabc5da0b714ea86e11af8f34d3b674f0c9ae004d1f228f7296b9cc",
+      "ranges": [
+        {
+          "start": 116,
+          "end": 224,
+          "role": "UseCase",
+          "startText": "    fn handle(&self, request: &mut tiny_http::Request) -> HttpResult {",
+          "endText": "    }"
+        }
+      ]
+    },
+    {
+      "path": "tests/http_tests.py",
+      "role": "HttpTest",
+      "sha256": "b9b28aa627ca06227da0f9024b34791f815b0deaad8916e2508c4f9813a0e4a3",
+      "ranges": []
+    }
+  ],
+  "TypeScript＋Zod": [
+    {
+      "path": "../decider_level3/typescript/dcb.ts",
+      "role": "Library",
+      "sha256": "6335128de679b0c12de0120b504a1d104d4ab0490b56166ae5fa12cbf7778585",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/typescript/decider.ts",
+      "role": "Decider",
+      "sha256": "f65092c757d986eafdc8a3b243dd8a4e10eda4ed10af5c952494461d0c2bf920",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/typescript/domain.test.ts",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "849628634f3bde911a968d17b2d66911d14aa92fe77f2400f2c7d70be83a7eda"
+    },
+    {
+      "path": "../decider_level3/typescript/handlers.ts",
+      "role": "Command",
+      "ranges": [],
+      "sha256": "fc61aacddf1c73a42f2b6022452fa6f7892ea712ac1ccf4a58eb975000d8f108"
+    },
+    {
+      "path": "../decider_level3/typescript/models.ts",
+      "role": "Model",
+      "sha256": "08a57d2158219588c4409202f329ad0e01f62ff3485644b6fb7e0b85b4acc31b",
+      "ranges": [
+        {
+          "start": 52,
+          "end": 53,
+          "role": "Projection",
+          "startText": "export const SchoolListSchema = z.object({ students: z.array(StudentSchema).readonly(), classes: z.array(ClassStateSchema).readonly(), enrollments: z.array(EnrollmentSchema).readonly(), summaries: z.array(z.string()).readonly() }).readonly();",
+          "endText": "export type SchoolList = z.infer<typeof SchoolListSchema>;"
+        },
+        {
+          "start": 55,
+          "end": 56,
+          "role": "UseCase",
+          "startText": "export const TraceSchema = z.object({ operation: z.string(), status: z.string(), conflicts: z.int(), appended: z.int(), position: z.int(), errors: z.array(RejectionSchema).readonly() }).readonly();",
+          "endText": "export type Trace = z.infer<typeof TraceSchema>;"
+        },
+        {
+          "start": 58,
+          "end": 69,
+          "role": "Command",
+          "startText": "export const CommandSchema = z.discriminatedUnion(\"$type\", [",
+          "endText": "export type Command = z.infer<typeof CommandSchema>;"
+        },
+        {
+          "start": 85,
+          "end": 89,
+          "role": "Decider",
+          "startText": "export const DecisionSchema = z.discriminatedUnion(\"$type\", [",
+          "endText": "export type Decision = z.infer<typeof DecisionSchema>;"
+        },
+        {
+          "start": 91,
+          "end": 99,
+          "role": "UseCase",
+          "startText": "export const OperationSchema = z.discriminatedUnion(\"$type\", [",
+          "endText": "export type Operation = z.infer<typeof OperationSchema>;"
+        },
+        {
+          "start": 101,
+          "end": 101,
+          "role": "Boundary",
+          "startText": "export function unreachable(value: never): never { throw new Error(\"Unknown case: \" + JSON.stringify(value)); }",
+          "endText": "export function unreachable(value: never): never { throw new Error(\"Unknown case: \" + JSON.stringify(value)); }"
+        }
+      ]
+    },
+    {
+      "path": "../decider_level3/typescript/projection.test.ts",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "885a8afc3dcc62175bc238717b4e2c534615e224ef40983b016804025583eb0e"
+    },
+    {
+      "path": "../decider_level3/typescript/projection.ts",
+      "role": "Projection",
+      "sha256": "3549ab26265748d02e03031408b13164d8526eb8893f216a06ec1ae96e89018c",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/typescript/routing.ts",
+      "role": "Connection",
+      "sha256": "4c5ed14a0ff542abe8b77db5d9f12f8da7b6f3f527806807a694fb95a9867838",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/typescript/schoolProjection.ts",
+      "role": "Projection",
+      "ranges": [],
+      "sha256": "fb910c3586e499a2af80b3fdd1aad3665013cc2117e4cf6c9e19bd7e72259651"
+    },
+    {
+      "path": "../decider_level3/typescript/valueObjects.ts",
+      "role": "Model",
+      "ranges": [
+        {
+          "start": 20,
+          "end": 40,
+          "role": "Command",
+          "startText": "export class ValidatedCommand {",
+          "endText": ""
+        }
+      ],
+      "sha256": "3c28da456a472967cfda1b8a00870357603db4e06815260d786d8e775813956d"
+    },
+    {
+      "path": "../decider_level3/typescript/jsonStore.ts",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "917ccbe3ad7efd0dede7caa09973c6be676e483eed41db839f8091bde7577b1d"
+    },
+    {
+      "path": "typescript/server.ts",
+      "role": "Boundary",
+      "sha256": "17c071c83d39e7cf9713971998213f17bf6159a9d27df502018c39e246c21c48",
+      "ranges": [
+        {
+          "start": 32,
+          "end": 57,
+          "role": "UseCase",
+          "startText": "const server=createServer(async(req,res)=>{",
+          "endText": "  res.writeHead(code,{'Content-Type':'application/json'});res.end(JSON.stringify(body));"
+        }
+      ]
+    },
+    {
+      "path": "tests/http_tests.py",
+      "role": "HttpTest",
+      "sha256": "b9b28aa627ca06227da0f9024b34791f815b0deaad8916e2508c4f9813a0e4a3",
+      "ranges": []
+    }
+  ],
+  "Java": [
+    {
+      "path": "../decider_level3/java/Decider.java",
+      "role": "Decider",
+      "sha256": "2ee638dbf3cf6a0ad6ed139cbcf43b6363092fae0b02b2dcbf299f5250c0d83e",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/java/DomainTests.java",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "cc4a3262559bb30a292732324bdaa30acf60ca0b8f22b71b42d83812d9f3a2f1"
+    },
+    {
+      "path": "../decider_level3/java/Models.java",
+      "role": "Model",
+      "sha256": "5fcb821e13c5fb10bad1a34c3aca6f5f8f14c4630ba0e3ac933ca00ffd7ccc92",
+      "ranges": [
+        {
+          "start": 46,
+          "end": 53,
+          "role": "Projection",
+          "startText": "record SchoolList(List<Student> students, List<ClassState> classes, List<Enrollment> enrollments, List<String> summaries) {",
+          "endText": "}"
+        },
+        {
+          "start": 54,
+          "end": 61,
+          "role": "UseCase",
+          "startText": "record Trace(String operation, String status, int conflicts, int appended, int position, List<Rejection> errors) {",
+          "endText": ""
+        },
+        {
+          "start": 144,
+          "end": 210,
+          "role": "Command",
+          "startText": "@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = \"$type\")",
+          "endText": ""
+        },
+        {
+          "start": 287,
+          "end": 303,
+          "role": "Decider",
+          "startText": "@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = \"$type\")",
+          "endText": ""
+        },
+        {
+          "start": 304,
+          "end": 343,
+          "role": "UseCase",
+          "startText": "@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = \"$type\")",
+          "endText": "}"
+        }
+      ]
+    },
+    {
+      "path": "../decider_level3/java/Projection.java",
+      "role": "Projection",
+      "sha256": "1c1f592541b1f3c6867d22a976d2b8029b32e4df182c12a07474d666d3fcd239",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/java/ProjectionTests.java",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "5262ada4322b2ee4f648e8cebe5d1d5eca6c7d6f4ff171435a9cf77eb45137fe"
+    },
+    {
+      "path": "../decider_level3/java/Routing.java",
+      "role": "Connection",
+      "sha256": "fa2eaa82bfc70423394e6f2df58cc52a9acda53bb19824981d155b231a8843aa",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/java/SchoolHandler.java",
+      "role": "Command",
+      "ranges": [],
+      "sha256": "ad07a687b1ce56ba46ffabcd32c19aca91c1a394aa8d610269b3b27583e92f7f"
+    },
+    {
+      "path": "../decider_level3/java/SchoolProjection.java",
+      "role": "Projection",
+      "ranges": [],
+      "sha256": "221cafb8ef9edc3c857c7ffc0d9a5aa9583c1c89ceb531a767c9cf096a1987f2"
+    },
+    {
+      "path": "../decider_level3/java/ValueObjects.java",
+      "role": "Model",
+      "ranges": [
+        {
+          "start": 42,
+          "end": 64,
+          "role": "Command",
+          "startText": "final class ValidatedCommand {",
+          "endText": "}"
+        }
+      ],
+      "sha256": "31d691dfc1170f22d737d371bc3bc3dc0ad18c97a7286d4975b01adb06cabbe9"
+    },
+    {
+      "path": "../decider_level3/java/playground/dcb/Dcb.java",
+      "role": "Library",
+      "sha256": "e420e86bc99a6543f728593e4c35620308504905187c13e662c10aa585c82210",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/java/playground/dcb/JsonStore.java",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "fc64065acf1693b65af31711ba8aa5a17dec2b3915e85f750612493a0d7cce6c"
+    },
+    {
+      "path": "java/Server.java",
+      "role": "Boundary",
+      "sha256": "6a74c0522bbea5f17b223d42a95cd09dccda2739a803d7ecd387364984157d81",
+      "ranges": [
+        {
+          "start": 42,
+          "end": 63,
+          "role": "UseCase",
+          "startText": "        server.createContext(\"/\",exchange->{",
+          "endText": "            byte[]raw=mapper.writeValueAsBytes(reply.body());exchange.getResponseHeaders().set(\"Content-Type\",\"application/json\");exchange.sendResponseHeaders(reply.code(),raw.length);try(var output=exchange.getResponseBody()){output.write(raw);}exchange.close();"
+        }
+      ]
+    },
+    {
+      "path": "tests/http_tests.py",
+      "role": "HttpTest",
+      "sha256": "b9b28aa627ca06227da0f9024b34791f815b0deaad8916e2508c4f9813a0e4a3",
+      "ranges": []
+    }
+  ],
+  "Go": [
+    {
+      "path": "../decider_level3/go/dcb/store.go",
+      "role": "Library",
+      "sha256": "731809921bce1b4d3e99d610eb6a36bb42963dd6e3eb642d2b4495526e5791ee",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/go/domain/decider.go",
+      "role": "Decider",
+      "sha256": "932a508b1ab478afcde252a520bda7861769496de8ad5db9d3c2d8304a396cd2",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/go/domain/handlers.go",
+      "role": "Command",
+      "ranges": [],
+      "sha256": "ed9fd7b8f51c65e9e391960c5a294513fdf6fad38d49c2060ad9eef2c347c992"
+    },
+    {
+      "path": "../decider_level3/go/domain/json.go",
+      "role": "Boundary",
+      "sha256": "1c66242a9a4052f0e91f126acd96a34fa866724a79e8e6800675fb340ca831c8",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/go/domain/models.go",
+      "role": "Model",
+      "sha256": "a0a313e42d17d1b398962c6e7e002d12e2a780a26dbcafe1a89861487b9c6207",
+      "ranges": [
+        {
+          "start": 82,
+          "end": 87,
+          "role": "Projection",
+          "startText": "type SchoolList struct {",
+          "endText": "}"
+        },
+        {
+          "start": 88,
+          "end": 95,
+          "role": "UseCase",
+          "startText": "type Trace struct {",
+          "endText": "}"
+        },
+        {
+          "start": 170,
+          "end": 234,
+          "role": "Command",
+          "startText": "type Command interface{ isCommand() }",
+          "endText": ""
+        },
+        {
+          "start": 309,
+          "end": 321,
+          "role": "Decider",
+          "startText": "type Decision interface{ isDecision() }",
+          "endText": ""
+        },
+        {
+          "start": 322,
+          "end": 357,
+          "role": "UseCase",
+          "startText": "type Operation interface{ isOperation() }",
+          "endText": "func (Redeliver) isOperation() {}"
+        }
+      ]
+    },
+    {
+      "path": "../decider_level3/go/domain/projection.go",
+      "role": "Projection",
+      "sha256": "7d50d3b12d4e5238619440641f53247a044ef56c6bec1e37774a59a1dbae32ef",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/go/domain/routing.go",
+      "role": "Connection",
+      "sha256": "b9c916fb0bbc301839b72706233e645ea019e079d975ad01fad9b1d432c053b7",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/go/domain/school_projection.go",
+      "role": "Projection",
+      "ranges": [],
+      "sha256": "559f248e7e6560d8108b252cebec318d931bc08056f4571b8966e907412541f8"
+    },
+    {
+      "path": "../decider_level3/go/domain/value_objects.go",
+      "role": "Model",
+      "ranges": [
+        {
+          "start": 89,
+          "end": 153,
+          "role": "Command",
+          "startText": "type ValidatedCommand struct{ value Command }",
+          "endText": ""
+        }
+      ],
+      "sha256": "682515a1b2c5db2c6a70fafa2a61a4664769228838516653418cc6772d9428b3"
+    },
+    {
+      "path": "../decider_level3/go/domain_test.go",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "75cb5df2bf9b6156a397fe482cf9ed7f6aa18f27255459e4da8d9b77bdce9d7f"
+    },
+    {
+      "path": "../decider_level3/go/projection_tests.go",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "79071372c763b135f21425e8327b428ab35aa6c9f0fffc808768fe262a7cb771"
+    },
+    {
+      "path": "../decider_level3/go/dcb/json_store.go",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "e2a93f6e8267906d13c9a50b129f80a31688472da3c11d4d476552f811f54240"
+    },
+    {
+      "path": "go/main.go",
+      "role": "Boundary",
+      "sha256": "2653e9eb2da315bb1e588a1bd0ab9a1d2581d2598ea41467d37225e6e0aea215",
+      "ranges": [
+        {
+          "start": 167,
+          "end": 278,
+          "role": "UseCase",
+          "startText": "\thandlerHTTP := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {",
+          "endText": "\t\t}"
+        }
+      ]
+    },
+    {
+      "path": "tests/http_tests.py",
+      "role": "HttpTest",
+      "sha256": "b9b28aa627ca06227da0f9024b34791f815b0deaad8916e2508c4f9813a0e4a3",
+      "ranges": []
+    }
+  ],
+  "Swift": [
+    {
+      "path": "../decider_level3/swift/dcb.swift",
+      "role": "Library",
+      "sha256": "74ab566de299a87011572a4d3f4c09e854a57105e0622f1abd725085ad6bee65",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/swift/decider.swift",
+      "role": "Decider",
+      "sha256": "f837b514b38d43714cfba85a45bb68455d8730ec3e9ac30d4e8cae71f8bb09dd",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/swift/domainTests.swift",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "5911c87f618ab19d4f0e2f0150d3901c0d0397a642a6efdd045d76d720ccbeef"
+    },
+    {
+      "path": "../decider_level3/swift/handlers.swift",
+      "role": "Command",
+      "ranges": [],
+      "sha256": "e98bce7f71251c161872dbcf8b99568258affbc6e4f5a8915ae7af4bc08074e1"
+    },
+    {
+      "path": "../decider_level3/swift/models.swift",
+      "role": "Model",
+      "sha256": "d34adc2a83ded5a2c0daee3f39ec387bb8dd7c0ed680826d5543e28964e50a23",
+      "ranges": [
+        {
+          "start": 34,
+          "end": 39,
+          "role": "Projection",
+          "startText": "struct SchoolList: Codable, Sendable {",
+          "endText": "}"
+        },
+        {
+          "start": 40,
+          "end": 47,
+          "role": "UseCase",
+          "startText": "struct Trace: Codable, Sendable {",
+          "endText": "}"
+        },
+        {
+          "start": 65,
+          "end": 75,
+          "role": "Command",
+          "startText": "enum Command: Sendable {",
+          "endText": "}"
+        },
+        {
+          "start": 88,
+          "end": 91,
+          "role": "Decider",
+          "startText": "enum Decision: Sendable {",
+          "endText": "}"
+        },
+        {
+          "start": 92,
+          "end": 99,
+          "role": "UseCase",
+          "startText": "enum Operation: Sendable {",
+          "endText": "}"
+        }
+      ]
+    },
+    {
+      "path": "../decider_level3/swift/projection.swift",
+      "role": "Projection",
+      "sha256": "e52d422b6986eb3fca408335abcf3988a078146ed1979639391a7d548e3121ee",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/swift/projectionTests.swift",
+      "role": "DomainTest",
+      "ranges": [],
+      "sha256": "840031c3082fdd247b8fdb890c83a17d470d20d9747233bab9ebae8a75f8befb"
+    },
+    {
+      "path": "../decider_level3/swift/routing.swift",
+      "role": "Connection",
+      "sha256": "4dabed3ed7fcac27614f899d11f4b84c146db02b27418863ea7bec4b14d5df3a",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/swift/schoolProjection.swift",
+      "role": "Projection",
+      "ranges": [],
+      "sha256": "00acfdbf7ec08065af61f8c5f2983c8b847c37c7e846be61e69e6a81bcccec4c"
+    },
+    {
+      "path": "../decider_level3/swift/valueObjects.swift",
+      "role": "Model",
+      "ranges": [
+        {
+          "start": 40,
+          "end": 57,
+          "role": "Command",
+          "startText": "struct ValidatedCommand {",
+          "endText": "}"
+        }
+      ],
+      "sha256": "68d380fb0521b20d0ec58637b7012b9e6324da0328d111733ac1e852721b9539"
+    },
+    {
+      "path": "../decider_level3/swift/wire.swift",
+      "role": "Boundary",
+      "sha256": "cab03b2b588256636449482947877dc6574a7091cea3bf0f15520bb9c63b42ee",
+      "ranges": []
+    },
+    {
+      "path": "../decider_level3/swift/JsonStore.swift",
+      "role": "Library",
+      "ranges": [],
+      "sha256": "f75b28ebe8d34845782b04450d79e54afedbc9f8662735d9978f3a224137c31e"
+    },
+    {
+      "path": "swift/main.swift",
+      "role": "Boundary",
+      "sha256": "60185776dade7fb1adb38b33b7d65cf97953b7e21b5aa838f6782851851dfdb6",
+      "ranges": [
+        {
+          "start": 99,
+          "end": 172,
+          "role": "UseCase",
+          "startText": "  func route(_ method: String, _ uri: String, _ content: String, _ raw: Data) throws -> (Int, Data)",
+          "endText": "  }"
+        }
+      ]
+    },
+    {
+      "path": "tests/http_tests.py",
+      "role": "HttpTest",
+      "sha256": "b9b28aa627ca06227da0f9024b34791f815b0deaad8916e2508c4f9813a0e4a3",
+      "ranges": []
+    }
+  ]
+}

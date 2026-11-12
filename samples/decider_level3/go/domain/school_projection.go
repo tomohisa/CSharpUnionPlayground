@@ -194,6 +194,17 @@ func (p *SchoolProjection) Student(id string) Student {
 	p.index.Read(func(rows map[indexKey]indexRow) { result = rows[indexKey{Kind: "student", A: id}].(studentRow).Value })
 	return result
 }
+func (p *SchoolProjection) FindStudent(id string) (int, Student, bool) {
+	var student Student
+	var found bool
+	position := p.index.Read(func(rows map[indexKey]indexRow) {
+		if row, ok := rows[indexKey{Kind: "student", A: id}].(studentRow); ok {
+			student = row.Value
+			found = true
+		}
+	})
+	return position, student, found
+}
 func (p *SchoolProjection) Snapshot() (int, SchoolList) {
 	list := SchoolList{Students: []Student{}, Classes: []ClassState{}, Enrollments: []Enrollment{}, Summaries: []string{}}
 	position := p.index.Read(func(rows map[indexKey]indexRow) {

@@ -52,6 +52,7 @@ export class SchoolProjection{
   get checkpoint(){return this.index.checkpoint;}get rowCount(){return this.index.rowCount;}get work(){return this.index.work;}
   accept=this.index.accept;
   student(id:string):Student{return this.index.read(rows=>structuredClone(typed(rows.get(key("student",id))!,"student").value)).state;}
+  findStudent(id:string):{position:number;state:Student[]}{return this.index.read(rows=>{const row=rows.get(key("student",id));return row?.kind==="student"?[structuredClone(row.value)]:[];});}
   snapshot():{position:number;state:SchoolList}{return this.index.read(rows=>{
     const students:Student[]=[],classes:ClassState[]=[],enrollments:Enrollment[]=[];
     for(const row of rows.values())switch(row.kind){case "student":students.push(row.value);break;case "enrollment":enrollments.push(row.value);break;

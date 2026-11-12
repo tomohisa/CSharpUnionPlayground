@@ -153,7 +153,7 @@
   "csharp/SchoolProjection.cs": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "b75edb97709d1cbbb65b6a8c744ac14cc46643891b871272871decbf8dcad775"
+    "sha256": "292c5df3690bda33e96242ee51924864f89cf1d2cec9d409898edece571254d1"
   },
   "csharp/ValueObjects.cs": {
     "role": "Model",
@@ -322,7 +322,7 @@
   "fsharp/SchoolProjection.fs": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "b0e6689303817a01b3f3141d4ed18f15f099ff7a5bece25e57a0c39f29186b0b"
+    "sha256": "a4d5cb090a01929ad05d22ca5ae58ad2ce05be054fd52eaebcf6a86b4bd66ff4"
   },
   "fsharp/ValueObjects.fs": {
     "role": "Model",
@@ -473,7 +473,7 @@
   "go/domain/school_projection.go": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "31bef0f91e644c3b1effb9afc7835ebedc015d42c34435b892fbaa6494207c7c"
+    "sha256": "559f248e7e6560d8108b252cebec318d931bc08056f4571b8966e907412541f8"
   },
   "go/domain/value_objects.go": {
     "role": "Model",
@@ -672,7 +672,7 @@
   "java/SchoolProjection.java": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "7e25aab36f0c1d6b86856789102f1d8f13ae91f836b49d264efeb69ff28e73c3"
+    "sha256": "221cafb8ef9edc3c857c7ffc0d9a5aa9583c1c89ceb531a767c9cf096a1987f2"
   },
   "java/ValueObjects.java": {
     "role": "Model",
@@ -763,7 +763,7 @@
   },
   "rust/src/dcb.rs": {
     "role": "Library",
-    "sha256": "3fd1489aaea9b440375d7d698b49e8a9631f524ff31874fde21f48d525172642",
+    "sha256": "aa378abcaa24bb052dd08c47137103aa01722ad7d91d9d511e09a61234f3998f",
     "ranges": []
   },
   "rust/src/decider.rs": {
@@ -853,7 +853,7 @@
   "rust/src/school_projection.rs": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "66182a0939e4bb18fbedd3eb1a6ec72b6b5ffc41bd5fd96eb89b064c0dc82efa"
+    "sha256": "993cc24dec3d3b4cb8167ba304106f81a8621068cfac6603fb5c89c60832467e"
   },
   "rust/src/value_objects.rs": {
     "role": "Model",
@@ -1022,7 +1022,7 @@
   "swift/schoolProjection.swift": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "77f40f72d3ddb2a783a3a742a92671895df9db8f63108e0726a3f74fcb01ca42"
+    "sha256": "00acfdbf7ec08065af61f8c5f2983c8b847c37c7e846be61e69e6a81bcccec4c"
   },
   "swift/valueObjects.swift": {
     "role": "Model",
@@ -1217,7 +1217,7 @@
   "typescript/schoolProjection.ts": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "2ef8ba76e5a30f38c744f3472932fb399e5f42aacbca243c978bfe92730aca8a"
+    "sha256": "fb910c3586e499a2af80b3fdd1aad3665013cc2117e4cf6c9e19bd7e72259651"
   },
   "typescript/valueObjects.ts": {
     "role": "Model",

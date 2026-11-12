@@ -1,0 +1,6 @@
+.build/
+**/bin/
+**/obj/
+**/target/
+**/node_modules/
+__pycache__/
