@@ -79,7 +79,7 @@ def publish(source,destination):
     destination.mkdir(parents=True,exist_ok=True)
     expected={'manifest.json','README.md'}
     for name,data in results:
-        benchmark.report(data,destination/name);expected.update([name,Path(name).with_suffix('.md').name])
+        benchmark.report(data,destination/name);shutil.copyfile(source/name,destination/name);expected.update([name,Path(name).with_suffix('.md').name])
     shutil.copyfile(source/'manifest.json',destination/'manifest.json')
     render_index(results,destination)
     for path in destination.iterdir():
