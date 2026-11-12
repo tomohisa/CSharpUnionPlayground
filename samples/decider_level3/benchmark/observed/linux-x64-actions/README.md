@@ -4,6 +4,22 @@ CPU: AMD EPYC 7763 64-Core Processor / RAM: 15.6084 GiB / `ubuntu-26.04`。
 
 [Actions run](https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/43179765108) / [Measured source](https://github.com/tomohisa/CSharpUnionPlayground/tree/b8b5d71533da2c89916beb4969aa7bbc61604eae/samples/decider_level3).
 
+
+## 測定環境
+
+OS: `Linux-7.0.0-1019-azure-x86_64-with-glibc2.43` / architecture: `x86_64`。
+
+| 言語 | 実測ツールチェーン |
+|---|---|
+| C# / F# | .NET SDK 11.0.100 / runtime 11.0.0 |
+| TypeScript + Zod (Node) | v26.13.1 |
+| Rust | rustc 1.99.1 (58cf8f9c3 2026-10-13) |
+| Java | openjdk version "27.0.1.0.2" 2026-10-21 |
+| Go | go version go1.27.4 linux/amd64 |
+| Swift | Swift version 6.4.2 (swift-6.4.2-RELEASE) |
+
+## 結果
+
 全サイズ・7言語のSQLite／メモリJSONを、同じx64ジョブで順次測定しました。ビルドは計測外です。C#・F#はRelease JIT＋Dynamic PGOです。
 
 | 学生数 | 結果 | Raw data |
