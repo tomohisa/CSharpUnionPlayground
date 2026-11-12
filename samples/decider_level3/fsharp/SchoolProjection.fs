@@ -90,4 +90,5 @@ type SchoolProjection() =
     member _.Checkpoint=index.Checkpoint
     member _.RowCount=index.RowCount
     member _.Work=index.Work
+    member _.Student id=index.Read(fun rows->match rows[StudentKey id] with StudentRow s->s | _->failwith "not a student") |> snd
     member _.Snapshot()=index.Read(SchoolIndex.list)

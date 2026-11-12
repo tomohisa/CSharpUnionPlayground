@@ -10,9 +10,9 @@ SOURCES=[('C#','csharp','.cs'),('F#','fsharp','.fs'),
  ('Rust','rust/src','.rs'),('TypeScript＋Zod','typescript','.ts'),
  ('Java','java','.java'),('Go','go','.go'),('Swift','swift','.swift')]
 SKIP={'bin','obj','target','node_modules','.build'}
-TESTS={'LibraryTests.cs','LibraryTests.fs','dcb_tests.rs','dcb.test.ts','DcbTests.java','libraryTests.swift'}
-ROLES=['Model','Decider','Command','Connection','Projection','UseCase','Boundary','Library','DomainTest']
-LABELS=['Model・値オブジェクト','Decider','コマンド・共通Handler・入力検証','DCB接続・メタ情報','ドメイン投影','ユースケース','アプリ設定・JSON・CLI','共通ライブラリ','ドメインテスト']
+TESTS={'LibraryTests.cs','LibraryTests.fs','dcb_tests.rs','dcb.test.ts','DcbTests.java','libraryTests.swift','PersistenceTests.cs'}
+ROLES=['Model','Decider','Command','Connection','Projection','UseCase','Boundary','Library','DomainTest','Benchmark']
+LABELS=['Model・値オブジェクト','Decider','コマンド・共通Handler・入力検証','DCB接続・メタ情報','ドメイン投影','ユースケース','アプリ設定・JSON・CLI','共通ライブラリ','ドメインテスト','ベンチマーク']
 START,END='<!-- code-stats:start -->','<!-- code-stats:end -->'
 def collect():
  manifest=json.loads((HERE/'code_stats_classification.json').read_text())
@@ -42,7 +42,7 @@ def collect():
     else:segments.append({'start':index,'end':index,'role':role})
    details.append({'path':name,'lines':len(lines),'characters':sum(not c.isspace() for c in raw.decode()),'segments':segments})
   for key in ['lines','characters']:
-   groups.setdefault('ApplicationTotal',{})[key]=sum(groups[r][key] for r in ROLES if r not in ['Library','DomainTest'])
+   groups.setdefault('ApplicationTotal',{})[key]=sum(groups[r][key] for r in ROLES if r not in ['Library','Benchmark'])
    groups.setdefault('Total',{})[key]=sum(groups[r][key] for r in ROLES)
    if groups['Total'][key]!=sum(f[key] for f in details):raise ValueError('Partition does not match source total')
   rows.append({'language':language,'groups':groups,'files':details})
@@ -52,8 +52,8 @@ def collect():
 def markdown(rows):
  out=[]
  for metric,title in [('lines','行数（空行を含む）'),('characters','空白以外の文字数')]:
-  columns=ROLES[:-2]+['ApplicationTotal','Library','DomainTest']
-  labels=LABELS[:-2]+['アプリ側合計（ライブラリ・テスト除外）','共通ライブラリ（別枠）','ドメインテスト（別枠）']
+  columns=ROLES[:7]+['DomainTest','ApplicationTotal','Library','Benchmark']
+  labels=LABELS[:7]+['ドメインテスト','アプリ側合計（ドメインテスト含む）','共通ライブラリ（別枠）','ベンチマーク（別枠）']
   out += ['### '+title,'','| 言語 | '+' | '.join(labels)+' |','|---|'+ '|'.join('---:' for _ in columns)+'|']
   for row in rows:out.append('| '+row['language']+' | '+' | '.join(f"{row['groups'][r][metric]:,}" for r in columns)+' |')
   out.append('')

@@ -10,6 +10,7 @@ final class SchoolProjection {
     record Member(String student,int previous,int next) implements Row {}
     record MemberIndex(int node) implements Row {}
     private final Dcb.IndexedProjection<Key,Row,Event> index=new Dcb.IndexedProjection<>(SchoolProjection::apply);
+    Student student(String id){return index.read(rows->((StudentRow)rows.get(new Key("student",id))).value()).state();}
     int checkpoint(){return index.checkpoint();}int rowCount(){return index.rowCount();}long work(){return index.work();}
     boolean accept(List<Dcb.Recorded<Event>> events){return index.accept(events);}
     static Key node(int n){return new Key("node","","",n);}

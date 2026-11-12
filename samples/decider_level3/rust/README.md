@@ -1,12 +1,12 @@
 # Rust：enumを保ち、traitでコマンドストアを分離する
 
-[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。速度・メモリのベンチマークではありません。
+[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。このページでは記述を比較し、速度・メモリは[ベンチマーク](../benchmark/README.md)で比較します。
 
 ## この設計でよかったこと
 
 ### 1. 動的なのは振る舞いで、イベント本体は型Eのまま
 
-出典：[rust/src/dcb.rs](src/dcb.rs#L21-L24)
+出典：[src/dcb.rs:21–24](src/dcb.rs#L21-L24)
 
 ```rust
 pub trait CommandStore<E:Clone+Send>:Sync {
@@ -15,7 +15,7 @@ pub trait CommandStore<E:Clone+Send>:Sync {
 }
 ```
 
-出典：[src/handlers.rs](src/handlers.rs#L1-L14)
+出典：[src/handlers.rs:1–14](src/handlers.rs#L1-L14)
 
 ```rust
 use crate::{dcb::*,models::*,routing,decider,projection,value_objects::ValidatedCommand};
@@ -38,7 +38,7 @@ dyn CommandStoreやクロージャを使っても、payloadをdyn Anyへ変え�
 
 ### 2. 所有権でストアと読み取り結果の境界を明示できる
 
-出典：[rust/src/dcb.rs](src/dcb.rs#L31-L34)
+出典：[src/dcb.rs:31–34](src/dcb.rs#L31-L34)
 
 ```rust
     fn copy(&self,e:&Recorded<E>)->Recorded<E>{Recorded{position:e.position,command_id:e.command_id.clone(),event_type:e.event_type.clone(),tags:e.tags.clone(),payload:(self.copy_payload)(&e.payload)}}
@@ -51,7 +51,7 @@ dyn CommandStoreやクロージャを使っても、payloadをdyn Anyへ変え�
 
 ### 3. 複合キーとBTreeMapで一覧の順序と区別を揃えられる
 
-出典：[rust/src/projection.rs](src/projection.rs#L4-L7)
+出典：[src/projection.rs:4–7](src/projection.rs#L4-L7)
 
 ```rust
 pub struct Registers { pub students:BTreeMap<String,Student>, pub classes:BTreeMap<String,ClassState>, pub enrollments:BTreeMap<(String,String),Enrollment> }
@@ -66,7 +66,7 @@ pub fn apply_student(s:&mut Registers,e:&Event) {
 
 ### 1. 汎用化するとSendとクロージャの所有関係もAPIになる
 
-出典：[rust/src/dcb.rs](src/dcb.rs#L85-L88)
+出典：[src/dcb.rs:85–88](src/dcb.rs#L85-L88)
 
 ```rust
 pub struct CommandProcessor<'a,C,E:Clone+Send,R> {
@@ -79,7 +79,7 @@ pub struct CommandProcessor<'a,C,E:Clone+Send,R> {
 
 ### 2. 投影スナップショットはMapを含めてcloneする
 
-出典：[rust/src/dcb.rs](src/dcb.rs#L80-L80)
+出典：[src/dcb.rs:80–80](src/dcb.rs#L80-L80)
 
 ```rust
     pub fn snapshot(&self) -> (usize,S) { self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner).clone() }
@@ -89,7 +89,7 @@ pub struct CommandProcessor<'a,C,E:Clone+Send,R> {
 
 ### 3. ロック中の購読panicを分離しないと、コミット結果とMutexが壊れる
 
-出典：[rust/src/dcb.rs](src/dcb.rs#L48-L50)
+出典：[src/dcb.rs:48–50](src/dcb.rs#L48-L50)
 
 ```rust
         s.listeners.retain(|listener| std::panic::catch_unwind(std::panic::AssertUnwindSafe(||listener(&committed.iter().map(|e|self.copy(e)).collect::<Vec<_>>()))).unwrap_or(false));
@@ -118,3 +118,9 @@ privateフィールドのnewtypeとTryFrom、Resultの?で制約を合成しま�
 一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
 
 [src/projection_tests.rs](src/projection_tests.rs)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。
+
+## JSON／SQLiteと計測
+
+rusqliteのbundled SQLite。所有権を持つJSON文字列をArcで共有し、メモリジャーナルの読み取りで本文全体を複製しないようにしています。復元時のserde処理は省きません。
+
+[共通ベンチマーク](../benchmark/README.md)では、履修コマンド・拒否・競合後の再判断、索引Projectionのクエリ、JSON応答、再起動を同じ件数で実行します。SQLite版とメモリJSON版の両方でシリアライズ・デシリアライズを通します。インフラ障害は業務のRejectedと混ぜず、プロセスを失敗させます。外部接続のイベントは明示的なRefreshまたは次の自分のcommitで取り込みます。

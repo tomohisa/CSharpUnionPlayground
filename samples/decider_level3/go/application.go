@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"example.com/dcb-school/dcb"
 	d "example.com/dcb-school/domain"
 	"fmt"
+	"os"
+	"time"
 )
 
 type ReadAudit struct {
@@ -23,8 +26,30 @@ type RunOutput struct {
 }
 
 func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOutput, error) {
-	store := dcb.NewStore(d.DescribeEvent, d.CopyEvent)
-	store.Load(history)
+	var journal dcb.JsonJournal = dcb.NewMemoryJsonJournal()
+	if path := os.Getenv("DECIDER_PERSISTENT"); path != "" {
+		journal = dcb.NewSqliteJournal(path, "FULL")
+	}
+	store := dcb.NewJsonEventStore(journal, d.DescribeEvent, func(e d.Event) string {
+		b, err := json.Marshal(e)
+		if err != nil {
+			panic(err)
+		}
+		return string(b)
+	}, func(s string) d.Event {
+		e, err := d.DecodeEvent([]byte(s))
+		if err != nil {
+			panic(err)
+		}
+		return e
+	})
+	defer store.Close()
+	if len(history) > 0 {
+		store.Load(history)
+	}
+	if os.Getenv("DECIDER_BENCHMARK") == "1" {
+		fmt.Fprintln(os.Stderr, "STORE "+store.EngineVersion())
+	}
 	projection := d.NewSchoolProjection()
 	store.Subscribe(projection.Accept)
 	var executor dcb.Executor[d.Command, d.Event, d.Rejection] = dcb.DcbExecutor[d.Command, d.Event, d.Rejection]{Store: store}
@@ -43,6 +68,11 @@ func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOu
 	commit := func(op string, t dcb.PreparedCommand[d.Rejection]) {
 		r := t.Commit()
 		steps = append(steps, d.Trace{op, r.Status, r.Conflicts, r.Appended, r.Position, r.Errors})
+	}
+	bench := os.Getenv("DECIDER_BENCHMARK") == "1"
+	start := time.Now()
+	if bench {
+		fmt.Fprintln(os.Stderr, "READY")
 	}
 	for _, operation := range operations {
 		switch x := operation.(type) {
@@ -63,6 +93,7 @@ func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOu
 			delete(tickets, x.Key)
 			commit("Commit", t)
 		case d.ListAll:
+			store.Refresh()
 			if store.ListenerFaults() != 0 {
 				return RunOutput{}, fmt.Errorf("projection unavailable; rebuild required")
 			}
@@ -87,6 +118,13 @@ func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOu
 			return RunOutput{}, fmt.Errorf("unknown operation")
 		}
 	}
+	if bench {
+		fmt.Fprintln(os.Stderr, "PHASE operations", time.Since(start).Seconds())
+	}
+	start = time.Now()
+	store.Refresh()
+	queryBenchmark(store, projection)
+	start = time.Now()
 	events := store.Read(dcb.Query{Items: []dcb.QueryItem{}}).Events
 	fresh := d.NewSchoolProjection()
 	if !fresh.Accept(events) {
@@ -97,5 +135,10 @@ func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOu
 	if store.ListenerFaults() != 0 {
 		return RunOutput{}, fmt.Errorf("projection unavailable; rebuild required")
 	}
+	if bench {
+		fmt.Fprintln(os.Stderr, "PHASE read_rebuild_snapshot", time.Since(start).Seconds())
+		fmt.Fprintln(os.Stderr, "CODEC", store.Encoded, store.Decoded, store.EncodedBytes, store.DecodedBytes)
+	}
+	storageBenchmark()
 	return RunOutput{events, steps, lists, s, rebuilt, position, store.ListenerFaults(), reads}, nil
 }

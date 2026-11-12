@@ -24,7 +24,7 @@ permissions:
 jobs:
   decider:
     runs-on: macos-15
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - name: Check README code statistics
@@ -64,10 +64,26 @@ jobs:
         run: python3 samples/decider_level3/run.py --verify
       - name: Domain-free library isolation and conditional races
         run: python3 samples/decider_level3/tests/library_isolation.py
+      - name: SQLite persistence, cross-language replay and competing processes
+        run: python3 samples/decider_level3/tests/persistence.py
+      - name: JSON and SQLite libraries without school models
+        run: python3 samples/decider_level3/tests/json_library_isolation.py
+      - name: SQLite and memory benchmark smoke test (not performance observations)
+        run: python3 samples/decider_level3/benchmark/run.py --quick --store both --output samples/decider_level3/.build/es-smoke.json
+      - name: Benchmark calibration reuse and mismatch rejection
+        run: python3 samples/decider_level3/tests/benchmark_runner.py --observations samples/decider_level3/.build/es-smoke.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: level3-es-benchmark-smoke
+          path: |
+            samples/decider_level3/.build/es-smoke.json
+            samples/decider_level3/.build/es-smoke.md
       - name: Exhaustiveness with a new progress case
         run: python3 samples/decider_level3/tests/check_exhaustiveness.py
       - name: C# Native AOT
         run: |
           python3 samples/decider_level3/run.py --language csharp --native-aot --verify
+          samples/decider_level3/.build/csharp-aot/Decider --persistence-test "$RUNNER_TEMP/level3-aot-persistence"
+          python3 samples/decider_level3/benchmark/run.py --quick --language csharp --csharp-native-aot --store both --output samples/decider_level3/.build/es-aot-smoke.json
           python3 samples/decider_level3/tests/domain_tests.py --language csharp --native-aot
           python3 samples/decider_level3/tests/projection_scaling.py --language csharp --native-aot --sizes 1000,100000 --samples 1

@@ -35,5 +35,13 @@ func run() error {
 	if err != nil {
 		return err
 	}
+	if os.Getenv("DECIDER_BENCHMARK_SUMMARY") == "1" {
+		b, err := benchmarkOutput(output)
+		if err != nil {
+			return err
+		}
+		_, err = fmt.Fprintln(os.Stdout, string(b))
+		return err
+	}
 	return json.NewEncoder(os.Stdout).Encode(output)
 }

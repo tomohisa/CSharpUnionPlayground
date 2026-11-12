@@ -1,12 +1,12 @@
 # Java：公開generic portとsealedな学校イベントを組み合わせる
 
-[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。速度・メモリのベンチマークではありません。
+[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。このページでは記述を比較し、速度・メモリは[ベンチマーク](../benchmark/README.md)で比較します。
 
 ## この設計でよかったこと
 
 ### 1. 公開ライブラリが学校のsealed interfaceを知らずに済む
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L23-L26)
+出典：[playground/dcb/Dcb.java:23–26](playground/dcb/Dcb.java#L23-L26)
 
 ```java
     public interface CommandStore<E> {
@@ -15,7 +15,7 @@
     }
 ```
 
-出典：[SchoolHandler.java](SchoolHandler.java#L1-L11)
+出典：[SchoolHandler.java:1–11](SchoolHandler.java#L1-L11)
 
 ```java
 import playground.dcb.Dcb;
@@ -35,7 +35,7 @@ final class SchoolHandler implements Dcb.CommandHandler<Command,Event,Rejection>
 
 ### 2. JSONのgenericエンベロープにも元のEvent型を指定できる
 
-出典：[java/Main.java](Main.java#L6-L6)
+出典：[Main.java:6–6](Main.java#L6-L6)
 
 ```java
     record Input(List<Dcb.Recorded<Event>> history,List<Operation> operations){public Input{history=List.copyOf(history);operations=List.copyOf(operations);}}
@@ -45,14 +45,14 @@ Recorded<Event>のpayloadを学校のポリモーフィズムとして読むこ�
 
 ### 3. スナップショットの状態と位置をひとつの値にできる
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L63-L64)
+出典：[playground/dcb/Dcb.java:63–64](playground/dcb/Dcb.java#L63-L64)
 
 ```java
     public record Snapshot<S>(int position,S state) {}
     public static final class LiveProjection<E,S> {
 ```
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L78-L78)
+出典：[playground/dcb/Dcb.java:78–78](playground/dcb/Dcb.java#L78-L78)
 
 ```java
         public synchronized Snapshot<S> snapshot() { return new Snapshot<>(checkpoint,copyState.apply(state)); }
@@ -64,7 +64,7 @@ Recorded<Event>のpayloadを学校のポリモーフィズムとして読むこ�
 
 ### 1. ライブラリ型とドメイン型のJSON登録は別の仕事
 
-出典：[java/Models.java](Models.java#L224-L225)
+出典：[Models.java:224–225](Models.java#L224-L225)
 
 ```java
 sealed interface Event permits StudentRegistered, StudentPromoted, ClassOpened, StudentEnrolled, StudentDropped, ClassStarted, AttendanceRecorded, ResultRecorded, ClassCompleted, StudyStarted {}
@@ -75,7 +75,7 @@ Eを保持しても、学校のpermitsとJsonSubTypesのケース一覧は引き
 
 ### 2. 不変Mapの更新でも再構築が多い
 
-出典：[java/Projection.java](Projection.java#L51-L52)
+出典：[Projection.java:51–52](Projection.java#L51-L52)
 
 ```java
     static Registers reduce(Registers s,Event e){return new Registers(student(s.students(),e),classroom(s.classes(),e),enrollment(s.enrollments(),e));}
@@ -86,7 +86,7 @@ mutableなローカルコピーから、Map.copyOfを持つ新しいRegistersを
 
 ### 3. Javaの型消去はあるが、payloadをObjectへ崩す必要はない
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L81-L83)
+出典：[playground/dcb/Dcb.java:81–83](playground/dcb/Dcb.java#L81-L83)
 
 ```java
     public sealed interface Preparation<E,R> permits Emit, Reject {}
@@ -115,3 +115,9 @@ ID・定員・点数・日付のfactoryがInputViolationを投げ、Handlerが�
 一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
 
 [ProjectionTests.java](ProjectionTests.java)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。
+
+## JSON／SQLiteと計測
+
+sqlite-jdbc。ConnectionとPreparedStatementを再利用し、payloadのJSONはJacksonで復元します。JDBCドライバーのSQLiteを使用するため、他言語とエンジン版が一致するとは限りません。
+
+[共通ベンチマーク](../benchmark/README.md)では、履修コマンド・拒否・競合後の再判断、索引Projectionのクエリ、JSON応答、再起動を同じ件数で実行します。SQLite版とメモリJSON版の両方でシリアライズ・デシリアライズを通します。インフラ障害は業務のRejectedと混ぜず、プロセスを失敗させます。外部接続のイベントは明示的なRefreshまたは次の自分のcommitで取り込みます。

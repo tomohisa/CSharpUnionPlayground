@@ -1,21 +1,63 @@
 {
   "csharp/Application.cs": {
     "role": "UseCase",
-    "sha256": "f974f97ce6079ebe719ccdd8f6a9a12a797eb24fce868dc1a63ad74a8c8cd529",
+    "sha256": "d36a3551d2b7b3035bd63bf385fdad73255b86abe0f8299e67c85ad0627ffbd8",
     "ranges": [
       {
         "start": 1,
-        "end": 6,
+        "end": 7,
         "role": "Boundary",
         "startText": "using System.Collections.Immutable;",
         "endText": "    ImmutableArray<SchoolList> Lists,SchoolList List,SchoolList Rebuilt,int Checkpoint,ImmutableArray<ReadAudit> Reads,int ListenerFaults);"
       },
       {
-        "start": 11,
-        "end": 17,
+        "start": 12,
+        "end": 15,
         "role": "Boundary",
-        "startText": "        var store=new EventStore<Event>(Routing.Describe,e=>e);",
+        "startText": "        var path=Environment.GetEnvironmentVariable(\"DECIDER_PERSISTENT\");",
+        "endText": "        if(!history.IsEmpty)store.Load(history);"
+      },
+      {
+        "start": 16,
+        "end": 16,
+        "role": "Benchmark",
+        "startText": "        if(Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK\")==\"1\")Console.Error.WriteLine(\"STORE \"+store.EngineVersion);",
+        "endText": "        if(Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK\")==\"1\")Console.Error.WriteLine(\"STORE \"+store.EngineVersion);"
+      },
+      {
+        "start": 17,
+        "end": 21,
+        "role": "Boundary",
+        "startText": "        var projection=new SchoolProjection();",
         "endText": "        var handler=new SchoolHandler();"
+      },
+      {
+        "start": 26,
+        "end": 27,
+        "role": "Benchmark",
+        "startText": "        var bench=Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK\")==\"1\";",
+        "endText": "        var clock=System.Diagnostics.Stopwatch.StartNew();if(bench)Console.Error.WriteLine(\"READY\");"
+      },
+      {
+        "start": 47,
+        "end": 47,
+        "role": "Benchmark",
+        "startText": "        if(bench)Console.Error.WriteLine($\"PHASE operations {clock.Elapsed.TotalSeconds:R}\");clock.Restart();",
+        "endText": "        if(bench)Console.Error.WriteLine($\"PHASE operations {clock.Elapsed.TotalSeconds:R}\");clock.Restart();"
+      },
+      {
+        "start": 49,
+        "end": 49,
+        "role": "Benchmark",
+        "startText": "        QueryBenchmark.Run(store,projection);clock.Restart();",
+        "endText": "        QueryBenchmark.Run(store,projection);clock.Restart();"
+      },
+      {
+        "start": 54,
+        "end": 55,
+        "role": "Benchmark",
+        "startText": "        if(bench){Console.Error.WriteLine($\"PHASE read_rebuild_snapshot {clock.Elapsed.TotalSeconds:R}\");Console.Error.WriteLine($\"CODEC {store.Encoded} {store.Decoded} {store.EncodedBytes} {store.DecodedBytes}\");}",
+        "endText": "        StorageBenchmark.Run();"
       }
     ]
   },
@@ -82,8 +124,16 @@
   },
   "csharp/Program.cs": {
     "role": "Boundary",
-    "sha256": "0ade55a413ec88b0523a123e723fc84a41f51fe1be2a397a46333ba53e62c84a",
-    "ranges": []
+    "sha256": "796e562aca9165cd57efdbb86e4461675f2231fe9c190a34543720dd695a073b",
+    "ranges": [
+      {
+        "start": 16,
+        "end": 16,
+        "role": "Benchmark",
+        "startText": "    Console.WriteLine(Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK_SUMMARY\")==\"1\"?BenchmarkOutput.Serialize(output):JsonSerializer.Serialize(output,Wire.Default.RunOutput));",
+        "endText": "    Console.WriteLine(Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK_SUMMARY\")==\"1\"?BenchmarkOutput.Serialize(output):JsonSerializer.Serialize(output,Wire.Default.RunOutput));"
+      }
+    ]
   },
   "csharp/Projection.cs": {
     "role": "Projection",
@@ -103,7 +153,7 @@
   "csharp/SchoolProjection.cs": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "760a6af60ef2b7f25c4c186a5798616d79a35c2133b011b9afbe3c3b723fa60e"
+    "sha256": "b75edb97709d1cbbb65b6a8c744ac14cc46643891b871272871decbf8dcad775"
   },
   "csharp/ValueObjects.cs": {
     "role": "Model",
@@ -120,21 +170,63 @@
   },
   "fsharp/Application.fs": {
     "role": "UseCase",
-    "sha256": "fdb66ea87aeb90acccb0aa9ddc9773a0e2bccfaa0bb060d47e9bcb572e245bf3",
+    "sha256": "70d89e92db114440b5879168f3ed7e7fff42887846df33b0980379b1622bf704",
     "ranges": [
       {
         "start": 1,
-        "end": 5,
+        "end": 7,
         "role": "Boundary",
         "startText": "namespace SchoolDomain",
         "endText": "type RunOutput = {Events:Recorded<Event> list;Steps:Trace list;Lists:SchoolList list;List:SchoolList;Rebuilt:SchoolList;Checkpoint:int;Reads:ReadAudit list;ListenerFaults:int}"
       },
       {
-        "start": 8,
-        "end": 12,
+        "start": 10,
+        "end": 16,
         "role": "Boundary",
-        "startText": "        let store=EventStore<Event>(Routing.describe,id)",
+        "startText": "        let options=JsonSerializerOptions(PropertyNamingPolicy=JsonNamingPolicy.CamelCase,AllowOutOfOrderMetadataProperties=true,RespectRequiredConstructorParameters=true)",
+        "endText": "        if not (List.isEmpty history) then store.Load history"
+      },
+      {
+        "start": 17,
+        "end": 17,
+        "role": "Benchmark",
+        "startText": "        if Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK\")=\"1\" then Console.Error.WriteLine(\"STORE \"+store.EngineVersion)",
+        "endText": "        if Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK\")=\"1\" then Console.Error.WriteLine(\"STORE \"+store.EngineVersion)"
+      },
+      {
+        "start": 18,
+        "end": 20,
+        "role": "Boundary",
+        "startText": "        let projection=SchoolProjection()",
         "endText": "        let executor:IDcbExecutor<Event,Rejection>=DcbExecutor<Event,Rejection>(store,3)"
+      },
+      {
+        "start": 30,
+        "end": 32,
+        "role": "Benchmark",
+        "startText": "        let bench=Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK\")=\"1\"",
+        "endText": "        if bench then Console.Error.WriteLine(\"READY\")"
+      },
+      {
+        "start": 61,
+        "end": 62,
+        "role": "Benchmark",
+        "startText": "        if bench then Console.Error.WriteLine($\"PHASE operations {clock.Elapsed.TotalSeconds:R}\")",
+        "endText": "        clock.Restart()"
+      },
+      {
+        "start": 64,
+        "end": 65,
+        "role": "Benchmark",
+        "startText": "        QueryBenchmark.run store projection",
+        "endText": "        clock.Restart()"
+      },
+      {
+        "start": 72,
+        "end": 75,
+        "role": "Benchmark",
+        "startText": "        if bench then",
+        "endText": "        StorageBenchmark.run()"
       }
     ]
   },
@@ -201,8 +293,16 @@
   },
   "fsharp/Program.fs": {
     "role": "Boundary",
-    "sha256": "fe473100ae720fdc889f4fdb82eeccaa284d92d254571ce8b11d3c466d46cd41",
-    "ranges": []
+    "sha256": "acce198fc6abd71662aa1eca89105410828799610afbed529f717f1a0f67dc27",
+    "ranges": [
+      {
+        "start": 34,
+        "end": 34,
+        "role": "Benchmark",
+        "startText": "                Console.WriteLine(if Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK_SUMMARY\")=\"1\" then BenchmarkOutput.serialize output options else JsonSerializer.Serialize(output,options))",
+        "endText": "                Console.WriteLine(if Environment.GetEnvironmentVariable(\"DECIDER_BENCHMARK_SUMMARY\")=\"1\" then BenchmarkOutput.serialize output options else JsonSerializer.Serialize(output,options))"
+      }
+    ]
   },
   "fsharp/Projection.fs": {
     "role": "Projection",
@@ -222,7 +322,7 @@
   "fsharp/SchoolProjection.fs": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "5b69c80dc3b67b19b5e71cc81ceda1536b9760266c5425659089c9fdc5108b78"
+    "sha256": "b0e6689303817a01b3f3141d4ed18f15f099ff7a5bece25e57a0c39f29186b0b"
   },
   "fsharp/ValueObjects.fs": {
     "role": "Model",
@@ -239,21 +339,63 @@
   },
   "go/application.go": {
     "role": "UseCase",
-    "sha256": "1a07fd91cae4bac3cb123083514548d67c9e52886ce4a41044258f3faa27d4c8",
+    "sha256": "e0c21d3e81cec25a003b48aee3a14a2f14a467af8ff062783402114ace6e0c9d",
     "ranges": [
       {
         "start": 1,
-        "end": 24,
+        "end": 27,
         "role": "Boundary",
         "startText": "package main",
         "endText": ""
       },
       {
-        "start": 26,
-        "end": 31,
+        "start": 29,
+        "end": 49,
         "role": "Boundary",
-        "startText": "\tstore := dcb.NewStore(d.DescribeEvent, d.CopyEvent)",
+        "startText": "\tvar journal dcb.JsonJournal = dcb.NewMemoryJsonJournal()",
+        "endText": "\t}"
+      },
+      {
+        "start": 50,
+        "end": 50,
+        "role": "Benchmark",
+        "startText": "\tif os.Getenv(\"DECIDER_BENCHMARK\") == \"1\" {",
+        "endText": "\tif os.Getenv(\"DECIDER_BENCHMARK\") == \"1\" {"
+      },
+      {
+        "start": 51,
+        "end": 56,
+        "role": "Boundary",
+        "startText": "\t\tfmt.Fprintln(os.Stderr, \"STORE \"+store.EngineVersion())",
         "endText": "\thandler := d.SchoolHandler{}"
+      },
+      {
+        "start": 72,
+        "end": 76,
+        "role": "Benchmark",
+        "startText": "\tbench := os.Getenv(\"DECIDER_BENCHMARK\") == \"1\"",
+        "endText": "\t}"
+      },
+      {
+        "start": 121,
+        "end": 124,
+        "role": "Benchmark",
+        "startText": "\tif bench {",
+        "endText": "\tstart = time.Now()"
+      },
+      {
+        "start": 126,
+        "end": 126,
+        "role": "Benchmark",
+        "startText": "\tqueryBenchmark(store, projection)",
+        "endText": "\tqueryBenchmark(store, projection)"
+      },
+      {
+        "start": 138,
+        "end": 142,
+        "role": "Benchmark",
+        "startText": "\tif bench {",
+        "endText": "\tstorageBenchmark()"
       }
     ]
   },
@@ -331,7 +473,7 @@
   "go/domain/school_projection.go": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "b92fac4578f06ddec34f703d11888103703f6e5b446c3375ef36010a4bcb77b5"
+    "sha256": "31bef0f91e644c3b1effb9afc7835ebedc015d42c34435b892fbaa6494207c7c"
   },
   "go/domain/value_objects.go": {
     "role": "Model",
@@ -353,8 +495,16 @@
   },
   "go/main.go": {
     "role": "Boundary",
-    "sha256": "423b569fb67ac5d1c2bdd755693edac63aad066d4fee968583efb48347367a20",
-    "ranges": []
+    "sha256": "86c08b15585c3edf2e41f27c40fa7df13f23f678c8cc5b82deb54bc5b3fdff2a",
+    "ranges": [
+      {
+        "start": 38,
+        "end": 39,
+        "role": "Benchmark",
+        "startText": "\tif os.Getenv(\"DECIDER_BENCHMARK_SUMMARY\") == \"1\" {",
+        "endText": "\t\tb, err := benchmarkOutput(output)"
+      }
+    ]
   },
   "go/projection_tests.go": {
     "role": "DomainTest",
@@ -368,21 +518,70 @@
   },
   "java/Application.java": {
     "role": "UseCase",
-    "sha256": "2ad6ee4d8e6e283498215009ef7e46a1d4c59064e86d6f44a43faa287a4447aa",
+    "sha256": "762249a8d1bb7ab13299921ca8f831678f5a6d61deee234cf9a55cd93c5d0d9c",
     "ranges": [
       {
         "start": 1,
-        "end": 5,
+        "end": 7,
         "role": "Boundary",
         "startText": "import playground.dcb.Dcb;",
         "endText": "    record RunOutput(List<Dcb.Recorded<Event>> events,List<Trace> steps,List<SchoolList> lists,SchoolList list,SchoolList rebuilt,int checkpoint,List<ReadAudit> reads,int listenerFaults){}"
       },
       {
-        "start": 7,
-        "end": 9,
+        "start": 9,
+        "end": 13,
         "role": "Boundary",
-        "startText": "        var store=new Dcb.EventStore<Event>(Routing::describe,e->e);",
+        "startText": "        var path=System.getenv(\"DECIDER_PERSISTENT\");var mapper=new ObjectMapper();",
+        "endText": "        if(!history.isEmpty())store.load(history);"
+      },
+      {
+        "start": 14,
+        "end": 14,
+        "role": "Benchmark",
+        "startText": "        if(\"1\".equals(System.getenv(\"DECIDER_BENCHMARK\")))System.err.println(\"STORE \"+store.version());var projection=new SchoolProjection();store.subscribe(projection::accept);",
+        "endText": "        if(\"1\".equals(System.getenv(\"DECIDER_BENCHMARK\")))System.err.println(\"STORE \"+store.version());var projection=new SchoolProjection();store.subscribe(projection::accept);"
+      },
+      {
+        "start": 15,
+        "end": 15,
+        "role": "Boundary",
+        "startText": "        Dcb.Executor<Event,Rejection> executor=new Dcb.DcbExecutor<>(store);var handler=new SchoolHandler();",
         "endText": "        Dcb.Executor<Event,Rejection> executor=new Dcb.DcbExecutor<>(store);var handler=new SchoolHandler();"
+      },
+      {
+        "start": 17,
+        "end": 17,
+        "role": "Benchmark",
+        "startText": "        boolean bench=\"1\".equals(System.getenv(\"DECIDER_BENCHMARK\"));long start=System.nanoTime();if(bench)System.err.println(\"READY\");",
+        "endText": "        boolean bench=\"1\".equals(System.getenv(\"DECIDER_BENCHMARK\"));long start=System.nanoTime();if(bench)System.err.println(\"READY\");"
+      },
+      {
+        "start": 26,
+        "end": 26,
+        "role": "Benchmark",
+        "startText": "        if(bench)System.err.println(\"PHASE operations \"+(System.nanoTime()-start)/1e9);start=System.nanoTime();",
+        "endText": "        if(bench)System.err.println(\"PHASE operations \"+(System.nanoTime()-start)/1e9);start=System.nanoTime();"
+      },
+      {
+        "start": 28,
+        "end": 28,
+        "role": "Benchmark",
+        "startText": "        QueryBenchmark.run(store,projection);start=System.nanoTime();",
+        "endText": "        QueryBenchmark.run(store,projection);start=System.nanoTime();"
+      },
+      {
+        "start": 32,
+        "end": 32,
+        "role": "Benchmark",
+        "startText": "        if(bench){System.err.println(\"PHASE read_rebuild_snapshot \"+(System.nanoTime()-start)/1e9);System.err.println(\"CODEC \"+store.encoded+\" \"+store.decoded+\" \"+store.encodedBytes+\" \"+store.decodedBytes);}",
+        "endText": "        if(bench){System.err.println(\"PHASE read_rebuild_snapshot \"+(System.nanoTime()-start)/1e9);System.err.println(\"CODEC \"+store.encoded+\" \"+store.decoded+\" \"+store.encodedBytes+\" \"+store.decodedBytes);}"
+      },
+      {
+        "start": 34,
+        "end": 34,
+        "role": "Benchmark",
+        "startText": "        StorageBenchmark.run();",
+        "endText": "        StorageBenchmark.run();"
       }
     ]
   },
@@ -398,8 +597,16 @@
   },
   "java/Main.java": {
     "role": "Boundary",
-    "sha256": "e623a1729c6e8b3a2b10edc5388dfdc45d562c882193ed960b3c82db980696d2",
-    "ranges": []
+    "sha256": "a03be1b026a6656d6d0857212bb48b402997ca010b468895610ac29b66d487b0",
+    "ranges": [
+      {
+        "start": 12,
+        "end": 12,
+        "role": "Benchmark",
+        "startText": "        var input=mapper.readValue(System.in,Input.class);var output=Application.run(input.history(),input.operations());System.out.println(\"1\".equals(System.getenv(\"DECIDER_BENCHMARK_SUMMARY\"))?BenchmarkOutput.serialize(output,mapper):mapper.writeValueAsString(output));",
+        "endText": "        var input=mapper.readValue(System.in,Input.class);var output=Application.run(input.history(),input.operations());System.out.println(\"1\".equals(System.getenv(\"DECIDER_BENCHMARK_SUMMARY\"))?BenchmarkOutput.serialize(output,mapper):mapper.writeValueAsString(output));"
+      }
+    ]
   },
   "java/Models.java": {
     "role": "Model",
@@ -465,7 +672,7 @@
   "java/SchoolProjection.java": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "36a849e62ad574dc6bfe121c99d1fce3cf24a1932339a5e6715dadc244cf2304"
+    "sha256": "7e25aab36f0c1d6b86856789102f1d8f13ae91f836b49d264efeb69ff28e73c3"
   },
   "java/ValueObjects.java": {
     "role": "Model",
@@ -487,7 +694,7 @@
   },
   "rust/src/application.rs": {
     "role": "UseCase",
-    "sha256": "3f551f2491e753cd92bd1aae220b1133818f9a0b19bfbbe906d369e76437378e",
+    "sha256": "a6de02611f09f83f84620c6e7ed18a82ee1789bd6c3509d4ddf7f55eca8ef65f",
     "ranges": [
       {
         "start": 1,
@@ -498,10 +705,59 @@
       },
       {
         "start": 17,
-        "end": 20,
+        "end": 19,
         "role": "Boundary",
-        "startText": "    let store=EventStore::new(routing::describe,Clone::clone);",
+        "startText": "    let journal:Box<dyn crate::json_store::JsonJournal>=match std::env::var(\"DECIDER_PERSISTENT\"){Ok(path)=>Box::new(crate::sqlite_journal::SqliteJournal::new(&path,\"FULL\")),Err(_)=>Box::new(crate::json_store::MemoryJsonJournal::new())};",
+        "endText": "    if !history.is_empty(){store.load(history);}"
+      },
+      {
+        "start": 20,
+        "end": 20,
+        "role": "Benchmark",
+        "startText": "    if std::env::var(\"DECIDER_BENCHMARK\").as_deref()==Ok(\"1\"){eprintln!(\"STORE {}\",store.engine_version());}",
+        "endText": "    if std::env::var(\"DECIDER_BENCHMARK\").as_deref()==Ok(\"1\"){eprintln!(\"STORE {}\",store.engine_version());}"
+      },
+      {
+        "start": 21,
+        "end": 22,
+        "role": "Boundary",
+        "startText": "    let projection=Arc::new(SchoolProjection::new());let listener=projection.clone();store.subscribe(Box::new(move|batch|listener.accept(batch)));",
         "endText": "    let executor=DcbExecutor{store:&store};"
+      },
+      {
+        "start": 24,
+        "end": 24,
+        "role": "Benchmark",
+        "startText": "    let bench=std::env::var(\"DECIDER_BENCHMARK\").as_deref()==Ok(\"1\");let mut start=std::time::Instant::now();if bench{eprintln!(\"READY\");}",
+        "endText": "    let bench=std::env::var(\"DECIDER_BENCHMARK\").as_deref()==Ok(\"1\");let mut start=std::time::Instant::now();if bench{eprintln!(\"READY\");}"
+      },
+      {
+        "start": 33,
+        "end": 33,
+        "role": "Benchmark",
+        "startText": "    if bench{eprintln!(\"PHASE operations {}\",start.elapsed().as_secs_f64());}start=std::time::Instant::now();",
+        "endText": "    if bench{eprintln!(\"PHASE operations {}\",start.elapsed().as_secs_f64());}start=std::time::Instant::now();"
+      },
+      {
+        "start": 35,
+        "end": 35,
+        "role": "Benchmark",
+        "startText": "    crate::query_benchmark::run(&store,&projection);start=std::time::Instant::now();",
+        "endText": "    crate::query_benchmark::run(&store,&projection);start=std::time::Instant::now();"
+      },
+      {
+        "start": 38,
+        "end": 39,
+        "role": "Benchmark",
+        "startText": "    if bench{let(a,b,c,d)=store.counters();eprintln!(\"PHASE read_rebuild_snapshot {}\",start.elapsed().as_secs_f64());eprintln!(\"CODEC {a} {b} {c} {d}\");}",
+        "endText": "    crate::storage_benchmark::run();"
+      },
+      {
+        "start": 43,
+        "end": 49,
+        "role": "Benchmark",
+        "startText": "#[derive(Serialize)]#[serde(rename_all=\"camelCase\")]",
+        "endText": "}"
       }
     ]
   },
@@ -527,8 +783,16 @@
   },
   "rust/src/main.rs": {
     "role": "Boundary",
-    "sha256": "10ead6f2eb0916308c6ea700eaeccad817fc008561799b788ac96af87376c260",
-    "ranges": []
+    "sha256": "91a3ba4efe44436436336e298c8317e5f96695fa488b259264a4cc3e67c24b83",
+    "ranges": [
+      {
+        "start": 14,
+        "end": 14,
+        "role": "Benchmark",
+        "startText": "    if std::env::var(\"DECIDER_BENCHMARK_SUMMARY\").as_deref()==Ok(\"1\"){println!(\"{}\",serde_json::to_string(&application::benchmark_summary(output))?);}else{println!(\"{}\",serde_json::to_string(&output)?);}Ok(())",
+        "endText": "    if std::env::var(\"DECIDER_BENCHMARK_SUMMARY\").as_deref()==Ok(\"1\"){println!(\"{}\",serde_json::to_string(&application::benchmark_summary(output))?);}else{println!(\"{}\",serde_json::to_string(&output)?);}Ok(())"
+      }
+    ]
   },
   "rust/src/models.rs": {
     "role": "Model",
@@ -589,7 +853,7 @@
   "rust/src/school_projection.rs": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "b80c69cfef8eb79629d4886f13a7eaacc5d55116db59f186a6bc5c0fa8761f0a"
+    "sha256": "66182a0939e4bb18fbedd3eb1a6ec72b6b5ffc41bd5fd96eb89b064c0dc82efa"
   },
   "rust/src/value_objects.rs": {
     "role": "Model",
@@ -606,7 +870,7 @@
   },
   "swift/application.swift": {
     "role": "UseCase",
-    "sha256": "bc76f4e075acb7daf4870a73a6a854608857be259b18d43adbb165667917b7f3",
+    "sha256": "c19a8bb559d66df387e528a9516881899853013583c162cd444827f3caaad265",
     "ranges": [
       {
         "start": 1,
@@ -617,10 +881,52 @@
       },
       {
         "start": 5,
-        "end": 7,
+        "end": 9,
         "role": "Boundary",
-        "startText": "    let store=EventStore<Event>(describe:describeEvent,copyPayload:{$0})",
+        "startText": "    let journal:any JsonJournal",
+        "endText": "    if !history.isEmpty{store.load(history)}"
+      },
+      {
+        "start": 10,
+        "end": 10,
+        "role": "Benchmark",
+        "startText": "    if ProcessInfo.processInfo.environment[\"DECIDER_BENCHMARK\"]==\"1\"{FileHandle.standardError.write(Data((\"STORE \"+store.version+\"\\n\").utf8))}",
+        "endText": "    if ProcessInfo.processInfo.environment[\"DECIDER_BENCHMARK\"]==\"1\"{FileHandle.standardError.write(Data((\"STORE \"+store.version+\"\\n\").utf8))}"
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "role": "Boundary",
+        "startText": "    let projection=SchoolProjection();store.subscribe(projection.accept)",
         "endText": "    let executor=DcbExecutor(store:store),handler=SchoolHandler()"
+      },
+      {
+        "start": 16,
+        "end": 18,
+        "role": "Benchmark",
+        "startText": "    let bench=ProcessInfo.processInfo.environment[\"DECIDER_BENCHMARK\"]==\"1\"",
+        "endText": "    var start=ProcessInfo.processInfo.systemUptime;report(\"READY\")"
+      },
+      {
+        "start": 27,
+        "end": 27,
+        "role": "Benchmark",
+        "startText": "    report(\"PHASE operations \\(ProcessInfo.processInfo.systemUptime-start)\");start=ProcessInfo.processInfo.systemUptime",
+        "endText": "    report(\"PHASE operations \\(ProcessInfo.processInfo.systemUptime-start)\");start=ProcessInfo.processInfo.systemUptime"
+      },
+      {
+        "start": 29,
+        "end": 29,
+        "role": "Benchmark",
+        "startText": "    queryBenchmark(store,projection);start=ProcessInfo.processInfo.systemUptime",
+        "endText": "    queryBenchmark(store,projection);start=ProcessInfo.processInfo.systemUptime"
+      },
+      {
+        "start": 32,
+        "end": 33,
+        "role": "Benchmark",
+        "startText": "    report(\"PHASE read_rebuild_snapshot \\(ProcessInfo.processInfo.systemUptime-start)\");report(\"CODEC \\(store.encoded) \\(store.decoded) \\(store.encodedBytes) \\(store.decodedBytes)\")",
+        "endText": "    storageBenchmark()"
       }
     ]
   },
@@ -646,8 +952,16 @@
   },
   "swift/main.swift": {
     "role": "Boundary",
-    "sha256": "0efdfad36e4e09a1bdff400d40ba4166dce50ced75f9a17920a7dc1fb9f39719",
-    "ranges": []
+    "sha256": "6d14402f9aeb7b1d3b7b27226de3345cde2bd5030eade7780dd3d2b8f971c085",
+    "ranges": [
+      {
+        "start": 7,
+        "end": 7,
+        "role": "Benchmark",
+        "startText": "    print(String(decoding:try ProcessInfo.processInfo.environment[\"DECIDER_BENCHMARK_SUMMARY\"]==\"1\" ? benchmarkOutput(output):JSONEncoder().encode(output),as:UTF8.self))",
+        "endText": "    print(String(decoding:try ProcessInfo.processInfo.environment[\"DECIDER_BENCHMARK_SUMMARY\"]==\"1\" ? benchmarkOutput(output):JSONEncoder().encode(output),as:UTF8.self))"
+      }
+    ]
   },
   "swift/models.swift": {
     "role": "Model",
@@ -708,7 +1022,7 @@
   "swift/schoolProjection.swift": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "db664c0ca98fc7c1ae10d8fb4063c2557621eb1725f495c13b28e7c7067747f1"
+    "sha256": "77f40f72d3ddb2a783a3a742a92671895df9db8f63108e0726a3f74fcb01ca42"
   },
   "swift/valueObjects.swift": {
     "role": "Model",
@@ -730,21 +1044,70 @@
   },
   "typescript/application.ts": {
     "role": "UseCase",
-    "sha256": "db6f5ff576a0d9707964a5f850eaed3e7e1a2cfc4e4fa4ab52f16f8720abfbe1",
+    "sha256": "38b8ec4df7cc821c740be684fdb83c3914ea9acd3f1a5d9cd72a11001eb5cc20",
     "ranges": [
       {
         "start": 1,
-        "end": 7,
+        "end": 10,
         "role": "Boundary",
-        "startText": "import { DcbExecutor, EventStore, LiveProjection, sameTag } from \"./dcb.ts\";",
+        "startText": "import {queryBenchmark} from \"./queryBenchmark.ts\";",
         "endText": "import { SchoolProjection } from \"./schoolProjection.ts\";"
       },
       {
-        "start": 9,
-        "end": 12,
+        "start": 12,
+        "end": 14,
         "role": "Boundary",
-        "startText": "  const store=new EventStore<Event>(describeEvent,e=>EventSchema.parse(e));",
+        "startText": "  const path=process.env.DECIDER_PERSISTENT;",
+        "endText": "  if(history.length)store.load(history);"
+      },
+      {
+        "start": 15,
+        "end": 15,
+        "role": "Benchmark",
+        "startText": "  if(process.env.DECIDER_BENCHMARK===\"1\")console.error(\"STORE \"+store.engineVersion);",
+        "endText": "  if(process.env.DECIDER_BENCHMARK===\"1\")console.error(\"STORE \"+store.engineVersion);"
+      },
+      {
+        "start": 16,
+        "end": 17,
+        "role": "Boundary",
+        "startText": "  const projection=new SchoolProjection();store.subscribe(projection.accept);",
         "endText": "  const executor=new DcbExecutor<Event,Rejection>(store);"
+      },
+      {
+        "start": 22,
+        "end": 22,
+        "role": "Benchmark",
+        "startText": "  const bench=process.env.DECIDER_BENCHMARK===\"1\";let start=performance.now();if(bench)console.error(\"READY\");",
+        "endText": "  const bench=process.env.DECIDER_BENCHMARK===\"1\";let start=performance.now();if(bench)console.error(\"READY\");"
+      },
+      {
+        "start": 33,
+        "end": 33,
+        "role": "Benchmark",
+        "startText": "  if(bench)console.error(\"PHASE operations \"+(performance.now()-start)/1000);start=performance.now();",
+        "endText": "  if(bench)console.error(\"PHASE operations \"+(performance.now()-start)/1000);start=performance.now();"
+      },
+      {
+        "start": 35,
+        "end": 35,
+        "role": "Benchmark",
+        "startText": "  queryBenchmark(store,projection);start=performance.now();",
+        "endText": "  queryBenchmark(store,projection);start=performance.now();"
+      },
+      {
+        "start": 39,
+        "end": 39,
+        "role": "Benchmark",
+        "startText": "  if(bench){console.error(\"PHASE read_rebuild_snapshot \"+(performance.now()-start)/1000);console.error(`CODEC ${store.encoded} ${store.decoded} ${store.encodedBytes} ${store.decodedBytes}`);}",
+        "endText": "  if(bench){console.error(\"PHASE read_rebuild_snapshot \"+(performance.now()-start)/1000);console.error(`CODEC ${store.encoded} ${store.decoded} ${store.encodedBytes} ${store.decodedBytes}`);}"
+      },
+      {
+        "start": 41,
+        "end": 41,
+        "role": "Benchmark",
+        "startText": "  storageBenchmark();",
+        "endText": "  storageBenchmark();"
       }
     ]
   },
@@ -770,8 +1133,23 @@
   },
   "typescript/main.ts": {
     "role": "Boundary",
-    "sha256": "a1294ff6ca61fa2466059ed1f4dff7238988f24370e57560c3ef20ad0d236063",
-    "ranges": []
+    "sha256": "aa021455b95f0d4e1ee911344c014fefb5a409eaa22375494dd9e32cf64db0d5",
+    "ranges": [
+      {
+        "start": 1,
+        "end": 1,
+        "role": "Benchmark",
+        "startText": "import {benchmarkOutput} from \"./benchmarkOutput.ts\";",
+        "endText": "import {benchmarkOutput} from \"./benchmarkOutput.ts\";"
+      },
+      {
+        "start": 10,
+        "end": 10,
+        "role": "Benchmark",
+        "startText": "console.log(process.env.DECIDER_BENCHMARK_SUMMARY===\"1\"?benchmarkOutput(output):JSON.stringify(output));",
+        "endText": "console.log(process.env.DECIDER_BENCHMARK_SUMMARY===\"1\"?benchmarkOutput(output):JSON.stringify(output));"
+      }
+    ]
   },
   "typescript/models.ts": {
     "role": "Model",
@@ -839,7 +1217,7 @@
   "typescript/schoolProjection.ts": {
     "role": "Projection",
     "ranges": [],
-    "sha256": "e4a74ceb40ccc7d2b611a0d647500b6b4f607507585d5594aad278dd89a3cb4d"
+    "sha256": "2ef8ba76e5a30f38c744f3472932fb399e5f42aacbca243c978bfe92730aca8a"
   },
   "typescript/valueObjects.ts": {
     "role": "Model",
@@ -858,5 +1236,155 @@
     "role": "Boundary",
     "sha256": "d2df1ec8610102d3833c1a8939ead927e144012e780ccbee482f4fb90c4290dc",
     "ranges": []
+  },
+  "csharp/StorageBenchmark.cs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "8d90d8d80f6f08ebc96c39e8c41a085cf8dadf2ea8a8d13f77667f5e249cf5fe"
+  },
+  "csharp/JsonStore.cs": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "e1cd158b8c5753a289b42897fc194723d1571f38f5ae0eec7384081dc891c6bf"
+  },
+  "csharp/QueryBenchmark.cs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "aaa1c1a5dba69f2709a98a65413fcfa9d8c40ca0661bc9657777be1d8f39cfaa"
+  },
+  "csharp/SqliteJournal.cs": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "a23ee0bc846cd2ce8053603f59bcbcd1fb72be9662e68950193ea66dde5b25cc"
+  },
+  "fsharp/SqliteJournal.fs": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "93a85a5a51c5bcbd78f72d6cf5df8576ae2e336afb5ec4bea3fc8e16892e3c8d"
+  },
+  "fsharp/StorageBenchmark.fs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "88c43008de8fb28a5d653fff7700d523586d0f02a11ad2278e53c71f4eec4558"
+  },
+  "fsharp/JsonStore.fs": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "b167ad19a2cc7417ccf98bd47598547e32ff8d961e09bbff3d7d19245272ce6d"
+  },
+  "fsharp/QueryBenchmark.fs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "d99e9d1460ab560bee52bc6b42c0c7d263364b41f5213af8bc1aaf23ca805fc3"
+  },
+  "rust/src/storage_benchmark.rs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "625a5881a85cd0426b22492056cefb9c5b85fd9301b359785d7682a3302c68e8"
+  },
+  "rust/src/json_store.rs": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "89f5379c7f486b060c62aa3d6c7fa0cd6582c07f62587cdb099bb7c63ed4ad34"
+  },
+  "rust/src/sqlite_journal.rs": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "2ec34c7d2729a5704b2b72accf3157ba98ba0d098dcb76032211cd3ec41389f6"
+  },
+  "rust/src/query_benchmark.rs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "5b29741f3aad746456f86bbedacf5e6bf6169f317e36299e4df15c40c9d55bdd"
+  },
+  "typescript/storageBenchmark.ts": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "8576c4143d78d518b8b4aa84c879418c5912c7a3c1e47f110632d5104a6cbe39"
+  },
+  "typescript/queryBenchmark.ts": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "fffe960f0c3fd9135ad4ad54dd6104dccbc8fcbd081bdb666e6503bcf396d9b6"
+  },
+  "typescript/jsonStore.ts": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "917ccbe3ad7efd0dede7caa09973c6be676e483eed41db839f8091bde7577b1d"
+  },
+  "java/QueryBenchmark.java": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "b818a2325b30ece80fcbc4e86ab81ed895a10aadd7fa535f01a7543ea7c0f08c"
+  },
+  "java/StorageBenchmark.java": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "1f65a44affc1b53a59f35dcc119e7debd340c239c92d78773f9f1f04e1f932bf"
+  },
+  "java/playground/dcb/JsonStore.java": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "fc64065acf1693b65af31711ba8aa5a17dec2b3915e85f750612493a0d7cce6c"
+  },
+  "go/storage_benchmark.go": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "a75bfd10db9836af91254c36b9c00b79b5ab11857f78928dcd6bf8c83fa781ba"
+  },
+  "go/query_benchmark.go": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "9cb2ab2b1cb9303a2e0aca1234e714ead7b769cfac57ed3ec8e5df9c76af8c10"
+  },
+  "go/dcb/json_store.go": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "e2a93f6e8267906d13c9a50b129f80a31688472da3c11d4d476552f811f54240"
+  },
+  "swift/JsonStore.swift": {
+    "role": "Library",
+    "ranges": [],
+    "sha256": "f75b28ebe8d34845782b04450d79e54afedbc9f8662735d9978f3a224137c31e"
+  },
+  "swift/queryBenchmark.swift": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "bd423b0f060e88c2aaea7c4748d9955c4597e3432a9daa791fb03a3c5686edd3"
+  },
+  "swift/storageBenchmark.swift": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "e3f2c533efb69984b28a72801c7ce6f9702e2ee48a622444a9b786c6f040c2ab"
+  },
+  "csharp/BenchmarkOutput.cs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "388f47f994220df448fe4f37ec83162ebfe8e7bb3283b1ac57ee0e4bdb5ce0af"
+  },
+  "fsharp/BenchmarkOutput.fs": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "305b8677d4107818735e03b3efac288ce9b29a3e118a493adff76bea4cd9f520"
+  },
+  "typescript/benchmarkOutput.ts": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "6e3dcef77e1836315262029607db79b74957c79e23fd5037602a1dd06c495072"
+  },
+  "java/BenchmarkOutput.java": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "c0fc32b38446f92f53861795a9f53d0dd09f91d77c25cf5f0955993008383106"
+  },
+  "go/benchmark_output.go": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "cbc2984267cbc63338c586eaff7bf5247b6d547b0ed71d0aa8f8a3e43ee208db"
+  },
+  "swift/benchmarkOutput.swift": {
+    "role": "Benchmark",
+    "ranges": [],
+    "sha256": "c1bc4b6be988791f17376b3b349c0aeb58e1002ec2878c3e2be07606ac454892"
   }
 }

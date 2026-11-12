@@ -1,12 +1,12 @@
 # Swift：関連値付きenumを公開generic moduleへ渡す
 
-[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。速度・メモリのベンチマークではありません。
+[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。このページでは記述を比較し、速度・メモリは[ベンチマーク](../benchmark/README.md)で比較します。
 
 ## この設計でよかったこと
 
 ### 1. primary associated typeでストアのpayloadを保てる
 
-出典：[swift/dcb.swift](dcb.swift#L16-L20)
+出典：[dcb.swift:16–20](dcb.swift#L16-L20)
 
 ```swift
 public protocol CommandStore<Payload>: Sendable {
@@ -16,7 +16,7 @@ public protocol CommandStore<Payload>: Sendable {
 }
 ```
 
-出典：[handlers.swift](handlers.swift#L1-L11)
+出典：[handlers.swift:1–11](handlers.swift#L1-L11)
 
 ```swift
 import Foundation
@@ -36,7 +36,7 @@ struct SchoolHandler:CommandHandler {
 
 ### 2. Codableをライブラリ全体の制約にしなくてよかった
 
-出典：[swift/dcb.swift](dcb.swift#L13-L14)
+出典：[dcb.swift:13–14](dcb.swift#L13-L14)
 
 ```swift
 extension Recorded: Codable where E: Codable {}
@@ -47,7 +47,7 @@ public struct ReadResult<E:Sendable>{public let after:Int;public let events:[Rec
 
 ### 3. 値セマンティクスで投影の過去のスナップショットを保てる
 
-出典：[swift/projection.swift](projection.swift#L4-L8)
+出典：[projection.swift:4–8](projection.swift#L4-L8)
 
 ```swift
 struct Registers: Sendable {
@@ -63,7 +63,7 @@ Dictionaryとstruct／enumで状態を持ち、更新するローカル値を作
 
 ### 1. 公開モジュールの初期化子とSendableの契約を揃える必要があった
 
-出典：[swift/dcb.swift](dcb.swift#L23-L26)
+出典：[dcb.swift:23–26](dcb.swift#L23-L26)
 
 ```swift
 public final class EventStore<E: Sendable>: @unchecked Sendable, CommandStore {
@@ -76,7 +76,7 @@ publicなstructでも外部向けのmemberwise initializerが自動でpublicに�
 
 ### 2. 共通JSON形式へのCodable対応は引き続き長い
 
-出典：[swift/wire.swift](wire.swift#L295-L302)
+出典：[wire.swift:295–302](wire.swift#L295-L302)
 
 ```swift
 extension Operation: Codable {
@@ -93,7 +93,7 @@ extension Operation: Codable {
 
 ### 3. 同期ロック型の実装で、actorの非同期APIではない
 
-出典：[swift/dcb.swift](dcb.swift#L21-L22)
+出典：[dcb.swift:21–22](dcb.swift#L21-L22)
 
 ```swift
 // The lock covers check-and-append and synchronous notification. Listeners are
@@ -121,3 +121,9 @@ extension Operation: Codable {
 一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
 
 [projectionTests.swift](projectionTests.swift)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。
+
+## JSON／SQLiteと計測
+
+SQLite3のC API。bind・step・reset・finalizeをライブラリで管理する分、コードとエラー処理が増えます。payload自体はCodableで復元します。OSのSQLite版を使います。
+
+[共通ベンチマーク](../benchmark/README.md)では、履修コマンド・拒否・競合後の再判断、索引Projectionのクエリ、JSON応答、再起動を同じ件数で実行します。SQLite版とメモリJSON版の両方でシリアライズ・デシリアライズを通します。インフラ障害は業務のRejectedと混ぜず、プロセスを失敗させます。外部接続のイベントは明示的なRefreshまたは次の自分のcommitで取り込みます。

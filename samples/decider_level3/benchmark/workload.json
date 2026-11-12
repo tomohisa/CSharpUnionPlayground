@@ -1,0 +1,20 @@
+{
+  "formatVersion": 1,
+  "targetSeconds": 90,
+  "studentsPerClass": 10,
+  "attendancePerStudent": 2,
+  "passStudentsPerClass": 7,
+  "documentStudentsRatio": 20,
+  "documentRevisions": 16,
+  "documentBodyBytes": 4096,
+  "pointQueries": 1000,
+  "fullQueries": 3,
+  "sqlite": {
+    "journalMode": "WAL",
+    "synchronous": "FULL",
+    "busyTimeoutMs": 5000,
+    "cacheSizeKiB": 2048,
+    "walAutocheckpointPages": 1000,
+    "foreignKeys": true
+  }
+}

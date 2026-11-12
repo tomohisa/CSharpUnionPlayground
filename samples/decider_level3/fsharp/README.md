@@ -1,6 +1,6 @@
 # F#：DU・不変Map・関数注入で共通DCBを使う
 
-[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。速度・メモリのベンチマークではありません。
+[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。このページでは記述を比較し、速度・メモリは[ベンチマーク](../benchmark/README.md)で比較します。
 
 この版は.NET 11 Release／JIT＋Dynamic PGO前提です。WASM・Native AOTは対象にしません。
 
@@ -8,7 +8,7 @@
 
 ### 1. 共通部品を挟んでも、ドメインDUをそのまま扱える
 
-出典：[fsharp/Dcb.fs](Dcb.fs#L73-L75)
+出典：[Dcb.fs:73–75](Dcb.fs#L73-L75)
 
 ```fsharp
 type Preparation<'E,'R> = Emit of 'E list | Reject of 'R
@@ -16,7 +16,7 @@ type Ticket<'C,'E,'R> = { CommandId: string; Command: 'C; Query: Query; After: i
 type HandlingResult<'R> = { Status: string; Conflicts: int; Appended: int; Position: int; Errors: 'R list }
 ```
 
-出典：[Handlers.fs](Handlers.fs#L1-L13)
+出典：[Handlers.fs:1–13](Handlers.fs#L1-L13)
 
 ```fsharp
 namespace SchoolDomain
@@ -38,7 +38,7 @@ module Handlers =
 
 ### 2. 分かれた状態を不変Mapで更新できる
 
-出典：[fsharp/Projection.fs](Projection.fs#L4-L8)
+出典：[Projection.fs:4–8](Projection.fs#L4-L8)
 
 ```fsharp
 type Registers = { Students: Map<string,Student>; Classes: Map<string,ClassState>; Enrollments: Map<string*string,Enrollment> }
@@ -52,7 +52,7 @@ module StudentRegister =
 
 ### 3. ストア差し替えとタグ規則を型付き関数で表せる
 
-出典：[fsharp/Dcb.fs](Dcb.fs#L16-L18)
+出典：[Dcb.fs:16–18](Dcb.fs#L16-L18)
 
 ```fsharp
 type ICommandStore<'E> =
@@ -60,7 +60,7 @@ type ICommandStore<'E> =
     abstract Append: string * Query * int * 'E list -> AppendResult<'E>
 ```
 
-出典：[fsharp/Routing.fs](Routing.fs#L8-L11)
+出典：[Routing.fs:8–11](Routing.fs#L8-L11)
 
 ```fsharp
     let queryFor = function
@@ -75,7 +75,7 @@ type ICommandStore<'E> =
 
 ### 1. JSONの表現差はライブラリ化しても消えない
 
-出典：[fsharp/Program.fs](Program.fs#L9-L14)
+出典：[Program.fs:9–14](Program.fs#L9-L14)
 
 ```fsharp
     let rec containsNull (e:JsonElement) =
@@ -90,13 +90,13 @@ type ICommandStore<'E> =
 
 ### 2. 同じ名前のrecordが増え、型注釈が重要になった
 
-出典：[fsharp/Dcb.fs](Dcb.fs#L26-L26)
+出典：[Dcb.fs:26–26](Dcb.fs#L26-L26)
 
 ```fsharp
     let copy (e: Recorded<'E>) = { e with Payload = copyPayload e.Payload }
 ```
 
-出典：[fsharp/Projection.fs](Projection.fs#L52-L52)
+出典：[Projection.fs:52–52](Projection.fs#L52-L52)
 
 ```fsharp
     let decisionModel state: DecisionModel =
@@ -106,7 +106,7 @@ Recorded、ReadResult、Ticket、学校のレジストリで似たフィール�
 
 ### 3. 競合再試行の関数が正しくても、投影配信の失敗契約は別に必要
 
-出典：[fsharp/Dcb.fs](Dcb.fs#L27-L28)
+出典：[Dcb.fs:27–28](Dcb.fs#L27-L28)
 
 ```fsharp
     let notify listener events = try listener events with _ -> false
@@ -134,3 +134,9 @@ privateな単一ケースDUとResultで、値の生成成功／拒否を表現�
 一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
 
 [ProjectionTests.fs](ProjectionTests.fs)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。
+
+## JSON／SQLiteと計測
+
+Microsoft.Data.Sqlite。codecを関数で注入し、学校のDUと別の文書レコードも同じライブラリで扱います。実行は.NET 11のJIT＋PGOを前提にしています。
+
+[共通ベンチマーク](../benchmark/README.md)では、履修コマンド・拒否・競合後の再判断、索引Projectionのクエリ、JSON応答、再起動を同じ件数で実行します。SQLite版とメモリJSON版の両方でシリアライズ・デシリアライズを通します。インフラ障害は業務のRejectedと混ぜず、プロセスを失敗させます。外部接続のイベントは明示的なRefreshまたは次の自分のcommitで取り込みます。

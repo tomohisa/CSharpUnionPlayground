@@ -13,14 +13,14 @@ stats=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(stats)
 
 class StatisticsTests(unittest.TestCase):
-    def test_application_excludes_library_and_domain_tests(self):
+    def test_application_includes_domain_tests_excludes_library_and_benchmark(self):
         rows=stats.collect()
         self.assertEqual(len(rows),7)
         for row in rows:
             for metric in ['lines','characters']:
                 groups=row['groups']
                 self.assertGreater(groups['DomainTest'][metric],0)
-                self.assertEqual(groups['Total'][metric],groups['ApplicationTotal'][metric]+groups['Library'][metric]+groups['DomainTest'][metric])
+                self.assertEqual(groups['Total'][metric],groups['ApplicationTotal'][metric]+groups['Library'][metric]+groups['Benchmark'][metric])
             tests=[file for file in row['files'] if any(s['role']=='DomainTest' for s in file['segments'])]
             self.assertGreaterEqual(len(tests),2,row['language'])
             self.assertTrue(all(s['role']=='DomainTest' for file in tests for s in file['segments']))
@@ -36,7 +36,7 @@ class StatisticsTests(unittest.TestCase):
             (root/'code_stats_classification.json').write_text(json.dumps(manifest))
             with patch.object(stats,'HERE',root),patch.object(stats,'SOURCES',[('example','example','.cs')]):
                 groups=stats.collect()[0]['groups']
-                self.assertEqual(groups['ApplicationTotal'],{'lines':1,'characters':8})
+                self.assertEqual(groups['ApplicationTotal'],{'lines':3,'characters':13})
                 self.assertEqual(groups['DomainTest'],{'lines':2,'characters':5})
                 self.assertEqual(groups['Library'],{'lines':1,'characters':7})
                 manifest['example/Sample.cs']['ranges'].append({'start':3,'end':3,'role':'Command'})

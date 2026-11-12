@@ -189,6 +189,11 @@ func (p *SchoolProjection) Accept(events []dcb.Recorded[Event]) bool { return p.
 func (p *SchoolProjection) Checkpoint() int                          { return p.index.Checkpoint() }
 func (p *SchoolProjection) RowCount() int                            { return p.index.RowCount() }
 func (p *SchoolProjection) Work() int64                              { return p.index.Work() }
+func (p *SchoolProjection) Student(id string) Student {
+	var result Student
+	p.index.Read(func(rows map[indexKey]indexRow) { result = rows[indexKey{Kind: "student", A: id}].(studentRow).Value })
+	return result
+}
 func (p *SchoolProjection) Snapshot() (int, SchoolList) {
 	list := SchoolList{Students: []Student{}, Classes: []ClassState{}, Enrollments: []Enrollment{}, Summaries: []string{}}
 	position := p.index.Read(func(rows map[indexKey]indexRow) {
