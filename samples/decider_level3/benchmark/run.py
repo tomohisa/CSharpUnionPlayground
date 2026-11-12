@@ -162,7 +162,7 @@ def main():
         try:
             v=subprocess.run(command,capture_output=True,text=True);versions[name]=(v.stdout+v.stderr).strip()
         except OSError as error:versions[name]='unavailable: '+str(error)
-    manifest={str(f.relative_to(LEVEL)):hashlib.sha256(f.read_bytes()).hexdigest() for f in LEVEL.rglob('*') if f.is_file() and not any(part in f.parts for part in ['.build','bin','obj','node_modules','target','observed','__pycache__']) and f.suffix in ['.cs','.fs','.rs','.ts','.go','.swift','.java','.py','.json','.toml','.lock','.sql','.csproj','.fsproj','.mod','.sum']}
+    manifest={str(f.relative_to(LEVEL)):hashlib.sha256(f.read_bytes()).hexdigest() for f in LEVEL.rglob('*') if f.is_file() and not any(part in f.parts for part in ['.build','bin','obj','node_modules','target','observed','__pycache__']) and f.suffix in ['.cs','.fs','.rs','.ts','.go','.swift','.java','.py','.json','.toml','.lock','.sql','.csproj','.fsproj','.mod','.sum','.h','.modulemap']}
     root=Path(tempfile.mkdtemp(prefix='level3-es-'));data={'formatVersion':1,'measuredAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'platform':platform.platform(),'machine':platform.machine(),'processor':platform.processor(),'commands':commands,'runtimeVersions':versions,'sourceManifest':manifest,'csharpNativeAot':a.csharp_native_aot,'sourceCommit':subprocess.run(['git','rev-parse','HEAD'],cwd=LEVEL,capture_output=True,text=True).stdout.strip(),'results':[]}
     import xml.etree.ElementTree as ET
     driver=lambda project:next(p.attrib['Version'] for p in ET.parse(project).iter('PackageReference') if p.attrib.get('Include')=='Microsoft.Data.Sqlite')
@@ -173,7 +173,7 @@ def main():
     if sys.platform=='darwin':
         data['hardware']={name:subprocess.run(['sysctl','-n',key],capture_output=True,text=True).stdout.strip() for name,key in [('cpu','machdep.cpu.brand_string'),('memoryBytes','hw.memsize')]}
     else:
-        data['hardware']={'memoryBytes':os.sysconf('SC_PAGE_SIZE')*os.sysconf('SC_PHYS_PAGES')}
+        data['hardware']={'memoryBytes':os.sysconf('SC_PAGE_SIZE')*os.sysconf('SC_PHYS_PAGES'), 'cpu':next((line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')),platform.processor()), 'osRelease':Path('/etc/os-release').read_text(), 'kernel':platform.release()}
     data['workloadSha256']=hashlib.sha256((HERE/'workload.py').read_bytes()).hexdigest()
     try:
         n=100 if a.quick else a.students

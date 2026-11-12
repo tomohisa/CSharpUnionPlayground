@@ -32,6 +32,15 @@ class PublicationTests(unittest.TestCase):
             report=(dest/'students-22900.md').read_text()
             self.assertNotIn('(../../csharp)',report)
             self.assertEqual(len(intel.load_bundle(dest)),2)
+    def test_linux_bundle_and_architecture(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source=Path(temp)/'source';dest=Path(temp)/'linux';source.mkdir()
+            self.bundle(source,lambda d:d.update(platform='Linux-7-test',actions={**d['actions'],'runnerLabel':'ubuntu-26.04'}))
+            intel.publish(source,dest)
+            self.assertIn('Linux x64 GitHub Actions',(dest/'README.md').read_text())
+            self.assertEqual(len(intel.load_bundle(dest)),2)
+            self.bundle(source,lambda d:d.update(machine='aarch64',platform='Linux-test'))
+            with self.assertRaisesRegex(ValueError,'x64'):intel.load_bundle(source)
     def test_reject_partial_without_modifying_previous_page(self):
         with tempfile.TemporaryDirectory()as temp:
             source=Path(temp)/'source';dest=Path(temp)/'dest';source.mkdir();dest.mkdir();(dest/'README.md').write_text('previous complete run')

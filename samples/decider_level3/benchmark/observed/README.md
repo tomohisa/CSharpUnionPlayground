@@ -1,4 +1,6 @@
-# Local ES benchmark observations
+# ES benchmark observations
+
+[Linux x64 Actionsの結果](linux-x64-actions/README.md)／[macOS Intel Actionsの結果](macos-intel-actions/README.md)。以下はmacOS ARMローカルの独立した測定です。
 
 [Intel GitHub Actionsの結果](macos-intel-actions/README.md)は別ページに掲載します。
 

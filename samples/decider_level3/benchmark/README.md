@@ -78,3 +78,9 @@ C#・F#の標準計測はRelease JIT＋Dynamic PGO、Rust・Go・Swiftは最適�
 `Decider Level 3 Intel benchmark` を手動実行すると、`macos-15-intel` の1ジョブで全7言語・全サイズを順次測定します。標準件数はローカルと同じ22,900人／43,050人です。C#・F#はRelease JIT＋Dynamic PGO、TypeScriptはZod版です。
 
 `publish: true` でmainから実行した場合、全構成の検証成功後に[Intel専用ページ](observed/macos-intel-actions/README.md)とraw JSONを自動更新します。Actionsのsummary・artifactにも保存します。失敗・不完全な構成や異なるジョブの混在を検出した場合は公開しません。
+
+## Linux x64 Actions
+
+Linuxサーバー向けの比較は `decider-level3-linux.yml` でUbuntu 26.04 x64上に7言語を導入し、同じジョブで全サイズ・全ストアを順次測定します。ビルドは計測外です。C#・F#は.NET 11 Release JIT＋Dynamic PGO、Javaは27をターゲットにコンパイルします。Node 26.13.1、Go 1.27.4、Rust 1.99.1、Swift 6.4.2は導入時に確認した安定版を固定しています。実際の版、CPU、OS、カーネル、runner image、測定ソースをraw dataに記録します。x64 runnerのCPUメーカーは固定していません。
+
+[Linux結果](observed/linux-x64-actions/README.md)と[macOS Intel結果](observed/macos-intel-actions/README.md)は独立した測定として残します。CPU・OS・ツールチェーンが同時に変わるため、両者の差をOSだけの効果として解釈しません。

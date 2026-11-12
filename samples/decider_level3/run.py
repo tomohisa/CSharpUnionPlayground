@@ -57,7 +57,7 @@ def build(language, native_aot=False):
         cp += os.pathsep+os.pathsep.join(jdbc)
         out = BUILD/'java'
         out.mkdir(exist_ok=True)
-        run(['javac', '--release', '21', '--class-path', cp, '-d', out, *sorted((HERE/'java').rglob('*.java'))])
+        run(['javac', '--release', os.environ.get('DECIDER_JAVA_RELEASE','21'), '--class-path', cp, '-d', out, *sorted((HERE/'java').rglob('*.java'))])
         return ['java', '--class-path', str(out)+os.pathsep+cp, 'Main']
     if language == 'go':
         out = BUILD/'go-decider'
@@ -65,7 +65,7 @@ def build(language, native_aot=False):
         return [str(out)]
     if language == 'swift':
         out = BUILD/'swift-decider'
-        run(['swiftc', '-O', '-module-cache-path', BUILD/'swift-modules', *sorted((HERE/'swift').glob('*.swift')), '-o', out])
+        run(['swiftc', '-O', *(['-I', HERE/'swift/sqlite-module'] if sys.platform=='linux' else []), '-module-cache-path', BUILD/'swift-modules', *sorted((HERE/'swift').glob('*.swift')), '-o', out])
         return [str(out)]
     raise ValueError(language)
 

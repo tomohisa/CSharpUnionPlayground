@@ -1,0 +1,100 @@
+name: Decider Level 3 Linux x64 benchmark
+on:
+  workflow_dispatch:
+    inputs:
+      sizes:
+        description: Shared student counts (comma-separated multiples of ten)
+        type: string
+        default: '22900,43050'
+      publish:
+        description: Publish complete Linux x64 observations to main
+        type: boolean
+        default: true
+permissions:
+  contents: read
+concurrency:
+  group: decider-level3-linux-x64-benchmark
+  cancel-in-progress: false
+jobs:
+  benchmark:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 180
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+      BENCHMARK_SIZES: ${{ inputs.sizes }}
+      BENCHMARK_RUNNER_LABEL: ubuntu-26.04
+      DECIDER_JAVA_RELEASE: '27'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify native Linux x64 host
+        run: test "$(uname -m)" = x86_64
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26.13.1'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '27'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.4'
+          cache: false
+      - name: Rust stable
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - name: Install stable Swift and Linux SQLite headers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsqlite3-dev libcurl4-openssl-dev libxml2-dev libncurses-dev libz3-dev
+          curl --fail --location --retry 3 https://download.swift.org/swift-6.4.2-release/ubuntu2604/swift-6.4.2-RELEASE/swift-6.4.2-RELEASE-ubuntu26.04.tar.gz -o "$RUNNER_TEMP/swift.tar.gz"
+          mkdir "$RUNNER_TEMP/swift"
+          tar -xzf "$RUNNER_TEMP/swift.tar.gz" -C "$RUNNER_TEMP/swift" --strip-components=1
+          echo "$RUNNER_TEMP/swift/usr/bin" >> "$GITHUB_PATH"
+      - name: Verify Linux domain tests and JSON persistence before timing
+        run: |
+          python3 samples/decider_level3/tests/domain_tests.py
+          python3 samples/decider_level3/benchmark/run.py --quick --store both --output samples/decider_level3/.build/linux-smoke.json
+      - name: Measure all languages and sizes sequentially
+        run: python3 samples/decider_level3/benchmark/intel.py run --sizes "$BENCHMARK_SIZES" --output samples/decider_level3/benchmark/observed/linux-x64-actions
+      - name: Job summary
+        run: cat samples/decider_level3/benchmark/observed/linux-x64-actions/README.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: level3-linux-x64-observations
+          path: samples/decider_level3/benchmark/observed/linux-x64-actions/
+          if-no-files-found: error
+          retention-days: 90
+  update-data:
+    needs: benchmark
+    if: inputs.publish && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+    concurrency:
+      group: decider-level3-linux-x64-publication
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          name: level3-linux-x64-observations
+          path: ${{ runner.temp }}/level3-linux-x64-observations
+      - name: Validate and publish complete cohort
+        run: python3 samples/decider_level3/benchmark/intel.py publish "$RUNNER_TEMP/level3-linux-x64-observations" samples/decider_level3/benchmark/observed/linux-x64-actions
+      - name: Commit Linux x64 observations
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add samples/decider_level3/benchmark/observed/linux-x64-actions
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update Level 3 Linux x64 ES benchmark observations'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
