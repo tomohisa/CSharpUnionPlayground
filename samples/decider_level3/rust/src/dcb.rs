@@ -162,3 +162,24 @@ impl<K:std::hash::Hash+Eq+Clone,V:Clone,E> IndexedProjection<K,V,E>{
     pub fn work(&self)->u64{self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner).work}
     pub fn read<T>(&self,query:impl FnOnce(&std::collections::HashMap<K,V>)->T)->(usize,T){let s=self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner);(s.checkpoint,query(&s.rows))}
 }
+
+// Owned preparation can cross request/thread boundaries without leaking a store.
+// The generic handler and store stay alive until the one-shot ticket is dropped.
+pub struct OwnedPrepared<R> {
+    pub after:usize, pub was_read:bool,
+    action:Box<dyn FnOnce()->HandlingResult<R>+Send>
+}
+impl<R> OwnedPrepared<R>{pub fn commit(self)->HandlingResult<R>{(self.action)()}}
+pub fn prepare_owned<C:Send+'static,E:Clone+Send+'static,R:Send+'static,H:CommandHandler<C,E,R>+Send+Sync+'static>(
+    store:std::sync::Arc<dyn CommandStore<E>+Send+Sync>,id:String,command:C,handler:std::sync::Arc<H>
+)->OwnedPrepared<R>{
+    assert!(!id.trim().is_empty(),"command id required");
+    let errors=handler.validate(&command);
+    if !errors.is_empty(){return OwnedPrepared{after:0,was_read:false,action:Box::new(move||HandlingResult{status:"Rejected".into(),conflicts:0,appended:0,position:0,errors})};}
+    let query=handler.query_for(&command);let read=store.read(&query);
+    let decision=handler.handle(&read.events,&command);
+    let ticket=Ticket{command_id:id,command,query,after:read.after,returned:read.events.len(),decision};
+    OwnedPrepared{after:read.after,was_read:true,action:Box::new(move||CommandProcessor{
+        store:&*store,query_for:&|c|handler.query_for(c),decide:&|events,c|handler.handle(events,c),max_conflicts:3
+    }.commit(ticket))}
+}

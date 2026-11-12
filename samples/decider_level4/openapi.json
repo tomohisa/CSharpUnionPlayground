@@ -1,0 +1,1635 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DCB school Level4",
+    "version": "1.0.0",
+    "description": "Local comparison API. commandId is tracing, not idempotency. Prepared tickets are bounded, expire, and can be committed once. Successful commands synchronously reach the live projection."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "Health_health",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/school": {
+      "get": {
+        "operationId": "SchoolSnapshot_school",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchoolSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/students/{id}": {
+      "get": {
+        "operationId": "StudentSnapshot_students_{id}",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/status": {
+      "get": {
+        "operationId": "Status_status",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/commands": {
+      "post": {
+        "operationId": "CommandResult_commands",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets": {
+      "post": {
+        "operationId": "TicketPrepare",
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/{id}/commit": {
+      "post": {
+        "operationId": "CommandResult_tickets_{id}_commit",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegisterStudent": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "studentId",
+          "grade"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "RegisterStudent"
+          },
+          "studentId": {
+            "type": "string"
+          },
+          "grade": {
+            "type": "string",
+            "enum": [
+              "Year1",
+              "Year2",
+              "Year3"
+            ]
+          }
+        }
+      },
+      "PromoteStudent": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "studentId",
+          "grade"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "PromoteStudent"
+          },
+          "studentId": {
+            "type": "string"
+          },
+          "grade": {
+            "type": "string",
+            "enum": [
+              "Year1",
+              "Year2",
+              "Year3"
+            ]
+          }
+        }
+      },
+      "OpenClass": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "classId",
+          "course",
+          "capacity"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "OpenClass"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "course": {
+            "type": "string",
+            "enum": [
+              "Foundation",
+              "Advanced"
+            ]
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          }
+        }
+      },
+      "Enroll": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "classId",
+          "studentId"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Enroll"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "studentId": {
+            "type": "string"
+          }
+        }
+      },
+      "Drop": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "classId",
+          "studentId"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Drop"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "studentId": {
+            "type": "string"
+          }
+        }
+      },
+      "StartClass": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "classId",
+          "startedOn"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "StartClass"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "startedOn": {
+            "type": "string"
+          }
+        }
+      },
+      "Attend": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "classId",
+          "studentId"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Attend"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "studentId": {
+            "type": "string"
+          }
+        }
+      },
+      "Assess": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "classId",
+          "studentId",
+          "score"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Assess"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "studentId": {
+            "type": "string"
+          },
+          "score": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          }
+        }
+      },
+      "CompleteClass": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "classId"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "CompleteClass"
+          },
+          "classId": {
+            "type": "string"
+          }
+        }
+      },
+      "Command": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/RegisterStudent"
+          },
+          {
+            "$ref": "#/components/schemas/PromoteStudent"
+          },
+          {
+            "$ref": "#/components/schemas/OpenClass"
+          },
+          {
+            "$ref": "#/components/schemas/Enroll"
+          },
+          {
+            "$ref": "#/components/schemas/Drop"
+          },
+          {
+            "$ref": "#/components/schemas/StartClass"
+          },
+          {
+            "$ref": "#/components/schemas/Attend"
+          },
+          {
+            "$ref": "#/components/schemas/Assess"
+          },
+          {
+            "$ref": "#/components/schemas/CompleteClass"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "$type"
+        }
+      },
+      "CommandRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "commandId",
+          "command"
+        ],
+        "properties": {
+          "commandId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "\\S"
+          },
+          "command": {
+            "$ref": "#/components/schemas/Command"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "CommandResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "conflicts",
+          "appended",
+          "position",
+          "projectionPosition",
+          "errors"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "Committed",
+              "Rejected",
+              "RetryExhausted"
+            ]
+          },
+          "conflicts": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "appended": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "projectionPosition": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rejection"
+            }
+          }
+        }
+      },
+      "Ticket": {
+        "type": "object",
+        "required": [
+          "ticket",
+          "position"
+        ],
+        "properties": {
+          "ticket": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          }
+        }
+      },
+      "SchoolSnapshot": {
+        "type": "object",
+        "required": [
+          "position",
+          "state"
+        ],
+        "properties": {
+          "position": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "students",
+              "classes",
+              "enrollments",
+              "summaries"
+            ],
+            "properties": {
+              "students": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              },
+              "classes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ClassState"
+                }
+              },
+              "enrollments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Enrollment"
+                }
+              },
+              "summaries": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "StudentSnapshot": {
+        "type": "object",
+        "required": [
+          "position",
+          "student"
+        ],
+        "properties": {
+          "position": {
+            "type": "integer"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student"
+          }
+        }
+      },
+      "Health": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "const": "ok"
+          }
+        }
+      },
+      "Status": {
+        "type": "object",
+        "required": [
+          "eventPosition",
+          "projectionPosition",
+          "listenerFaults"
+        ],
+        "properties": {
+          "eventPosition": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "projectionPosition": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "listenerFaults": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "Grade": {
+        "type": "string",
+        "enum": [
+          "Year1",
+          "Year2",
+          "Year3"
+        ]
+      },
+      "Course": {
+        "type": "string",
+        "enum": [
+          "Foundation",
+          "Advanced"
+        ]
+      },
+      "Student": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "studentId",
+          "grade"
+        ],
+        "properties": {
+          "studentId": {
+            "type": "string"
+          },
+          "grade": {
+            "$ref": "#/components/schemas/Grade"
+          }
+        }
+      },
+      "NoPrerequisite": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "NoPrerequisite"
+          }
+        }
+      },
+      "PassedCourse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "course"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "PassedCourse"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          }
+        }
+      },
+      "Prerequisite": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/NoPrerequisite"
+          },
+          {
+            "$ref": "#/components/schemas/PassedCourse"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "$type"
+        }
+      },
+      "Reserved": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Reserved"
+          }
+        }
+      },
+      "Studying": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "attendance"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Studying"
+          },
+          "attendance": {
+            "type": "integer"
+          }
+        }
+      },
+      "Passed": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "score",
+          "credits"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Passed"
+          },
+          "score": {
+            "type": "integer"
+          },
+          "credits": {
+            "type": "integer"
+          }
+        }
+      },
+      "Failed": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "score",
+          "reason"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Failed"
+          },
+          "score": {
+            "type": "integer"
+          },
+          "reason": {
+            "const": "BelowPassMark"
+          }
+        }
+      },
+      "Withdrawn": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "reason"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Withdrawn"
+          },
+          "reason": {
+            "const": "StudentRequest"
+          }
+        }
+      },
+      "Progress": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Reserved"
+          },
+          {
+            "$ref": "#/components/schemas/Studying"
+          },
+          {
+            "$ref": "#/components/schemas/Passed"
+          },
+          {
+            "$ref": "#/components/schemas/Failed"
+          },
+          {
+            "$ref": "#/components/schemas/Withdrawn"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "$type"
+        }
+      },
+      "Plan": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "classId",
+          "course",
+          "minimumGrade",
+          "prerequisite",
+          "capacity"
+        ],
+        "properties": {
+          "classId": {
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "minimumGrade": {
+            "$ref": "#/components/schemas/Grade"
+          },
+          "prerequisite": {
+            "$ref": "#/components/schemas/Prerequisite"
+          },
+          "capacity": {
+            "type": "integer"
+          }
+        }
+      },
+      "ClassResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "studentId",
+          "progress"
+        ],
+        "properties": {
+          "studentId": {
+            "type": "string"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/Progress"
+          }
+        }
+      },
+      "Available": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "plan",
+          "students"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Available"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/Plan"
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Full": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "plan",
+          "students"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Full"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/Plan"
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Teaching": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "plan",
+          "students",
+          "startedOn"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Teaching"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/Plan"
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startedOn": {
+            "type": "string"
+          }
+        }
+      },
+      "Completed": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$type",
+          "plan",
+          "results"
+        ],
+        "properties": {
+          "$type": {
+            "type": "string",
+            "const": "Completed"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/Plan"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassResult"
+            }
+          }
+        }
+      },
+      "ClassState": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Available"
+          },
+          {
+            "$ref": "#/components/schemas/Full"
+          },
+          {
+            "$ref": "#/components/schemas/Teaching"
+          },
+          {
+            "$ref": "#/components/schemas/Completed"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "$type"
+        }
+      },
+      "Enrollment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "classId",
+          "studentId",
+          "course",
+          "progress"
+        ],
+        "properties": {
+          "classId": {
+            "type": "string"
+          },
+          "studentId": {
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/Progress"
+          }
+        }
+      },
+      "Rejection": {
+        "type": "string",
+        "enum": [
+          "InvalidId",
+          "InvalidCapacity",
+          "InvalidScore",
+          "InvalidDate",
+          "DuplicateStudent",
+          "UnknownStudent",
+          "InvalidPromotion",
+          "DuplicateClass",
+          "UnknownClass",
+          "GradeTooLow",
+          "PrerequisiteMissing",
+          "AlreadyEnrolled",
+          "ClassFull",
+          "RegistrationClosed",
+          "NotEnrolled",
+          "NotTeaching",
+          "NoAttendance",
+          "AlreadyAssessed",
+          "UnassessedStudents",
+          "InvalidHistory",
+          "InvalidCommand"
+        ]
+      }
+    }
+  }
+}

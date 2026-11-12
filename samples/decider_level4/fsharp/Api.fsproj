@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+<PropertyGroup><TargetFramework>net11.0</TargetFramework><Nullable>enable</Nullable><WarningsAsErrors>25;3261</WarningsAsErrors></PropertyGroup>
+<ItemGroup>
+<Compile Include="../../decider_level3/fsharp/Dcb.fs" />
+<Compile Include="../../decider_level3/fsharp/JsonStore.fs" />
+<Compile Include="../../decider_level3/fsharp/SqliteJournal.fs" />
+<Compile Include="../../decider_level3/fsharp/Models.fs" />
+<Compile Include="../../decider_level3/fsharp/ValueObjects.fs" />
+<Compile Include="../../decider_level3/fsharp/Decider.fs" />
+<Compile Include="../../decider_level3/fsharp/Projection.fs" />
+<Compile Include="../../decider_level3/fsharp/SchoolProjection.fs" />
+<Compile Include="../../decider_level3/fsharp/Routing.fs" />
+<Compile Include="../../decider_level3/fsharp/Handlers.fs" />
+<Compile Include="Program.fs" />
+</ItemGroup>
+<ItemGroup><PackageReference Include="Microsoft.Data.Sqlite" Version="11.0.0" /></ItemGroup>
+</Project>

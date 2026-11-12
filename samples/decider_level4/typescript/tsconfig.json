@@ -1,0 +1,4 @@
+{
+  "extends": "../../decider_level3/typescript/tsconfig.json",
+  "include": ["server.ts"]
+}

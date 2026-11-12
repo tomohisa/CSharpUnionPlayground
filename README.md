@@ -12,6 +12,8 @@ A playground for testing and exploring **C# 15 Union Types** (.NET 11 GA).
 
 [Decider Level 3](samples/decider_level3/README.md) adds reusable typed DCB libraries, conditional append and conflict redecisions, plus automatically updated live list projections in all seven languages.
 
+[Decider Level 4](samples/decider_level4/README.md) reuses Level3 behind one OpenAPI contract in seven native HTTP hosts, with common functional tests and local HTTP/SQLite benchmarks.
+
 ## What's This?
 
 This repository contains experiments to test the capabilities and limitations of the new `union` keyword in C# 15, including:

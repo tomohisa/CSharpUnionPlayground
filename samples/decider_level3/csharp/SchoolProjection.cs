@@ -14,6 +14,7 @@ public sealed class SchoolProjection
     private sealed record MemberIndex(int Node):Row;
     private readonly IndexedProjection<Key,Row,Event> index=new(Apply);
     public Student Student(string id)=>index.Read(rows=>((StudentRow)rows[new("student",id)]).Value).State;
+    public (int Position,ImmutableArray<Student> State) FindStudent(string id)=>index.Read(rows=>rows.TryGetValue(new("student",id),out var row)&&row is StudentRow s?ImmutableArray.Create(s.Value):ImmutableArray<Student>.Empty);
     public int Checkpoint=>index.Checkpoint;
     public int RowCount=>index.RowCount;
     public long Work=>index.Work;

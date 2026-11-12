@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <WarningsAsErrors>CS8509;CS8655</WarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../decider_level3/csharp/*.cs" Exclude="../../decider_level3/csharp/Program.cs;../../decider_level3/csharp/Application.cs;../../decider_level3/csharp/*Tests.cs;../../decider_level3/csharp/*Benchmark*.cs" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="11.0.0" />
+  </ItemGroup>
+</Project>
