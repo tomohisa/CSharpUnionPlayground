@@ -10,7 +10,7 @@ final class DomainTests {
     }
     static final class Given {
         final Dcb.EventStore<Event> store=new Dcb.EventStore<>(Routing::describe,e->e);
-        final Dcb.LiveProjection<Event,Projection.Registers> projection=new Dcb.LiveProjection<>(Projection.Registers.empty(),Projection::reduce,s->s);
+        final SchoolProjection projection=new SchoolProjection();
         final CountingStore port=new CountingStore(store);
         final Dcb.Executor<Event,Rejection> executor=new Dcb.DcbExecutor<>(port);
         final SchoolHandler handler=new SchoolHandler();
@@ -19,7 +19,7 @@ final class DomainTests {
     static void require(boolean value,String name){if(!value)throw new AssertionError(name);}
     static void checkProjection(Given g){
         var events=g.store.read(new Dcb.Query(List.of())).events();var snapshot=g.projection.snapshot();
-        require(snapshot.position()==events.size() && snapshot.state().list().equals(Projection.fold(events).list()),"live / replay state");
+        require(snapshot.position()==events.size() && snapshot.state().equals(Projection.fold(events).list()),"live / replay state");
     }
     static void check(String name,List<Event> given,Command when,List<Event> thenEvents,List<Rejection> thenErrors,boolean invalid){
         var g=new Given(given); // Given

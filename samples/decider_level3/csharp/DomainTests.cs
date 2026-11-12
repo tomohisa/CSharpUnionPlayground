@@ -15,7 +15,7 @@ public static class DomainTests
     private sealed class Given
     {
         public readonly EventStore<Event> Store=new(Routing.Describe,e=>e);
-        public readonly LiveProjection<Event,Registers> Projection=new(Registers.Empty,Registers.Reduce,s=>s);
+        public readonly SchoolProjection Projection=new();
         public readonly CountingStore Port;
         public readonly IDcbExecutor<Event,Rejection> Executor;
         public readonly SchoolHandler Handler=new();
@@ -34,7 +34,7 @@ public static class DomainTests
         var events=g.Store.Read(new([])).Events;
         var (position,state)=g.Projection.Snapshot();
         Require(position==events.Length,"live checkpoint");
-        Require(JsonSerializer.Serialize(state.List(),TestJson.Default.SchoolList)==JsonSerializer.Serialize(Registers.Fold(events).List(),TestJson.Default.SchoolList),"live / replay state");
+        Require(JsonSerializer.Serialize(state,TestJson.Default.SchoolList)==JsonSerializer.Serialize(Registers.Fold(events).List(),TestJson.Default.SchoolList),"live / replay state");
     }
     private static void check(string name,ImmutableArray<Event> given,Command when,ImmutableArray<Event> thenEvents,ImmutableArray<Rejection> thenErrors,bool invalid)
     {

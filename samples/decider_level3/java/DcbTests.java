@@ -13,6 +13,12 @@ final class DcbTests{
         public Dcb.Preparation<Counter,String> handle(List<Dcb.Recorded<Counter>> events,Integer n){return new Dcb.Emit<>(List.of(new Counter("executor",n)));}
     }
     static void run()throws Exception{
+        var indexed=new Dcb.IndexedProjection<String,Integer,Counter>((tx,e)->{if(e.payload().delta()<0)throw new IllegalArgumentException("invalid");tx.put(e.payload().key(),tx.find(e.payload().key()).orElse(0)+e.payload().delta());});
+        java.util.function.BiFunction<Integer,Integer,Dcb.Recorded<Counter>> item=(n,delta)->new Dcb.Recorded<>(n,"index","CounterDelta",List.of(),new Counter("x",delta));
+        check(indexed.accept(List.of(item.apply(1,3))) && indexed.read(rows->rows.get("x")).state()==3);long indexWork=indexed.work();
+        check(!indexed.accept(List.of(item.apply(2,4),item.apply(3,-1))) && indexed.checkpoint()==1 && indexed.read(rows->rows.get("x")).state()==3 && indexed.work()==indexWork);
+        check(!indexed.accept(List.of(item.apply(2,4),item.apply(4,5))) && indexed.checkpoint()==1);check(indexed.accept(List.of(item.apply(1,3))) && indexed.work()==indexWork);
+
         var executorStore=new Dcb.EventStore<Counter>(DcbTests::describe,e->e);Dcb.Executor<Counter,String> executor=new Dcb.DcbExecutor<>(executorStore);
         check(executor.execute("valid",5,new CounterHandler()).appended()==1);
         check(executor.execute("invalid",0,new CounterHandler()).status().equals("Rejected") && executorStore.read(new Dcb.Query(List.of())).after()==1);

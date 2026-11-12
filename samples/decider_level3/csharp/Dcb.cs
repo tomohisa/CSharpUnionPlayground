@@ -162,3 +162,45 @@ public sealed class DcbExecutor<E,R>(ICommandStore<E> store,int maxConflicts=3):
     }
     public HandlingResult<R> Execute<C>(string id,C command,ICommandHandler<C,E,R> handler) => Prepare(id,command,handler).Commit();
 }
+
+// Transaction rows must be immutable. Only touched keys are staged; no table clone.
+public sealed class IndexBatch<K,V>(IReadOnlyDictionary<K,V> rows) where K:notnull
+{
+    internal readonly Dictionary<K,(bool Remove,V Value)> Changes=[];
+    public long Work {get;private set;}
+    public bool TryGet(K key,out V value)
+    {
+        Work++;
+        if(Changes.TryGetValue(key,out var edit)){value=edit.Value;return !edit.Remove;}
+        return rows.TryGetValue(key,out value!);
+    }
+    public V Get(K key)=>TryGet(key,out var value)?value:throw new InvalidOperationException("missing index row");
+    public void Put(K key,V value){Work++;Changes[key]=(false,value);}
+    public void Delete(K key){Work++;Changes[key]=(true,default!);}
+}
+public sealed class IndexedProjection<K,V,E>(Action<IndexBatch<K,V>,Recorded<E>> reduce) where K:notnull
+{
+    private readonly object gate=new();
+    private readonly Dictionary<K,V> rows=[];
+    private int checkpoint;
+    private long work;
+    public int Checkpoint {get{lock(gate)return checkpoint;}}
+    public int RowCount {get{lock(gate)return rows.Count;}}
+    public long Work {get{lock(gate)return work;}}
+    public bool Accept(ImmutableArray<Recorded<E>> events)
+    {
+        lock(gate)
+        {
+            var batch=new IndexBatch<K,V>(rows);var position=checkpoint;
+            try
+            {
+                foreach(var e in events){if(e.Position<=position)continue;if(e.Position!=position+1)return false;reduce(batch,e);position=e.Position;}
+            }
+            catch(Exception){return false;}
+            foreach(var (key,edit) in batch.Changes){if(edit.Remove)rows.Remove(key);else rows[key]=edit.Value;}
+            checkpoint=position;work+=batch.Work;return true;
+        }
+    }
+    // Query must return a detached value, never the row table or its enumerator.
+    public (int Position,T State) Read<T>(Func<IReadOnlyDictionary<K,V>,T> query){lock(gate)return(checkpoint,query(rows));}
+}

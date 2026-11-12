@@ -1,19 +1,20 @@
 use crate::{dcb::*,models::*,handlers::SchoolHandler,routing,projection::{self,Registers}};
+use crate::school_projection::SchoolProjection;
 use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
 struct CountingStore<'a>{inner:&'a EventStore<Event>,reads:AtomicUsize}
 impl CommandStore<Event> for CountingStore<'_>{
     fn read(&self,q:&Query)->ReadResult<Event>{self.reads.fetch_add(1,Ordering::SeqCst);self.inner.read(q)}
     fn append(&self,id:&str,q:&Query,after:usize,events:Vec<Event>)->AppendResult<Event>{self.inner.append(id,q,after,events)}
 }
-fn given_history(events:Vec<Event>)->(EventStore<Event>,Arc<LiveProjection<Event,Registers>>){
+fn given_history(events:Vec<Event>)->(EventStore<Event>,Arc<SchoolProjection>){
     let store=EventStore::new(routing::describe,Clone::clone);
     if !events.is_empty(){store.append("given",&Query{items:vec![]},0,events);}
-    let projection=Arc::new(LiveProjection::new(Registers::default(),projection::reduce));let listener=projection.clone();
+    let projection=Arc::new(SchoolProjection::new());let listener=projection.clone();
     store.subscribe(Box::new(move|batch|listener.accept(batch)));(store,projection)
 }
-fn check_projection(store:&EventStore<Event>,projection:&LiveProjection<Event,Registers>){
+fn check_projection(store:&EventStore<Event>,projection:&SchoolProjection){
     let events=store.read(&Query{items:vec![]}).events;let(position,state)=projection.snapshot();
-    assert_eq!(position,events.len());assert_eq!(projection::list(&state),projection::list(&projection::fold(&events)));
+    assert_eq!(position,events.len());assert_eq!(state,projection::list(&projection::fold(&events)));
 }
 fn check(name:&str,given:Vec<Event>,when:Command,then_events:Vec<Event>,then_errors:Vec<Rejection>,invalid:bool){
     let before=given.len();let(store,projection)=given_history(given); // Given

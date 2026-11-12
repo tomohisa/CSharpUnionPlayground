@@ -115,3 +115,42 @@ type DcbExecutor<'E,'R>(store:ICommandStore<'E>,maxConflicts:int) =
     interface IDcbExecutor<'E,'R> with
         member this.Prepare(id,command,handler) = this.Prepare(id,command,handler)
         member this.Execute(id,command,handler) = this.Execute(id,command,handler)
+
+// Rows are immutable; a failed batch discards only its staged changes.
+type IndexBatch<'K,'V when 'K:equality and 'K : not null>(rows:System.Collections.Generic.Dictionary<'K,'V>) =
+    let changes=System.Collections.Generic.Dictionary<'K,'V option>()
+    let mutable work=0L
+    member _.Changes=changes
+    member _.Work=work
+    member _.TryGet key =
+        work<-work+1L
+        match changes.TryGetValue key with
+        | true,value -> value
+        | _ -> match rows.TryGetValue key with true,value->Some value | _->None
+    member this.Get key=this.TryGet key |> Option.defaultWith(fun ()->failwith "missing index row")
+    member _.Put(key,value)=work<-work+1L;changes[key]<-Some value
+    member _.Delete key=work<-work+1L;changes[key]<-None
+type IndexedProjection<'K,'V,'E when 'K:equality and 'K : not null>(reduce:IndexBatch<'K,'V> -> Recorded<'E> -> unit) =
+    let gate=obj()
+    let rows=System.Collections.Generic.Dictionary<'K,'V>()
+    let mutable checkpoint,work=0,0L
+    member _.Checkpoint=lock gate (fun ()->checkpoint)
+    member _.RowCount=lock gate (fun ()->rows.Count)
+    member _.Work=lock gate (fun ()->work)
+    member _.Accept(events:Recorded<'E> list)=lock gate (fun ()->
+        let batch=IndexBatch(rows)
+        let mutable position=checkpoint
+        let valid=
+            try
+                for e in events do
+                    if e.Position>position then
+                        if e.Position<>position+1 then failwith "position gap"
+                        reduce batch e;position<-e.Position
+                true
+            with _->false
+        if valid then
+            for pair in batch.Changes do
+                match pair.Value with Some value->rows[pair.Key]<-value | None->rows.Remove pair.Key |> ignore
+            checkpoint<-position;work<-work+batch.Work
+        valid)
+    member _.Read(query:System.Collections.Generic.IReadOnlyDictionary<'K,'V> -> 'T)=lock gate (fun ()->checkpoint,query rows)

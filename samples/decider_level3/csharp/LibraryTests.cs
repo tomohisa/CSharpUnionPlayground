@@ -16,6 +16,14 @@ public static class LibraryTests
     }
     public static void Run()
     {
+        var indexed=new IndexedProjection<string,int,Counter>((tx,e)=>{if(e.Payload.Delta<0)throw new ArgumentException("invalid");tx.Put(e.Payload.Key,(tx.TryGet(e.Payload.Key,out var old)?old:0)+e.Payload.Delta);});
+        Recorded<Counter> I(int n,int delta)=>new(n,"index","CounterDelta",[],new("x",delta));
+        Check(indexed.Accept([I(1,3)]) && indexed.Read(rows=>rows["x"]).State==3);
+        long indexWork=indexed.Work;
+        Check(!indexed.Accept([I(2,4),I(3,-1)]) && indexed.Checkpoint==1 && indexed.Read(rows=>rows["x"]).State==3 && indexed.Work==indexWork);
+        Check(!indexed.Accept([I(2,4),I(4,5)]) && indexed.Checkpoint==1);
+        Check(indexed.Accept([I(1,3)]) && indexed.Work==indexWork);
+
         var executorStore=new EventStore<Counter>(Describe,e=>e);
         IDcbExecutor<Counter,string> executor=new DcbExecutor<Counter,string>(executorStore);
         Check(executor.Execute("valid",5,new CounterHandler()).Appended==1);

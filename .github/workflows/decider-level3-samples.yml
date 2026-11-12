@@ -58,6 +58,8 @@ jobs:
           samples/file-based/node_modules/.bin/tsc -p samples/decider_level3/typescript/tsconfig.json
       - name: Native domain tests (value objects, deciders, executors)
         run: python3 samples/decider_level3/tests/domain_tests.py
+      - name: Projection size independence and transactional snapshots
+        run: python3 samples/decider_level3/tests/projection_scaling.py --samples 1
       - name: Shared scenarios and cross-language event logs
         run: python3 samples/decider_level3/run.py --verify
       - name: Domain-free library isolation and conditional races
@@ -68,3 +70,4 @@ jobs:
         run: |
           python3 samples/decider_level3/run.py --language csharp --native-aot --verify
           python3 samples/decider_level3/tests/domain_tests.py --language csharp --native-aot
+          python3 samples/decider_level3/tests/projection_scaling.py --language csharp --native-aot --sizes 1000,100000 --samples 1

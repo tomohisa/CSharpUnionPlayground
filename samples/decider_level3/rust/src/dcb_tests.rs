@@ -12,6 +12,12 @@ impl CommandHandler<i32,Counter,String> for CounterHandler{
     fn handle(&self,_:&[Recorded<Counter>],n:&i32)->Preparation<Counter,String>{Preparation::Emit(vec![event("executor",*n)])}
 }
 pub fn run(){
+    let indexed=IndexedProjection::new(|tx:&mut IndexBatch<String,i32>,e:&Recorded<Counter>|{if e.payload.delta<0{return Err("invalid".into());}let old=tx.find(&e.payload.key).unwrap_or(0);tx.put(e.payload.key.clone(),old+e.payload.delta);Ok(())});
+    let item=|position,delta|Recorded{position,command_id:"index".into(),event_type:"CounterDelta".into(),tags:vec![],payload:event("x",delta)};
+    assert!(indexed.accept(&[item(1,3)]));let index_work=indexed.work();assert_eq!(indexed.read(|rows|rows["x"]).1,3);
+    assert!(!indexed.accept(&[item(2,4),item(3,-1)]));assert_eq!(indexed.checkpoint(),1);assert_eq!(indexed.read(|rows|rows["x"]).1,3);assert_eq!(indexed.work(),index_work);
+    assert!(!indexed.accept(&[item(2,4),item(4,5)]));assert_eq!(indexed.checkpoint(),1);assert!(indexed.accept(&[item(1,3)]));assert_eq!(indexed.work(),index_work);
+
     let executor_store=EventStore::new(describe,Clone::clone);let executor=DcbExecutor{store:&executor_store};
     assert_eq!(executor.execute("valid",5,&CounterHandler).appended,1);
     assert_eq!(executor.execute("invalid",0,&CounterHandler).status,"Rejected");assert_eq!(executor_store.read(&Query{items:vec![]}).after,1);

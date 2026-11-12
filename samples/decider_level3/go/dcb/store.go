@@ -331,3 +331,98 @@ func (e DcbExecutor[C, E, R]) Prepare(id string, command C, handler CommandHandl
 func (e DcbExecutor[C, E, R]) Execute(id string, command C, handler CommandHandler[C, E, R]) HandlingResult[R] {
 	return e.Prepare(id, command, handler).Commit()
 }
+
+// Values returned by Get are immutable rows; a reducer replaces touched rows.
+type indexEdit[V any] struct {
+	Value  V
+	Remove bool
+}
+type IndexBatch[K comparable, V any] struct {
+	rows    map[K]V
+	changes map[K]indexEdit[V]
+	work    int64
+}
+
+func (b *IndexBatch[K, V]) Find(key K) (V, bool) {
+	b.work++
+	if e, ok := b.changes[key]; ok {
+		return e.Value, !e.Remove
+	}
+	v, ok := b.rows[key]
+	return v, ok
+}
+func (b *IndexBatch[K, V]) Get(key K) V {
+	v, ok := b.Find(key)
+	if !ok {
+		panic("missing index row")
+	}
+	return v
+}
+func (b *IndexBatch[K, V]) Put(key K, v V) { b.work++; b.changes[key] = indexEdit[V]{Value: v} }
+func (b *IndexBatch[K, V]) Delete(key K)   { b.work++; b.changes[key] = indexEdit[V]{Remove: true} }
+
+type IndexedProjection[K comparable, V, E any] struct {
+	gate       sync.Mutex
+	rows       map[K]V
+	checkpoint int
+	work       int64
+	reduce     func(*IndexBatch[K, V], Recorded[E])
+}
+
+func NewIndexedProjection[K comparable, V, E any](reduce func(*IndexBatch[K, V], Recorded[E])) *IndexedProjection[K, V, E] {
+	return &IndexedProjection[K, V, E]{rows: map[K]V{}, reduce: reduce}
+}
+func (p *IndexedProjection[K, V, E]) Accept(events []Recorded[E]) (valid bool) {
+	p.gate.Lock()
+	defer p.gate.Unlock()
+	defer func() {
+		if recover() != nil {
+			valid = false
+		}
+	}()
+	batch := &IndexBatch[K, V]{rows: p.rows, changes: map[K]indexEdit[V]{}}
+	position := p.checkpoint
+	for _, e := range events {
+		if e.Position <= position {
+			continue
+		}
+		if e.Position != position+1 {
+			return false
+		}
+		p.reduce(batch, e)
+		position = e.Position
+	}
+	for key, e := range batch.changes {
+		if e.Remove {
+			delete(p.rows, key)
+		} else {
+			p.rows[key] = e.Value
+		}
+	}
+	p.checkpoint = position
+	p.work += batch.work
+	return true
+}
+func (p *IndexedProjection[K, V, E]) Checkpoint() int {
+	p.gate.Lock()
+	defer p.gate.Unlock()
+	return p.checkpoint
+}
+func (p *IndexedProjection[K, V, E]) RowCount() int {
+	p.gate.Lock()
+	defer p.gate.Unlock()
+	return len(p.rows)
+}
+func (p *IndexedProjection[K, V, E]) Work() int64 {
+	p.gate.Lock()
+	defer p.gate.Unlock()
+	return p.work
+}
+
+// The callback must produce a detached DTO and must not retain/mutate rows.
+func (p *IndexedProjection[K, V, E]) Read(query func(map[K]V)) int {
+	p.gate.Lock()
+	defer p.gate.Unlock()
+	query(p.rows)
+	return p.checkpoint
+}

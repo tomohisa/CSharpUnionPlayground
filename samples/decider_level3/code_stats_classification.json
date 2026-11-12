@@ -1,7 +1,7 @@
 {
   "csharp/Application.cs": {
     "role": "UseCase",
-    "sha256": "a0de27eb15d9eb0d6d5e21dcd152d40b02c814db842ee4cbe44ca80a51d1b619",
+    "sha256": "f974f97ce6079ebe719ccdd8f6a9a12a797eb24fce868dc1a63ad74a8c8cd529",
     "ranges": [
       {
         "start": 1,
@@ -21,7 +21,7 @@
   },
   "csharp/Dcb.cs": {
     "role": "Library",
-    "sha256": "510f169052ca8fb2653f3277ae924233868e0b4939bc378b878c73e79c263ac3",
+    "sha256": "4d2913c4acde3c5e1eb3373a2b0eec2e68c3b48ec94bf25f3eb9238c7badaafe",
     "ranges": []
   },
   "csharp/Decider.cs": {
@@ -32,7 +32,7 @@
   "csharp/DomainTests.cs": {
     "role": "DomainTest",
     "ranges": [],
-    "sha256": "79273261e45e0cfcfbece230cf8c5c061887f4867a0859f0d0f65a6a38e52ffd"
+    "sha256": "48f78fb6a34586524bacd60395161d2f9b3e507c92c8c880cb4a0b49eb503717"
   },
   "csharp/Handlers.cs": {
     "role": "Command",
@@ -82,18 +82,28 @@
   },
   "csharp/Program.cs": {
     "role": "Boundary",
-    "sha256": "b2d6bb9eaaf841ec868cea829b89a5b16448aaa21bcbe7f32eb2fba96a4a28d1",
+    "sha256": "0ade55a413ec88b0523a123e723fc84a41f51fe1be2a397a46333ba53e62c84a",
     "ranges": []
   },
   "csharp/Projection.cs": {
     "role": "Projection",
-    "sha256": "f18357da58543bb2e32b4281cb6dfb6d68180f3e0b5c926b595d44dc9445df79",
+    "sha256": "d834148f2a2bdb96582b10b4d150dba37d326280a283fdc8f2c962a4e551086d",
     "ranges": []
+  },
+  "csharp/ProjectionTests.cs": {
+    "role": "DomainTest",
+    "ranges": [],
+    "sha256": "84773bff5c9aa15431b7656ba8d5dc18096aeeae25d8a610bd0e3dc794fc59d2"
   },
   "csharp/Routing.cs": {
     "role": "Connection",
     "sha256": "9238035e4db15b755f818ce561a6bf0c457008052907c0236953751e32a84aaa",
     "ranges": []
+  },
+  "csharp/SchoolProjection.cs": {
+    "role": "Projection",
+    "ranges": [],
+    "sha256": "760a6af60ef2b7f25c4c186a5798616d79a35c2133b011b9afbe3c3b723fa60e"
   },
   "csharp/ValueObjects.cs": {
     "role": "Model",
@@ -110,7 +120,7 @@
   },
   "fsharp/Application.fs": {
     "role": "UseCase",
-    "sha256": "4f2005060b5b47095295629fd04f066d47360693e0ac02db366360157b333eef",
+    "sha256": "fdb66ea87aeb90acccb0aa9ddc9773a0e2bccfaa0bb060d47e9bcb572e245bf3",
     "ranges": [
       {
         "start": 1,
@@ -130,7 +140,7 @@
   },
   "fsharp/Dcb.fs": {
     "role": "Library",
-    "sha256": "bf71c76b7e9f5a48a7a5248a6f84c6d45a5157f396f53e45e0898a5e4c5911de",
+    "sha256": "5f965432a69e552f9d3425a693bc44e6c7c5230c5a72c18e9bbe188a691fd1e7",
     "ranges": []
   },
   "fsharp/Decider.fs": {
@@ -141,7 +151,7 @@
   "fsharp/DomainTests.fs": {
     "role": "DomainTest",
     "ranges": [],
-    "sha256": "bd055d6d6171295efd5403ce51ac6784a921db8043f936f052d5a0a5a1464570"
+    "sha256": "069a1029ab137ee1a32ad7e1653fffac94100939ad8d51e2df2e3b99851e0fa9"
   },
   "fsharp/Handlers.fs": {
     "role": "Command",
@@ -191,7 +201,7 @@
   },
   "fsharp/Program.fs": {
     "role": "Boundary",
-    "sha256": "9476ba02b749672376ff2895683cef150c444718c569e601e513c4c7df0dddb1",
+    "sha256": "fe473100ae720fdc889f4fdb82eeccaa284d92d254571ce8b11d3c466d46cd41",
     "ranges": []
   },
   "fsharp/Projection.fs": {
@@ -199,10 +209,20 @@
     "sha256": "e05d974e5e2f6af5d721c9cc37148f8e761e19baf61280fa93a6a1b9107409b8",
     "ranges": []
   },
+  "fsharp/ProjectionTests.fs": {
+    "role": "DomainTest",
+    "ranges": [],
+    "sha256": "ce8f4a78375408a06bdfd1de6d637d30427e4c6ac94caa66ee9bd702384782fc"
+  },
   "fsharp/Routing.fs": {
     "role": "Connection",
     "sha256": "78b17b14feb761543ee9aa702c557e6f3bc81049448bf659e761f78620e3b6c9",
     "ranges": []
+  },
+  "fsharp/SchoolProjection.fs": {
+    "role": "Projection",
+    "ranges": [],
+    "sha256": "5b69c80dc3b67b19b5e71cc81ceda1536b9760266c5425659089c9fdc5108b78"
   },
   "fsharp/ValueObjects.fs": {
     "role": "Model",
@@ -219,7 +239,7 @@
   },
   "go/application.go": {
     "role": "UseCase",
-    "sha256": "9c002f8dbaaa5998f2fdff7890fa252ce2b9be806d42a8dd5b94b45328845710",
+    "sha256": "1a07fd91cae4bac3cb123083514548d67c9e52886ce4a41044258f3faa27d4c8",
     "ranges": [
       {
         "start": 1,
@@ -239,7 +259,7 @@
   },
   "go/dcb/store.go": {
     "role": "Library",
-    "sha256": "ebf6896c664fb018006ac8f1e8cd8d909326470163514d113cf6391f25f9427d",
+    "sha256": "731809921bce1b4d3e99d610eb6a36bb42963dd6e3eb642d2b4495526e5791ee",
     "ranges": []
   },
   "go/domain/decider.go": {
@@ -308,6 +328,11 @@
     "sha256": "b9c916fb0bbc301839b72706233e645ea019e079d975ad01fad9b1d432c053b7",
     "ranges": []
   },
+  "go/domain/school_projection.go": {
+    "role": "Projection",
+    "ranges": [],
+    "sha256": "b92fac4578f06ddec34f703d11888103703f6e5b446c3375ef36010a4bcb77b5"
+  },
   "go/domain/value_objects.go": {
     "role": "Model",
     "ranges": [
@@ -324,12 +349,17 @@
   "go/domain_test.go": {
     "role": "DomainTest",
     "ranges": [],
-    "sha256": "58e730bedd8626bf78986fb7d38ef1a2cfdf39931ea1c8ee837beb6901b9f3e7"
+    "sha256": "75cb5df2bf9b6156a397fe482cf9ed7f6aa18f27255459e4da8d9b77bdce9d7f"
   },
   "go/main.go": {
     "role": "Boundary",
-    "sha256": "db9f606ed3cef6d1165b1b945981de91631062e5167d8dfc35a318184497768c",
+    "sha256": "423b569fb67ac5d1c2bdd755693edac63aad066d4fee968583efb48347367a20",
     "ranges": []
+  },
+  "go/projection_tests.go": {
+    "role": "DomainTest",
+    "ranges": [],
+    "sha256": "79071372c763b135f21425e8327b428ab35aa6c9f0fffc808768fe262a7cb771"
   },
   "go/wire.go": {
     "role": "Boundary",
@@ -338,7 +368,7 @@
   },
   "java/Application.java": {
     "role": "UseCase",
-    "sha256": "9e5b36efaa0d669efe62089895fa7db7b3294efe9820ca04be89cbb2d6efacba",
+    "sha256": "2ad6ee4d8e6e283498215009ef7e46a1d4c59064e86d6f44a43faa287a4447aa",
     "ranges": [
       {
         "start": 1,
@@ -364,11 +394,11 @@
   "java/DomainTests.java": {
     "role": "DomainTest",
     "ranges": [],
-    "sha256": "6b4589483679fa00e54f024ef335a0f198b2f3df774de9fe18b1b50c8a35ea5b"
+    "sha256": "cc4a3262559bb30a292732324bdaa30acf60ca0b8f22b71b42d83812d9f3a2f1"
   },
   "java/Main.java": {
     "role": "Boundary",
-    "sha256": "39c052db05dcfe7fc87edf10efefb0b93e90b163e8c573287b6c30a4546a5720",
+    "sha256": "e623a1729c6e8b3a2b10edc5388dfdc45d562c882193ed960b3c82db980696d2",
     "ranges": []
   },
   "java/Models.java": {
@@ -417,6 +447,11 @@
     "sha256": "1c1f592541b1f3c6867d22a976d2b8029b32e4df182c12a07474d666d3fcd239",
     "ranges": []
   },
+  "java/ProjectionTests.java": {
+    "role": "DomainTest",
+    "ranges": [],
+    "sha256": "5262ada4322b2ee4f648e8cebe5d1d5eca6c7d6f4ff171435a9cf77eb45137fe"
+  },
   "java/Routing.java": {
     "role": "Connection",
     "sha256": "fa2eaa82bfc70423394e6f2df58cc52a9acda53bb19824981d155b231a8843aa",
@@ -426,6 +461,11 @@
     "role": "Command",
     "ranges": [],
     "sha256": "ad07a687b1ce56ba46ffabcd32c19aca91c1a394aa8d610269b3b27583e92f7f"
+  },
+  "java/SchoolProjection.java": {
+    "role": "Projection",
+    "ranges": [],
+    "sha256": "36a849e62ad574dc6bfe121c99d1fce3cf24a1932339a5e6715dadc244cf2304"
   },
   "java/ValueObjects.java": {
     "role": "Model",
@@ -442,23 +482,23 @@
   },
   "java/playground/dcb/Dcb.java": {
     "role": "Library",
-    "sha256": "6845426e1cc037ffa8a6379fbaa2500f3bcd3cbb754c98aac937fde1e65c7283",
+    "sha256": "e420e86bc99a6543f728593e4c35620308504905187c13e662c10aa585c82210",
     "ranges": []
   },
   "rust/src/application.rs": {
     "role": "UseCase",
-    "sha256": "eefc5587590c7458df162a3d2286a425018034818b2d1ff13b8f3cd5b1290a8f",
+    "sha256": "3f551f2491e753cd92bd1aae220b1133818f9a0b19bfbbe906d369e76437378e",
     "ranges": [
       {
         "start": 1,
-        "end": 8,
+        "end": 9,
         "role": "Boundary",
         "startText": "use crate::{dcb::*,models::*,projection::{self,Registers},routing,handlers::SchoolHandler};",
         "endText": "pub struct RunOutput{events:Vec<Recorded<Event>>,steps:Vec<Trace>,lists:Vec<SchoolList>,list:SchoolList,rebuilt:SchoolList,checkpoint:usize,reads:Vec<ReadAudit>,listener_faults:usize}"
       },
       {
-        "start": 16,
-        "end": 19,
+        "start": 17,
+        "end": 20,
         "role": "Boundary",
         "startText": "    let store=EventStore::new(routing::describe,Clone::clone);",
         "endText": "    let executor=DcbExecutor{store:&store};"
@@ -467,7 +507,7 @@
   },
   "rust/src/dcb.rs": {
     "role": "Library",
-    "sha256": "984852fdd68937120fe7e7fdffe638a7b5e19d6184894730cc07dfb46dfed02f",
+    "sha256": "3fd1489aaea9b440375d7d698b49e8a9631f524ff31874fde21f48d525172642",
     "ranges": []
   },
   "rust/src/decider.rs": {
@@ -478,7 +518,7 @@
   "rust/src/domain_tests.rs": {
     "role": "DomainTest",
     "ranges": [],
-    "sha256": "a9ade638c83ebd9f589f72640e5e9a75c3670835d0fb009883ae6326b981490c"
+    "sha256": "691dfb1cf2ee2f8843a49a28386ed9ad4fed30b06dcb6b98505fb02e8e51206b"
   },
   "rust/src/handlers.rs": {
     "role": "Command",
@@ -487,7 +527,7 @@
   },
   "rust/src/main.rs": {
     "role": "Boundary",
-    "sha256": "7df95782962404ce5bbf02ddd46c1c5ce1e4b671cae1fa4ec39df7e28bd8b8e7",
+    "sha256": "10ead6f2eb0916308c6ea700eaeccad817fc008561799b788ac96af87376c260",
     "ranges": []
   },
   "rust/src/models.rs": {
@@ -536,10 +576,20 @@
     "sha256": "601e5e5a02a038f86b7fcfb2edfe70e959bb092794b29e2fbbfab3bead87b7a2",
     "ranges": []
   },
+  "rust/src/projection_tests.rs": {
+    "role": "DomainTest",
+    "ranges": [],
+    "sha256": "d44e9dc949fba925c14b0adac0cd1b1d6b5c8c8a94a8ef2aecbab3ae4fc13106"
+  },
   "rust/src/routing.rs": {
     "role": "Connection",
     "sha256": "f5db02b9ba6d5f2ad962ee4546ee5cd240ca3bfee37ffa2d78c246ca754bc3de",
     "ranges": []
+  },
+  "rust/src/school_projection.rs": {
+    "role": "Projection",
+    "ranges": [],
+    "sha256": "b80c69cfef8eb79629d4886f13a7eaacc5d55116db59f186a6bc5c0fa8761f0a"
   },
   "rust/src/value_objects.rs": {
     "role": "Model",
@@ -556,7 +606,7 @@
   },
   "swift/application.swift": {
     "role": "UseCase",
-    "sha256": "6676d3db5eb61d67fa73f21d67719618d1b0a25cc1c3427abc4e02b30ae6303e",
+    "sha256": "bc76f4e075acb7daf4870a73a6a854608857be259b18d43adbb165667917b7f3",
     "ranges": [
       {
         "start": 1,
@@ -576,7 +626,7 @@
   },
   "swift/dcb.swift": {
     "role": "Library",
-    "sha256": "9dee522151d8af30400cc251737a686ff5506a4818838d003172fd0e8a795e3b",
+    "sha256": "74ab566de299a87011572a4d3f4c09e854a57105e0622f1abd725085ad6bee65",
     "ranges": []
   },
   "swift/decider.swift": {
@@ -587,7 +637,7 @@
   "swift/domainTests.swift": {
     "role": "DomainTest",
     "ranges": [],
-    "sha256": "d221ea538bb968a981a60ac0b491a0d744f9829172e8ee87c9f245df883e1d21"
+    "sha256": "5911c87f618ab19d4f0e2f0150d3901c0d0397a642a6efdd045d76d720ccbeef"
   },
   "swift/handlers.swift": {
     "role": "Command",
@@ -596,7 +646,7 @@
   },
   "swift/main.swift": {
     "role": "Boundary",
-    "sha256": "464622e40696c5f16bb2cee0d79c3d5451481182cf81469de63cc41bacecd75a",
+    "sha256": "0efdfad36e4e09a1bdff400d40ba4166dce50ced75f9a17920a7dc1fb9f39719",
     "ranges": []
   },
   "swift/models.swift": {
@@ -645,10 +695,20 @@
     "sha256": "e52d422b6986eb3fca408335abcf3988a078146ed1979639391a7d548e3121ee",
     "ranges": []
   },
+  "swift/projectionTests.swift": {
+    "role": "DomainTest",
+    "ranges": [],
+    "sha256": "840031c3082fdd247b8fdb890c83a17d470d20d9747233bab9ebae8a75f8befb"
+  },
   "swift/routing.swift": {
     "role": "Connection",
     "sha256": "4dabed3ed7fcac27614f899d11f4b84c146db02b27418863ea7bec4b14d5df3a",
     "ranges": []
+  },
+  "swift/schoolProjection.swift": {
+    "role": "Projection",
+    "ranges": [],
+    "sha256": "db664c0ca98fc7c1ae10d8fb4063c2557621eb1725f495c13b28e7c7067747f1"
   },
   "swift/valueObjects.swift": {
     "role": "Model",
@@ -670,14 +730,14 @@
   },
   "typescript/application.ts": {
     "role": "UseCase",
-    "sha256": "9ba159a73f422aab49b3ec75575d757c5259c10e6d9311548085f5deee24e8ea",
+    "sha256": "db6f5ff576a0d9707964a5f850eaed3e7e1a2cfc4e4fa4ab52f16f8720abfbe1",
     "ranges": [
       {
         "start": 1,
         "end": 7,
         "role": "Boundary",
         "startText": "import { DcbExecutor, EventStore, LiveProjection, sameTag } from \"./dcb.ts\";",
-        "endText": "import { empty, copy, reduce, list } from \"./projection.ts\";"
+        "endText": "import { SchoolProjection } from \"./schoolProjection.ts\";"
       },
       {
         "start": 9,
@@ -690,7 +750,7 @@
   },
   "typescript/dcb.ts": {
     "role": "Library",
-    "sha256": "532bde099025fe331e8169bd2775828bfd1311f1103343f34954c267a8913ae9",
+    "sha256": "6335128de679b0c12de0120b504a1d104d4ab0490b56166ae5fa12cbf7778585",
     "ranges": []
   },
   "typescript/decider.ts": {
@@ -701,7 +761,7 @@
   "typescript/domain.test.ts": {
     "role": "DomainTest",
     "ranges": [],
-    "sha256": "55b2cceceb93b527954ea1352e77a909aa0b4deeee46dea73ec2ba35ad01effc"
+    "sha256": "849628634f3bde911a968d17b2d66911d14aa92fe77f2400f2c7d70be83a7eda"
   },
   "typescript/handlers.ts": {
     "role": "Command",
@@ -710,7 +770,7 @@
   },
   "typescript/main.ts": {
     "role": "Boundary",
-    "sha256": "3d72415ac5c75391d8926177bea9c0e4cc817d4c801fb9c60b11d76d1130bf80",
+    "sha256": "a1294ff6ca61fa2466059ed1f4dff7238988f24370e57560c3ef20ad0d236063",
     "ranges": []
   },
   "typescript/models.ts": {
@@ -761,6 +821,11 @@
       }
     ]
   },
+  "typescript/projection.test.ts": {
+    "role": "DomainTest",
+    "ranges": [],
+    "sha256": "885a8afc3dcc62175bc238717b4e2c534615e224ef40983b016804025583eb0e"
+  },
   "typescript/projection.ts": {
     "role": "Projection",
     "sha256": "3549ab26265748d02e03031408b13164d8526eb8893f216a06ec1ae96e89018c",
@@ -770,6 +835,11 @@
     "role": "Connection",
     "sha256": "4c5ed14a0ff542abe8b77db5d9f12f8da7b6f3f527806807a694fb95a9867838",
     "ranges": []
+  },
+  "typescript/schoolProjection.ts": {
+    "role": "Projection",
+    "ranges": [],
+    "sha256": "e4a74ceb40ccc7d2b611a0d647500b6b4f607507585d5594aad278dd89a3cb4d"
   },
   "typescript/valueObjects.ts": {
     "role": "Model",

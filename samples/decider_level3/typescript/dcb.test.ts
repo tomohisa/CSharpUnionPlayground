@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import {test} from "node:test";
-import {EventStore,LiveProjection,CommandProcessor,DcbExecutor} from "./dcb.ts";
+import {EventStore,LiveProjection,CommandProcessor,DcbExecutor,IndexedProjection} from "./dcb.ts";
 import type {Tag,Query,EventDescriptor,CommandHandler} from "./dcb.ts";
 type Counter={readonly key:string;readonly delta:number};
 const tag=(key:string):Tag=>({category:"counter",keys:[key]});
@@ -40,4 +40,12 @@ test("executor accepts an unrelated typed command / handler pair",()=>{
     queryFor:n=>{assert.ok(n>0);return query("executor");},handle:(_,n)=>({kind:"Emit",events:[{key:"executor",delta:n}]})};
   assert.equal(executor.execute("valid",5,handler).appended,1);
   assert.equal(executor.execute("invalid",0,handler).status,"Rejected");assert.equal(store.read({items:[]}).after,1);
+});
+
+test("indexed projection commits only staged keys; failures and gaps leave its checkpoint and rows unchanged",()=>{
+  const p=new IndexedProjection<string,number,Counter>((tx,e)=>{if(e.payload.delta<0)throw new Error("invalid");tx.put(e.payload.key,(tx.find(e.payload.key)??0)+e.payload.delta);});
+  const item=(position:number,delta:number)=>({position,commandId:"index",eventType:"CounterDelta",tags:[],payload:{key:"x",delta}});
+  assert.ok(p.accept([item(1,3)]));const work=p.work;assert.equal(p.read(rows=>rows.get("x")).state,3);
+  assert.equal(p.accept([item(2,4),item(3,-1)]),false);assert.equal(p.checkpoint,1);assert.equal(p.work,work);assert.equal(p.read(rows=>rows.get("x")).state,3);
+  assert.equal(p.accept([item(2,4),item(4,5)]),false);assert.equal(p.checkpoint,1);assert.ok(p.accept([item(1,3)]));assert.equal(p.work,work);
 });

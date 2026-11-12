@@ -7,7 +7,7 @@ module Application =
     let run history operations =
         let store=EventStore<Event>(Routing.describe,id)
         store.Load history
-        let projection=LiveProjection(Registers.empty,Registers.reduce,id)
+        let projection=SchoolProjection()
         store.Subscribe projection.Accept
         let executor:IDcbExecutor<Event,Rejection>=DcbExecutor<Event,Rejection>(store,3)
         let mutable tickets=Map.empty<string,PreparedCommand<Rejection>>
@@ -34,22 +34,22 @@ module Application =
             | Operation.ListAll ->
                 if store.ListenerFaults<>0 then failwith "projection unavailable; rebuild required"
                 let position,state=projection.Snapshot()
-                lists.Add(Registers.list state)
+                lists.Add(state)
                 steps.Add {Operation="ListAll";Status="Listed";Conflicts=0;Appended=0;Position=position;Errors=[]}
             | Operation.Rebuild ->
-                let fresh=LiveProjection(Registers.empty,Registers.reduce,id)
+                let fresh=SchoolProjection()
                 if not (fresh.Accept (store.Read {Items=[]}).Events) then failwith "rebuild failed"
                 let position,state=fresh.Snapshot()
-                lists.Add(Registers.list state)
+                lists.Add(state)
                 steps.Add {Operation="Rebuild";Status="Rebuilt";Conflicts=0;Appended=0;Position=position;Errors=[]}
             | Operation.Redeliver ->
                 if not (projection.Accept (store.Read {Items=[]}).Events) then failwith "duplicate delivery failed"
-                let position,_=projection.Snapshot()
+                let position=projection.Checkpoint
                 steps.Add {Operation="Redeliver";Status="Redelivered";Conflicts=0;Appended=0;Position=position;Errors=[]}
         let events=(store.Read {Items=[]}).Events
-        let fresh=LiveProjection(Registers.empty,Registers.reduce,id)
+        let fresh=SchoolProjection()
         if not(fresh.Accept events) then failwith "rebuild failed"
         if store.ListenerFaults<>0 then failwith "projection unavailable; rebuild required"
         let checkpoint,state=projection.Snapshot()
         let _,rebuilt=fresh.Snapshot()
-        {Events=events;Steps=List.ofSeq steps;Lists=List.ofSeq lists;List=Registers.list state;Rebuilt=Registers.list rebuilt;Checkpoint=checkpoint;Reads=List.ofSeq reads;ListenerFaults=store.ListenerFaults}
+        {Events=events;Steps=List.ofSeq steps;Lists=List.ofSeq lists;List=state;Rebuilt=rebuilt;Checkpoint=checkpoint;Reads=List.ofSeq reads;ListenerFaults=store.ListenerFaults}

@@ -10,7 +10,7 @@ module DomainTests =
             member _.Append(id,query,after,events)=inner.Append(id,query,after,events)
     type Given(events:Event list) =
         let store=EventStore<Event>(Routing.describe,id)
-        let projection=LiveProjection(Registers.empty,Registers.reduce,id)
+        let projection=SchoolProjection()
         do
             if not(List.isEmpty events) then store.Append("given",{Items=[]},0,events) |> ignore
             store.Subscribe projection.Accept
@@ -24,7 +24,7 @@ module DomainTests =
     let checkProjection (g:Given) =
         let events=(g.Store.Read {Items=[]}).Events
         let position,state=g.Projection.Snapshot()
-        require (position=events.Length && Registers.list state=Registers.list(Registers.fold events)) "live / replay state"
+        require (position=events.Length && state=Registers.list(Registers.fold events)) "live / replay state"
     let check name given command thenEvents thenErrors invalid =
         let g=Given(given) // Given: event history independent of the command under test.
         let prepared=g.Executor.Prepare("when",command,Handlers.school) // When
