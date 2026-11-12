@@ -144,6 +144,8 @@ def main():
     p.add_argument('--timeout',type=int,default=1800);p.add_argument('--output',type=Path,default=HERE/'observed/latest.json')
     p.add_argument('--keep-databases',action='store_true');p.add_argument('--no-build',action='store_true')
     p.add_argument('--csharp-native-aot',action='store_true')
+    p.add_argument('--calibrate-from',type=Path,help='Reuse a complete SQLite run on this host and unchanged native sources')
+    p.add_argument('--calibrate-only',action='store_true',help='Save the selected count and calibration without the main run')
     a=p.parse_args();languages=build_runner.LANGUAGES if a.language=='all' else a.language.split(',')
     if any(l not in build_runner.LANGUAGES for l in languages):p.error('unknown language')
     if a.students is not None and (a.students<10 or a.students%10):p.error('--students must be a positive multiple of ten')
@@ -171,8 +173,29 @@ def main():
         data['hardware']={name:subprocess.run(['sysctl','-n',key],capture_output=True,text=True).stdout.strip() for name,key in [('cpu','machdep.cpu.brand_string'),('memoryBytes','hw.memsize')]}
     else:
         data['hardware']={'memoryBytes':os.sysconf('SC_PAGE_SIZE')*os.sysconf('SC_PHYS_PAGES')}
+    data['workloadSha256']=hashlib.sha256((HERE/'workload.py').read_bytes()).hexdigest()
     try:
         n=100 if a.quick else a.students
+        if n is None and a.calibrate_from:
+            prior=json.loads(a.calibrate_from.read_text())
+            if prior['platform']!=data['platform'] or prior.get('hardware')!=data.get('hardware'):
+                raise ValueError('Calibration source is from a different host/environment')
+            tool_for={'csharp':'dotnet','fsharp':'dotnet','typescript':'node','rust':'rust','java':'java','go':'go','swift':'swift'}
+            if any(prior['runtimeVersions'].get(tool_for[l])!=data['runtimeVersions'].get(tool_for[l]) for l in languages):
+                raise ValueError('Calibration source uses different runtime/compiler versions')
+            if 'csharp' in languages and prior.get('csharpNativeAot',False)!=data['csharpNativeAot']:
+                raise ValueError('Calibration source uses a different C# build mode')
+            if prior['workloadSha256']!=data['workloadSha256']:
+                raise ValueError('Calibration source uses a different workload')
+            core_suffixes={'.cs','.fs','.rs','.ts','.java','.go','.swift','.csproj','.fsproj','.toml','.lock','.mod','.sum','.sql'}
+            for name,digest in data['sourceManifest'].items():
+                if Path(name).suffix in core_suffixes and prior['sourceManifest'].get(name)!=digest:
+                    raise ValueError('Calibration source code differs: '+name)
+            profiles={m['language']:m for m in prior['results'] if m['store']=='sqlite'}
+            if any(l not in profiles for l in languages):raise ValueError('Calibration source lacks selected languages')
+            rates=sorted((profiles[l]['phases']['operations']+profiles[l]['document']['seconds'])/profiles[l]['students'] for l in languages)
+            n=max(10,min(100000,round(a.target_seconds/rates[len(rates)//2]/10)*10))
+            data['calibration']={'method':'previous-complete-SQLite-run','targetSeconds':a.target_seconds,'source':str(a.calibrate_from),'sourceSha256':hashlib.sha256(a.calibrate_from.read_bytes()).hexdigest(),'referenceStudents':prior['students'],'selectedStudents':n}
         if n is None:
             pilot=root/'pilot';pilot.mkdir();pilots=[]
             for l in languages:
@@ -186,7 +209,7 @@ def main():
             calibration={'targetSeconds':a.target_seconds,'pilotStudents':2000,'results':pilots,'initialStudents':n,'medianImplementation':median['language']}
             # A small DB fits different cache/IO conditions. Refine on a larger
             # database before selecting the one common count for every runtime.
-            refinement_students=min(20000,max(2000,round(n/2/10)*10))
+            refinement_students=max(2000,n)
             if refinement_students>2000:
                 refinement=root/'refinement';refinement.mkdir()
                 language=median['language'];print(f'Refining calibration: {language}, {refinement_students:,} students',flush=True)
@@ -196,6 +219,9 @@ def main():
             calibration['selectedStudents']=n;data['calibration']=calibration
         data['students']=n;data['workload']=json.loads((HERE/'workload.json').read_text())
         data['workloadSha256']=hashlib.sha256((HERE/'workload.py').read_bytes()).hexdigest()
+        if a.calibrate_only:
+            a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+            print(f'Selected common students: {n:,}; calibration saved to {a.output}',flush=True);return
         stores=['sqlite','memory-json'] if a.store=='both' else [a.store]
         for store in stores:
             hashes=set()

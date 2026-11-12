@@ -9,6 +9,10 @@ python3 samples/decider_level3/benchmark/run.py --quick --store both
 # 予備計測から共通件数を決定し、7言語を順番に測定
 python3 samples/decider_level3/benchmark/run.py --target-seconds 90 --store both
 
+# 同じPC・同じnative実装の完了済みデータを校正に使う
+python3 samples/decider_level3/benchmark/run.py --target-seconds 90 --store both \
+  --calibrate-from samples/decider_level3/benchmark/observed/macos-arm64-large.json
+
 # 同じ件数で再現、またはデータ量を変えて比較
 python3 samples/decider_level3/benchmark/run.py --students 10000 --store both --output /tmp/es-10000.json
 python3 samples/decider_level3/benchmark/run.py --students 20000 --store both --output /tmp/es-20000.json
@@ -17,7 +21,7 @@ python3 samples/decider_level3/benchmark/run.py --students 20000 --store both --
 python3 samples/decider_level3/benchmark/run.py --students 10000 --language csharp --csharp-native-aot
 ```
 
-結果は `observed/latest.json` と `observed/latest.md` に保存します。`--output` で変更できます。既存の結果を上書きしたくない場合は別名を指定してください。DBは実行ごとに作る一時フォルダだけを使い、終了時に削除します。`--keep-databases` で保持できます。`--no-build` は直前のビルドを再利用するための指定です。
+結果は `observed/latest.json` と `observed/latest.md` に保存します。`--output` で変更できます。既存の結果を上書きしたくない場合は別名を指定してください。DBは実行ごとに作る一時フォルダだけを使い、終了時に削除します。`--keep-databases` で保持できます。`--no-build` は直前のビルドを再利用するための指定です。`--calibrate-only` は校正と件数選定までを行い、本計測を始めません。
 
 ## 測定する処理
 
@@ -43,7 +47,7 @@ SQLiteはWAL、synchronous=FULL、busy_timeout=5000、cache_size=-2048、wal_aut
 
 学校と文書は別の型付きログなので、SQLiteファイルも分けます。文書型のcodec・メタ情報はアプリから注入し、ライブラリは学校のEventを参照しません。[学校型を含めずにビルドする検証](../tests/json_library_isolation.py)も用意しています。
 
-予備計測は各言語2000人で行います。その中央値の実装について最大2万人の中間サイズでも測り、DBが大きくなったときの時間を使って約90秒になる共通件数を選びます。全言語へ同じ件数を渡すため、全てを厳密に1〜2分に揃えることはできません。速いものを待たせる処理や、遅い言語だけ件数を減らす処理はありません。実測時間と選定根拠はraw JSONに残します。
+予備計測は各言語2000人で行います。その中央値の実装について一旦見積もった規模でも測り、DBが大きくなったときの時間を使って約90秒になる共通件数を選びます。全言語へ同じ件数を渡すため、全てを厳密に1〜2分に揃えることはできません。速いものを待たせる処理や、遅い言語だけ件数を減らす処理はありません。実測時間と選定根拠はraw JSONに残します。大きなDBの実測がすでにある場合は `--calibrate-from` で再利用できます。ホストとnativeソース・依存設定・負荷のハッシュを照合し、別の条件のデータを黙って再利用しません。
 
 C#・F#の標準計測はRelease JIT＋Dynamic PGO、Rust・Go・Swiftは最適化ビルド、Javaは標準JVM、TypeScriptはNode＋Zodです。ウォームアップ専用の同じ処理を何千回も回す方式ではなく、増え続けるイベントを一連の業務として処理します。
 

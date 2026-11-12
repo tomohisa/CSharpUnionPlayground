@@ -70,6 +70,8 @@ jobs:
         run: python3 samples/decider_level3/tests/json_library_isolation.py
       - name: SQLite and memory benchmark smoke test (not performance observations)
         run: python3 samples/decider_level3/benchmark/run.py --quick --store both --output samples/decider_level3/.build/es-smoke.json
+      - name: Benchmark calibration reuse and mismatch rejection
+        run: python3 samples/decider_level3/tests/benchmark_runner.py --observations samples/decider_level3/.build/es-smoke.json
       - uses: actions/upload-artifact@v4
         with:
           name: level3-es-benchmark-smoke
