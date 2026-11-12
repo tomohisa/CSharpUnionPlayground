@@ -9,6 +9,6 @@ public final class Main{
         if(java.util.Arrays.asList(args).contains("--domain-test")){DomainTests.run();return;}
         if(java.util.Arrays.asList(args).contains("--self-test")){DcbTests.run();System.out.println("{\"library\":\"PASS\"}");return;}
         var mapper=new ObjectMapper().enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES,DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES);
-        var input=mapper.readValue(System.in,Input.class);System.out.println(mapper.writeValueAsString(Application.run(input.history(),input.operations())));
+        var input=mapper.readValue(System.in,Input.class);var output=Application.run(input.history(),input.operations());System.out.println("1".equals(System.getenv("DECIDER_BENCHMARK_SUMMARY"))?BenchmarkOutput.serialize(output,mapper):mapper.writeValueAsString(output));
     }
 }

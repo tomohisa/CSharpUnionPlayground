@@ -50,6 +50,7 @@ impl SchoolProjection{
     pub fn checkpoint(&self)->usize{self.index.checkpoint()}
     pub fn row_count(&self)->usize{self.index.row_count()}
     pub fn work(&self)->u64{self.index.work()}
+    pub fn student(&self,id:&str)->Student{self.index.read(|rows|match &rows[&Key::Student(id.into())]{Row::Student(s)=>s.clone(),_=>panic!("not a student")}).1}
     pub fn snapshot(&self)->(usize,SchoolList){self.index.read(|rows|{
         let(mut students,mut classes,mut enrollments)=(vec![],vec![],vec![]);
         for row in rows.values(){match row{Row::Student(v)=>students.push(v.clone()),Row::Enrollment(v)=>enrollments.push(v.clone()),Row::Class(c)=>{

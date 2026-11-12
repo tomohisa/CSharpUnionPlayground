@@ -47,6 +47,12 @@ def build(language, native_aot=False):
         jars.mkdir(exist_ok=True)
         cached = sorted(jars.glob('jackson-*.jar'))
         cp = os.pathsep.join(map(str,cached)) if len(cached)==3 else jackson_classpath(jars)
+        import urllib.request
+        for artifact,version,group in [('sqlite-jdbc','3.54.1.0','org/xerial'),('slf4j-api','2.0.17','org/slf4j'),('slf4j-nop','2.0.17','org/slf4j')]:
+            jar=jars/f'{artifact}-{version}.jar'
+            if not jar.exists():
+                urllib.request.urlretrieve(f'https://repo.maven.apache.org/maven2/{group}/{artifact}/{version}/{jar.name}',jar)
+        cp += os.pathsep+os.pathsep.join(str(p) for p in sorted(jars.glob('*.jar')) if not p.name.startswith('jackson-'))
         out = BUILD/'java'
         out.mkdir(exist_ok=True)
         run(['javac', '--release', '21', '--class-path', cp, '-d', out, *sorted((HERE/'java').rglob('*.java'))])
@@ -71,8 +77,10 @@ def canonical(value, field=''):
     return value
 
 
-def execute(command, payload):
-    return run(command, input=json.dumps(payload, ensure_ascii=False), cwd=REPO)
+def execute(command, payload, persistent=None):
+    env=dict(os.environ)
+    if persistent is not None:env['DECIDER_PERSISTENT']=str(Path(persistent).resolve())
+    return run(command, input=json.dumps(payload, ensure_ascii=False), cwd=REPO,env=env)
 
 
 def no_null(value):
@@ -90,10 +98,12 @@ def main():
     parser.add_argument('--scenario',default='lifecycle')
     parser.add_argument('--verify', action='store_true')
     parser.add_argument('--native-aot', action='store_true', help='Publish C# as Native AOT')
+    parser.add_argument('--persistent',type=Path,help='SQLite database file (one language, normal scenario mode)')
     args = parser.parse_args()
     languages = LANGUAGES if args.language == 'all' else args.language.split(',')
     if any(name not in LANGUAGES for name in languages):
         parser.error('Unknown language')
+    if args.persistent and (args.verify or len(languages)!=1):parser.error('--persistent requires one language and scenario mode')
     if args.verify:
         from verify import verify_all
         commands = {}
@@ -106,7 +116,7 @@ def main():
         for language in languages:
             command=build(language,args.native_aot)
             print(language+':')
-            print(json.dumps(json.loads(execute(command,payload).stdout),indent=2,ensure_ascii=False))
+            print(json.dumps(json.loads(execute(command,payload,args.persistent).stdout),indent=2,ensure_ascii=False))
 
 
 if __name__ == '__main__':

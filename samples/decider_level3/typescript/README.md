@@ -1,12 +1,12 @@
 # TypeScript＋Zod：型付きイベントと構造的なportを使う
 
-[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。速度・メモリのベンチマークではありません。
+[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。このページでは記述を比較し、速度・メモリは[ベンチマーク](../benchmark/README.md)で比較します。
 
 ## この設計でよかったこと
 
 ### 1. Zodのドメイン型を、Zodに依存しない共通部品へ渡せる
 
-出典：[typescript/dcb.ts](dcb.ts#L12-L15)
+出典：[dcb.ts:12–15](dcb.ts#L12-L15)
 
 ```typescript
 export interface CommandStore<E> {
@@ -15,7 +15,7 @@ export interface CommandStore<E> {
 }
 ```
 
-出典：[handlers.ts](handlers.ts#L1-L16)
+出典：[handlers.ts:1–16](handlers.ts#L1-L16)
 
 ```typescript
 import type {CommandHandler} from "./dcb.ts";
@@ -40,7 +40,7 @@ export const schoolHandler:CommandHandler<Command,Event,Rejection> = {
 
 ### 2. 生の閉じたイベントを返したまま、タグ登録を一か所へ集められる
 
-出典：[typescript/routing.ts](routing.ts#L24-L28)
+出典：[routing.ts:24–28](routing.ts#L24-L28)
 
 ```typescript
 export function describeEvent(event: Event): EventDescriptor {
@@ -54,7 +54,7 @@ export function describeEvent(event: Event): EventDescriptor {
 
 ### 3. 複合キーと投影コピーを標準の機能で表せる
 
-出典：[typescript/projection.ts](projection.ts#L8-L9)
+出典：[projection.ts:8–9](projection.ts#L8-L9)
 
 ```typescript
 export const copy = (s: Registers): Registers => structuredClone(s);
@@ -67,7 +67,7 @@ Mapのコピーと更新を明示し、JSONのtuple表現で履修キーを区�
 
 ### 1. 共通メタ情報の実行時スキーマとの接続は残る
 
-出典：[typescript/wire.ts](wire.ts#L3-L4)
+出典：[wire.ts:3–4](wire.ts#L3-L4)
 
 ```typescript
 export const InputSchema=z.object({history:z.array(z.object({position:z.int().positive(),commandId:z.string().min(1),eventType:z.string().min(1),
@@ -78,7 +78,7 @@ export const InputSchema=z.object({history:z.array(z.object({position:z.int().po
 
 ### 2. ジェネリック関数の推論にも調整が必要だった
 
-出典：[typescript/dcb.ts](dcb.ts#L24-L24)
+出典：[dcb.ts:24–24](dcb.ts#L24-L24)
 
 ```typescript
   constructor(describe:(event:E)=>EventDescriptor,copyPayload:(event:NoInfer<E>)=>NoInfer<E>){this.describe=describe;this.copyPayload=copyPayload;}
@@ -88,7 +88,7 @@ structuredCloneのようなジェネリック関数からEがunknownへ引っ張
 
 ### 3. 原子性は1つのJavaScriptイベントループの範囲
 
-出典：[typescript/dcb.ts](dcb.ts#L16-L17)
+出典：[dcb.ts:16–17](dcb.ts#L16-L17)
 
 ```typescript
 // Operations have no await boundary: atomic within one JavaScript event loop.
@@ -116,3 +116,9 @@ ZodのbrandでStudentIdとClassIdを名目的に分け、safeParseで実行時�
 一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
 
 [projection.test.ts](projection.test.ts)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。
+
+## JSON／SQLiteと計測
+
+Nodeのnode:sqlite。JSON復元後のイベントはZodを通します。SQLiteとJSONの同期APIを直列に使うため、このサンプルは非同期I/Oのスループット比較ではありません。
+
+[共通ベンチマーク](../benchmark/README.md)では、履修コマンド・拒否・競合後の再判断、索引Projectionのクエリ、JSON応答、再起動を同じ件数で実行します。SQLite版とメモリJSON版の両方でシリアライズ・デシリアライズを通します。インフラ障害は業務のRejectedと混ぜず、プロセスを失敗させます。外部接続のイベントは明示的なRefreshまたは次の自分のcommitで取り込みます。

@@ -292,7 +292,7 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 
 ## コード量の比較
 
-共通ライブラリとドメインテストを別枠にし、両方を除いた**アプリ側合計**を表示します。ファイル単位ではなく、混在するファイルはソース範囲単位で次の責務に分けます。
+ドメインテストを含めた**アプリ側合計**を表示し、共通ライブラリとベンチマークは別枠にします。ファイル単位ではなく、混在するファイルはソース範囲単位で次の責務に分けます。
 
 | 分類 | 含めるコード |
 |---|---|
@@ -304,7 +304,8 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 | ユースケース | Execute／Prepare／Commit／一覧／再構築／再配送のOperation型と実行制御、Trace型、チケット・実行履歴管理 |
 | アプリ設定・JSON・CLI | ストア／投影／processorの生成と購読接続、入出力DTO、JSON変換、CLI、Application内のimport・namespace等の共通宣言 |
 | 共通ライブラリ（別枠） | 学校に依存しないタグ・エンベロープ・ストアport・Handler／Executor契約・条件付き追記・再試行・ライブ投影基盤 |
-| ドメインテスト（別枠） | 各言語の学校ドメインのGWT、VO、Decider、競合再判断、テスト用port・ヘルパー。アプリ側合計へ含めない |
+| ドメインテスト | 各言語の学校ドメインのGWT、VO、Decider、競合再判断、テスト用port・ヘルパー。アプリ側合計へ含める |
+| ベンチマーク（別枠） | 計測用のクエリ・文書更新・検証サマリーと、Application／Main内の計測フック |
 
 汎用CommandProcessorの競合再判断ループは共通ライブラリ、学校の判断への接続はコマンド・ハンドラー、タグとQuery条件はDCB接続・メタ情報です。Application内の初期接続はアプリ設定、その後の実行制御はユースケースとして区別します。型に付随するJSON属性・Zodスキーマ・コンストラクター検証はその型の分類に含めます。独立した手書きJSON変換はアプリ設定・JSON・CLIに含めるため、JSON関連の総量を単独で表す列ではありません。
 
@@ -313,34 +314,51 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 - 空行・コメント・括弧だけの行を含む物理行数を数えます。
 - 文字数はUnicodeの空白をすべて除いた文字数です。文字列・コメント中の空白も除き、バイト数とは区別します。
 - ライブラリやJSON変換を含め、維持する各言語のソースを一度ずつ数えます。
-- カウンターのライブラリテスト、検証Python、共有JSON fixtures、README、設定・依存ロック、コンパイラー生成物は除外します。学校ドメインの各言語のテストは別枠で含めます。Main内のテスト起動分岐はMainの一部として含めます。
-- 自動整形や1行の長さで行数が変わるため、文字数と内訳を併せて比較します。このサンプルは速度・メモリのベンチマークではありません。
+- カウンターのライブラリテスト、検証Python、共有JSON fixtures、README、設定・依存ロック、コンパイラー生成物は除外します。学校ドメインの各言語のテストは独立した列に集計し、アプリ側合計にも含めます。Main内のテスト起動分岐はMainの一部として含めます。
+- 自動整形や1行の長さで行数が変わるため、文字数と内訳を併せて比較します。このコード量の表は速度・メモリを表すものではありません。性能は[別のベンチマーク](benchmark/README.md)で測定します。
+
+## JSONストアとSQLiteベンチマーク
+
+[benchmark](benchmark/README.md)に、7言語で同じ履修業務・クエリ・4 KiBデータ更新を行うCLIを追加しています。標準は約90秒を目安に共通件数を選びます。言語ごとの件数変更や人工的な待機は行いません。
+
+```bash
+python3 samples/decider_level3/benchmark/run.py --quick --store both
+python3 samples/decider_level3/benchmark/run.py --target-seconds 90 --store both
+# 通常のサンプルもSQLiteへ切り替え可能（DBファイルを保持）
+python3 samples/decider_level3/run.py --language csharp --scenario lifecycle --persistent /tmp/school.db
+```
+
+通常のアプリも、標準はJSON文字列を保持する索引メモリストアを使います。`--persistent` はSQLiteを選びます。どちらも書き込み時のJSON化と読み取り・ライブ配信時のJSON復元を通し、ドメインの現在の入力検証を過去イベントへ適用し直すことはしません。ライブラリのストア選択とcodecはアプリの初期設定で行い、Decider・Handlerは同じです。
+
+SQLiteの条件確認と追記は同一トランザクションです。commitしたバッチはそのプロセスのライブProjectionへ自動配信されます。別接続のイベントは常時pushされる仕組みではなく、次の自分のcommit、`Refresh`、一覧の取得、再購読・再起動で取り込みます。これはインメモリ配信付きの小さなSQLite実装であり、分散購読やバックグラウンドのcheckpoint保存までは実装していません。
+
+[永続化・言語間復元・競合のテスト](tests/persistence.py)と、[学校の型を参照せずライブラリだけをビルドするテスト](tests/json_library_isolation.py)があります。計測用のヘルパーと計測フックは、以下の表でも「ベンチマーク（別枠）」に分け、アプリ側合計と共通ライブラリには混ぜていません。インフラの単体テストは従来どおり集計対象外です。
 
 <!-- code-stats:start -->
 
 ### 行数（空行を含む）
 
-| 言語 | Model・値オブジェクト | Decider | コマンド・共通Handler・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ・テスト除外） | 共通ライブラリ（別枠） | ドメインテスト（別枠） |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C# | 126 | 127 | 67 | 35 | 170 | 43 | 35 | 603 | 206 | 214 |
-| F# | 122 | 99 | 40 | 31 | 152 | 54 | 45 | 543 | 156 | 189 |
-| Rust | 132 | 113 | 42 | 31 | 107 | 40 | 25 | 490 | 164 | 158 |
-| TypeScript＋Zod | 95 | 102 | 49 | 38 | 117 | 31 | 26 | 458 | 149 | 174 |
-| Java | 244 | 126 | 101 | 31 | 129 | 66 | 22 | 719 | 162 | 165 |
-| Go | 324 | 293 | 155 | 71 | 434 | 115 | 815 | 2,207 | 428 | 310 |
-| Swift | 101 | 103 | 40 | 32 | 120 | 32 | 353 | 781 | 175 | 163 |
+| 言語 | Model・値オブジェクト | Decider | コマンド・共通Handler・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | ドメインテスト | アプリ側合計（ドメインテスト含む） | 共通ライブラリ（別枠） | ベンチマーク（別枠） |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| C# | 126 | 127 | 67 | 35 | 171 | 44 | 39 | 214 | 823 | 454 | 77 |
+| F# | 122 | 99 | 40 | 31 | 153 | 56 | 52 | 189 | 742 | 381 | 83 |
+| Rust | 132 | 113 | 42 | 31 | 108 | 42 | 28 | 158 | 654 | 272 | 32 |
+| TypeScript＋Zod | 95 | 102 | 49 | 38 | 118 | 33 | 30 | 174 | 639 | 221 | 44 |
+| Java | 244 | 126 | 101 | 31 | 130 | 68 | 26 | 165 | 891 | 217 | 32 |
+| Go | 324 | 293 | 155 | 71 | 439 | 118 | 845 | 310 | 2,555 | 915 | 195 |
+| Swift | 101 | 103 | 40 | 32 | 121 | 33 | 357 | 163 | 950 | 226 | 33 |
 
 ### 空白以外の文字数
 
-| 言語 | Model・値オブジェクト | Decider | コマンド・共通Handler・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ・テスト除外） | 共通ライブラリ（別枠） | ドメインテスト（別枠） |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C# | 5,663 | 5,542 | 4,625 | 1,696 | 9,832 | 2,467 | 2,035 | 31,860 | 8,639 | 18,977 |
-| F# | 4,881 | 5,068 | 2,137 | 1,965 | 8,491 | 2,639 | 1,625 | 26,806 | 7,296 | 17,455 |
-| Rust | 5,143 | 5,707 | 2,216 | 2,308 | 9,919 | 2,884 | 1,677 | 29,854 | 10,468 | 27,133 |
-| TypeScript＋Zod | 5,592 | 5,286 | 2,490 | 2,547 | 8,795 | 2,922 | 1,527 | 29,159 | 8,759 | 22,824 |
-| Java | 8,304 | 6,106 | 3,673 | 2,241 | 10,716 | 3,614 | 1,536 | 36,190 | 9,467 | 19,311 |
-| Go | 6,114 | 5,449 | 3,333 | 2,620 | 9,666 | 2,934 | 17,954 | 48,070 | 9,267 | 23,095 |
-| Swift | 4,670 | 5,657 | 1,941 | 2,277 | 8,538 | 2,435 | 13,516 | 39,034 | 10,836 | 19,725 |
+| 言語 | Model・値オブジェクト | Decider | コマンド・共通Handler・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | ドメインテスト | アプリ側合計（ドメインテスト含む） | 共通ライブラリ（別枠） | ベンチマーク（別枠） |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| C# | 5,663 | 5,542 | 4,625 | 1,696 | 9,932 | 2,499 | 2,366 | 18,977 | 51,300 | 21,467 | 5,117 |
+| F# | 4,881 | 5,068 | 2,137 | 1,965 | 8,601 | 2,669 | 2,082 | 17,455 | 44,858 | 18,619 | 4,426 |
+| Rust | 5,143 | 5,707 | 2,216 | 2,308 | 10,071 | 2,916 | 2,057 | 27,133 | 57,551 | 24,196 | 4,646 |
+| TypeScript＋Zod | 5,592 | 5,286 | 2,490 | 2,547 | 8,927 | 2,968 | 1,832 | 22,824 | 52,466 | 19,727 | 4,040 |
+| Java | 8,304 | 6,106 | 3,673 | 2,241 | 10,827 | 3,660 | 1,791 | 19,311 | 55,913 | 21,719 | 5,081 |
+| Go | 6,114 | 5,449 | 3,333 | 2,620 | 9,852 | 2,980 | 18,452 | 23,095 | 71,895 | 20,214 | 4,460 |
+| Swift | 4,670 | 5,657 | 1,941 | 2,277 | 8,692 | 2,466 | 13,767 | 19,725 | 59,195 | 22,174 | 4,473 |
 
 ### 分類したソース範囲
 
@@ -352,65 +370,72 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 | C# | Decider | [csharp/Decider.cs:1–123](csharp/Decider.cs#L1-L123) / [csharp/Models.cs:75–78](csharp/Models.cs#L75-L78) |
 | C# | コマンド・共通Handler・入力検証 | [csharp/Handlers.cs:1–16](csharp/Handlers.cs#L1-L16) / [csharp/Models.cs:50–60](csharp/Models.cs#L50-L60) / [csharp/ValueObjects.cs:65–104](csharp/ValueObjects.cs#L65-L104) |
 | C# | DCB接続・メタ情報 | [csharp/Routing.cs:1–35](csharp/Routing.cs#L1-L35) |
-| C# | ドメイン投影 | [csharp/Models.cs:27–27](csharp/Models.cs#L27-L27) / [csharp/Projection.cs:1–81](csharp/Projection.cs#L1-L81) / [csharp/SchoolProjection.cs:1–88](csharp/SchoolProjection.cs#L1-L88) |
-| C# | ユースケース | [csharp/Application.cs:7–10](csharp/Application.cs#L7-L10) / [csharp/Application.cs:18–47](csharp/Application.cs#L18-L47) / [csharp/Models.cs:28–28](csharp/Models.cs#L28-L28) / [csharp/Models.cs:80–87](csharp/Models.cs#L80-L87) |
-| C# | アプリ設定・JSON・CLI | [csharp/Application.cs:1–6](csharp/Application.cs#L1-L6) / [csharp/Application.cs:11–17](csharp/Application.cs#L11-L17) / [csharp/Program.cs:1–22](csharp/Program.cs#L1-L22) |
-| C# | 共通ライブラリ | [csharp/Dcb.cs:1–206](csharp/Dcb.cs#L1-L206) |
+| C# | ドメイン投影 | [csharp/Models.cs:27–27](csharp/Models.cs#L27-L27) / [csharp/Projection.cs:1–81](csharp/Projection.cs#L1-L81) / [csharp/SchoolProjection.cs:1–89](csharp/SchoolProjection.cs#L1-L89) |
+| C# | ユースケース | [csharp/Application.cs:8–11](csharp/Application.cs#L8-L11) / [csharp/Application.cs:22–25](csharp/Application.cs#L22-L25) / [csharp/Application.cs:28–46](csharp/Application.cs#L28-L46) / [csharp/Application.cs:48–48](csharp/Application.cs#L48-L48) / [csharp/Application.cs:50–53](csharp/Application.cs#L50-L53) / [csharp/Application.cs:56–58](csharp/Application.cs#L56-L58) / [csharp/Models.cs:28–28](csharp/Models.cs#L28-L28) / [csharp/Models.cs:80–87](csharp/Models.cs#L80-L87) |
+| C# | アプリ設定・JSON・CLI | [csharp/Application.cs:1–7](csharp/Application.cs#L1-L7) / [csharp/Application.cs:12–15](csharp/Application.cs#L12-L15) / [csharp/Application.cs:17–21](csharp/Application.cs#L17-L21) / [csharp/Program.cs:1–15](csharp/Program.cs#L1-L15) / [csharp/Program.cs:17–24](csharp/Program.cs#L17-L24) |
+| C# | 共通ライブラリ | [csharp/Dcb.cs:1–206](csharp/Dcb.cs#L1-L206) / [csharp/JsonStore.cs:1–148](csharp/JsonStore.cs#L1-L148) / [csharp/SqliteJournal.cs:1–100](csharp/SqliteJournal.cs#L1-L100) |
 | C# | ドメインテスト | [csharp/DomainTests.cs:1–164](csharp/DomainTests.cs#L1-L164) / [csharp/ProjectionTests.cs:1–50](csharp/ProjectionTests.cs#L1-L50) |
+| C# | ベンチマーク | [csharp/Application.cs:16–16](csharp/Application.cs#L16-L16) / [csharp/Application.cs:26–27](csharp/Application.cs#L26-L27) / [csharp/Application.cs:47–47](csharp/Application.cs#L47-L47) / [csharp/Application.cs:49–49](csharp/Application.cs#L49-L49) / [csharp/Application.cs:54–55](csharp/Application.cs#L54-L55) / [csharp/BenchmarkOutput.cs:1–14](csharp/BenchmarkOutput.cs#L1-L14) / [csharp/Program.cs:16–16](csharp/Program.cs#L16-L16) / [csharp/QueryBenchmark.cs:1–16](csharp/QueryBenchmark.cs#L1-L16) / [csharp/StorageBenchmark.cs:1–39](csharp/StorageBenchmark.cs#L1-L39) |
 | F# | Model・値オブジェクト | [fsharp/Models.fs:1–72](fsharp/Models.fs#L1-L72) / [fsharp/Models.fs:74–74](fsharp/Models.fs#L74-L74) / [fsharp/Models.fs:76–76](fsharp/Models.fs#L76-L76) / [fsharp/Models.fs:88–101](fsharp/Models.fs#L88-L101) / [fsharp/Models.fs:106–106](fsharp/Models.fs#L106-L106) / [fsharp/ValueObjects.fs:1–33](fsharp/ValueObjects.fs#L1-L33) |
 | F# | Decider | [fsharp/Decider.fs:1–95](fsharp/Decider.fs#L1-L95) / [fsharp/Models.fs:102–105](fsharp/Models.fs#L102-L105) |
 | F# | コマンド・共通Handler・入力検証 | [fsharp/Handlers.fs:1–13](fsharp/Handlers.fs#L1-L13) / [fsharp/Models.fs:77–87](fsharp/Models.fs#L77-L87) / [fsharp/ValueObjects.fs:34–49](fsharp/ValueObjects.fs#L34-L49) |
 | F# | DCB接続・メタ情報 | [fsharp/Routing.fs:1–31](fsharp/Routing.fs#L1-L31) |
-| F# | ドメイン投影 | [fsharp/Models.fs:73–73](fsharp/Models.fs#L73-L73) / [fsharp/Projection.fs:1–58](fsharp/Projection.fs#L1-L58) / [fsharp/SchoolProjection.fs:1–93](fsharp/SchoolProjection.fs#L1-L93) |
-| F# | ユースケース | [fsharp/Application.fs:6–7](fsharp/Application.fs#L6-L7) / [fsharp/Application.fs:13–55](fsharp/Application.fs#L13-L55) / [fsharp/Models.fs:75–75](fsharp/Models.fs#L75-L75) / [fsharp/Models.fs:107–114](fsharp/Models.fs#L107-L114) |
-| F# | アプリ設定・JSON・CLI | [fsharp/Application.fs:1–5](fsharp/Application.fs#L1-L5) / [fsharp/Application.fs:8–12](fsharp/Application.fs#L8-L12) / [fsharp/Program.fs:1–35](fsharp/Program.fs#L1-L35) |
-| F# | 共通ライブラリ | [fsharp/Dcb.fs:1–156](fsharp/Dcb.fs#L1-L156) |
+| F# | ドメイン投影 | [fsharp/Models.fs:73–73](fsharp/Models.fs#L73-L73) / [fsharp/Projection.fs:1–58](fsharp/Projection.fs#L1-L58) / [fsharp/SchoolProjection.fs:1–94](fsharp/SchoolProjection.fs#L1-L94) |
+| F# | ユースケース | [fsharp/Application.fs:8–9](fsharp/Application.fs#L8-L9) / [fsharp/Application.fs:21–29](fsharp/Application.fs#L21-L29) / [fsharp/Application.fs:33–60](fsharp/Application.fs#L33-L60) / [fsharp/Application.fs:63–63](fsharp/Application.fs#L63-L63) / [fsharp/Application.fs:66–71](fsharp/Application.fs#L66-L71) / [fsharp/Application.fs:76–76](fsharp/Application.fs#L76-L76) / [fsharp/Models.fs:75–75](fsharp/Models.fs#L75-L75) / [fsharp/Models.fs:107–114](fsharp/Models.fs#L107-L114) |
+| F# | アプリ設定・JSON・CLI | [fsharp/Application.fs:1–7](fsharp/Application.fs#L1-L7) / [fsharp/Application.fs:10–16](fsharp/Application.fs#L10-L16) / [fsharp/Application.fs:18–20](fsharp/Application.fs#L18-L20) / [fsharp/Program.fs:1–33](fsharp/Program.fs#L1-L33) / [fsharp/Program.fs:35–36](fsharp/Program.fs#L35-L36) |
+| F# | 共通ライブラリ | [fsharp/Dcb.fs:1–156](fsharp/Dcb.fs#L1-L156) / [fsharp/JsonStore.fs:1–133](fsharp/JsonStore.fs#L1-L133) / [fsharp/SqliteJournal.fs:1–92](fsharp/SqliteJournal.fs#L1-L92) |
 | F# | ドメインテスト | [fsharp/DomainTests.fs:1–141](fsharp/DomainTests.fs#L1-L141) / [fsharp/ProjectionTests.fs:1–48](fsharp/ProjectionTests.fs#L1-L48) |
+| F# | ベンチマーク | [fsharp/Application.fs:17–17](fsharp/Application.fs#L17-L17) / [fsharp/Application.fs:30–32](fsharp/Application.fs#L30-L32) / [fsharp/Application.fs:61–62](fsharp/Application.fs#L61-L62) / [fsharp/Application.fs:64–65](fsharp/Application.fs#L64-L65) / [fsharp/Application.fs:72–75](fsharp/Application.fs#L72-L75) / [fsharp/BenchmarkOutput.fs:1–7](fsharp/BenchmarkOutput.fs#L1-L7) / [fsharp/Program.fs:34–34](fsharp/Program.fs#L34-L34) / [fsharp/QueryBenchmark.fs:1–22](fsharp/QueryBenchmark.fs#L1-L22) / [fsharp/StorageBenchmark.fs:1–41](fsharp/StorageBenchmark.fs#L1-L41) |
 | Rust | Model・値オブジェクト | [rust/src/models.rs:1–58](rust/src/models.rs#L1-L58) / [rust/src/models.rs:67–67](rust/src/models.rs#L67-L67) / [rust/src/models.rs:78–104](rust/src/models.rs#L78-L104) / [rust/src/models.rs:118–133](rust/src/models.rs#L118-L133) / [rust/src/models.rs:140–140](rust/src/models.rs#L140-L140) / [rust/src/value_objects.rs:1–29](rust/src/value_objects.rs#L1-L29) |
 | Rust | Decider | [rust/src/decider.rs:1–107](rust/src/decider.rs#L1-L107) / [rust/src/models.rs:134–139](rust/src/models.rs#L134-L139) |
 | Rust | コマンド・共通Handler・入力検証 | [rust/src/handlers.rs:1–14](rust/src/handlers.rs#L1-L14) / [rust/src/models.rs:105–117](rust/src/models.rs#L105-L117) / [rust/src/value_objects.rs:30–44](rust/src/value_objects.rs#L30-L44) |
 | Rust | DCB接続・メタ情報 | [rust/src/routing.rs:1–31](rust/src/routing.rs#L1-L31) |
-| Rust | ドメイン投影 | [rust/src/models.rs:59–66](rust/src/models.rs#L59-L66) / [rust/src/projection.rs:1–38](rust/src/projection.rs#L1-L38) / [rust/src/school_projection.rs:1–61](rust/src/school_projection.rs#L1-L61) |
-| Rust | ユースケース | [rust/src/application.rs:10–16](rust/src/application.rs#L10-L16) / [rust/src/application.rs:21–33](rust/src/application.rs#L21-L33) / [rust/src/models.rs:68–77](rust/src/models.rs#L68-L77) / [rust/src/models.rs:141–150](rust/src/models.rs#L141-L150) |
-| Rust | アプリ設定・JSON・CLI | [rust/src/application.rs:1–9](rust/src/application.rs#L1-L9) / [rust/src/application.rs:17–20](rust/src/application.rs#L17-L20) / [rust/src/main.rs:1–12](rust/src/main.rs#L1-L12) |
-| Rust | 共通ライブラリ | [rust/src/dcb.rs:1–164](rust/src/dcb.rs#L1-L164) |
+| Rust | ドメイン投影 | [rust/src/models.rs:59–66](rust/src/models.rs#L59-L66) / [rust/src/projection.rs:1–38](rust/src/projection.rs#L1-L38) / [rust/src/school_projection.rs:1–62](rust/src/school_projection.rs#L1-L62) |
+| Rust | ユースケース | [rust/src/application.rs:10–16](rust/src/application.rs#L10-L16) / [rust/src/application.rs:23–23](rust/src/application.rs#L23-L23) / [rust/src/application.rs:25–32](rust/src/application.rs#L25-L32) / [rust/src/application.rs:34–34](rust/src/application.rs#L34-L34) / [rust/src/application.rs:36–37](rust/src/application.rs#L36-L37) / [rust/src/application.rs:40–42](rust/src/application.rs#L40-L42) / [rust/src/models.rs:68–77](rust/src/models.rs#L68-L77) / [rust/src/models.rs:141–150](rust/src/models.rs#L141-L150) |
+| Rust | アプリ設定・JSON・CLI | [rust/src/application.rs:1–9](rust/src/application.rs#L1-L9) / [rust/src/application.rs:17–19](rust/src/application.rs#L17-L19) / [rust/src/application.rs:21–22](rust/src/application.rs#L21-L22) / [rust/src/main.rs:1–13](rust/src/main.rs#L1-L13) / [rust/src/main.rs:15–15](rust/src/main.rs#L15-L15) |
+| Rust | 共通ライブラリ | [rust/src/dcb.rs:1–164](rust/src/dcb.rs#L1-L164) / [rust/src/json_store.rs:1–59](rust/src/json_store.rs#L1-L59) / [rust/src/sqlite_journal.rs:1–49](rust/src/sqlite_journal.rs#L1-L49) |
 | Rust | ドメインテスト | [rust/src/domain_tests.rs:1–131](rust/src/domain_tests.rs#L1-L131) / [rust/src/projection_tests.rs:1–27](rust/src/projection_tests.rs#L1-L27) |
+| Rust | ベンチマーク | [rust/src/application.rs:20–20](rust/src/application.rs#L20-L20) / [rust/src/application.rs:24–24](rust/src/application.rs#L24-L24) / [rust/src/application.rs:33–33](rust/src/application.rs#L33-L33) / [rust/src/application.rs:35–35](rust/src/application.rs#L35-L35) / [rust/src/application.rs:38–39](rust/src/application.rs#L38-L39) / [rust/src/application.rs:43–49](rust/src/application.rs#L43-L49) / [rust/src/main.rs:14–14](rust/src/main.rs#L14-L14) / [rust/src/query_benchmark.rs:1–2](rust/src/query_benchmark.rs#L1-L2) / [rust/src/storage_benchmark.rs:1–16](rust/src/storage_benchmark.rs#L1-L16) |
 | TypeScript＋Zod | Model・値オブジェクト | [typescript/models.ts:1–51](typescript/models.ts#L1-L51) / [typescript/models.ts:54–54](typescript/models.ts#L54-L54) / [typescript/models.ts:57–57](typescript/models.ts#L57-L57) / [typescript/models.ts:70–84](typescript/models.ts#L70-L84) / [typescript/models.ts:90–90](typescript/models.ts#L90-L90) / [typescript/models.ts:100–100](typescript/models.ts#L100-L100) / [typescript/valueObjects.ts:1–19](typescript/valueObjects.ts#L1-L19) / [typescript/valueObjects.ts:41–46](typescript/valueObjects.ts#L41-L46) |
 | TypeScript＋Zod | Decider | [typescript/decider.ts:1–97](typescript/decider.ts#L1-L97) / [typescript/models.ts:85–89](typescript/models.ts#L85-L89) |
 | TypeScript＋Zod | コマンド・共通Handler・入力検証 | [typescript/handlers.ts:1–16](typescript/handlers.ts#L1-L16) / [typescript/models.ts:58–69](typescript/models.ts#L58-L69) / [typescript/valueObjects.ts:20–40](typescript/valueObjects.ts#L20-L40) |
 | TypeScript＋Zod | DCB接続・メタ情報 | [typescript/routing.ts:1–38](typescript/routing.ts#L1-L38) |
-| TypeScript＋Zod | ドメイン投影 | [typescript/models.ts:52–53](typescript/models.ts#L52-L53) / [typescript/projection.ts:1–51](typescript/projection.ts#L1-L51) / [typescript/schoolProjection.ts:1–64](typescript/schoolProjection.ts#L1-L64) |
-| TypeScript＋Zod | ユースケース | [typescript/application.ts:8–8](typescript/application.ts#L8-L8) / [typescript/application.ts:13–31](typescript/application.ts#L13-L31) / [typescript/models.ts:55–56](typescript/models.ts#L55-L56) / [typescript/models.ts:91–99](typescript/models.ts#L91-L99) |
-| TypeScript＋Zod | アプリ設定・JSON・CLI | [typescript/application.ts:1–7](typescript/application.ts#L1-L7) / [typescript/application.ts:9–12](typescript/application.ts#L9-L12) / [typescript/main.ts:1–10](typescript/main.ts#L1-L10) / [typescript/models.ts:101–101](typescript/models.ts#L101-L101) / [typescript/wire.ts:1–4](typescript/wire.ts#L1-L4) |
-| TypeScript＋Zod | 共通ライブラリ | [typescript/dcb.ts:1–149](typescript/dcb.ts#L1-L149) |
+| TypeScript＋Zod | ドメイン投影 | [typescript/models.ts:52–53](typescript/models.ts#L52-L53) / [typescript/projection.ts:1–51](typescript/projection.ts#L1-L51) / [typescript/schoolProjection.ts:1–65](typescript/schoolProjection.ts#L1-L65) |
+| TypeScript＋Zod | ユースケース | [typescript/application.ts:11–11](typescript/application.ts#L11-L11) / [typescript/application.ts:18–21](typescript/application.ts#L18-L21) / [typescript/application.ts:23–32](typescript/application.ts#L23-L32) / [typescript/application.ts:34–34](typescript/application.ts#L34-L34) / [typescript/application.ts:36–38](typescript/application.ts#L36-L38) / [typescript/application.ts:40–40](typescript/application.ts#L40-L40) / [typescript/application.ts:42–43](typescript/application.ts#L42-L43) / [typescript/models.ts:55–56](typescript/models.ts#L55-L56) / [typescript/models.ts:91–99](typescript/models.ts#L91-L99) |
+| TypeScript＋Zod | アプリ設定・JSON・CLI | [typescript/application.ts:1–10](typescript/application.ts#L1-L10) / [typescript/application.ts:12–14](typescript/application.ts#L12-L14) / [typescript/application.ts:16–17](typescript/application.ts#L16-L17) / [typescript/main.ts:2–9](typescript/main.ts#L2-L9) / [typescript/main.ts:11–12](typescript/main.ts#L11-L12) / [typescript/models.ts:101–101](typescript/models.ts#L101-L101) / [typescript/wire.ts:1–4](typescript/wire.ts#L1-L4) |
+| TypeScript＋Zod | 共通ライブラリ | [typescript/dcb.ts:1–149](typescript/dcb.ts#L1-L149) / [typescript/jsonStore.ts:1–72](typescript/jsonStore.ts#L1-L72) |
 | TypeScript＋Zod | ドメインテスト | [typescript/domain.test.ts:1–141](typescript/domain.test.ts#L1-L141) / [typescript/projection.test.ts:1–33](typescript/projection.test.ts#L1-L33) |
+| TypeScript＋Zod | ベンチマーク | [typescript/application.ts:15–15](typescript/application.ts#L15-L15) / [typescript/application.ts:22–22](typescript/application.ts#L22-L22) / [typescript/application.ts:33–33](typescript/application.ts#L33-L33) / [typescript/application.ts:35–35](typescript/application.ts#L35-L35) / [typescript/application.ts:39–39](typescript/application.ts#L39-L39) / [typescript/application.ts:41–41](typescript/application.ts#L41-L41) / [typescript/benchmarkOutput.ts:1–6](typescript/benchmarkOutput.ts#L1-L6) / [typescript/main.ts:1–1](typescript/main.ts#L1-L1) / [typescript/main.ts:10–10](typescript/main.ts#L10-L10) / [typescript/queryBenchmark.ts:1–12](typescript/queryBenchmark.ts#L1-L12) / [typescript/storageBenchmark.ts:1–18](typescript/storageBenchmark.ts#L1-L18) |
 | Java | Model・値オブジェクト | [java/Models.java:1–45](java/Models.java#L1-L45) / [java/Models.java:62–143](java/Models.java#L62-L143) / [java/Models.java:211–286](java/Models.java#L211-L286) / [java/ValueObjects.java:1–41](java/ValueObjects.java#L1-L41) |
 | Java | Decider | [java/Decider.java:1–109](java/Decider.java#L1-L109) / [java/Models.java:287–303](java/Models.java#L287-L303) |
 | Java | コマンド・共通Handler・入力検証 | [java/Models.java:144–210](java/Models.java#L144-L210) / [java/SchoolHandler.java:1–11](java/SchoolHandler.java#L1-L11) / [java/ValueObjects.java:42–64](java/ValueObjects.java#L42-L64) |
 | Java | DCB接続・メタ情報 | [java/Routing.java:1–31](java/Routing.java#L1-L31) |
-| Java | ドメイン投影 | [java/Models.java:46–53](java/Models.java#L46-L53) / [java/Projection.java:1–53](java/Projection.java#L1-L53) / [java/SchoolProjection.java:1–68](java/SchoolProjection.java#L1-L68) |
-| Java | ユースケース | [java/Application.java:6–6](java/Application.java#L6-L6) / [java/Application.java:10–26](java/Application.java#L10-L26) / [java/Models.java:54–61](java/Models.java#L54-L61) / [java/Models.java:304–343](java/Models.java#L304-L343) |
-| Java | アプリ設定・JSON・CLI | [java/Application.java:1–5](java/Application.java#L1-L5) / [java/Application.java:7–9](java/Application.java#L7-L9) / [java/Main.java:1–14](java/Main.java#L1-L14) |
-| Java | 共通ライブラリ | [java/playground/dcb/Dcb.java:1–162](java/playground/dcb/Dcb.java#L1-L162) |
+| Java | ドメイン投影 | [java/Models.java:46–53](java/Models.java#L46-L53) / [java/Projection.java:1–53](java/Projection.java#L1-L53) / [java/SchoolProjection.java:1–69](java/SchoolProjection.java#L1-L69) |
+| Java | ユースケース | [java/Application.java:8–8](java/Application.java#L8-L8) / [java/Application.java:16–16](java/Application.java#L16-L16) / [java/Application.java:18–25](java/Application.java#L18-L25) / [java/Application.java:27–27](java/Application.java#L27-L27) / [java/Application.java:29–31](java/Application.java#L29-L31) / [java/Application.java:33–33](java/Application.java#L33-L33) / [java/Application.java:35–39](java/Application.java#L35-L39) / [java/Models.java:54–61](java/Models.java#L54-L61) / [java/Models.java:304–343](java/Models.java#L304-L343) |
+| Java | アプリ設定・JSON・CLI | [java/Application.java:1–7](java/Application.java#L1-L7) / [java/Application.java:9–13](java/Application.java#L9-L13) / [java/Application.java:15–15](java/Application.java#L15-L15) / [java/Main.java:1–11](java/Main.java#L1-L11) / [java/Main.java:13–14](java/Main.java#L13-L14) |
+| Java | 共通ライブラリ | [java/playground/dcb/Dcb.java:1–162](java/playground/dcb/Dcb.java#L1-L162) / [java/playground/dcb/JsonStore.java:1–55](java/playground/dcb/JsonStore.java#L1-L55) |
 | Java | ドメインテスト | [java/DomainTests.java:1–138](java/DomainTests.java#L1-L138) / [java/ProjectionTests.java:1–27](java/ProjectionTests.java#L1-L27) |
+| Java | ベンチマーク | [java/Application.java:14–14](java/Application.java#L14-L14) / [java/Application.java:17–17](java/Application.java#L17-L17) / [java/Application.java:26–26](java/Application.java#L26-L26) / [java/Application.java:28–28](java/Application.java#L28-L28) / [java/Application.java:32–32](java/Application.java#L32-L32) / [java/Application.java:34–34](java/Application.java#L34-L34) / [java/BenchmarkOutput.java:1–6](java/BenchmarkOutput.java#L1-L6) / [java/Main.java:12–12](java/Main.java#L12-L12) / [java/QueryBenchmark.java:1–7](java/QueryBenchmark.java#L1-L7) / [java/StorageBenchmark.java:1–12](java/StorageBenchmark.java#L1-L12) |
 | Go | Model・値オブジェクト | [go/domain/models.go:1–81](go/domain/models.go#L1-L81) / [go/domain/models.go:96–169](go/domain/models.go#L96-L169) / [go/domain/models.go:235–308](go/domain/models.go#L235-L308) / [go/domain/value_objects.go:1–88](go/domain/value_objects.go#L1-L88) / [go/domain/value_objects.go:154–160](go/domain/value_objects.go#L154-L160) |
 | Go | Decider | [go/domain/decider.go:1–280](go/domain/decider.go#L1-L280) / [go/domain/models.go:309–321](go/domain/models.go#L309-L321) |
 | Go | コマンド・共通Handler・入力検証 | [go/domain/handlers.go:1–25](go/domain/handlers.go#L1-L25) / [go/domain/models.go:170–234](go/domain/models.go#L170-L234) / [go/domain/value_objects.go:89–153](go/domain/value_objects.go#L89-L153) |
 | Go | DCB接続・メタ情報 | [go/domain/routing.go:1–71](go/domain/routing.go#L1-L71) |
-| Go | ドメイン投影 | [go/domain/models.go:82–87](go/domain/models.go#L82-L87) / [go/domain/projection.go:1–190](go/domain/projection.go#L1-L190) / [go/domain/school_projection.go:1–238](go/domain/school_projection.go#L1-L238) |
-| Go | ユースケース | [go/application.go:25–25](go/application.go#L25-L25) / [go/application.go:32–101](go/application.go#L32-L101) / [go/domain/models.go:88–95](go/domain/models.go#L88-L95) / [go/domain/models.go:322–357](go/domain/models.go#L322-L357) |
-| Go | アプリ設定・JSON・CLI | [go/application.go:1–24](go/application.go#L1-L24) / [go/application.go:26–31](go/application.go#L26-L31) / [go/domain/json.go:1–694](go/domain/json.go#L1-L694) / [go/main.go:1–39](go/main.go#L1-L39) / [go/wire.go:1–52](go/wire.go#L1-L52) |
-| Go | 共通ライブラリ | [go/dcb/store.go:1–428](go/dcb/store.go#L1-L428) |
+| Go | ドメイン投影 | [go/domain/models.go:82–87](go/domain/models.go#L82-L87) / [go/domain/projection.go:1–190](go/domain/projection.go#L1-L190) / [go/domain/school_projection.go:1–243](go/domain/school_projection.go#L1-L243) |
+| Go | ユースケース | [go/application.go:28–28](go/application.go#L28-L28) / [go/application.go:57–71](go/application.go#L57-L71) / [go/application.go:77–120](go/application.go#L77-L120) / [go/application.go:125–125](go/application.go#L125-L125) / [go/application.go:127–137](go/application.go#L127-L137) / [go/application.go:143–144](go/application.go#L143-L144) / [go/domain/models.go:88–95](go/domain/models.go#L88-L95) / [go/domain/models.go:322–357](go/domain/models.go#L322-L357) |
+| Go | アプリ設定・JSON・CLI | [go/application.go:1–27](go/application.go#L1-L27) / [go/application.go:29–49](go/application.go#L29-L49) / [go/application.go:51–56](go/application.go#L51-L56) / [go/domain/json.go:1–694](go/domain/json.go#L1-L694) / [go/main.go:1–37](go/main.go#L1-L37) / [go/main.go:40–47](go/main.go#L40-L47) / [go/wire.go:1–52](go/wire.go#L1-L52) |
+| Go | 共通ライブラリ | [go/dcb/json_store.go:1–487](go/dcb/json_store.go#L1-L487) / [go/dcb/store.go:1–428](go/dcb/store.go#L1-L428) |
 | Go | ドメインテスト | [go/domain_test.go:1–211](go/domain_test.go#L1-L211) / [go/projection_tests.go:1–99](go/projection_tests.go#L1-L99) |
+| Go | ベンチマーク | [go/application.go:50–50](go/application.go#L50-L50) / [go/application.go:72–76](go/application.go#L72-L76) / [go/application.go:121–124](go/application.go#L121-L124) / [go/application.go:126–126](go/application.go#L126-L126) / [go/application.go:138–142](go/application.go#L138-L142) / [go/benchmark_output.go:1–38](go/benchmark_output.go#L1-L38) / [go/main.go:38–39](go/main.go#L38-L39) / [go/query_benchmark.go:1–42](go/query_benchmark.go#L1-L42) / [go/storage_benchmark.go:1–97](go/storage_benchmark.go#L1-L97) |
 | Swift | Model・値オブジェクト | [swift/models.swift:1–33](swift/models.swift#L1-L33) / [swift/models.swift:48–64](swift/models.swift#L48-L64) / [swift/models.swift:76–87](swift/models.swift#L76-L87) / [swift/valueObjects.swift:1–39](swift/valueObjects.swift#L1-L39) |
 | Swift | Decider | [swift/decider.swift:1–99](swift/decider.swift#L1-L99) / [swift/models.swift:88–91](swift/models.swift#L88-L91) |
 | Swift | コマンド・共通Handler・入力検証 | [swift/handlers.swift:1–11](swift/handlers.swift#L1-L11) / [swift/models.swift:65–75](swift/models.swift#L65-L75) / [swift/valueObjects.swift:40–57](swift/valueObjects.swift#L40-L57) |
 | Swift | DCB接続・メタ情報 | [swift/routing.swift:1–32](swift/routing.swift#L1-L32) |
-| Swift | ドメイン投影 | [swift/models.swift:34–39](swift/models.swift#L34-L39) / [swift/projection.swift:1–49](swift/projection.swift#L1-L49) / [swift/schoolProjection.swift:1–65](swift/schoolProjection.swift#L1-L65) |
-| Swift | ユースケース | [swift/application.swift:4–4](swift/application.swift#L4-L4) / [swift/application.swift:8–22](swift/application.swift#L8-L22) / [swift/models.swift:40–47](swift/models.swift#L40-L47) / [swift/models.swift:92–99](swift/models.swift#L92-L99) |
-| Swift | アプリ設定・JSON・CLI | [swift/application.swift:1–3](swift/application.swift#L1-L3) / [swift/application.swift:5–7](swift/application.swift#L5-L7) / [swift/main.swift:1–9](swift/main.swift#L1-L9) / [swift/wire.swift:1–338](swift/wire.swift#L1-L338) |
-| Swift | 共通ライブラリ | [swift/dcb.swift:1–175](swift/dcb.swift#L1-L175) |
+| Swift | ドメイン投影 | [swift/models.swift:34–39](swift/models.swift#L34-L39) / [swift/projection.swift:1–49](swift/projection.swift#L1-L49) / [swift/schoolProjection.swift:1–66](swift/schoolProjection.swift#L1-L66) |
+| Swift | ユースケース | [swift/application.swift:4–4](swift/application.swift#L4-L4) / [swift/application.swift:13–15](swift/application.swift#L13-L15) / [swift/application.swift:19–26](swift/application.swift#L19-L26) / [swift/application.swift:28–28](swift/application.swift#L28-L28) / [swift/application.swift:30–31](swift/application.swift#L30-L31) / [swift/application.swift:34–35](swift/application.swift#L34-L35) / [swift/models.swift:40–47](swift/models.swift#L40-L47) / [swift/models.swift:92–99](swift/models.swift#L92-L99) |
+| Swift | アプリ設定・JSON・CLI | [swift/application.swift:1–3](swift/application.swift#L1-L3) / [swift/application.swift:5–9](swift/application.swift#L5-L9) / [swift/application.swift:11–12](swift/application.swift#L11-L12) / [swift/main.swift:1–6](swift/main.swift#L1-L6) / [swift/main.swift:8–10](swift/main.swift#L8-L10) / [swift/wire.swift:1–338](swift/wire.swift#L1-L338) |
+| Swift | 共通ライブラリ | [swift/JsonStore.swift:1–51](swift/JsonStore.swift#L1-L51) / [swift/dcb.swift:1–175](swift/dcb.swift#L1-L175) |
 | Swift | ドメインテスト | [swift/domainTests.swift:1–135](swift/domainTests.swift#L1-L135) / [swift/projectionTests.swift:1–28](swift/projectionTests.swift#L1-L28) |
+| Swift | ベンチマーク | [swift/application.swift:10–10](swift/application.swift#L10-L10) / [swift/application.swift:16–18](swift/application.swift#L16-L18) / [swift/application.swift:27–27](swift/application.swift#L27-L27) / [swift/application.swift:29–29](swift/application.swift#L29-L29) / [swift/application.swift:32–33](swift/application.swift#L32-L33) / [swift/benchmarkOutput.swift:1–3](swift/benchmarkOutput.swift#L1-L3) / [swift/main.swift:7–7](swift/main.swift#L7-L7) / [swift/queryBenchmark.swift:1–7](swift/queryBenchmark.swift#L1-L7) / [swift/storageBenchmark.swift:1–14](swift/storageBenchmark.swift#L1-L14) |
 
 <!-- code-stats:end -->
 

@@ -51,6 +51,7 @@ final class SchoolProjection:@unchecked Sendable{
     private let index=IndexedProjection(applyIndex)
     var checkpoint:Int{index.checkpoint};var rowCount:Int{index.rowCount};var work:Int64{index.work}
     func accept(_ events:[Recorded<Event>])->Bool{index.accept(events)}
+    func student(_ id:String)->Student{index.read{rows in guard case .student(let s)=rows[IndexKey("student",id)]else{preconditionFailure("not a student")};return s}.1}
     func snapshot()->(Int,SchoolList){index.read{rows in
         var students:[Student]=[],classes:[ClassState]=[],enrollments:[Enrollment]=[]
         for row in rows.values{switch row{case .student(let value):students.append(value);case .enrollment(let value):enrollments.append(value)

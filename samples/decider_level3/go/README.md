@@ -1,12 +1,12 @@
 # Go：型パラメーターと小さなストアinterfaceで分ける
 
-[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。速度・メモリのベンチマークではありません。
+[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。このページでは記述を比較し、速度・メモリは[ベンチマーク](../benchmark/README.md)で比較します。
 
 ## この設計でよかったこと
 
 ### 1. 共通ストアのpayloadはanyの値ではなくE
 
-出典：[go/dcb/store.go](dcb/store.go#L73-L76)
+出典：[dcb/store.go:73–76](dcb/store.go#L73-L76)
 
 ```go
 type CommandStore[E any] interface {
@@ -15,7 +15,7 @@ type CommandStore[E any] interface {
 }
 ```
 
-出典：[domain/handlers.go](domain/handlers.go#L1-L25)
+出典：[domain/handlers.go:1–25](domain/handlers.go#L1-L25)
 
 ```go
 package domain
@@ -49,7 +49,7 @@ anyは型パラメーターの制約で、保存するフィールド自体はE�
 
 ### 2. 履修のキーとコピーの責任を明示できる
 
-出典：[go/domain/projection.go](domain/projection.go#L8-L10)
+出典：[domain/projection.go:8–10](domain/projection.go#L8-L10)
 
 ```go
 type EnrollmentKey struct{ Room, Student string }
@@ -57,7 +57,7 @@ type Registers struct {
 	Students    map[string]Student
 ```
 
-出典：[go/domain/projection.go](domain/projection.go#L18-L22)
+出典：[domain/projection.go:18–22](domain/projection.go#L18-L22)
 
 ```go
 func CopyRegisters(s Registers) Registers {
@@ -71,7 +71,7 @@ func CopyRegisters(s Registers) Registers {
 
 ### 3. race detectorを使ってストアのロックを検証できる
 
-出典：[go/dcb/store.go](dcb/store.go#L111-L115)
+出典：[dcb/store.go:111–115](dcb/store.go#L111-L115)
 
 ```go
 func (s *EventStore[E]) Append(commandId string, q Query, after int, batch []E) AppendResult[E] {
@@ -87,7 +87,7 @@ func (s *EventStore[E]) Append(commandId string, q Query, after int, batch []E) 
 
 ### 1. generic化しても、学校のtype switchの網羅性は得られない
 
-出典：[go/domain/routing.go](domain/routing.go#L39-L44)
+出典：[domain/routing.go:39–44](domain/routing.go#L39-L44)
 
 ```go
 func DescribeEvent(event Event) dcb.EventDescriptor {
@@ -102,7 +102,7 @@ func DescribeEvent(event Event) dcb.EventDescriptor {
 
 ### 2. JSONのinterface復元は境界で書く必要がある
 
-出典：[go/wire.go](wire.go#L38-L41)
+出典：[wire.go:38–41](wire.go#L38-L41)
 
 ```go
 		payload, err := d.DecodeEvent(e.Payload)
@@ -115,7 +115,7 @@ Recorded[Event]のpayloadをencoding/jsonだけで具体型へ戻せないため
 
 ### 3. 購読panicを隔離し、失敗した投影を黙って使わない必要がある
 
-出典：[go/dcb/store.go](dcb/store.go#L151-L158)
+出典：[dcb/store.go:151–158](dcb/store.go#L151-L158)
 
 ```go
 func notify[E any](listener func([]Recorded[E]) bool, events []Recorded[E]) (ok bool) {
@@ -149,3 +149,9 @@ panicを追記失敗に見せないようrecoverで通知失敗へ変換しま�
 一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
 
 [projection_tests.go](projection_tests.go)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。
+
+## JSON／SQLiteと計測
+
+mattn/go-sqlite3とdatabase/sql。CGOを使うためCコンパイラーが必要です。学校のJSON復元処理はdomain側に残し、dcbパッケージはcodec関数だけを受け取ります。
+
+[共通ベンチマーク](../benchmark/README.md)では、履修コマンド・拒否・競合後の再判断、索引Projectionのクエリ、JSON応答、再起動を同じ件数で実行します。SQLite版とメモリJSON版の両方でシリアライズ・デシリアライズを通します。インフラ障害は業務のRejectedと混ぜず、プロセスを失敗させます。外部接続のイベントは明示的なRefreshまたは次の自分のcommitで取り込みます。

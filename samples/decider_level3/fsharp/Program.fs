@@ -30,6 +30,7 @@ module Program =
                 use doc=JsonDocument.Parse text
                 if containsNull doc.RootElement then failwith "null is outside the input contract"
                 let input=JsonSerializer.Deserialize<Input>(text,options) |> nonNull
-                Console.WriteLine(JsonSerializer.Serialize(Application.run input.History input.Operations,options))
+                let output=Application.run input.History input.Operations
+                Console.WriteLine(if Environment.GetEnvironmentVariable("DECIDER_BENCHMARK_SUMMARY")="1" then BenchmarkOutput.serialize output options else JsonSerializer.Serialize(output,options))
                 0
         with error -> Console.Error.WriteLine(error.Message);1

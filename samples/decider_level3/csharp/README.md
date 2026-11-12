@@ -1,12 +1,12 @@
 # C#：closedイベントをジェネリックDCBへ渡す
 
-[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。速度・メモリのベンチマークではありません。
+[共通仕様・検証](../README.md)／[Model・Decider・共通部品のコード量](../README.md#コード量の比較)。このES／DCB実装で助かった点と増えた負担を比較します。このページでは記述を比較し、速度・メモリは[ベンチマーク](../benchmark/README.md)で比較します。
 
 ## この設計でよかったこと
 
 ### 1. ライブラリ化しても閉じたEventを保てる
 
-出典：[Handlers.cs](Handlers.cs#L1-L16)
+出典：[Handlers.cs:1–16](Handlers.cs#L1-L16)
 
 ```csharp
 using System.Collections.Immutable;
@@ -31,7 +31,7 @@ public sealed class SchoolHandler : ICommandHandler<Command,Event,Rejection>
 
 ### 2. 具象ストアとメタ情報の登録を切り離せる
 
-出典：[csharp/Dcb.cs](Dcb.cs#L22-L26)
+出典：[Dcb.cs:22–26](Dcb.cs#L22-L26)
 
 ```csharp
 public interface ICommandStore<E>
@@ -41,7 +41,7 @@ public interface ICommandStore<E>
 }
 ```
 
-出典：[csharp/Routing.cs](Routing.cs#L22-L25)
+出典：[Routing.cs:22–25](Routing.cs#L22-L25)
 
 ```csharp
     public static EventDescriptor Describe(Event e) => e switch
@@ -54,7 +54,7 @@ CommandProcessorはinterfaceへ依存し、タグと型名は学校の網羅的�
 
 ### 3. メタ情報が増えてもSource GenerationでJSONを往復できる
 
-出典：[csharp/Program.cs](Program.cs#L18-L22)
+出典：[Program.cs:20–24](Program.cs#L20-L24)
 
 ```csharp
 [JsonSourceGenerationOptions(PropertyNamingPolicy=JsonKnownNamingPolicy.CamelCase,AllowOutOfOrderMetadataProperties=true,
@@ -70,7 +70,7 @@ Recorded<Event>、Operation、ネストした履修状態までルートから�
 
 ### 1. Tagのrecordだけでは構造的な等価性にならなかった
 
-出典：[csharp/Dcb.cs](Dcb.cs#L6-L8)
+出典：[Dcb.cs:6–8](Dcb.cs#L6-L8)
 
 ```csharp
     public bool Equals(Tag? other) => other is not null && Category == other.Category && Keys.SequenceEqual(other.Keys);
@@ -82,7 +82,7 @@ ImmutableArrayをそのままrecordの既定比較へ任せず、Keysの値比�
 
 ### 2. 分割すると、イベントに必要な事実とタグを設計し直す必要があった
 
-出典：[csharp/Decider.cs](Decider.cs#L115-L122)
+出典：[Decider.cs:115–122](Decider.cs#L115-L122)
 
 ```csharp
     public static Decision Decide(DecisionModel state, ValidatedCommand validated)
@@ -99,7 +99,7 @@ ImmutableArrayをそのままrecordの既定比較へ任せず、Keysの値比�
 
 ### 3. 抽出可能な同期APIと、本番用の非同期基盤は別
 
-出典：[csharp/Dcb.cs](Dcb.cs#L59-L60)
+出典：[Dcb.cs:59–60](Dcb.cs#L59-L60)
 
 ```csharp
     private static bool Notify(Func<ImmutableArray<Recorded<T>>,bool> listener,ImmutableArray<Recorded<T>> batch)
@@ -127,3 +127,9 @@ ImmutableArrayをそのままrecordの既定比較へ任せず、Keysの値比�
 一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
 
 [ProjectionTests.cs](ProjectionTests.cs)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。
+
+## JSON／SQLiteと計測
+
+Microsoft.Data.Sqlite。codecはSystem.Text.JsonのSource Generationで注入し、学校モデルをライブラリから参照しません。Native AOTにも同じ接続を使います。
+
+[共通ベンチマーク](../benchmark/README.md)では、履修コマンド・拒否・競合後の再判断、索引Projectionのクエリ、JSON応答、再起動を同じ件数で実行します。SQLite版とメモリJSON版の両方でシリアライズ・デシリアライズを通します。インフラ障害は業務のRejectedと混ぜず、プロセスを失敗させます。外部接続のイベントは明示的なRefreshまたは次の自分のcommitで取り込みます。

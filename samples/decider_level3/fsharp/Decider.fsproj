@@ -6,6 +6,12 @@
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Runtime.TieredCompilation" Value="true" />
     <RuntimeHostConfigurationOption Include="System.Runtime.TieredPGO" Value="true" />
-    <Compile Include="Dcb.fs" /><Compile Include="LibraryTests.fs" /><Compile Include="Models.fs" /><Compile Include="ValueObjects.fs" /><Compile Include="Decider.fs" /><Compile Include="Projection.fs" /><Compile Include="SchoolProjection.fs" /><Compile Include="Routing.fs" /><Compile Include="Handlers.fs" /><Compile Include="Application.fs" /><Compile Include="DomainTests.fs" /><Compile Include="ProjectionTests.fs" /><Compile Include="Program.fs" />
+    <Compile Include="Dcb.fs" /><Compile Include="JsonStore.fs" /><Compile Include="SqliteJournal.fs" /><Compile Include="LibraryTests.fs" /><Compile Include="Models.fs" /><Compile Include="ValueObjects.fs" /><Compile Include="Decider.fs" /><Compile Include="Projection.fs" /><Compile Include="SchoolProjection.fs" /><Compile Include="Routing.fs" /><Compile Include="Handlers.fs" /><Compile Include="QueryBenchmark.fs" />
+    <Compile Include="StorageBenchmark.fs" />
+    <Compile Include="Application.fs" /><Compile Include="DomainTests.fs" /><Compile Include="ProjectionTests.fs" /><Compile Include="BenchmarkOutput.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="11.0.0" />
   </ItemGroup>
 </Project>
