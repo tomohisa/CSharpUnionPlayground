@@ -65,7 +65,7 @@ def invoke(command,payload,folder,store,documents,timeout,students=0):
                 marks.append((time.monotonic()-start,line.strip()));errors.write(line);errors.flush()
         reader=threading.Thread(target=collect);reader.start()
         try:code=process.wait(timeout=timeout)
-        except subprocess.TimeoutExpired:
+        except (subprocess.TimeoutExpired,KeyboardInterrupt):
             os.killpg(process.pid,signal.SIGKILL);process.wait();reader.join();raise RuntimeError(f'benchmark timeout; see {err}')
         reader.join()
     duration=time.monotonic()-start
@@ -156,9 +156,17 @@ def main():
         cache.write_text(json.dumps(commands[l]))
     versions={}
     for name,command in {'dotnet':['dotnet','--info'],'node':['node','--version'],'rust':['rustc','--version'],'java':['java','-version'],'go':['go','version'],'swift':['swift','--version']}.items():
-        v=subprocess.run(command,capture_output=True,text=True);versions[name]=(v.stdout+v.stderr).strip()
+        try:
+            v=subprocess.run(command,capture_output=True,text=True);versions[name]=(v.stdout+v.stderr).strip()
+        except OSError as error:versions[name]='unavailable: '+str(error)
     manifest={str(f.relative_to(LEVEL)):hashlib.sha256(f.read_bytes()).hexdigest() for f in LEVEL.rglob('*') if f.is_file() and not any(part in f.parts for part in ['.build','bin','obj','node_modules','target','observed','__pycache__']) and f.suffix in ['.cs','.fs','.rs','.ts','.go','.swift','.java','.py','.json','.toml','.lock','.sql','.csproj','.fsproj','.mod','.sum']}
-    root=Path(tempfile.mkdtemp(prefix='level3-es-'));data={'formatVersion':1,'measuredAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'platform':platform.platform(),'machine':platform.machine(),'processor':platform.processor(),'commands':commands,'runtimeVersions':versions,'sourceManifest':manifest,'csharpNativeAot':a.csharp_native_aot,'results':[]}
+    root=Path(tempfile.mkdtemp(prefix='level3-es-'));data={'formatVersion':1,'measuredAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'platform':platform.platform(),'machine':platform.machine(),'processor':platform.processor(),'commands':commands,'runtimeVersions':versions,'sourceManifest':manifest,'csharpNativeAot':a.csharp_native_aot,'sourceCommit':subprocess.run(['git','rev-parse','HEAD'],cwd=LEVEL,capture_output=True,text=True).stdout.strip(),'results':[]}
+    import xml.etree.ElementTree as ET
+    driver=lambda project:next(p.attrib['Version'] for p in ET.parse(project).iter('PackageReference') if p.attrib.get('Include')=='Microsoft.Data.Sqlite')
+    data['drivers']={'csharp':'Microsoft.Data.Sqlite '+driver(LEVEL/'csharp/Decider.csproj'),'fsharp':'Microsoft.Data.Sqlite '+driver(LEVEL/'fsharp/Decider.fsproj'),
+                     'rust':'rusqlite '+re.search(r'rusqlite\s*=\s*\{\s*version\s*=\s*"=?([^"\s]+)',(LEVEL/'rust/Cargo.toml').read_text())[1]+' / bundled',
+                     'typescript':'node:sqlite / built-in','java':[Path(c).name for c in os.pathsep.join(commands.get('java',[])).split(os.pathsep) if 'sqlite-jdbc-' in c and c.endswith('.jar')],
+                     'go':re.search(r'github.com/mattn/go-sqlite3\s+(\S+)',(LEVEL/'go/go.mod').read_text())[0]+' / CGO','swift':'system SQLite3'}
     if sys.platform=='darwin':
         data['hardware']={name:subprocess.run(['sysctl','-n',key],capture_output=True,text=True).stdout.strip() for name,key in [('cpu','machdep.cpu.brand_string'),('memoryBytes','hw.memsize')]}
     else:
@@ -172,9 +180,20 @@ def main():
             # One common count based on the median implementation, never a
             # different count for each language. Slow implementations may exceed
             # the target; retaining equal work takes precedence over equal time.
-            rates=sorted((m['phases']['operations']+m['document']['seconds'])/2000 for m in pilots)
-            n=max(10,round(a.target_seconds/rates[len(rates)//2]/10)*10)
-            n=min(n,100000);data['calibration']={'targetSeconds':a.target_seconds,'pilotStudents':2000,'results':pilots,'selectedStudents':n}
+            def rate(m):return (m['phases']['operations']+m['document']['seconds'])/m['students']
+            ordered=sorted(pilots,key=rate);median=ordered[len(ordered)//2]
+            n=max(10,min(100000,round(a.target_seconds/rate(median)/10)*10))
+            calibration={'targetSeconds':a.target_seconds,'pilotStudents':2000,'results':pilots,'initialStudents':n,'medianImplementation':median['language']}
+            # A small DB fits different cache/IO conditions. Refine on a larger
+            # database before selecting the one common count for every runtime.
+            refinement_students=min(20000,max(2000,round(n/2/10)*10))
+            if refinement_students>2000:
+                refinement=root/'refinement';refinement.mkdir()
+                language=median['language'];print(f'Refining calibration: {language}, {refinement_students:,} students',flush=True)
+                measured=measure(language,commands[language],refinement_students,'sqlite',refinement,a.timeout)
+                calibration['refinement']=measured
+                n=max(10,min(100000,round(a.target_seconds/rate(measured)/10)*10))
+            calibration['selectedStudents']=n;data['calibration']=calibration
         data['students']=n;data['workload']=json.loads((HERE/'workload.json').read_text())
         data['workloadSha256']=hashlib.sha256((HERE/'workload.py').read_bytes()).hexdigest()
         stores=['sqlite','memory-json'] if a.store=='both' else [a.store]

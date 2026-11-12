@@ -48,11 +48,13 @@ def build(language, native_aot=False):
         cached = sorted(jars.glob('jackson-*.jar'))
         cp = os.pathsep.join(map(str,cached)) if len(cached)==3 else jackson_classpath(jars)
         import urllib.request
+        jdbc=[]
         for artifact,version,group in [('sqlite-jdbc','3.54.1.0','org/xerial'),('slf4j-api','2.0.17','org/slf4j'),('slf4j-nop','2.0.17','org/slf4j')]:
             jar=jars/f'{artifact}-{version}.jar'
+            jdbc.append(str(jar))
             if not jar.exists():
                 urllib.request.urlretrieve(f'https://repo.maven.apache.org/maven2/{group}/{artifact}/{version}/{jar.name}',jar)
-        cp += os.pathsep+os.pathsep.join(str(p) for p in sorted(jars.glob('*.jar')) if not p.name.startswith('jackson-'))
+        cp += os.pathsep+os.pathsep.join(jdbc)
         out = BUILD/'java'
         out.mkdir(exist_ok=True)
         run(['javac', '--release', '21', '--class-path', cp, '-d', out, *sorted((HERE/'java').rglob('*.java'))])
