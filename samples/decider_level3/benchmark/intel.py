@@ -21,8 +21,8 @@ LANGUAGES=benchmark.build_runner.LANGUAGES
 
 
 def validate_cohort(data):
-    if data['machine'] not in ['x86_64','AMD64'] or not data['platform'].startswith('macOS'):
-        raise ValueError('Intel macOS results required')
+    if data['machine'] not in ['x86_64','AMD64'] or not data['platform'].startswith(('macOS','Linux')):
+        raise ValueError('Native macOS or Linux x64 results required')
     pairs={(l,s)for l in LANGUAGES for s in ['sqlite','memory-json']}
     rows=data['results']
     if len(rows)!=14 or {(r['language'],r['store'])for r in rows}!=pairs:
@@ -55,9 +55,10 @@ def load_bundle(folder):
 
 def render_index(results,folder):
     data=results[0][1];a=data['actions'];cpu=data['hardware']['cpu'];ram=int(data['hardware']['memoryBytes'])/1024**3
-    lines=['# Intel GitHub Actions ES benchmark','',f"CPU: {cpu} / RAM: {ram:g} GiB / `{a['runnerLabel']}`。",'',
+    title='Linux x64' if data['platform'].startswith('Linux') else 'Intel'
+    lines=['# '+title+' GitHub Actions ES benchmark','',f"CPU: {cpu} / RAM: {ram:g} GiB / `{a['runnerLabel']}`。",'',
            f"[Actions run]({a['runUrl']}) / [Measured source](https://github.com/{a['repository']}/tree/{data['sourceCommit']}/samples/decider_level3).",'',
-           '全サイズ・7言語のSQLite／メモリJSONを、同じIntelジョブで順次測定しました。ビルドは計測外です。C#・F#はRelease JIT＋Dynamic PGOです。','',
+           '全サイズ・7言語のSQLite／メモリJSONを、同じx64ジョブで順次測定しました。ビルドは計測外です。C#・F#はRelease JIT＋Dynamic PGOです。','',
            '| 学生数 | 結果 | Raw data |','|---:|---|---|']
     for name,d in results:lines.append(f"| {d['students']:,} | [SQLite／メモリJSON]({Path(name).with_suffix('.md').name}) | [JSON]({name}) |")
     lines+=['','## データ量による変化','','| 実装 | '+' | '.join(f"{d['students']:,}人 SQLite秒 / RSS MiB"for _,d in results)+' |', '|---|'+ '|'.join('---:'for _ in results)+'|']
@@ -87,10 +88,10 @@ def publish(source,destination):
 
 
 def run(sizes,output):
-    if platform.system()!='Darwin' or platform.machine()!='x86_64':raise ValueError('Run on native macOS Intel')
+    if platform.system() not in ['Darwin','Linux'] or platform.machine()!='x86_64':raise ValueError('Run on native Linux or macOS x64')
     if not sizes or len(set(sizes))!=len(sizes) or any(n<10 or n%10 for n in sizes):raise ValueError('Sizes must be distinct positive multiples of ten')
     repository=os.environ['GITHUB_REPOSITORY'];run_id=os.environ['GITHUB_RUN_ID'];server=os.environ.get('GITHUB_SERVER_URL','https://github.com')
-    actions={'repository':repository,'runId':run_id,'attempt':os.environ.get('GITHUB_RUN_ATTEMPT','1'),'runUrl':f'{server}/{repository}/actions/runs/{run_id}','runnerLabel':'macos-15-intel','runnerImage':os.environ.get('ImageOS',''),'runnerImageVersion':os.environ.get('ImageVersion','')}
+    actions={'repository':repository,'runId':run_id,'attempt':os.environ.get('GITHUB_RUN_ATTEMPT','1'),'runUrl':f'{server}/{repository}/actions/runs/{run_id}','runnerLabel':os.environ.get('BENCHMARK_RUNNER_LABEL','macos-15-intel'),'runnerImage':os.environ.get('ImageOS',''),'runnerImageVersion':os.environ.get('ImageVersion','')}
     output.mkdir(parents=True,exist_ok=True)
     # Stage a whole bundle: a failed later size must not publish a partial run.
     with tempfile.TemporaryDirectory(prefix='level3-intel-')as temp:
