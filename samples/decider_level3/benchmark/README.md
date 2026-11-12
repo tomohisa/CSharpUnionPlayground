@@ -1,5 +1,7 @@
 # Level 3 ES benchmark
 
+[ローカルの実測結果（2規模・7言語・SQLite／メモリJSON）](observed/README.md)
+
 7言語で同じ履修コマンド、件数、SQLスキーマ、SQLite設定を使うコンソールベンチマークです。
 
 ```bash

@@ -319,7 +319,7 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 
 ## JSONストアとSQLiteベンチマーク
 
-[benchmark](benchmark/README.md)に、7言語で同じ履修業務・クエリ・4 KiBデータ更新を行うCLIを追加しています。標準は約90秒を目安に共通件数を選びます。言語ごとの件数変更や人工的な待機は行いません。
+[実測結果（2規模）](benchmark/observed/README.md)と[benchmark](benchmark/README.md)に、7言語で同じ履修業務・クエリ・4 KiBデータ更新を行うCLIを追加しています。標準は約90秒を目安に共通件数を選びます。言語ごとの件数変更や人工的な待機は行いません。
 
 ```bash
 python3 samples/decider_level3/benchmark/run.py --quick --store both
