@@ -2,6 +2,8 @@
 
 [共通仕様・実行・コード量](../README.md)／[OpenAPI](../openapi.json)／[再利用するLevel3](../../decider_level3/csharp)。学校ドメイン・VO・DeciderはLevel3から参照し、コピーしていません。
 
+ホストはASP.NET Core／Kestrelのminimal hostingです。HTTP処理はapp.Runの共通RequestDelegateでディスパッチしており、MapGet／MapPostでエンドポイントを定義する形式ではありません。
+
 ## 今回良かったところ
 
 良かったのは、closed recordのコマンド・イベントとproperty attributeによる入力検証を変更せずに、ASP.NET Coreから同じExecutorを呼べたことです。失敗時にイベントが出ないという保証をHTTPホストへ書き直す必要がありません。JSONも既存のclosed階層をSource Generationで扱い、ケースごとのコンバーターを追加していません。
