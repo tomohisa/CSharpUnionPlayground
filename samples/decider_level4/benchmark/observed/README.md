@@ -1,5 +1,7 @@
 # Level4 ローカルHTTPベンチマーク
 
+[Linux x64 Actionsの結果](linux-x64-actions/README.md)は別ページです。以下はローカルの独立した測定です。
+
 Apple M4 Max / RAM 128 GiB / `macOS-27.2.1-arm64-arm-64bit`。
 
 [10,000人・同時接続8の全結果](macos-arm64.md)／[Raw data](macos-arm64.json)。同じホストで7言語×SQLite・メモリJSONを順次測定しました。

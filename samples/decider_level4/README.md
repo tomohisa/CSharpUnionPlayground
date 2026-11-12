@@ -2,7 +2,7 @@
 
 [Level3](../decider_level3)のモデル・VO・Decider・Handler・DCB・JSONストア・投影を参照し、HTTPホストを追加しました。ドメインのコピーは持ちません。C#、F#、Rust、TypeScript＋Zod、Java、Go、Swiftに同じ[OpenAPI 3.1仕様](openapi.json)を実装しています。
 
-この段階の計測はローカルのみです。[Level3のLinux測定](../decider_level3/benchmark/observed/linux-x64-actions)とは測定対象が違います。HTTP結果とコンソール結果の表は混ぜません。
+[Linux x64 Actionsの測定](benchmark/observed/linux-x64-actions/README.md)と[ローカル測定](benchmark/observed/README.md)を別ページにしています。[Level3のLinux測定](../decider_level3/benchmark/observed/linux-x64-actions)とは測定対象が違います。HTTP結果とコンソール結果の表は混ぜません。
 
 ## 実行する
 

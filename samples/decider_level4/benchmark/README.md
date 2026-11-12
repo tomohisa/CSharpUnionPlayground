@@ -16,3 +16,11 @@ python3 samples/decider_level4/benchmark/run.py --students 10000 --concurrency 8
 RSSはpsで100msごとにサーバーPIDを観測した最大値です。クライアント、ビルドプロセス、他言語のサーバーは含みません。サンプリング間に一瞬だけ増えたメモリは捉えられません。入力・出力・JIT・GC・JSONイベント・ライブ投影を含むプロセス全体の値です。
 
 raw dataにはフェーズ別時間、API種別別p50/p95/p99、レスポンスbyte数、クライアントCPU時間、各SDK版、ソースSHA-256、OpenAPI SHA-256を保存します。同じローカルマシンで負荷側とサーバーが動くため、純粋なサーバーの上限性能ではありません。到着率を固定するopen-loopの飽和・過負荷試験は今回含めていません。
+
+## Linux x64 Actions
+
+`decider-level4-linux.yml` はUbuntu 26.04 x64上で最新安定版として確認した.NET 11.0.100、Node 26.13.1、Rust 1.99.1、Java 27、Go 1.27.4、Swift 6.4.2を導入します。C#・F#はRelease JIT＋Dynamic PGO、Javaは27をターゲットにコンパイルします。機能テスト・ビルド後、7言語×SQLite／メモリJSONを同じジョブで順番に測ります。既定は10,000人・同時接続8です。
+
+結果artifactは `actions.py publish` で全構成の件数・状態・再起動検証・SHA-256を検査してから別のLinux結果フォルダへ取り込みます。CPUメーカーをIntelに固定せず、実際のCPU・割り当てlogical CPU数・RAM・OS・kernel・SDK版とActions runを記録します。ローカルのJSON・測定表は上書きしません。
+
+C#はminimal hostingとKestrelを使い、app.Runで共通ディスパッチしています。MapGet／MapPostを使う形式ではありません。SQLiteドライバーは言語ごとに異なり、共通スキーマのHTTPアプリ全体を比較しています。
