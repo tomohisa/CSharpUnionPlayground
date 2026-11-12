@@ -38,6 +38,8 @@ class PublicationTests(unittest.TestCase):
             self.bundle(source,lambda d:d.update(platform='Linux-7-test',actions={**d['actions'],'runnerLabel':'ubuntu-26.04'}))
             intel.publish(source,dest)
             self.assertIn('Linux x64 GitHub Actions',(dest/'README.md').read_text())
+            self.assertIn('TypeScript + Zod (Node)',(dest/'README.md').read_text())
+            self.assertIn('Linux-7-test',(dest/'README.md').read_text())
             self.assertEqual(len(intel.load_bundle(dest)),2)
             self.bundle(source,lambda d:d.update(machine='aarch64',platform='Linux-test'))
             with self.assertRaisesRegex(ValueError,'x64'):intel.load_bundle(source)
