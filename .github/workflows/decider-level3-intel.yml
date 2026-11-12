@@ -1,0 +1,86 @@
+name: Decider Level 3 Intel benchmark
+on:
+  workflow_dispatch:
+    inputs:
+      sizes:
+        description: Shared student counts (comma-separated multiples of ten)
+        type: string
+        default: '22900,43050'
+      publish:
+        description: Publish complete Intel observations to main
+        type: boolean
+        default: true
+permissions:
+  contents: read
+concurrency:
+  group: decider-level3-intel-benchmark
+  cancel-in-progress: false
+jobs:
+  benchmark:
+    runs-on: macos-15-intel
+    timeout-minutes: 180
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+      BENCHMARK_SIZES: ${{ inputs.sizes }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify native Intel host
+        run: test "$(uname -m)" = x86_64
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.4'
+          cache: false
+      - name: Rust stable
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+      - name: Measure all languages and sizes sequentially
+        run: python3 samples/decider_level3/benchmark/intel.py run --sizes "$BENCHMARK_SIZES"
+      - name: Job summary
+        run: cat samples/decider_level3/benchmark/observed/macos-intel-actions/README.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: level3-intel-observations
+          path: samples/decider_level3/benchmark/observed/macos-intel-actions/
+          if-no-files-found: error
+          retention-days: 90
+  update-data:
+    needs: benchmark
+    if: inputs.publish && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    concurrency:
+      group: decider-level3-intel-publication
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          name: level3-intel-observations
+          path: ${{ runner.temp }}/level3-intel-observations
+      - name: Validate and publish complete cohort
+        run: python3 samples/decider_level3/benchmark/intel.py publish "$RUNNER_TEMP/level3-intel-observations"
+      - name: Commit Intel observations
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add samples/decider_level3/benchmark/observed/macos-intel-actions
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update Level 3 Intel ES benchmark observations'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

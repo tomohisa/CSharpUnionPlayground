@@ -72,3 +72,9 @@ C#・F#の標準計測はRelease JIT＋Dynamic PGO、Rust・Go・Swiftは最適�
 | Java | [JsonStore.java](../java/playground/dcb/JsonStore.java) | [Application.java](../java/Application.java) | [StorageBenchmark.java](../java/StorageBenchmark.java) | [QueryBenchmark.java](../java/QueryBenchmark.java) |
 | Go | [json_store.go](../go/dcb/json_store.go) | [application.go](../go/application.go) | [storage_benchmark.go](../go/storage_benchmark.go) | [query_benchmark.go](../go/query_benchmark.go) |
 | Swift | [JsonStore.swift](../swift/JsonStore.swift) | [application.swift](../swift/application.swift) | [storageBenchmark.swift](../swift/storageBenchmark.swift) | [queryBenchmark.swift](../swift/queryBenchmark.swift) |
+
+## Intel GitHub Actions
+
+`Decider Level 3 Intel benchmark` を手動実行すると、`macos-15-intel` の1ジョブで全7言語・全サイズを順次測定します。標準件数はローカルと同じ22,900人／43,050人です。C#・F#はRelease JIT＋Dynamic PGO、TypeScriptはZod版です。
+
+`publish: true` でmainから実行した場合、全構成の検証成功後に[Intel専用ページ](observed/macos-intel-actions/README.md)とraw JSONを自動更新します。Actionsのsummary・artifactにも保存します。失敗・不完全な構成や異なるジョブの混在を検出した場合は公開しません。
