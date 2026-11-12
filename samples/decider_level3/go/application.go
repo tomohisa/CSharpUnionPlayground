@@ -25,7 +25,7 @@ type RunOutput struct {
 func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOutput, error) {
 	store := dcb.NewStore(d.DescribeEvent, d.CopyEvent)
 	store.Load(history)
-	projection := dcb.NewProjection(d.EmptyRegisters(), d.Reduce, d.CopyRegisters)
+	projection := d.NewSchoolProjection()
 	store.Subscribe(projection.Accept)
 	var executor dcb.Executor[d.Command, d.Event, d.Rejection] = dcb.DcbExecutor[d.Command, d.Event, d.Rejection]{Store: store}
 	handler := d.SchoolHandler{}
@@ -67,28 +67,28 @@ func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOu
 				return RunOutput{}, fmt.Errorf("projection unavailable; rebuild required")
 			}
 			position, s := projection.Snapshot()
-			lists = append(lists, s.List())
+			lists = append(lists, s)
 			steps = append(steps, d.Trace{"ListAll", "Listed", 0, 0, position, []d.Rejection{}})
 		case d.Rebuild:
-			fresh := dcb.NewProjection(d.EmptyRegisters(), d.Reduce, d.CopyRegisters)
+			fresh := d.NewSchoolProjection()
 			if !fresh.Accept(store.Read(dcb.Query{Items: []dcb.QueryItem{}}).Events) {
 				return RunOutput{}, fmt.Errorf("rebuild failed")
 			}
 			position, s := fresh.Snapshot()
-			lists = append(lists, s.List())
+			lists = append(lists, s)
 			steps = append(steps, d.Trace{"Rebuild", "Rebuilt", 0, 0, position, []d.Rejection{}})
 		case d.Redeliver:
 			if !projection.Accept(store.Read(dcb.Query{Items: []dcb.QueryItem{}}).Events) {
 				return RunOutput{}, fmt.Errorf("duplicate delivery failed")
 			}
-			position, _ := projection.Snapshot()
+			position := projection.Checkpoint()
 			steps = append(steps, d.Trace{"Redeliver", "Redelivered", 0, 0, position, []d.Rejection{}})
 		default:
 			return RunOutput{}, fmt.Errorf("unknown operation")
 		}
 	}
 	events := store.Read(dcb.Query{Items: []dcb.QueryItem{}}).Events
-	fresh := dcb.NewProjection(d.EmptyRegisters(), d.Reduce, d.CopyRegisters)
+	fresh := d.NewSchoolProjection()
 	if !fresh.Accept(events) {
 		return RunOutput{}, fmt.Errorf("rebuild failed")
 	}
@@ -97,5 +97,5 @@ func runSchool(history []dcb.Recorded[d.Event], operations []d.Operation) (RunOu
 	if store.ListenerFaults() != 0 {
 		return RunOutput{}, fmt.Errorf("projection unavailable; rebuild required")
 	}
-	return RunOutput{events, steps, lists, s.List(), rebuilt.List(), position, store.ListenerFaults(), reads}, nil
+	return RunOutput{events, steps, lists, s, rebuilt, position, store.ListenerFaults(), reads}, nil
 }

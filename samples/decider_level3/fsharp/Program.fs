@@ -15,7 +15,10 @@ module Program =
     [<EntryPoint>]
     let main args =
         try
-            if Array.contains "--domain-test" args then
+            if args.Length=2 && args[0]="--projection-scale" then
+                ProjectionTests.run (int args[1])
+                0
+            elif Array.contains "--domain-test" args then
                 DomainTests.run()
                 0
             elif Array.contains "--self-test" args then

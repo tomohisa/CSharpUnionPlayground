@@ -19,7 +19,7 @@ func (p *countingStore) Append(id string, q dcb.Query, after int, events []d.Eve
 
 type givenHistory struct {
 	store      *dcb.EventStore[d.Event]
-	projection *dcb.LiveProjection[d.Event, d.Registers]
+	projection *d.SchoolProjection
 	port       *countingStore
 	executor   dcb.Executor[d.Command, d.Event, d.Rejection]
 }
@@ -29,7 +29,7 @@ func givenEvents(events []d.Event) givenHistory {
 	if len(events) > 0 {
 		store.Append("given", dcb.Query{Items: []dcb.QueryItem{}}, 0, events)
 	}
-	projection := dcb.NewProjection(d.EmptyRegisters(), d.Reduce, d.CopyRegisters)
+	projection := d.NewSchoolProjection()
 	store.Subscribe(projection.Accept)
 	port := &countingStore{inner: store}
 	return givenHistory{store, projection, port, dcb.DcbExecutor[d.Command, d.Event, d.Rejection]{Store: port}}
@@ -38,7 +38,7 @@ func checkProjection(t *testing.T, g givenHistory) {
 	t.Helper()
 	events := g.store.Read(dcb.Query{}).Events
 	position, state := g.projection.Snapshot()
-	if position != len(events) || !reflect.DeepEqual(state.List(), d.Fold(events).List()) {
+	if position != len(events) || !reflect.DeepEqual(state, d.Fold(events).List()) {
 		t.Fatal("live / replay state")
 	}
 }

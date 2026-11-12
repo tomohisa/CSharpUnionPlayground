@@ -42,7 +42,7 @@ var result = executor.Execute("enroll-1", new Enroll("class-a", "student-1"), ne
 | Executor | 検証後の読み取り、Handlerの呼び出し、条件付き追記、競合時の読み直しと再判断 |
 | Routing | タグ、読み取り条件、イベントの型名・タグのメタ情報。業務ハンドラーとは区別する |
 
-Handlerは学校の9ケースをまとめる型付きHandlerです。9個の具象クラスをリフレクションやDIで探索する構成ではありません。ライブラリは学校のCommand／Event／Rejectionを参照せず、別の数値コマンドとカウンターHandlerでも独立ビルド・実行します。
+Handlerは学校の9ケースをまとめる型付きHandlerです。個別HandlerがVOやDeciderによって自動的に不要になったという意味ではなく、現在の9コマンドの処理手順が共通なので共通Handlerを選んでいます。ライブラリの契約はコマンドとHandlerを組にして渡すため、個別Handlerにも対応できます。取得する外部データ・認可・副作用などの手順がコマンドごとに異なるなら分ける選択ができます。9個の具象クラスをリフレクションやDIで探索する構成ではありません。ライブラリは学校のCommand／Event／Rejectionを参照せず、別の数値コマンドとカウンターHandlerでも独立ビルド・実行します。
 
 Prepare／Commitは競合を再現できるよう分離してあります。Prepareの返す値は元のHandlerと実行先を保持し、競合したら同じコマンド・同じHandlerから判断を作り直します。Rustはcommitで準備済み値を消費し、TypeScriptはprepare時に入力をコピー・凍結します。他の言語でもこのサンプルのCommandは不変のrecord／DU／値型です。PreparedCommandはメモリ内の値で、永続化・プロセス間転送のAPIではありません。
 
@@ -206,17 +206,49 @@ LiveProjection<E,S>も共通部品です。ドメインのreduceとcopyStateを�
 
 学校アプリは投影障害があれば古い一覧を黙って返さず、利用不可にします。コピー関数と更新関数は、有効なデータに対して純粋に動く必要があります。不変値はidentityコピーでよいですが、可変な配列やオブジェクトを使う場合は独立したコピーを渡す契約です。
 
+## 大きなライブProjectionの更新方式
+
+コマンド判断用のRegistersと、学校全体を保持するライブ一覧Projectionを分けました。後者は汎用のIndexedProjectionと、各言語のSchoolProjectionで実装します。
+
+| 処理 | 更新用Projectionの扱い |
+|---|---|
+| 学籍・クラス・履修の検索 | ハッシュ索引から該当行を取得 |
+| バッチ反映 | 変更したキーだけを一時領域へ積み、成功後に反映。全状態のcloneは行わない |
+| 名簿への追加・取消 | 前後リンクと先頭・末尾・件数を更新。配列の末尾コピーや全件filterは行わない |
+| 取消・再登録の繰り返し | 古いノードと所属索引を削除し、再登録を末尾へ追加 |
+| 全件一覧 | 要求されたときにDTOを構築・ソートし、更新用の内部行を外へ返さない |
+| 再配送 | checkpoint以前を無視。更新用索引へ触らない |
+
+K/Vの行は不変値として扱い、Reducerは取得した行を直接変更せず、置換行を差分へ書きます。失敗や位置欠落では差分と新checkpointを破棄します。過去に返したSnapshotも変化しません。Rustは大きなCompletedの配列を更新時に複製しないよう、内部のクラスフェーズをArcで共有します。Swiftは辞書を保持する参照型を所有者とし、バッチへ辞書全体を渡してcopy-on-writeを起こす形を避けています。
+
+内部ノードIDの0はリンクなしを表す索引用の値で、ドメインの生徒IDや未確定状態ではありません。ノードIDにはイベント位置を使いますが、その位置を配列添字にはせず、ハッシュのキーとして扱います。
+
+これは、固定サイズのイベントを反映する際の仕事を状態全体の件数に依存させない改善です。ハッシュ表の拡張、GC、キャッシュ、キー長の影響までなくすものではありません。ClassCompletedに含まれる大量の結果など、イベントのpayload自身が大きい場合はその処理量が必要です。全件Snapshotの作成・ソートも件数に応じて増え、読み取り中は更新を待たせる場合があります。コマンド側のタグ検索は引き続き線形走査で、この計測にはストア検索・Command処理・JSONは含めません。
+
+### サイズを増やすテスト
+
+```bash
+python3 samples/decider_level3/tests/projection_scaling.py --samples 3 --write
+python3 samples/decider_level3/tests/projection_scaling.py --language csharp --native-aot --samples 1
+```
+
+1千・1万・10万生徒を同じ1クラスに登録します。現在の新規Commandの定員上限は10なので、このテストは過去の大きなクラスを表すイベントをProjectionへ直接供給します。Commandの検証を迂回して新しい業務コマンドを許可する変更ではありません。各サイズで同じ1,000回の出席更新と、新しい1,000人の登録＋履修追加を実施します。更新時間と全件Snapshotの時間を分け、索引のget/put/delete回数も記録します。出席はどのサイズでも1イベント3操作、登録＋履修追加は各実装で8〜9操作です。名簿と索引が大きくなっても、この操作数が増えないことを検査します。
+
+同じテストで、バッチ途中のReducer失敗と位置欠落によるrollback、再配送、取得済みSnapshotの不変性、100回の取消・再登録後の順序と行数も確認します。各言語の独立ライブラリテストでも、学校型を使わない小さな索引でrollbackを検証します。
+
+[ローカルの結果](observed/projection-scaling.md)と[各サンプル・環境・ソース指紋](observed/projection-scaling.json)を保存しています。短い更新の時間はJIT、GC、表の拡張等で揺れるため、一定時間の合否判定や言語順位には使いません。CIはサイズごとの正当性と一定の索引操作数を確認します。
+
 ## 言語ごとの選択
 
 | 言語 | 今回使った特徴と制約 |
 |---|---|
-| C# | closed record、ImmutableSortedDictionary、ジェネリックinterface、Source Generation。Tagには構造的Equals／HashCodeを明示 |
-| F# | DU、不変Map、ジェネリックinterface、関数注入。.NET 11 Release JIT＋Dynamic PGO |
-| Rust | enum、BTreeMap、trait、所有したコピーとMutex。設定を捕捉するクロージャも受ける |
-| TypeScript | Zodから型を導出、構造的なport、Map＋明示的コピー。同期処理は単一イベントループ内で原子的 |
-| Java | sealed record、公開パッケージのgeneric interface、コピーしたMap／List、synchronized |
-| Go | generic interface、structの複合キー、明示的コピー、Mutex。標準type switchの網羅性検査はない |
-| Swift | 関連値付きenum、値セマンティクス、primary associated typeのprotocol、Sendable、NSLock。CodableはRecordedに条件付きで適合 |
+| C# | closed record、ジェネリックinterface、Source Generation。判断モデルはImmutableSortedDictionary、ライブ一覧は差分付きDictionaryと連結名簿。TagのEquals／HashCodeを明示 |
+| F# | DU、ジェネリックinterface、関数注入。判断モデルは不変Map、ライブ一覧は差分付きDictionaryと連結名簿。.NET 11 JIT＋PGO |
+| Rust | enum、trait、Mutex。判断モデルはBTreeMap、ライブ一覧は差分付きHashMapと連結名簿、クラスフェーズのArc共有 |
+| TypeScript | Zodから型を導出、構造的なport。ライブ一覧はMapと変更行だけの差分、一覧DTOは要求時にコピー。単一イベントループ |
+| Java | sealed record、公開generic interface、synchronized。判断モデルはコピーしたMap、ライブ一覧は差分付きHashMapと連結名簿 |
+| Go | generic interface、structの複合キー、Mutex。ライブ一覧は変更行だけを置換するmapと連結名簿。type switchの網羅性検査はない |
+| Swift | 関連値付きenum、protocol、Sendable、NSLock。ライブ一覧は参照型が辞書を所有して差分更新し、DTOへ値を取り出す |
 
 TypeScriptの競合プローブは、同じ読み取りから準備した2つの追記をPromiseで実行する論理的競合です。Workersで同じストアを共有する並列処理ではありません。他の6言語では実際の2スレッド／goroutineを使います。Goではrace detectorも実行します。
 
@@ -266,9 +298,9 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 |---|---|
 | Model・値オブジェクト | 学籍・履修・クラスの状態、VOとfactory／復元、イベント、拒否理由、判断入力のDecisionModel |
 | Decider | 純粋な業務判断と補助関数、判断結果のAccepted／Rejected型 |
-| コマンド・ハンドラー・入力検証 | Command型、属性ValidatorとValidatedCommand、入力を検証しDeciderを呼ぶ学校のHandler |
+| コマンド・共通Handler・入力検証 | Command型、属性ValidatorとValidatedCommand、入力を検証しDeciderを呼ぶ学校のHandler |
 | DCB接続・メタ情報 | Routingのタグ、Query条件、イベントの型名・タグ付与 |
-| ドメイン投影 | 学籍・履修・クラスのreducer、一覧生成、SchoolList型。判断用の状態復元にも共用する投影を含む |
+| ドメイン投影 | ライブ一覧のSchoolProjection、判断モデル用の純粋Reducer、一覧DTOと生成処理。2つの更新方式を含む |
 | ユースケース | Execute／Prepare／Commit／一覧／再構築／再配送のOperation型と実行制御、Trace型、チケット・実行履歴管理 |
 | アプリ設定・JSON・CLI | ストア／投影／processorの生成と購読接続、入出力DTO、JSON変換、CLI、Application内のimport・namespace等の共通宣言 |
 | 共通ライブラリ（別枠） | 学校に依存しないタグ・エンベロープ・ストアport・Handler／Executor契約・条件付き追記・再試行・ライブ投影基盤 |
@@ -288,27 +320,27 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 
 ### 行数（空行を含む）
 
-| 言語 | Model・値オブジェクト | Decider | コマンド・ハンドラー・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ・テスト除外） | 共通ライブラリ（別枠） | ドメインテスト（別枠） |
+| 言語 | Model・値オブジェクト | Decider | コマンド・共通Handler・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ・テスト除外） | 共通ライブラリ（別枠） | ドメインテスト（別枠） |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C# | 126 | 127 | 67 | 35 | 78 | 43 | 34 | 510 | 164 | 164 |
-| F# | 122 | 99 | 40 | 31 | 59 | 54 | 42 | 447 | 117 | 141 |
-| Rust | 132 | 113 | 42 | 31 | 46 | 40 | 23 | 427 | 138 | 130 |
-| TypeScript＋Zod | 95 | 102 | 49 | 38 | 53 | 31 | 25 | 393 | 121 | 140 |
-| Java | 244 | 126 | 101 | 31 | 61 | 66 | 21 | 650 | 133 | 138 |
-| Go | 324 | 293 | 155 | 71 | 196 | 115 | 806 | 1,960 | 333 | 211 |
-| Swift | 101 | 103 | 40 | 32 | 55 | 32 | 353 | 716 | 142 | 135 |
+| C# | 126 | 127 | 67 | 35 | 170 | 43 | 35 | 603 | 206 | 214 |
+| F# | 122 | 99 | 40 | 31 | 152 | 54 | 45 | 543 | 156 | 189 |
+| Rust | 132 | 113 | 42 | 31 | 107 | 40 | 25 | 490 | 164 | 158 |
+| TypeScript＋Zod | 95 | 102 | 49 | 38 | 117 | 31 | 26 | 458 | 149 | 174 |
+| Java | 244 | 126 | 101 | 31 | 129 | 66 | 22 | 719 | 162 | 165 |
+| Go | 324 | 293 | 155 | 71 | 434 | 115 | 815 | 2,207 | 428 | 310 |
+| Swift | 101 | 103 | 40 | 32 | 120 | 32 | 353 | 781 | 175 | 163 |
 
 ### 空白以外の文字数
 
-| 言語 | Model・値オブジェクト | Decider | コマンド・ハンドラー・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ・テスト除外） | 共通ライブラリ（別枠） | ドメインテスト（別枠） |
+| 言語 | Model・値オブジェクト | Decider | コマンド・共通Handler・入力検証 | DCB接続・メタ情報 | ドメイン投影 | ユースケース | アプリ設定・JSON・CLI | アプリ側合計（ライブラリ・テスト除外） | 共通ライブラリ（別枠） | ドメインテスト（別枠） |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C# | 5,663 | 5,542 | 4,625 | 1,696 | 4,535 | 2,608 | 1,989 | 26,658 | 7,057 | 15,852 |
-| F# | 4,881 | 5,068 | 2,137 | 1,965 | 3,552 | 2,763 | 1,575 | 21,941 | 5,809 | 14,835 |
-| Rust | 5,143 | 5,707 | 2,216 | 2,308 | 4,128 | 3,034 | 1,479 | 24,015 | 8,224 | 23,535 |
-| TypeScript＋Zod | 5,592 | 5,286 | 2,490 | 2,547 | 4,004 | 2,989 | 1,399 | 24,307 | 7,260 | 19,350 |
-| Java | 8,304 | 6,106 | 3,673 | 2,241 | 5,099 | 3,815 | 1,506 | 30,744 | 7,910 | 16,301 |
-| Go | 6,114 | 5,449 | 3,333 | 2,620 | 4,399 | 3,040 | 17,854 | 42,809 | 7,405 | 19,804 |
-| Swift | 4,670 | 5,657 | 1,941 | 2,277 | 3,592 | 2,507 | 13,404 | 34,048 | 9,101 | 16,923 |
+| C# | 5,663 | 5,542 | 4,625 | 1,696 | 9,832 | 2,467 | 2,035 | 31,860 | 8,639 | 18,977 |
+| F# | 4,881 | 5,068 | 2,137 | 1,965 | 8,491 | 2,639 | 1,625 | 26,806 | 7,296 | 17,455 |
+| Rust | 5,143 | 5,707 | 2,216 | 2,308 | 9,919 | 2,884 | 1,677 | 29,854 | 10,468 | 27,133 |
+| TypeScript＋Zod | 5,592 | 5,286 | 2,490 | 2,547 | 8,795 | 2,922 | 1,527 | 29,159 | 8,759 | 22,824 |
+| Java | 8,304 | 6,106 | 3,673 | 2,241 | 10,716 | 3,614 | 1,536 | 36,190 | 9,467 | 19,311 |
+| Go | 6,114 | 5,449 | 3,333 | 2,620 | 9,666 | 2,934 | 17,954 | 48,070 | 9,267 | 23,095 |
+| Swift | 4,670 | 5,657 | 1,941 | 2,277 | 8,538 | 2,435 | 13,516 | 39,034 | 10,836 | 19,725 |
 
 ### 分類したソース範囲
 
@@ -318,67 +350,67 @@ readsはアプリから初回準備したQuery・after・件数の監査表示�
 |---|---|---|
 | C# | Model・値オブジェクト | [csharp/Models.cs:1–26](csharp/Models.cs#L1-L26) / [csharp/Models.cs:29–49](csharp/Models.cs#L29-L49) / [csharp/Models.cs:61–74](csharp/Models.cs#L61-L74) / [csharp/Models.cs:79–79](csharp/Models.cs#L79-L79) / [csharp/ValueObjects.cs:1–64](csharp/ValueObjects.cs#L1-L64) |
 | C# | Decider | [csharp/Decider.cs:1–123](csharp/Decider.cs#L1-L123) / [csharp/Models.cs:75–78](csharp/Models.cs#L75-L78) |
-| C# | コマンド・ハンドラー・入力検証 | [csharp/Handlers.cs:1–16](csharp/Handlers.cs#L1-L16) / [csharp/Models.cs:50–60](csharp/Models.cs#L50-L60) / [csharp/ValueObjects.cs:65–104](csharp/ValueObjects.cs#L65-L104) |
+| C# | コマンド・共通Handler・入力検証 | [csharp/Handlers.cs:1–16](csharp/Handlers.cs#L1-L16) / [csharp/Models.cs:50–60](csharp/Models.cs#L50-L60) / [csharp/ValueObjects.cs:65–104](csharp/ValueObjects.cs#L65-L104) |
 | C# | DCB接続・メタ情報 | [csharp/Routing.cs:1–35](csharp/Routing.cs#L1-L35) |
-| C# | ドメイン投影 | [csharp/Models.cs:27–27](csharp/Models.cs#L27-L27) / [csharp/Projection.cs:1–77](csharp/Projection.cs#L1-L77) |
+| C# | ドメイン投影 | [csharp/Models.cs:27–27](csharp/Models.cs#L27-L27) / [csharp/Projection.cs:1–81](csharp/Projection.cs#L1-L81) / [csharp/SchoolProjection.cs:1–88](csharp/SchoolProjection.cs#L1-L88) |
 | C# | ユースケース | [csharp/Application.cs:7–10](csharp/Application.cs#L7-L10) / [csharp/Application.cs:18–47](csharp/Application.cs#L18-L47) / [csharp/Models.cs:28–28](csharp/Models.cs#L28-L28) / [csharp/Models.cs:80–87](csharp/Models.cs#L80-L87) |
-| C# | アプリ設定・JSON・CLI | [csharp/Application.cs:1–6](csharp/Application.cs#L1-L6) / [csharp/Application.cs:11–17](csharp/Application.cs#L11-L17) / [csharp/Program.cs:1–21](csharp/Program.cs#L1-L21) |
-| C# | 共通ライブラリ | [csharp/Dcb.cs:1–164](csharp/Dcb.cs#L1-L164) |
-| C# | ドメインテスト | [csharp/DomainTests.cs:1–164](csharp/DomainTests.cs#L1-L164) |
+| C# | アプリ設定・JSON・CLI | [csharp/Application.cs:1–6](csharp/Application.cs#L1-L6) / [csharp/Application.cs:11–17](csharp/Application.cs#L11-L17) / [csharp/Program.cs:1–22](csharp/Program.cs#L1-L22) |
+| C# | 共通ライブラリ | [csharp/Dcb.cs:1–206](csharp/Dcb.cs#L1-L206) |
+| C# | ドメインテスト | [csharp/DomainTests.cs:1–164](csharp/DomainTests.cs#L1-L164) / [csharp/ProjectionTests.cs:1–50](csharp/ProjectionTests.cs#L1-L50) |
 | F# | Model・値オブジェクト | [fsharp/Models.fs:1–72](fsharp/Models.fs#L1-L72) / [fsharp/Models.fs:74–74](fsharp/Models.fs#L74-L74) / [fsharp/Models.fs:76–76](fsharp/Models.fs#L76-L76) / [fsharp/Models.fs:88–101](fsharp/Models.fs#L88-L101) / [fsharp/Models.fs:106–106](fsharp/Models.fs#L106-L106) / [fsharp/ValueObjects.fs:1–33](fsharp/ValueObjects.fs#L1-L33) |
 | F# | Decider | [fsharp/Decider.fs:1–95](fsharp/Decider.fs#L1-L95) / [fsharp/Models.fs:102–105](fsharp/Models.fs#L102-L105) |
-| F# | コマンド・ハンドラー・入力検証 | [fsharp/Handlers.fs:1–13](fsharp/Handlers.fs#L1-L13) / [fsharp/Models.fs:77–87](fsharp/Models.fs#L77-L87) / [fsharp/ValueObjects.fs:34–49](fsharp/ValueObjects.fs#L34-L49) |
+| F# | コマンド・共通Handler・入力検証 | [fsharp/Handlers.fs:1–13](fsharp/Handlers.fs#L1-L13) / [fsharp/Models.fs:77–87](fsharp/Models.fs#L77-L87) / [fsharp/ValueObjects.fs:34–49](fsharp/ValueObjects.fs#L34-L49) |
 | F# | DCB接続・メタ情報 | [fsharp/Routing.fs:1–31](fsharp/Routing.fs#L1-L31) |
-| F# | ドメイン投影 | [fsharp/Models.fs:73–73](fsharp/Models.fs#L73-L73) / [fsharp/Projection.fs:1–58](fsharp/Projection.fs#L1-L58) |
+| F# | ドメイン投影 | [fsharp/Models.fs:73–73](fsharp/Models.fs#L73-L73) / [fsharp/Projection.fs:1–58](fsharp/Projection.fs#L1-L58) / [fsharp/SchoolProjection.fs:1–93](fsharp/SchoolProjection.fs#L1-L93) |
 | F# | ユースケース | [fsharp/Application.fs:6–7](fsharp/Application.fs#L6-L7) / [fsharp/Application.fs:13–55](fsharp/Application.fs#L13-L55) / [fsharp/Models.fs:75–75](fsharp/Models.fs#L75-L75) / [fsharp/Models.fs:107–114](fsharp/Models.fs#L107-L114) |
-| F# | アプリ設定・JSON・CLI | [fsharp/Application.fs:1–5](fsharp/Application.fs#L1-L5) / [fsharp/Application.fs:8–12](fsharp/Application.fs#L8-L12) / [fsharp/Program.fs:1–32](fsharp/Program.fs#L1-L32) |
-| F# | 共通ライブラリ | [fsharp/Dcb.fs:1–117](fsharp/Dcb.fs#L1-L117) |
-| F# | ドメインテスト | [fsharp/DomainTests.fs:1–141](fsharp/DomainTests.fs#L1-L141) |
+| F# | アプリ設定・JSON・CLI | [fsharp/Application.fs:1–5](fsharp/Application.fs#L1-L5) / [fsharp/Application.fs:8–12](fsharp/Application.fs#L8-L12) / [fsharp/Program.fs:1–35](fsharp/Program.fs#L1-L35) |
+| F# | 共通ライブラリ | [fsharp/Dcb.fs:1–156](fsharp/Dcb.fs#L1-L156) |
+| F# | ドメインテスト | [fsharp/DomainTests.fs:1–141](fsharp/DomainTests.fs#L1-L141) / [fsharp/ProjectionTests.fs:1–48](fsharp/ProjectionTests.fs#L1-L48) |
 | Rust | Model・値オブジェクト | [rust/src/models.rs:1–58](rust/src/models.rs#L1-L58) / [rust/src/models.rs:67–67](rust/src/models.rs#L67-L67) / [rust/src/models.rs:78–104](rust/src/models.rs#L78-L104) / [rust/src/models.rs:118–133](rust/src/models.rs#L118-L133) / [rust/src/models.rs:140–140](rust/src/models.rs#L140-L140) / [rust/src/value_objects.rs:1–29](rust/src/value_objects.rs#L1-L29) |
 | Rust | Decider | [rust/src/decider.rs:1–107](rust/src/decider.rs#L1-L107) / [rust/src/models.rs:134–139](rust/src/models.rs#L134-L139) |
-| Rust | コマンド・ハンドラー・入力検証 | [rust/src/handlers.rs:1–14](rust/src/handlers.rs#L1-L14) / [rust/src/models.rs:105–117](rust/src/models.rs#L105-L117) / [rust/src/value_objects.rs:30–44](rust/src/value_objects.rs#L30-L44) |
+| Rust | コマンド・共通Handler・入力検証 | [rust/src/handlers.rs:1–14](rust/src/handlers.rs#L1-L14) / [rust/src/models.rs:105–117](rust/src/models.rs#L105-L117) / [rust/src/value_objects.rs:30–44](rust/src/value_objects.rs#L30-L44) |
 | Rust | DCB接続・メタ情報 | [rust/src/routing.rs:1–31](rust/src/routing.rs#L1-L31) |
-| Rust | ドメイン投影 | [rust/src/models.rs:59–66](rust/src/models.rs#L59-L66) / [rust/src/projection.rs:1–38](rust/src/projection.rs#L1-L38) |
-| Rust | ユースケース | [rust/src/application.rs:9–15](rust/src/application.rs#L9-L15) / [rust/src/application.rs:20–32](rust/src/application.rs#L20-L32) / [rust/src/models.rs:68–77](rust/src/models.rs#L68-L77) / [rust/src/models.rs:141–150](rust/src/models.rs#L141-L150) |
-| Rust | アプリ設定・JSON・CLI | [rust/src/application.rs:1–8](rust/src/application.rs#L1-L8) / [rust/src/application.rs:16–19](rust/src/application.rs#L16-L19) / [rust/src/main.rs:1–11](rust/src/main.rs#L1-L11) |
-| Rust | 共通ライブラリ | [rust/src/dcb.rs:1–138](rust/src/dcb.rs#L1-L138) |
-| Rust | ドメインテスト | [rust/src/domain_tests.rs:1–130](rust/src/domain_tests.rs#L1-L130) |
+| Rust | ドメイン投影 | [rust/src/models.rs:59–66](rust/src/models.rs#L59-L66) / [rust/src/projection.rs:1–38](rust/src/projection.rs#L1-L38) / [rust/src/school_projection.rs:1–61](rust/src/school_projection.rs#L1-L61) |
+| Rust | ユースケース | [rust/src/application.rs:10–16](rust/src/application.rs#L10-L16) / [rust/src/application.rs:21–33](rust/src/application.rs#L21-L33) / [rust/src/models.rs:68–77](rust/src/models.rs#L68-L77) / [rust/src/models.rs:141–150](rust/src/models.rs#L141-L150) |
+| Rust | アプリ設定・JSON・CLI | [rust/src/application.rs:1–9](rust/src/application.rs#L1-L9) / [rust/src/application.rs:17–20](rust/src/application.rs#L17-L20) / [rust/src/main.rs:1–12](rust/src/main.rs#L1-L12) |
+| Rust | 共通ライブラリ | [rust/src/dcb.rs:1–164](rust/src/dcb.rs#L1-L164) |
+| Rust | ドメインテスト | [rust/src/domain_tests.rs:1–131](rust/src/domain_tests.rs#L1-L131) / [rust/src/projection_tests.rs:1–27](rust/src/projection_tests.rs#L1-L27) |
 | TypeScript＋Zod | Model・値オブジェクト | [typescript/models.ts:1–51](typescript/models.ts#L1-L51) / [typescript/models.ts:54–54](typescript/models.ts#L54-L54) / [typescript/models.ts:57–57](typescript/models.ts#L57-L57) / [typescript/models.ts:70–84](typescript/models.ts#L70-L84) / [typescript/models.ts:90–90](typescript/models.ts#L90-L90) / [typescript/models.ts:100–100](typescript/models.ts#L100-L100) / [typescript/valueObjects.ts:1–19](typescript/valueObjects.ts#L1-L19) / [typescript/valueObjects.ts:41–46](typescript/valueObjects.ts#L41-L46) |
 | TypeScript＋Zod | Decider | [typescript/decider.ts:1–97](typescript/decider.ts#L1-L97) / [typescript/models.ts:85–89](typescript/models.ts#L85-L89) |
-| TypeScript＋Zod | コマンド・ハンドラー・入力検証 | [typescript/handlers.ts:1–16](typescript/handlers.ts#L1-L16) / [typescript/models.ts:58–69](typescript/models.ts#L58-L69) / [typescript/valueObjects.ts:20–40](typescript/valueObjects.ts#L20-L40) |
+| TypeScript＋Zod | コマンド・共通Handler・入力検証 | [typescript/handlers.ts:1–16](typescript/handlers.ts#L1-L16) / [typescript/models.ts:58–69](typescript/models.ts#L58-L69) / [typescript/valueObjects.ts:20–40](typescript/valueObjects.ts#L20-L40) |
 | TypeScript＋Zod | DCB接続・メタ情報 | [typescript/routing.ts:1–38](typescript/routing.ts#L1-L38) |
-| TypeScript＋Zod | ドメイン投影 | [typescript/models.ts:52–53](typescript/models.ts#L52-L53) / [typescript/projection.ts:1–51](typescript/projection.ts#L1-L51) |
+| TypeScript＋Zod | ドメイン投影 | [typescript/models.ts:52–53](typescript/models.ts#L52-L53) / [typescript/projection.ts:1–51](typescript/projection.ts#L1-L51) / [typescript/schoolProjection.ts:1–64](typescript/schoolProjection.ts#L1-L64) |
 | TypeScript＋Zod | ユースケース | [typescript/application.ts:8–8](typescript/application.ts#L8-L8) / [typescript/application.ts:13–31](typescript/application.ts#L13-L31) / [typescript/models.ts:55–56](typescript/models.ts#L55-L56) / [typescript/models.ts:91–99](typescript/models.ts#L91-L99) |
-| TypeScript＋Zod | アプリ設定・JSON・CLI | [typescript/application.ts:1–7](typescript/application.ts#L1-L7) / [typescript/application.ts:9–12](typescript/application.ts#L9-L12) / [typescript/main.ts:1–9](typescript/main.ts#L1-L9) / [typescript/models.ts:101–101](typescript/models.ts#L101-L101) / [typescript/wire.ts:1–4](typescript/wire.ts#L1-L4) |
-| TypeScript＋Zod | 共通ライブラリ | [typescript/dcb.ts:1–121](typescript/dcb.ts#L1-L121) |
-| TypeScript＋Zod | ドメインテスト | [typescript/domain.test.ts:1–140](typescript/domain.test.ts#L1-L140) |
+| TypeScript＋Zod | アプリ設定・JSON・CLI | [typescript/application.ts:1–7](typescript/application.ts#L1-L7) / [typescript/application.ts:9–12](typescript/application.ts#L9-L12) / [typescript/main.ts:1–10](typescript/main.ts#L1-L10) / [typescript/models.ts:101–101](typescript/models.ts#L101-L101) / [typescript/wire.ts:1–4](typescript/wire.ts#L1-L4) |
+| TypeScript＋Zod | 共通ライブラリ | [typescript/dcb.ts:1–149](typescript/dcb.ts#L1-L149) |
+| TypeScript＋Zod | ドメインテスト | [typescript/domain.test.ts:1–141](typescript/domain.test.ts#L1-L141) / [typescript/projection.test.ts:1–33](typescript/projection.test.ts#L1-L33) |
 | Java | Model・値オブジェクト | [java/Models.java:1–45](java/Models.java#L1-L45) / [java/Models.java:62–143](java/Models.java#L62-L143) / [java/Models.java:211–286](java/Models.java#L211-L286) / [java/ValueObjects.java:1–41](java/ValueObjects.java#L1-L41) |
 | Java | Decider | [java/Decider.java:1–109](java/Decider.java#L1-L109) / [java/Models.java:287–303](java/Models.java#L287-L303) |
-| Java | コマンド・ハンドラー・入力検証 | [java/Models.java:144–210](java/Models.java#L144-L210) / [java/SchoolHandler.java:1–11](java/SchoolHandler.java#L1-L11) / [java/ValueObjects.java:42–64](java/ValueObjects.java#L42-L64) |
+| Java | コマンド・共通Handler・入力検証 | [java/Models.java:144–210](java/Models.java#L144-L210) / [java/SchoolHandler.java:1–11](java/SchoolHandler.java#L1-L11) / [java/ValueObjects.java:42–64](java/ValueObjects.java#L42-L64) |
 | Java | DCB接続・メタ情報 | [java/Routing.java:1–31](java/Routing.java#L1-L31) |
-| Java | ドメイン投影 | [java/Models.java:46–53](java/Models.java#L46-L53) / [java/Projection.java:1–53](java/Projection.java#L1-L53) |
+| Java | ドメイン投影 | [java/Models.java:46–53](java/Models.java#L46-L53) / [java/Projection.java:1–53](java/Projection.java#L1-L53) / [java/SchoolProjection.java:1–68](java/SchoolProjection.java#L1-L68) |
 | Java | ユースケース | [java/Application.java:6–6](java/Application.java#L6-L6) / [java/Application.java:10–26](java/Application.java#L10-L26) / [java/Models.java:54–61](java/Models.java#L54-L61) / [java/Models.java:304–343](java/Models.java#L304-L343) |
-| Java | アプリ設定・JSON・CLI | [java/Application.java:1–5](java/Application.java#L1-L5) / [java/Application.java:7–9](java/Application.java#L7-L9) / [java/Main.java:1–13](java/Main.java#L1-L13) |
-| Java | 共通ライブラリ | [java/playground/dcb/Dcb.java:1–133](java/playground/dcb/Dcb.java#L1-L133) |
-| Java | ドメインテスト | [java/DomainTests.java:1–138](java/DomainTests.java#L1-L138) |
+| Java | アプリ設定・JSON・CLI | [java/Application.java:1–5](java/Application.java#L1-L5) / [java/Application.java:7–9](java/Application.java#L7-L9) / [java/Main.java:1–14](java/Main.java#L1-L14) |
+| Java | 共通ライブラリ | [java/playground/dcb/Dcb.java:1–162](java/playground/dcb/Dcb.java#L1-L162) |
+| Java | ドメインテスト | [java/DomainTests.java:1–138](java/DomainTests.java#L1-L138) / [java/ProjectionTests.java:1–27](java/ProjectionTests.java#L1-L27) |
 | Go | Model・値オブジェクト | [go/domain/models.go:1–81](go/domain/models.go#L1-L81) / [go/domain/models.go:96–169](go/domain/models.go#L96-L169) / [go/domain/models.go:235–308](go/domain/models.go#L235-L308) / [go/domain/value_objects.go:1–88](go/domain/value_objects.go#L1-L88) / [go/domain/value_objects.go:154–160](go/domain/value_objects.go#L154-L160) |
 | Go | Decider | [go/domain/decider.go:1–280](go/domain/decider.go#L1-L280) / [go/domain/models.go:309–321](go/domain/models.go#L309-L321) |
-| Go | コマンド・ハンドラー・入力検証 | [go/domain/handlers.go:1–25](go/domain/handlers.go#L1-L25) / [go/domain/models.go:170–234](go/domain/models.go#L170-L234) / [go/domain/value_objects.go:89–153](go/domain/value_objects.go#L89-L153) |
+| Go | コマンド・共通Handler・入力検証 | [go/domain/handlers.go:1–25](go/domain/handlers.go#L1-L25) / [go/domain/models.go:170–234](go/domain/models.go#L170-L234) / [go/domain/value_objects.go:89–153](go/domain/value_objects.go#L89-L153) |
 | Go | DCB接続・メタ情報 | [go/domain/routing.go:1–71](go/domain/routing.go#L1-L71) |
-| Go | ドメイン投影 | [go/domain/models.go:82–87](go/domain/models.go#L82-L87) / [go/domain/projection.go:1–190](go/domain/projection.go#L1-L190) |
+| Go | ドメイン投影 | [go/domain/models.go:82–87](go/domain/models.go#L82-L87) / [go/domain/projection.go:1–190](go/domain/projection.go#L1-L190) / [go/domain/school_projection.go:1–238](go/domain/school_projection.go#L1-L238) |
 | Go | ユースケース | [go/application.go:25–25](go/application.go#L25-L25) / [go/application.go:32–101](go/application.go#L32-L101) / [go/domain/models.go:88–95](go/domain/models.go#L88-L95) / [go/domain/models.go:322–357](go/domain/models.go#L322-L357) |
-| Go | アプリ設定・JSON・CLI | [go/application.go:1–24](go/application.go#L1-L24) / [go/application.go:26–31](go/application.go#L26-L31) / [go/domain/json.go:1–694](go/domain/json.go#L1-L694) / [go/main.go:1–30](go/main.go#L1-L30) / [go/wire.go:1–52](go/wire.go#L1-L52) |
-| Go | 共通ライブラリ | [go/dcb/store.go:1–333](go/dcb/store.go#L1-L333) |
-| Go | ドメインテスト | [go/domain_test.go:1–211](go/domain_test.go#L1-L211) |
+| Go | アプリ設定・JSON・CLI | [go/application.go:1–24](go/application.go#L1-L24) / [go/application.go:26–31](go/application.go#L26-L31) / [go/domain/json.go:1–694](go/domain/json.go#L1-L694) / [go/main.go:1–39](go/main.go#L1-L39) / [go/wire.go:1–52](go/wire.go#L1-L52) |
+| Go | 共通ライブラリ | [go/dcb/store.go:1–428](go/dcb/store.go#L1-L428) |
+| Go | ドメインテスト | [go/domain_test.go:1–211](go/domain_test.go#L1-L211) / [go/projection_tests.go:1–99](go/projection_tests.go#L1-L99) |
 | Swift | Model・値オブジェクト | [swift/models.swift:1–33](swift/models.swift#L1-L33) / [swift/models.swift:48–64](swift/models.swift#L48-L64) / [swift/models.swift:76–87](swift/models.swift#L76-L87) / [swift/valueObjects.swift:1–39](swift/valueObjects.swift#L1-L39) |
 | Swift | Decider | [swift/decider.swift:1–99](swift/decider.swift#L1-L99) / [swift/models.swift:88–91](swift/models.swift#L88-L91) |
-| Swift | コマンド・ハンドラー・入力検証 | [swift/handlers.swift:1–11](swift/handlers.swift#L1-L11) / [swift/models.swift:65–75](swift/models.swift#L65-L75) / [swift/valueObjects.swift:40–57](swift/valueObjects.swift#L40-L57) |
+| Swift | コマンド・共通Handler・入力検証 | [swift/handlers.swift:1–11](swift/handlers.swift#L1-L11) / [swift/models.swift:65–75](swift/models.swift#L65-L75) / [swift/valueObjects.swift:40–57](swift/valueObjects.swift#L40-L57) |
 | Swift | DCB接続・メタ情報 | [swift/routing.swift:1–32](swift/routing.swift#L1-L32) |
-| Swift | ドメイン投影 | [swift/models.swift:34–39](swift/models.swift#L34-L39) / [swift/projection.swift:1–49](swift/projection.swift#L1-L49) |
+| Swift | ドメイン投影 | [swift/models.swift:34–39](swift/models.swift#L34-L39) / [swift/projection.swift:1–49](swift/projection.swift#L1-L49) / [swift/schoolProjection.swift:1–65](swift/schoolProjection.swift#L1-L65) |
 | Swift | ユースケース | [swift/application.swift:4–4](swift/application.swift#L4-L4) / [swift/application.swift:8–22](swift/application.swift#L8-L22) / [swift/models.swift:40–47](swift/models.swift#L40-L47) / [swift/models.swift:92–99](swift/models.swift#L92-L99) |
 | Swift | アプリ設定・JSON・CLI | [swift/application.swift:1–3](swift/application.swift#L1-L3) / [swift/application.swift:5–7](swift/application.swift#L5-L7) / [swift/main.swift:1–9](swift/main.swift#L1-L9) / [swift/wire.swift:1–338](swift/wire.swift#L1-L338) |
-| Swift | 共通ライブラリ | [swift/dcb.swift:1–142](swift/dcb.swift#L1-L142) |
-| Swift | ドメインテスト | [swift/domainTests.swift:1–135](swift/domainTests.swift#L1-L135) |
+| Swift | 共通ライブラリ | [swift/dcb.swift:1–175](swift/dcb.swift#L1-L175) |
+| Swift | ドメインテスト | [swift/domainTests.swift:1–135](swift/domainTests.swift#L1-L135) / [swift/projectionTests.swift:1–28](swift/projectionTests.swift#L1-L28) |
 
 <!-- code-stats:end -->
 

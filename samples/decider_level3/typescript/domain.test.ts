@@ -11,10 +11,11 @@ import {schoolHandler} from "./handlers.ts";
 import {describeEvent} from "./routing.ts";
 import {empty as emptyRegisters,copy,reduce,list,fold} from "./projection.ts";
 
+import {SchoolProjection} from "./schoolProjection.ts";
 function givenHistory(events:readonly Event[]){
   const store=new EventStore<Event>(describeEvent,e=>EventSchema.parse(e));
   if(events.length)store.append("given",{items:[]},0,events);
-  const projection=new LiveProjection(emptyRegisters(),reduce,copy);store.subscribe(projection.accept);
+  const projection=new SchoolProjection();store.subscribe(projection.accept);
   let reads=0;
   const port:CommandStore<Event>={read:q=>{reads++;return store.read(q);},append:(...args)=>store.append(...args)};
   return {store,projection,executor:new DcbExecutor<Event,Rejection>(port),reads:()=>reads};
@@ -22,7 +23,7 @@ function givenHistory(events:readonly Event[]){
 function checkProjection(g:ReturnType<typeof givenHistory>){
   const events=g.store.read({items:[]}).events,snapshot=g.projection.snapshot();
   assert.equal(snapshot.position,events.length);
-  assert.deepEqual(list(snapshot.state),list(fold(events)));
+  assert.deepEqual(snapshot.state,list(fold(events)));
 }
 function check(name:string,given:readonly Event[],when:Command,thenEvents:readonly Event[],thenErrors:readonly Rejection[],invalid:boolean){
   const g=givenHistory(given); // Given

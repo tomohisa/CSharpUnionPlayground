@@ -6,7 +6,7 @@
 
 ### 1. 公開ライブラリが学校のsealed interfaceを知らずに済む
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L22-L25)
+出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L23-L26)
 
 ```java
     public interface CommandStore<E> {
@@ -45,14 +45,14 @@ Recorded<Event>のpayloadを学校のポリモーフィズムとして読むこ�
 
 ### 3. スナップショットの状態と位置をひとつの値にできる
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L62-L63)
+出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L63-L64)
 
 ```java
     public record Snapshot<S>(int position,S state) {}
     public static final class LiveProjection<E,S> {
 ```
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L77-L77)
+出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L78-L78)
 
 ```java
         public synchronized Snapshot<S> snapshot() { return new Snapshot<>(checkpoint,copyState.apply(state)); }
@@ -86,7 +86,7 @@ mutableなローカルコピーから、Map.copyOfを持つ新しいRegistersを
 
 ### 3. Javaの型消去はあるが、payloadをObjectへ崩す必要はない
 
-出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L80-L82)
+出典：[java/playground/dcb/Dcb.java](playground/dcb/Dcb.java#L81-L83)
 
 ```java
     public sealed interface Preparation<E,R> permits Emit, Reject {}
@@ -105,3 +105,13 @@ ID・定員・点数・日付のfactoryがInputViolationを投げ、Handlerが�
 現在のポリシーで値を検証するcreate系factoryと、過去の事実を再検証しないfromEvent／restore系factoryを区別します。イベント・JSONの保存形と一覧DTOはプリミティブを保ち、投影で復元した値を取り出して使います。全てのStateの全フィールドを名目的なVOへ置き換えた実装ではありません。ValidatedCommandも永続化せず、新しいコマンドを受ける境界だけに使います。
 
 76ケースのGWTではExecutor経由の結果と正確なイベントpayload、拒否時の無追記、投影と再構築の一致を確認します。これとは別に、ストアを使わないDeciderの3例、VOのfactoryと履歴復元、最後の1席の競合再判断もテストします。言語固有の不正入力ケースも追加しています。テスト全体をコード量の別枠へ計上しています。
+
+## 大きな一覧Projectionの更新
+
+学校全体のライブ一覧は[SchoolProjection.java](SchoolProjection.java)へ分離しました。既存のProjectionにある不変MapやコピーするReducerは、タグで絞ったコマンド判断用モデルと参照再生に残しています。ライブ一覧の更新には使いません。
+
+ライブ一覧は汎用IndexedProjectionのハッシュ索引を使い、バッチ中に触った行だけを差分へ積み、全イベントを処理できてから反映します。クラスの名簿はイベント位置を内部ノードIDにした連結索引です。追加・取消で名簿全体をコピーせず、前後のノードだけを更新します。削除したノードは実際に索引から削除するため、同じ生徒の取消と再登録を繰り返してもノードを蓄積しません。
+
+一覧要求時だけ名簿の配列／listと並び順を持つDTOを組み立てます。過去のDTOはその後のイベントで変わりません。全件Snapshotは出力サイズに比例する仕事があり、ロック中の読み取りもあるため、大規模な並行クエリまで一定時間という保証ではありません。頻繁な大量一覧の提供には、ページングや公開用Snapshotの別管理が必要です。
+
+[ProjectionTests.java](ProjectionTests.java)では1千・1万・10万件を作り、更新と名簿拡大の時間を全件Snapshotと分けて測ります。途中失敗・位置の欠落で部分更新しないこと、再配送、過去Snapshotの不変性、取消と再登録後の順序と行数も検証します。[ローカルの測定値](../observed/projection-scaling.md)は言語の総合性能順位ではなく、この更新経路のサイズ依存を見るためのものです。

@@ -8,7 +8,11 @@ public sealed record Registers(ImmutableSortedDictionary<string,Student> Student
 {
     public static Registers Empty => new(ImmutableSortedDictionary.Create<string,Student>(StringComparer.Ordinal),
         ImmutableSortedDictionary.Create<string,ClassState>(StringComparer.Ordinal), ImmutableSortedDictionary.Create<(string,string),Enrollment>(Comparer<(string,string)>.Create((a,b)=>{int c=CompareIds(a.Item1,b.Item1);return c!=0?c:CompareIds(a.Item2,b.Item2);})));
-    public static int CompareIds(string a,string b)=>Encoding.UTF8.GetBytes(a).AsSpan().SequenceCompareTo(Encoding.UTF8.GetBytes(b));
+    public static int CompareIds(string a,string b)
+    {
+        var x=a.EnumerateRunes();var y=b.EnumerateRunes();
+        while(true){bool ax=x.MoveNext(),by=y.MoveNext();if(!ax||!by)return ax?1:by?-1:0;int c=x.Current.Value.CompareTo(y.Current.Value);if(c!=0)return c;}
+    }
     private static readonly IComparer<string> IdOrder=Comparer<string>.Create(CompareIds);
     public DecisionModel DecisionModel() => new([.. Students.Values.OrderBy(s=>s.StudentId,IdOrder)],
         [.. Classes.Values.OrderBy(c=>Decider.PlanOf(c).ClassId,IdOrder)],

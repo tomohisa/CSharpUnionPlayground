@@ -1,6 +1,7 @@
 use crate::{dcb::*,models::*,projection::{self,Registers},routing,handlers::SchoolHandler};
 use std::{collections::BTreeMap,sync::Arc};
 use serde::Serialize;
+use crate::school_projection::SchoolProjection;
 #[derive(Serialize)]
 pub struct ReadAudit{query:Query,after:usize,returned:usize}
 #[derive(Serialize)]
@@ -15,18 +16,18 @@ fn committed(steps:&mut Vec<Trace>,op:&str,t:PreparedCommand<Rejection>){
 pub fn run(history:Vec<Recorded<Event>>,operations:Vec<Operation>)->RunOutput{
     let store=EventStore::new(routing::describe,Clone::clone);
     store.load(history);
-    let projection=Arc::new(LiveProjection::new(Registers::default(),projection::reduce));let listener=projection.clone();store.subscribe(Box::new(move|batch|listener.accept(batch)));
+    let projection=Arc::new(SchoolProjection::new());let listener=projection.clone();store.subscribe(Box::new(move|batch|listener.accept(batch)));
     let executor=DcbExecutor{store:&store};
     let mut tickets=BTreeMap::new();let mut steps=vec![];let mut lists=vec![];let mut reads=vec![];
     for op in operations{match op{
         Operation::Execute{command_id,command}=>{let t=prepared(&executor,&mut reads,&command_id,command);committed(&mut steps,"Execute",t);},
         Operation::Prepare{key,command_id,command}=>{let t=prepared(&executor,&mut reads,&command_id,command);steps.push(Trace{operation:"Prepare".into(),status:"Prepared".into(),conflicts:0,appended:0,position:t.after as i32,errors:vec![]});assert!(tickets.insert(key,t).is_none(),"duplicate ticket");},
         Operation::Commit{key}=>{let t=tickets.remove(&key).expect("unknown ticket");committed(&mut steps,"Commit",t);},
-        Operation::ListAll=>{assert_eq!(store.listener_faults(),0,"projection unavailable; rebuild required");let (position,s)=projection.snapshot();lists.push(projection::list(&s));steps.push(Trace{operation:"ListAll".into(),status:"Listed".into(),conflicts:0,appended:0,position:position as i32,errors:vec![]});},
-        Operation::Rebuild=>{let fresh=LiveProjection::new(Registers::default(),projection::reduce);assert!(fresh.accept(&store.read(&Query{items:vec![]}).events));let(position,s)=fresh.snapshot();lists.push(projection::list(&s));steps.push(Trace{operation:"Rebuild".into(),status:"Rebuilt".into(),conflicts:0,appended:0,position:position as i32,errors:vec![]});},
-        Operation::Redeliver=>{assert!(projection.accept(&store.read(&Query{items:vec![]}).events));steps.push(Trace{operation:"Redeliver".into(),status:"Redelivered".into(),conflicts:0,appended:0,position:projection.snapshot().0 as i32,errors:vec![]});}
+        Operation::ListAll=>{assert_eq!(store.listener_faults(),0,"projection unavailable; rebuild required");let (position,s)=projection.snapshot();lists.push(s);steps.push(Trace{operation:"ListAll".into(),status:"Listed".into(),conflicts:0,appended:0,position:position as i32,errors:vec![]});},
+        Operation::Rebuild=>{let fresh=SchoolProjection::new();assert!(fresh.accept(&store.read(&Query{items:vec![]}).events));let(position,s)=fresh.snapshot();lists.push(s);steps.push(Trace{operation:"Rebuild".into(),status:"Rebuilt".into(),conflicts:0,appended:0,position:position as i32,errors:vec![]});},
+        Operation::Redeliver=>{assert!(projection.accept(&store.read(&Query{items:vec![]}).events));steps.push(Trace{operation:"Redeliver".into(),status:"Redelivered".into(),conflicts:0,appended:0,position:projection.checkpoint() as i32,errors:vec![]});}
     }}
-    let events=store.read(&Query{items:vec![]}).events;let fresh=LiveProjection::new(Registers::default(),projection::reduce);assert!(fresh.accept(&events));let(checkpoint,s)=projection.snapshot();
+    let events=store.read(&Query{items:vec![]}).events;let fresh=SchoolProjection::new();assert!(fresh.accept(&events));let(checkpoint,s)=projection.snapshot();
     assert_eq!(store.listener_faults(),0,"projection unavailable; rebuild required");
-    RunOutput{events,steps,lists,list:projection::list(&s),rebuilt:projection::list(&fresh.snapshot().1),checkpoint,reads,listener_faults:store.listener_faults()}
+    RunOutput{events,steps,lists,list:s,rebuilt:fresh.snapshot().1,checkpoint,reads,listener_faults:store.listener_faults()}
 }

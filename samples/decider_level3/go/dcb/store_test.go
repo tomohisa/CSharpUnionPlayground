@@ -138,3 +138,38 @@ func TestExecutorWithUnrelatedCommand(t *testing.T) {
 		t.Fatal("invalid command advanced")
 	}
 }
+
+func TestIndexedProjectionAtomicity(t *testing.T) {
+	p := NewIndexedProjection(func(tx *IndexBatch[string, int], e Recorded[counter]) {
+		if e.Payload.Delta < 0 {
+			panic("invalid")
+		}
+		old, _ := tx.Find(e.Payload.Key)
+		tx.Put(e.Payload.Key, old+e.Payload.Delta)
+	})
+	item := func(n, delta int) Recorded[counter] {
+		return Recorded[counter]{Position: n, CommandId: "index", EventType: "CounterDelta", Tags: []Tag{}, Payload: counter{Key: "x", Delta: delta}}
+	}
+	if !p.Accept([]Recorded[counter]{item(1, 3)}) {
+		t.Fatal("initial")
+	}
+	work := p.Work()
+	value := 0
+	p.Read(func(rows map[string]int) { value = rows["x"] })
+	if value != 3 {
+		t.Fatal("initial state")
+	}
+	if p.Accept([]Recorded[counter]{item(2, 4), item(3, -1)}) || p.Checkpoint() != 1 || p.Work() != work {
+		t.Fatal("failed batch was committed")
+	}
+	p.Read(func(rows map[string]int) { value = rows["x"] })
+	if value != 3 {
+		t.Fatal("partial state")
+	}
+	if p.Accept([]Recorded[counter]{item(2, 4), item(4, 5)}) || p.Checkpoint() != 1 {
+		t.Fatal("gap")
+	}
+	if !p.Accept([]Recorded[counter]{item(1, 3)}) || p.Work() != work {
+		t.Fatal("redelivery")
+	}
+}

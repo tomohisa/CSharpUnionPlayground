@@ -136,3 +136,29 @@ impl<'a,E:Clone+Send+'a> DcbExecutor<'a,E> {
     }
     pub fn execute<C:'a,R:'a,H:CommandHandler<C,E,R>+'a>(&self,id:&str,command:C,handler:&'a H)->HandlingResult<R>{self.prepare(id,command,handler).commit()}
 }
+
+// Clone is per touched row, never per entire projection.
+pub struct IndexBatch<'a,K:std::hash::Hash+Eq+Clone,V:Clone>{rows:&'a std::collections::HashMap<K,V>,changes:std::collections::HashMap<K,Option<V>>,work:u64}
+impl<K:std::hash::Hash+Eq+Clone,V:Clone> IndexBatch<'_,K,V>{
+    pub fn find(&mut self,key:&K)->Option<V>{self.work+=1;match self.changes.get(key){Some(v)=>v.clone(),None=>self.rows.get(key).cloned()}}
+    pub fn get(&mut self,key:&K)->V{self.find(key).expect("missing index row")}
+    pub fn put(&mut self,key:K,value:V){self.work+=1;self.changes.insert(key,Some(value));}
+    pub fn delete(&mut self,key:K){self.work+=1;self.changes.insert(key,None);}
+}
+struct IndexState<K,V>{rows:std::collections::HashMap<K,V>,checkpoint:usize,work:u64}
+pub struct IndexedProjection<K:std::hash::Hash+Eq+Clone,V:Clone,E>{inner:Mutex<IndexState<K,V>>,reduce:Box<dyn Fn(&mut IndexBatch<K,V>,&Recorded<E>)->Result<(),String>+Send+Sync>}
+impl<K:std::hash::Hash+Eq+Clone,V:Clone,E> IndexedProjection<K,V,E>{
+    pub fn new(reduce:impl Fn(&mut IndexBatch<K,V>,&Recorded<E>)->Result<(),String>+Send+Sync+'static)->Self{Self{inner:Mutex::new(IndexState{rows:std::collections::HashMap::new(),checkpoint:0,work:0}),reduce:Box::new(reduce)}}
+    pub fn accept(&self,events:&[Recorded<E>])->bool{
+        let mut s=self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        let mut batch=IndexBatch{rows:&s.rows,changes:std::collections::HashMap::new(),work:0};let mut position=s.checkpoint;
+        for e in events{if e.position<=position{continue;}if e.position!=position+1{return false;}if (self.reduce)(&mut batch,e).is_err(){return false;}position=e.position;}
+        let work=batch.work;let changes=batch.changes;
+        for(key,value)in changes{match value{Some(v)=>{s.rows.insert(key,v);},None=>{s.rows.remove(&key);}}}
+        s.checkpoint=position;s.work+=work;true
+    }
+    pub fn checkpoint(&self)->usize{self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner).checkpoint}
+    pub fn row_count(&self)->usize{self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner).rows.len()}
+    pub fn work(&self)->u64{self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner).work}
+    pub fn read<T>(&self,query:impl FnOnce(&std::collections::HashMap<K,V>)->T)->(usize,T){let s=self.inner.lock().unwrap_or_else(std::sync::PoisonError::into_inner);(s.checkpoint,query(&s.rows))}
+}

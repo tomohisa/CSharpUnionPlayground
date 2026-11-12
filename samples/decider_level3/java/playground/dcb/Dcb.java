@@ -1,4 +1,5 @@
 package playground.dcb;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -129,5 +130,33 @@ public final class Dcb {
             return new PreparedCommand<>(ticket.query(),ticket.after(),ticket.returned(),true,()->processor.commit(ticket));
         }
         public <C> HandlingResult<R> execute(String id,C command,CommandHandler<C,E,R> handler){return prepare(id,command,handler).commit();}
+    }
+
+    public static final class IndexBatch<K,V>{
+        private final Map<K,V> rows;
+        private final Map<K,Optional<V>> changes=new HashMap<>();
+        private long work;
+        private IndexBatch(Map<K,V> rows){this.rows=rows;}
+        public Optional<V> find(K key){work++;return changes.containsKey(key)?changes.get(key):Optional.ofNullable(rows.get(key));}
+        public V get(K key){return find(key).orElseThrow();}
+        public void put(K key,V value){work++;changes.put(key,Optional.of(value));}
+        public void delete(K key){work++;changes.put(key,Optional.empty());}
+    }
+    public static final class IndexedProjection<K,V,E>{
+        private final Map<K,V> rows=new HashMap<>();
+        private final java.util.function.BiConsumer<IndexBatch<K,V>,Recorded<E>> reduce;
+        private int checkpoint;private long work;
+        public IndexedProjection(java.util.function.BiConsumer<IndexBatch<K,V>,Recorded<E>> reduce){this.reduce=reduce;}
+        public synchronized int checkpoint(){return checkpoint;}
+        public synchronized int rowCount(){return rows.size();}
+        public synchronized long work(){return work;}
+        public synchronized boolean accept(List<Recorded<E>> events){
+            var batch=new IndexBatch<K,V>(rows);int position=checkpoint;
+            try{for(var e:events){if(e.position()<=position)continue;if(e.position()!=position+1)return false;reduce.accept(batch,e);position=e.position();}}
+            catch(RuntimeException error){return false;}
+            batch.changes.forEach((key,value)->{if(value.isPresent())rows.put(key,value.get());else rows.remove(key);});
+            checkpoint=position;work+=batch.work;return true;
+        }
+        public synchronized <T> Snapshot<T> read(Function<Map<K,V>,T> query){return new Snapshot<>(checkpoint,query.apply(Collections.unmodifiableMap(rows)));}
     }
 }

@@ -5,9 +5,18 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 )
 
 func main() {
+	if len(os.Args) == 3 && os.Args[1] == "--projection-scale" {
+		n, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			panic(err)
+		}
+		projectionTests(n)
+		return
+	}
 	if err := run(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

@@ -9,6 +9,16 @@ module LibraryTests =
     let describe (e:Counter):EventDescriptor={EventType="CounterDelta";Tags=[tag e.Key;{Category="scope";Keys=["test"]}]}
     let check value=if not value then failwith "DCB library probe failed"
     let run()=
+        let indexed=IndexedProjection<string,int,Counter>(fun tx e->
+            if e.Payload.Delta<0 then failwith "invalid"
+            tx.Put(e.Payload.Key,(tx.TryGet e.Payload.Key |> Option.defaultValue 0)+e.Payload.Delta))
+        let item n delta:Recorded<Counter>={Position=n;CommandId="index";EventType="CounterDelta";Tags=[];Payload={Key="x";Delta=delta}}
+        check(indexed.Accept [item 1 3] && snd(indexed.Read(fun rows->rows["x"]))=3)
+        let indexWork=indexed.Work
+        check(not(indexed.Accept [item 2 4;item 3 -1]) && indexed.Checkpoint=1 && snd(indexed.Read(fun rows->rows["x"]))=3 && indexed.Work=indexWork)
+        check(not(indexed.Accept [item 2 4;item 4 5]) && indexed.Checkpoint=1)
+        check(indexed.Accept [item 1 3] && indexed.Work=indexWork)
+
         let executorStore=EventStore(describe,id)
         let executor:IDcbExecutor<Counter,string>=DcbExecutor(executorStore,3)
         let handler:CommandHandler<int,Counter,string>={

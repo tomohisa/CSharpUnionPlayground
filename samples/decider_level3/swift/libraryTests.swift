@@ -16,6 +16,12 @@ private struct CounterHandler:CommandHandler{
     func handle(_ events:[Recorded<Counter>],_ n:Int)->Preparation<Counter,String>{.emit([Counter(key:"executor",delta:n)])}
 }
 func libraryTests(){
+    let indexed=IndexedProjection<String,Int,Counter>{tx,e in if e.payload.delta<0{throw IndexFailure.invalid};tx.put(e.payload.key,(tx.find(e.payload.key) ?? 0)+e.payload.delta)}
+    func item(_ n:Int,_ delta:Int)->Recorded<Counter>{Recorded(position:n,commandId:"index",eventType:"CounterDelta",tags:[],payload:Counter(key:"x",delta:delta))}
+    precondition(indexed.accept([item(1,3)]) && indexed.read{$0["x"] ?? 0}.1==3);let indexWork=indexed.work
+    precondition(!indexed.accept([item(2,4),item(3,-1)]) && indexed.checkpoint==1 && indexed.work==indexWork && indexed.read{$0["x"] ?? 0}.1==3)
+    precondition(!indexed.accept([item(2,4),item(4,5)]) && indexed.checkpoint==1);precondition(indexed.accept([item(1,3)]) && indexed.work==indexWork)
+
     let executorStore=EventStore(describe:describeCounter,copyPayload:{$0}),executor=DcbExecutor(store:executorStore)
     precondition(executor.execute("valid",5,CounterHandler()).appended==1)
     precondition(executor.execute("invalid",0,CounterHandler()).status=="Rejected" && executorStore.read(Query(items:[])).after==1)

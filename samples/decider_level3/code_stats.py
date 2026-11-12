@@ -12,7 +12,7 @@ SOURCES=[('C#','csharp','.cs'),('F#','fsharp','.fs'),
 SKIP={'bin','obj','target','node_modules','.build'}
 TESTS={'LibraryTests.cs','LibraryTests.fs','dcb_tests.rs','dcb.test.ts','DcbTests.java','libraryTests.swift'}
 ROLES=['Model','Decider','Command','Connection','Projection','UseCase','Boundary','Library','DomainTest']
-LABELS=['Model・値オブジェクト','Decider','コマンド・ハンドラー・入力検証','DCB接続・メタ情報','ドメイン投影','ユースケース','アプリ設定・JSON・CLI','共通ライブラリ','ドメインテスト']
+LABELS=['Model・値オブジェクト','Decider','コマンド・共通Handler・入力検証','DCB接続・メタ情報','ドメイン投影','ユースケース','アプリ設定・JSON・CLI','共通ライブラリ','ドメインテスト']
 START,END='<!-- code-stats:start -->','<!-- code-stats:end -->'
 def collect():
  manifest=json.loads((HERE/'code_stats_classification.json').read_text())

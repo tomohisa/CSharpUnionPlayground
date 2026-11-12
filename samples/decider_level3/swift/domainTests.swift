@@ -9,13 +9,13 @@ final class CountingStore:CommandStore,@unchecked Sendable {
 }
 struct GivenHistory {
     let store:EventStore<Event>
-    let projection:LiveProjection<Event,Registers>
+    let projection:SchoolProjection
     let port:CountingStore
     let executor:DcbExecutor<Event>
     init(_ events:[Event]){
         store=EventStore(describe:describeEvent,copyPayload:{$0})
         if !events.isEmpty{_ = store.append("given",Query(items:[]),0,events)}
-        projection=LiveProjection(Registers(),reduce,{$0});store.subscribe(projection.accept)
+        projection=SchoolProjection();store.subscribe(projection.accept)
         port=CountingStore(store);executor=DcbExecutor(store:port)
     }
 }
@@ -23,7 +23,7 @@ func domainTests(){
     func encoded<T:Encodable>(_ value:T)->Data{let encoder=JSONEncoder();encoder.outputFormatting=[.sortedKeys];return try! encoder.encode(value)}
     func checkProjection(_ g:GivenHistory){
         let events=g.store.read(Query(items:[])).events, (position,state)=g.projection.snapshot()
-        precondition(position==events.count && encoded(state.list())==encoded(fold(events).list()),"live / replay state")
+        precondition(position==events.count && encoded(state)==encoded(fold(events).list()),"live / replay state")
     }
     func check(_ name:String,_ given:[Event],_ when:Command,_ thenEvents:[Event],_ thenErrors:[Rejection],_ invalid:Bool){
         let g=GivenHistory(given) // Given

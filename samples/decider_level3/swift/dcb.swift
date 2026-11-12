@@ -140,3 +140,36 @@ public struct DcbExecutor<E:Sendable>:DcbExecutorApi {
     }
     public func execute<H:CommandHandler>(_ id:String,_ command:H.CommandInput,_ handler:H)->HandlingResult<H.Rejection> where H.EventOutput == E {prepare(id,command,handler).commit()}
 }
+
+public final class IndexBatch<K:Hashable,V>{
+    private let findBase:(K)->V?
+    fileprivate var changes:[K:IndexEdit<V>]=[:]
+    fileprivate var work:Int64=0
+    fileprivate init(_ find:@escaping(K)->V?){findBase=find}
+    public func find(_ key:K)->V?{work+=1;if let e=changes[key]{switch e{case .put(let v):return v;case .remove:return nil}};return findBase(key)}
+    public func get(_ key:K)throws->V{guard let value=find(key)else{throw IndexFailure.missing};return value}
+    public func put(_ key:K,_ value:V){work+=1;changes[key] = .put(value)}
+    public func delete(_ key:K){work+=1;changes[key] = .remove}
+}
+fileprivate enum IndexEdit<V>{case put(V);case remove}
+public enum IndexFailure:Error{case missing;case invalid}
+public final class IndexedProjection<K:Hashable & Sendable,V:Sendable,E:Sendable>:@unchecked Sendable{
+    private let gate=NSLock()
+    private var rows:[K:V]=[:]
+    private var position=0
+    private var operations:Int64=0
+    private let reduce:(IndexBatch<K,V>,Recorded<E>)throws->Void
+    public init(_ reduce:@escaping(IndexBatch<K,V>,Recorded<E>)throws->Void){self.reduce=reduce}
+    public var checkpoint:Int{gate.lock();defer{gate.unlock()};return position}
+    public var rowCount:Int{gate.lock();defer{gate.unlock()};return rows.count}
+    public var work:Int64{gate.lock();defer{gate.unlock()};return operations}
+    public func accept(_ events:[Recorded<E>])->Bool{
+        gate.lock();defer{gate.unlock()}
+        let batch=IndexBatch<K,V>({self.rows[$0]});var next=position
+        do{for e in events{if e.position<=next{continue};if e.position != next+1{return false};try reduce(batch,e);next=e.position}}
+        catch{return false}
+        for(key,edit)in batch.changes{switch edit{case .put(let value):rows[key]=value;case .remove:rows.removeValue(forKey:key)}}
+        position=next;operations+=batch.work;return true
+    }
+    public func read<T>(_ query:([K:V])->T)->(Int,T){gate.lock();defer{gate.unlock()};return(position,query(rows))}
+}

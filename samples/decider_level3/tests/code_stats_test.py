@@ -22,8 +22,8 @@ class StatisticsTests(unittest.TestCase):
                 self.assertGreater(groups['DomainTest'][metric],0)
                 self.assertEqual(groups['Total'][metric],groups['ApplicationTotal'][metric]+groups['Library'][metric]+groups['DomainTest'][metric])
             tests=[file for file in row['files'] if any(s['role']=='DomainTest' for s in file['segments'])]
-            self.assertEqual(len(tests),1,row['language'])
-            self.assertTrue(all(s['role']=='DomainTest' for s in tests[0]['segments']))
+            self.assertGreaterEqual(len(tests),2,row['language'])
+            self.assertTrue(all(s['role']=='DomainTest' for file in tests for s in file['segments']))
 
     def test_same_ranges_for_blank_lines_and_unicode_characters(self):
         with tempfile.TemporaryDirectory() as name:

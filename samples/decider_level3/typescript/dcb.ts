@@ -119,3 +119,31 @@ export class DcbExecutor<E,R> implements DcbExecutorApi<E,R> {
   }
   execute<C>(id:string,command:C,handler:CommandHandler<C,E,R>):HandlingResult<R> {return this.prepare(id,command,handler).commit();}
 }
+
+// Domain reducers replace immutable rows; they must not mutate a row returned by get.
+export class IndexBatch<K,V>{
+  readonly changes=new Map<K,V|undefined>();
+  work=0;
+  private readonly rows:ReadonlyMap<K,V>;
+  constructor(rows:ReadonlyMap<K,V>){this.rows=rows;}
+  find(key:K):V|undefined{this.work++;return this.changes.has(key)?this.changes.get(key):this.rows.get(key);}
+  get(key:K):V{const value=this.find(key);if(value===undefined)throw new Error("missing index row");return value;}
+  put(key:K,value:V):void{this.work++;this.changes.set(key,value);}
+  delete(key:K):void{this.work++;this.changes.set(key,undefined);}
+}
+export class IndexedProjection<K,V,E>{
+  private readonly rows=new Map<K,V>();
+  private readonly reduce:(batch:IndexBatch<K,V>,event:Recorded<E>)=>void;
+  checkpoint=0;work=0;
+  constructor(reduce:(batch:IndexBatch<K,V>,event:Recorded<E>)=>void){this.reduce=reduce;}
+  get rowCount():number{return this.rows.size;}
+  accept=(events:readonly Recorded<E>[]):boolean=>{
+    const batch=new IndexBatch(this.rows);let position=this.checkpoint;
+    try{for(const e of events){if(e.position<=position)continue;if(e.position!==position+1)return false;this.reduce(batch,e);position=e.position;}}
+    catch{return false;}
+    for(const [key,value] of batch.changes){if(value===undefined)this.rows.delete(key);else this.rows.set(key,value);}
+    this.checkpoint=position;this.work+=batch.work;return true;
+  };
+  // The query builds detached DTOs; callers must not retain the internal table.
+  read<T>(query:(rows:ReadonlyMap<K,V>)=>T):{position:number;state:T}{return {position:this.checkpoint,state:query(this.rows)};}
+}
