@@ -942,11 +942,11 @@
     {
       "path": "swift/main.swift",
       "role": "Boundary",
-      "sha256": "60185776dade7fb1adb38b33b7d65cf97953b7e21b5aa838f6782851851dfdb6",
+      "sha256": "0915c5ee47bae35d8eb18873bcfc34bf90fe4a9227dff1c0d4c7b00e36978824",
       "ranges": [
         {
-          "start": 99,
-          "end": 172,
+          "start": 108,
+          "end": 181,
           "role": "UseCase",
           "startText": "  func route(_ method: String, _ uri: String, _ content: String, _ raw: Data) throws -> (Int, Data)",
           "endText": "  }"

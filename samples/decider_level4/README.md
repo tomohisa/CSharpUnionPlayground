@@ -38,6 +38,8 @@ curl http://127.0.0.1:8080/school
 | `GET /school` | ライブ投影の一覧をJSON化。全件クエリなので出力件数に応じた処理がある |
 | `GET /status` | イベント位置・投影位置・投影通知の失敗数。検証用で、負荷測定外 |
 
+構造検査は、この仕様のrequestで使うobject・ref・oneOf・required・enum・int32などを対象にしています。仕様に制約を足すときは7実装と共通テストを同時に更新します。
+
 HTTPのJSON構造・型・enum違反は400、メディア型違反は415、本文上限1MiBは413です。構造が正しくてもIDが空、席数や日付が不正、前提科目未修得などの場合は、Level3のVO・Handler・Deciderが422で拒否します。追記はしません。正しい数学的整数 `1.0` も整数として受け付け、32bit範囲外・小数・booleanを拒否します。
 
 追記成功の応答には `position` と `projectionPosition` を含めます。このプロセスの同期通知で投影に届いてから応答します。別プロセスが書いた末尾は読み取り時にRefreshします。独立した外部投影サービスや分散配信は追加していません。
@@ -88,7 +90,7 @@ Level3を再利用するソースも含めた、このHTTPアプリに必要な�
 | TypeScript＋Zod | 95 | 102 | 49 | 38 | 119 | 37 | 35 | 174 | 181 | 830 | 221 |
 | Java | 244 | 126 | 101 | 31 | 131 | 70 | 45 | 165 | 181 | 1,094 | 217 |
 | Go | 324 | 293 | 155 | 71 | 450 | 156 | 870 | 310 | 181 | 2,810 | 915 |
-| Swift | 101 | 103 | 40 | 32 | 122 | 90 | 507 | 163 | 181 | 1,339 | 226 |
+| Swift | 101 | 103 | 40 | 32 | 122 | 90 | 520 | 163 | 181 | 1,352 | 226 |
 
 ### 空白以外の文字数
 
@@ -100,7 +102,7 @@ Level3を再利用するソースも含めた、このHTTPアプリに必要な�
 | TypeScript＋Zod | 5,592 | 5,286 | 2,490 | 2,547 | 9,114 | 2,920 | 2,933 | 22,824 | 12,301 | 66,007 | 19,727 |
 | Java | 8,304 | 6,106 | 3,673 | 2,241 | 10,997 | 4,171 | 3,718 | 19,311 | 12,301 | 70,822 | 21,719 |
 | Go | 6,114 | 5,449 | 3,333 | 2,620 | 10,121 | 3,254 | 18,764 | 23,095 | 12,301 | 85,051 | 20,214 |
-| Swift | 4,670 | 5,657 | 1,941 | 2,277 | 8,823 | 2,817 | 17,821 | 19,725 | 12,301 | 76,032 | 22,174 |
+| Swift | 4,670 | 5,657 | 1,941 | 2,277 | 8,823 | 2,817 | 18,235 | 19,725 | 12,301 | 76,446 | 22,174 |
 
 ### 同じ分類に使ったソース範囲
 
@@ -171,8 +173,8 @@ Level3を再利用するソースも含めた、このHTTPアプリに必要な�
 | Swift | コマンド・Handler・検証 | [../decider_level3/swift/handlers.swift:1–11](../decider_level3/swift/handlers.swift#L1-L11) / [../decider_level3/swift/models.swift:65–75](../decider_level3/swift/models.swift#L65-L75) / [../decider_level3/swift/valueObjects.swift:40–57](../decider_level3/swift/valueObjects.swift#L40-L57) |
 | Swift | DCB接続・メタ情報 | [../decider_level3/swift/routing.swift:1–32](../decider_level3/swift/routing.swift#L1-L32) |
 | Swift | ドメイン投影 | [../decider_level3/swift/models.swift:34–39](../decider_level3/swift/models.swift#L34-L39) / [../decider_level3/swift/projection.swift:1–49](../decider_level3/swift/projection.swift#L1-L49) / [../decider_level3/swift/schoolProjection.swift:1–67](../decider_level3/swift/schoolProjection.swift#L1-L67) |
-| Swift | ユースケース | [../decider_level3/swift/models.swift:40–47](../decider_level3/swift/models.swift#L40-L47) / [../decider_level3/swift/models.swift:92–99](../decider_level3/swift/models.swift#L92-L99) / [swift/main.swift:99–172](swift/main.swift#L99-L172) |
-| Swift | HTTP設定・JSON・プロトコル | [../decider_level3/swift/wire.swift:1–338](../decider_level3/swift/wire.swift#L1-L338) / [swift/main.swift:1–98](swift/main.swift#L1-L98) / [swift/main.swift:173–243](swift/main.swift#L173-L243) |
+| Swift | ユースケース | [../decider_level3/swift/models.swift:40–47](../decider_level3/swift/models.swift#L40-L47) / [../decider_level3/swift/models.swift:92–99](../decider_level3/swift/models.swift#L92-L99) / [swift/main.swift:108–181](swift/main.swift#L108-L181) |
+| Swift | HTTP設定・JSON・プロトコル | [../decider_level3/swift/wire.swift:1–338](../decider_level3/swift/wire.swift#L1-L338) / [swift/main.swift:1–107](swift/main.swift#L1-L107) / [swift/main.swift:182–256](swift/main.swift#L182-L256) |
 | Swift | ドメインテスト | [../decider_level3/swift/domainTests.swift:1–135](../decider_level3/swift/domainTests.swift#L1-L135) / [../decider_level3/swift/projectionTests.swift:1–28](../decider_level3/swift/projectionTests.swift#L1-L28) |
 | Swift | 共通HTTPテスト | [tests/http_tests.py:1–181](tests/http_tests.py#L1-L181) |
 | Swift | 共通ライブラリ（別枠） | [../decider_level3/swift/dcb.swift:1–175](../decider_level3/swift/dcb.swift#L1-L175) / [../decider_level3/swift/JsonStore.swift:1–51](../decider_level3/swift/JsonStore.swift#L1-L51) |

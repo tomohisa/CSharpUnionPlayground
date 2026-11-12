@@ -88,6 +88,15 @@ final class Engine: @unchecked Sendable {
       ])
     )
   }
+  // NIOThreadPool workers outlive each request. Drain Foundation temporaries
+  // per request on Apple platforms rather than retaining them until thread exit.
+  func request(_ method: String, _ uri: String, _ content: String, _ raw: Data) -> (Int, Data) {
+    #if canImport(ObjectiveC)
+      return autoreleasepool { handle(method, uri, content, raw) }
+    #else
+      return handle(method, uri, content, raw)
+    #endif
+  }
   func handle(_ method: String, _ uri: String, _ content: String, _ raw: Data) -> (Int, Data) {
     do { return try route(method, uri, content, raw) } catch let e as HttpError {
       return (e.code, try! JSONSerialization.data(withJSONObject: ["error": e.message]))
@@ -203,7 +212,7 @@ final class HTTPHandler: ChannelInboundHandler {
       workers.runIfActive(eventLoop: context.eventLoop) { [engine] in
         oversized
           ? (413, Data("{\"error\":\"PayloadTooLarge\"}".utf8))
-          : engine.handle(
+          : engine.request(
             h.method.rawValue, h.uri, h.headers.first(name: "content-type") ?? "", data)
       }.whenComplete { result in
         let (code, raw) = (try? result.get()) ?? (500, Data("{\"error\":\"InternalError\"}".utf8))
@@ -228,7 +237,11 @@ final class HTTPHandler: ChannelInboundHandler {
 let group = MultiThreadedEventLoopGroup(numberOfThreads: 2)
 let workers = NIOThreadPool(numberOfThreads: 8)
 workers.start()
-let engine = try Engine()
+#if canImport(ObjectiveC)
+  let engine = try autoreleasepool { try Engine() }
+#else
+  let engine = try Engine()
+#endif
 let channel = try ServerBootstrap(group: group).serverChannelOption(
   ChannelOptions.backlog, value: 128
 ).serverChannelOption(ChannelOptions.socketOption(.so_reuseaddr), value: 1).childChannelInitializer
