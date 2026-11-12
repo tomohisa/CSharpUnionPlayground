@@ -55,6 +55,10 @@ jobs:
           mkdir "$RUNNER_TEMP/swift"
           tar -xzf "$RUNNER_TEMP/swift.tar.gz" -C "$RUNNER_TEMP/swift" --strip-components=1
           echo "$RUNNER_TEMP/swift/usr/bin" >> "$GITHUB_PATH"
+      - name: Verify Linux domain tests and JSON persistence before timing
+        run: |
+          python3 samples/decider_level3/tests/domain_tests.py
+          python3 samples/decider_level3/benchmark/run.py --quick --store both --output samples/decider_level3/.build/linux-smoke.json
       - name: Measure all languages and sizes sequentially
         run: python3 samples/decider_level3/benchmark/intel.py run --sizes "$BENCHMARK_SIZES" --output samples/decider_level3/benchmark/observed/linux-x64-actions
       - name: Job summary
