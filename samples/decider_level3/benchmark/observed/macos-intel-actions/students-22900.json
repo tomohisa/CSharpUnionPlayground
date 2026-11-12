@@ -1,0 +1,1078 @@
+{
+  "formatVersion": 1,
+  "measuredAt": "2026-11-12T05:25:27.310310+00:00",
+  "platform": "macOS-15.7.9-x86_64-i386-64bit-Mach-O",
+  "machine": "x86_64",
+  "processor": "i386",
+  "commands": {
+    "csharp": [
+      "dotnet",
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/csharp/Decider.dll"
+    ],
+    "fsharp": [
+      "env",
+      "DOTNET_TieredCompilation=1",
+      "DOTNET_TieredPGO=1",
+      "dotnet",
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/fsharp/Decider.dll"
+    ],
+    "rust": [
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/rust/release/enrollment-decider"
+    ],
+    "typescript": [
+      "node",
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/typescript/main.ts"
+    ],
+    "java": [
+      "java",
+      "--class-path",
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/java:/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/jars/jackson-annotations-2.23.jar:/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/jars/jackson-core-2.23.0.jar:/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/jars/jackson-databind-2.23.0.jar:/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/jars/sqlite-jdbc-3.54.1.0.jar:/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/jars/slf4j-api-2.0.17.jar:/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/jars/slf4j-nop-2.0.17.jar",
+      "Main"
+    ],
+    "go": [
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/go-decider"
+    ],
+    "swift": [
+      "/Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/samples/decider_level3/.build/swift-decider"
+    ]
+  },
+  "runtimeVersions": {
+    "dotnet": ".NET SDK:\n Version:           11.0.100\n Commit:            297acf930f\n Workload version:  11.0.100-manifests.08e30c08\n MSBuild version:   18.12.2-1.26529.118+297acf930\n\nRuntime Environment:\n OS Name:     Mac OS X\n OS Version:  15.7\n OS Platform: Darwin\n RID:         osx-x64\n Base Path:   /Users/runner/.dotnet/sdk/11.0.100\n\n.NET workloads installed:\nThere are no installed workloads to display.\nConfigured to use workload sets when installing new manifests.\nNo workload sets are installed. Run \"dotnet workload restore\" to install a workload set.\n\nHost:\n  Version:      11.0.0\n  Architecture: x64\n  Commit:       297acf930f\n\n.NET SDKs installed:\n  8.0.101 [/Users/runner/.dotnet/sdk]\n  8.0.204 [/Users/runner/.dotnet/sdk]\n  8.0.303 [/Users/runner/.dotnet/sdk]\n  8.0.424 [/Users/runner/.dotnet/sdk]\n  9.0.102 [/Users/runner/.dotnet/sdk]\n  9.0.203 [/Users/runner/.dotnet/sdk]\n  9.0.317 [/Users/runner/.dotnet/sdk]\n  10.0.103 [/Users/runner/.dotnet/sdk]\n  10.0.203 [/Users/runner/.dotnet/sdk]\n  10.0.302 [/Users/runner/.dotnet/sdk]\n  10.0.400 [/Users/runner/.dotnet/sdk]\n  11.0.100 [/Users/runner/.dotnet/sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 8.0.1 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.4 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.7 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.30 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.1 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.4 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.19 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 10.0.3 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 10.0.7 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 10.0.10 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 10.0.11 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 11.0.0 [/Users/runner/.dotnet/shared/Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 8.0.1 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.4 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.7 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.30 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.1 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.4 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.19 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 10.0.3 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 10.0.7 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 10.0.10 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 10.0.11 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 10.0.15 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n  Microsoft.NETCore.App 11.0.0 [/Users/runner/.dotnet/shared/Microsoft.NETCore.App]\n\nOther architectures found:\n  None\n\nEnvironment variables:\n  DOTNET_CLI_TELEMETRY_OPTOUT              [1]\n  DOTNET_MULTILEVEL_LOOKUP                 [0]\n  DOTNET_NOLOGO                            [1]\n  DOTNET_ROOT                              [/Users/runner/.dotnet]\n  DOTNET_SKIP_FIRST_TIME_EXPERIENCE        [1]\n\nglobal.json file:\n  /Users/runner/work/CSharpUnionPlayground/CSharpUnionPlayground/global.json\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download",
+    "node": "v24.19.0",
+    "rust": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode)",
+    "go": "go version go1.23.4 darwin/amd64",
+    "swift": "Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)\nTarget: x86_64-apple-macosx15.0\nswift-driver version: 1.120.5"
+  },
+  "sourceManifest": {
+    "run.py": "f7c8461045e67bf414f527a617b7ff1909bbfc68387579afc3f3e38d870c7a5e",
+    "check_readmes.py": "e1a719581398e2bdc3b0859ebea4e0a9dbc1b4baf7165815fb9966c0d62c31f8",
+    "code_stats_classification.json": "d6fdca1fb4149b8b60fcd2ccdec27fd5e11cdd1a1442fd78473b2cfaf60b0644",
+    "code_stats.py": "5e13399743083125c6dc2f107464b6e3b612d6a7740425aee99c5e016bef7b62",
+    "verify.py": "0329e8f022c1070c89088e014718747baa2f1a85ac82390a67cb030ff9f720e9",
+    "benchmark/intel.py": "829e98c56033966aa47116a625d135d34a7ba687feb1afad53985a71b260e4f2",
+    "benchmark/run.py": "090f6dd3daa7d2b6d9f1aaef365f9eaaee3a93ee772c4090cb0c427288b491d3",
+    "benchmark/schema.sql": "47546500b5ada66e1a825c1e3cafa62b04aab65fecac31a3e19f089d058a1a9e",
+    "benchmark/workload.json": "60e5ac2aec89dc24890824c643ee97ec0fbf596275d24b32d5d05d1d63b8a527",
+    "benchmark/workload.py": "a166e0d44e509b37704d3e957cff869c90b72c8eebe6e2e88d002d0319e1e381",
+    "go/benchmark_output.go": "cbc2984267cbc63338c586eaff7bf5247b6d547b0ed71d0aa8f8a3e43ee208db",
+    "go/go.mod": "4bf352e31a6f4b46d76fe65a9c3200bd7a15b82e06ec14fc2b568cbb4f9acf46",
+    "go/storage_benchmark.go": "a75bfd10db9836af91254c36b9c00b79b5ab11857f78928dcd6bf8c83fa781ba",
+    "go/domain_test.go": "75cb5df2bf9b6156a397fe482cf9ed7f6aa18f27255459e4da8d9b77bdce9d7f",
+    "go/go.sum": "de2885ddd113a275f176faa907486cda7cfc66b25a8f2229464ec29ab07f3ab6",
+    "go/projection_tests.go": "79071372c763b135f21425e8327b428ab35aa6c9f0fffc808768fe262a7cb771",
+    "go/wire.go": "9b6b94190200e388fb0a778cdf5af2e7242e985f3538aa84f06a9def6563bab3",
+    "go/application.go": "e0c21d3e81cec25a003b48aee3a14a2f14a467af8ff062783402114ace6e0c9d",
+    "go/query_benchmark.go": "9cb2ab2b1cb9303a2e0aca1234e714ead7b769cfac57ed3ec8e5df9c76af8c10",
+    "go/main.go": "86c08b15585c3edf2e41f27c40fa7df13f23f678c8cc5b82deb54bc5b3fdff2a",
+    "typescript/benchmarkOutput.ts": "6e3dcef77e1836315262029607db79b74957c79e23fd5037602a1dd06c495072",
+    "typescript/main.ts": "aa021455b95f0d4e1ee911344c014fefb5a409eaa22375494dd9e32cf64db0d5",
+    "typescript/projection.ts": "3549ab26265748d02e03031408b13164d8526eb8893f216a06ec1ae96e89018c",
+    "typescript/dcb.test.ts": "e480c25ad10d72c1d7fe421b5940f6492c84f8042d86071d91dc527543397b2b",
+    "typescript/domain.test.ts": "849628634f3bde911a968d17b2d66911d14aa92fe77f2400f2c7d70be83a7eda",
+    "typescript/routing.ts": "4c5ed14a0ff542abe8b77db5d9f12f8da7b6f3f527806807a694fb95a9867838",
+    "typescript/wire.ts": "d2df1ec8610102d3833c1a8939ead927e144012e780ccbee482f4fb90c4290dc",
+    "typescript/application.ts": "38b8ec4df7cc821c740be684fdb83c3914ea9acd3f1a5d9cd72a11001eb5cc20",
+    "typescript/schoolProjection.ts": "2ef8ba76e5a30f38c744f3472932fb399e5f42aacbca243c978bfe92730aca8a",
+    "typescript/projection.test.ts": "885a8afc3dcc62175bc238717b4e2c534615e224ef40983b016804025583eb0e",
+    "typescript/dcb.ts": "6335128de679b0c12de0120b504a1d104d4ab0490b56166ae5fa12cbf7778585",
+    "typescript/package-lock.json": "71b46b6a3fd7067bd43b1b25e60bca466944c7110bddf93b89d6eecb076fcfd0",
+    "typescript/package.json": "28b7c2394ba489f9aa3a0ffcd0786194a4840cdae45875ab7a0bcddc18b2d01c",
+    "typescript/handlers.ts": "fc61aacddf1c73a42f2b6022452fa6f7892ea712ac1ccf4a58eb975000d8f108",
+    "typescript/storageBenchmark.ts": "8576c4143d78d518b8b4aa84c879418c5912c7a3c1e47f110632d5104a6cbe39",
+    "typescript/tsconfig.json": "33c82795ac738cf268602ee74b10bde38d3f1a2ff6a9726eef8371107ff06e82",
+    "typescript/models.ts": "08a57d2158219588c4409202f329ad0e01f62ff3485644b6fb7e0b85b4acc31b",
+    "typescript/queryBenchmark.ts": "fffe960f0c3fd9135ad4ad54dd6104dccbc8fcbd081bdb666e6503bcf396d9b6",
+    "typescript/decider.ts": "f65092c757d986eafdc8a3b243dd8a4e10eda4ed10af5c952494461d0c2bf920",
+    "typescript/jsonStore.ts": "917ccbe3ad7efd0dede7caa09973c6be676e483eed41db839f8091bde7577b1d",
+    "typescript/valueObjects.ts": "3c28da456a472967cfda1b8a00870357603db4e06815260d786d8e775813956d",
+    "rust/Cargo.toml": "a652f7a219900ec64136a9511e675cd20b5b105ad896abec66899a89afe1ef59",
+    "rust/Cargo.lock": "eb787d38892a7563502cd4ff84910615f1aa3c791800ed97c9d1b04d6209a87e",
+    "tests/library_isolation.py": "e01864a01d314382bbe373d1875f058ea64d8005b9f363603ebf890993a6ed33",
+    "tests/persistence.py": "3a069173641d2959d5c8b2b4e3538bc364acd0c68838a03fd09a9aebc6ae3703",
+    "tests/domain_tests.py": "80981c4530a47d151dbeb24b519506066895911adaf48fe6a3f1ddbc3c502661",
+    "tests/code_stats_test.py": "06e280e22f5f04ed405bc02c51e98469cb816a157c2b29fc3e3b3904a9e8acb5",
+    "tests/intel_publication.py": "88b98bb6e69d910009d50fe244b8e7e5e1911bf73273ff737add423f54aedba9",
+    "tests/check_exhaustiveness.py": "fba3fda3ccd3b07c021502e5c4cbef556d1ac08f8dec6f9a78dd0765352a10b4",
+    "tests/benchmark_runner.py": "af6978e55adefe59087de0069c743a6336436423014177176754500641074315",
+    "tests/json_library_isolation.py": "3b7f7db268f33cddc9edf4a983da8c81779c68cb6efa775ef01bb56d1d8350b8",
+    "tests/projection_scaling.py": "1836a8f1372acc2152f7a527b90e9f751f7fd2aeaedbc1e1ef1900affb6c48cb",
+    "fsharp/Projection.fs": "e05d974e5e2f6af5d721c9cc37148f8e761e19baf61280fa93a6a1b9107409b8",
+    "fsharp/BenchmarkOutput.fs": "305b8677d4107818735e03b3efac288ce9b29a3e118a493adff76bea4cd9f520",
+    "fsharp/LibraryTests.fs": "a9d33be44866b900340a8a7ae60d1a3e1521870a7a2dcce9b5bd8db2fd3815ba",
+    "fsharp/ProjectionTests.fs": "ce8f4a78375408a06bdfd1de6d637d30427e4c6ac94caa66ee9bd702384782fc",
+    "fsharp/Application.fs": "70d89e92db114440b5879168f3ed7e7fff42887846df33b0980379b1622bf704",
+    "fsharp/SqliteJournal.fs": "93a85a5a51c5bcbd78f72d6cf5df8576ae2e336afb5ec4bea3fc8e16892e3c8d",
+    "fsharp/Routing.fs": "78b17b14feb761543ee9aa702c557e6f3bc81049448bf659e761f78620e3b6c9",
+    "fsharp/Program.fs": "acce198fc6abd71662aa1eca89105410828799610afbed529f717f1a0f67dc27",
+    "fsharp/StorageBenchmark.fs": "88c43008de8fb28a5d653fff7700d523586d0f02a11ad2278e53c71f4eec4558",
+    "fsharp/Decider.fsproj": "de1aec190144ff87a23484da6794bfe619663f546eea0be3106cf5a30c18baef",
+    "fsharp/Dcb.fs": "5f965432a69e552f9d3425a693bc44e6c7c5230c5a72c18e9bbe188a691fd1e7",
+    "fsharp/Handlers.fs": "cea88ec22fb2138a03d5ee450f255df4b453ac9b988de615a86a3f5414782474",
+    "fsharp/SchoolProjection.fs": "b0e6689303817a01b3f3141d4ed18f15f099ff7a5bece25e57a0c39f29186b0b",
+    "fsharp/ValueObjects.fs": "e0e05e102c4642e5269c93ded5b7362b6a66be7ac08c75054c6a0616464a6e3d",
+    "fsharp/JsonStore.fs": "b167ad19a2cc7417ccf98bd47598547e32ff8d961e09bbff3d7d19245272ce6d",
+    "fsharp/QueryBenchmark.fs": "d99e9d1460ab560bee52bc6b42c0c7d263364b41f5213af8bc1aaf23ca805fc3",
+    "fsharp/Decider.fs": "b8fe41431e98728e09a687020f0804f6b2171c76c3a34512b55879c3b723ae15",
+    "fsharp/Models.fs": "841a798022ac313b240dcffc362bdab4e692a3e8a74306f3fefac9490ee6bbba",
+    "fsharp/DomainTests.fs": "069a1029ab137ee1a32ad7e1653fffac94100939ad8d51e2df2e3b99851e0fa9",
+    "java/DomainTests.java": "cc4a3262559bb30a292732324bdaa30acf60ca0b8f22b71b42d83812d9f3a2f1",
+    "java/Routing.java": "fa2eaa82bfc70423394e6f2df58cc52a9acda53bb19824981d155b231a8843aa",
+    "java/SchoolHandler.java": "ad07a687b1ce56ba46ffabcd32c19aca91c1a394aa8d610269b3b27583e92f7f",
+    "java/Application.java": "762249a8d1bb7ab13299921ca8f831678f5a6d61deee234cf9a55cd93c5d0d9c",
+    "java/QueryBenchmark.java": "b818a2325b30ece80fcbc4e86ab81ed895a10aadd7fa535f01a7543ea7c0f08c",
+    "java/SchoolProjection.java": "7e25aab36f0c1d6b86856789102f1d8f13ae91f836b49d264efeb69ff28e73c3",
+    "java/BenchmarkOutput.java": "c0fc32b38446f92f53861795a9f53d0dd09f91d77c25cf5f0955993008383106",
+    "java/ProjectionTests.java": "5262ada4322b2ee4f648e8cebe5d1d5eca6c7d6f4ff171435a9cf77eb45137fe",
+    "java/Projection.java": "1c1f592541b1f3c6867d22a976d2b8029b32e4df182c12a07474d666d3fcd239",
+    "java/Main.java": "a03be1b026a6656d6d0857212bb48b402997ca010b468895610ac29b66d487b0",
+    "java/DcbTests.java": "2f0b500af854f60c1dfadfeeb700d212761c9cd8d92d727342993d1a5cca2f1a",
+    "java/ValueObjects.java": "31d691dfc1170f22d737d371bc3bc3dc0ad18c97a7286d4975b01adb06cabbe9",
+    "java/Models.java": "5fcb821e13c5fb10bad1a34c3aca6f5f8f14c4630ba0e3ac933ca00ffd7ccc92",
+    "java/StorageBenchmark.java": "1f65a44affc1b53a59f35dcc119e7debd340c239c92d78773f9f1f04e1f932bf",
+    "java/Decider.java": "2ee638dbf3cf6a0ad6ed139cbcf43b6363092fae0b02b2dcbf299f5250c0d83e",
+    "swift/projectionTests.swift": "840031c3082fdd247b8fdb890c83a17d470d20d9747233bab9ebae8a75f8befb",
+    "swift/wire.swift": "cab03b2b588256636449482947877dc6574a7091cea3bf0f15520bb9c63b42ee",
+    "swift/JsonStore.swift": "f75b28ebe8d34845782b04450d79e54afedbc9f8662735d9978f3a224137c31e",
+    "swift/libraryTests.swift": "1c168ac3aeba9ce92564838c0a2c1c92f4269c531a5d05c885a491ec96502e59",
+    "swift/schoolProjection.swift": "77f40f72d3ddb2a783a3a742a92671895df9db8f63108e0726a3f74fcb01ca42",
+    "swift/decider.swift": "f837b514b38d43714cfba85a45bb68455d8730ec3e9ac30d4e8cae71f8bb09dd",
+    "swift/dcb.swift": "74ab566de299a87011572a4d3f4c09e854a57105e0622f1abd725085ad6bee65",
+    "swift/queryBenchmark.swift": "bd423b0f060e88c2aaea7c4748d9955c4597e3432a9daa791fb03a3c5686edd3",
+    "swift/storageBenchmark.swift": "e3f2c533efb69984b28a72801c7ce6f9702e2ee48a622444a9b786c6f040c2ab",
+    "swift/domainTests.swift": "5911c87f618ab19d4f0e2f0150d3901c0d0397a642a6efdd045d76d720ccbeef",
+    "swift/models.swift": "d34adc2a83ded5a2c0daee3f39ec387bb8dd7c0ed680826d5543e28964e50a23",
+    "swift/benchmarkOutput.swift": "c1bc4b6be988791f17376b3b349c0aeb58e1002ec2878c3e2be07606ac454892",
+    "swift/handlers.swift": "e98bce7f71251c161872dbcf8b99568258affbc6e4f5a8915ae7af4bc08074e1",
+    "swift/routing.swift": "4dabed3ed7fcac27614f899d11f4b84c146db02b27418863ea7bec4b14d5df3a",
+    "swift/application.swift": "c19a8bb559d66df387e528a9516881899853013583c162cd444827f3caaad265",
+    "swift/main.swift": "6d14402f9aeb7b1d3b7b27226de3345cde2bd5030eade7780dd3d2b8f971c085",
+    "swift/projection.swift": "e52d422b6986eb3fca408335abcf3988a078146ed1979639391a7d548e3121ee",
+    "swift/valueObjects.swift": "68d380fb0521b20d0ec58637b7012b9e6324da0328d111733ac1e852721b9539",
+    "fixtures/structured-tags.json": "9ea17e27dada76d88ae61f62c359f5450c489c684f1c563978a9abce74463440",
+    "fixtures/empty.json": "85072133230570af809175a491a1e803627b4b41ec5e0607bdc3d656baad2a72",
+    "fixtures/expected.json": "3bc389ad09a4d83afc79ab8050ee6cd5a5ba19230e3c262bd08826f54f20f9ff",
+    "fixtures/mixed-results.json": "038dd78cfb3e98d2b4b82804feb7497e6daa40ee7999a96583399ca46db34c25",
+    "fixtures/metadata-order.json": "c8e3dce53c5dea3362a76b2699a431215b849d25f7e50b3ecfcfd0d8890d3212",
+    "fixtures/historical-values.json": "7f65c2653aa08578588ede0bdec1d0ddef3f1475cd93ca1c3a4cfaf08ab7608f",
+    "fixtures/unicode-order.json": "ee752428b4c8b4e47257933af9b33c69b6147fd428c004390c3329f6f41a760a",
+    "fixtures/last-seat.json": "ae296270b2fd57fa22d1535f6d262fa8eb351bb9fe46eaa3aea8a64a8f7ab979",
+    "fixtures/lifecycle.json": "f1bcf82bb56f6f7726eeadbeed360d76c67678f7130ed08eb28662f4d781f424",
+    "fixtures/live-snapshots.json": "e2638f348bc62545c38b8ddfd48dee7c9190780c4bbbd9abd98e9b1b9f14d9be",
+    "fixtures/mixed-id-order.json": "fdd22f6c2929847223ed2ead782f75883da7c8ef434565af27977eb4cf7d28ae",
+    "fixtures/unicode.json": "aa80cafb8d05f2bb5b4ae68a06327ea7023a446c93462dcdf6bcf7ff9188941f",
+    "fixtures/available.json": "6ca79d6c9e36f2f4c15cd94d93e73571c440bfcfd53fd0012ac59c31a7be51ff",
+    "fixtures/withdraw.json": "1d02bf225cd45860a3350255d64b4ff5e17846a165c46332a846895fe526c79e",
+    "fixtures/validation.json": "a11e5250c93716452f1b1628f899716dc5c0338be250292939955d7fc1be012d",
+    "fixtures/phantom.json": "c89559e742822b82520e0dddbdafe3688311bbf7bd02437fdcfc160ba40d6635",
+    "fixtures/unrelated.json": "9899492beaebf68db898dfe7738b171982a984b0a2689fbd2467331121d74be8",
+    "fixtures/resume.json": "33a82878a25db7499aef05d4f08afcbc5fa2fdbe902bcc91383efc2bec615fe0",
+    "fixtures/start-redecide.json": "56bf631fed7024570755020db77a8c892a75782f4063ef83d181c247059c9e7b",
+    "csharp/StorageBenchmark.cs": "8d90d8d80f6f08ebc96c39e8c41a085cf8dadf2ea8a8d13f77667f5e249cf5fe",
+    "csharp/Handlers.cs": "b3635591060c06f8d3bcc633c6989de126c38c9236bdf786d5a1fd1d24068eab",
+    "csharp/Dcb.cs": "4d2913c4acde3c5e1eb3373a2b0eec2e68c3b48ec94bf25f3eb9238c7badaafe",
+    "csharp/Decider.csproj": "8078c63e86a31114a175191f7a84d639d211c52c4b7aaac6173279f0309e04ec",
+    "csharp/SchoolProjection.cs": "b75edb97709d1cbbb65b6a8c744ac14cc46643891b871272871decbf8dcad775",
+    "csharp/ValueObjects.cs": "1e8750cac75140298f11fa48c06b68a93d8ed4a4156594998815a4d9b21bfae7",
+    "csharp/JsonStore.cs": "e1cd158b8c5753a289b42897fc194723d1571f38f5ae0eec7384081dc891c6bf",
+    "csharp/Decider.cs": "209eb9bee2e9b8de4b4a2823bfa13d6b0814a7cd47a889992422618567db562b",
+    "csharp/QueryBenchmark.cs": "aaa1c1a5dba69f2709a98a65413fcfa9d8c40ca0661bc9657777be1d8f39cfaa",
+    "csharp/Models.cs": "0c6b27daf4a3e340385083136f8b66f08bd757dcc6dbde739aa392072451a657",
+    "csharp/PersistenceTests.cs": "1db9b17c3ccfe007d44289fb9edd8409abf8f03570b9bf1b30b7393ef2c1cd5f",
+    "csharp/DomainTests.cs": "48f78fb6a34586524bacd60395161d2f9b3e507c92c8c880cb4a0b49eb503717",
+    "csharp/BenchmarkOutput.cs": "388f47f994220df448fe4f37ec83162ebfe8e7bb3283b1ac57ee0e4bdb5ce0af",
+    "csharp/Projection.cs": "d834148f2a2bdb96582b10b4d150dba37d326280a283fdc8f2c962a4e551086d",
+    "csharp/LibraryTests.cs": "20fdbe4b3b205c2781da02aed546f34b108502b354cccaaaf4fb09ecfbdfc0b3",
+    "csharp/ProjectionTests.cs": "84773bff5c9aa15431b7656ba8d5dc18096aeeae25d8a610bd0e3dc794fc59d2",
+    "csharp/Application.cs": "d36a3551d2b7b3035bd63bf385fdad73255b86abe0f8299e67c85ad0627ffbd8",
+    "csharp/SqliteJournal.cs": "a23ee0bc846cd2ce8053603f59bcbcd1fb72be9662e68950193ea66dde5b25cc",
+    "csharp/Routing.cs": "9238035e4db15b755f818ce561a6bf0c457008052907c0236953751e32a84aaa",
+    "csharp/Program.cs": "796e562aca9165cd57efdbb86e4461675f2231fe9c190a34543720dd695a073b",
+    "fixtures/invalid/unknown-grade.json": "eb6774f6f39c459b9ca04b190d285466cf5c0542cdb916cc02d85491949cbee2",
+    "fixtures/invalid/missing-field.json": "d40a26ae33546d37b4256b881caf9eaf256a877ac16eb7e9745c4e0521110735",
+    "fixtures/invalid/impossible-attendance.json": "dcc68439a2d811e7935de33f1d11132efc290fd8431d911a8129ea847e1b753e",
+    "fixtures/invalid/position-gap.json": "63248b8c1a90f9a33a831a7f483eeb0c4d59496cdfe9472bef57608435e1d4e3",
+    "fixtures/invalid/wrong-tags.json": "2ca4dc2234f12bc2fb3f8d2035eacc3e4b2deeee789c193343588f9c3d38e7c6",
+    "fixtures/invalid/unknown-command.json": "aa933e192b5b55d4faa391ea21682ac68d4ef2a2e34a114c64f1d952320bd61a",
+    "fixtures/invalid/wrong-type.json": "32caf0867bd66359b6aabf06c21d0cfc1778225ea3dcf3456c6c5dad74a3bac2",
+    "fixtures/invalid/null-grade.json": "aa128905903ab8fd30bad6d20053b9ef6e8c22c77b8b73dfa9c7e4dbb83197af",
+    "java/playground/dcb/JsonStore.java": "fc64065acf1693b65af31711ba8aa5a17dec2b3915e85f750612493a0d7cce6c",
+    "java/playground/dcb/Dcb.java": "e420e86bc99a6543f728593e4c35620308504905187c13e662c10aa585c82210",
+    "rust/src/handlers.rs": "c8a920f9ad5baa78577c66216bb96df317c1f08d2b5fb17e62a3e089e2e280b0",
+    "rust/src/dcb.rs": "3fd1489aaea9b440375d7d698b49e8a9631f524ff31874fde21f48d525172642",
+    "rust/src/storage_benchmark.rs": "625a5881a85cd0426b22492056cefb9c5b85fd9301b359785d7682a3302c68e8",
+    "rust/src/json_store.rs": "89f5379c7f486b060c62aa3d6c7fa0cd6582c07f62587cdb099bb7c63ed4ad34",
+    "rust/src/sqlite_journal.rs": "2ec34c7d2729a5704b2b72accf3157ba98ba0d098dcb76032211cd3ec41389f6",
+    "rust/src/decider.rs": "8af3d94f8370acf76ff116e4702c06d4cdca1976bbdfa868faeda46d3403fc87",
+    "rust/src/domain_tests.rs": "691dfb1cf2ee2f8843a49a28386ed9ad4fed30b06dcb6b98505fb02e8e51206b",
+    "rust/src/models.rs": "9904b160eec31d04c7fed8e9978bdc7f0103095ad835a461ea6fb3f201e60206",
+    "rust/src/school_projection.rs": "66182a0939e4bb18fbedd3eb1a6ec72b6b5ffc41bd5fd96eb89b064c0dc82efa",
+    "rust/src/query_benchmark.rs": "5b29741f3aad746456f86bbedacf5e6bf6169f317e36299e4df15c40c9d55bdd",
+    "rust/src/projection.rs": "601e5e5a02a038f86b7fcfb2edfe70e959bb092794b29e2fbbfab3bead87b7a2",
+    "rust/src/main.rs": "91a3ba4efe44436436336e298c8317e5f96695fa488b259264a4cc3e67c24b83",
+    "rust/src/dcb_tests.rs": "5864c974a472661482542fadc45af939e282a6ac17748db834067419cb702285",
+    "rust/src/routing.rs": "f5db02b9ba6d5f2ad962ee4546ee5cd240ca3bfee37ffa2d78c246ca754bc3de",
+    "rust/src/projection_tests.rs": "d44e9dc949fba925c14b0adac0cd1b1d6b5c8c8a94a8ef2aecbab3ae4fc13106",
+    "rust/src/application.rs": "a6de02611f09f83f84620c6e7ed18a82ee1789bd6c3509d4ddf7f55eca8ef65f",
+    "rust/src/value_objects.rs": "076b784b5aa9226728a56873f88b809e253809761146faecc90e93b4b5750f63",
+    "go/dcb/store_test.go": "b5f5c26062190dd4eefba3bd61026ba04ce4a19b4c961eb55f64986dcc2b6c30",
+    "go/dcb/store.go": "731809921bce1b4d3e99d610eb6a36bb42963dd6e3eb642d2b4495526e5791ee",
+    "go/dcb/json_store.go": "e2a93f6e8267906d13c9a50b129f80a31688472da3c11d4d476552f811f54240",
+    "go/domain/models.go": "a0a313e42d17d1b398962c6e7e002d12e2a780a26dbcafe1a89861487b9c6207",
+    "go/domain/decider.go": "932a508b1ab478afcde252a520bda7861769496de8ad5db9d3c2d8304a396cd2",
+    "go/domain/school_projection.go": "31bef0f91e644c3b1effb9afc7835ebedc015d42c34435b892fbaa6494207c7c",
+    "go/domain/handlers.go": "ed9fd7b8f51c65e9e391960c5a294513fdf6fad38d49c2060ad9eef2c347c992",
+    "go/domain/routing.go": "b9c916fb0bbc301839b72706233e645ea019e079d975ad01fad9b1d432c053b7",
+    "go/domain/value_objects.go": "682515a1b2c5db2c6a70fafa2a61a4664769228838516653418cc6772d9428b3",
+    "go/domain/json.go": "1c66242a9a4052f0e91f126acd96a34fa866724a79e8e6800675fb340ca831c8",
+    "go/domain/projection.go": "7d50d3b12d4e5238619440641f53247a044ef56c6bec1e37774a59a1dbae32ef"
+  },
+  "csharpNativeAot": false,
+  "sourceCommit": "c1d5048cae711943869c897e314d7ca4e41f3117",
+  "results": [
+    {
+      "wallSeconds": 211.62982026999998,
+      "inputOpenReplaySeconds": 3.633817226000019,
+      "responseCloseExitSeconds": 1.1496266599999672,
+      "phases": {
+        "operations": 179.763952,
+        "tagged_point": 0.2183757,
+        "projection_point_json": 0.0055157,
+        "read_rebuild_snapshot": 3.9565039
+      },
+      "peakRssMiB": 977.125,
+      "sqliteVersion": "3.53.4",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 22.883653,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "csharp",
+      "build": "Release JIT + Dynamic PGO",
+      "store": "sqlite",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b",
+      "databaseValidation": {
+        "events": 163506,
+        "tagRows": 425024,
+        "queryPlan": "(2, 0, 47, 'SEARCH event_tags USING COVERING INDEX tags_match (category=? AND keys_key=? AND position>? AND position<?)')"
+      },
+      "databaseBytes": 213336064,
+      "restart": {
+        "wallSeconds": 13.980507236999983,
+        "inputOpenReplaySeconds": 7.235401771999932,
+        "responseCloseExitSeconds": 1.7429101349999883,
+        "phases": {
+          "operations": 0.8572904,
+          "read_rebuild_snapshot": 4.1392954
+        },
+        "peakRssMiB": 505.984375,
+        "sqliteVersion": "3.53.4",
+        "codec": {
+          "encoded": 0,
+          "decoded": 327012,
+          "encodedBytes": 0,
+          "decodedBytes": 34932136
+        },
+        "document": {},
+        "inputBytes": 49,
+        "outputBytes": 10139183
+      }
+    },
+    {
+      "wallSeconds": 202.90363096199997,
+      "inputOpenReplaySeconds": 2.8014645780000365,
+      "responseCloseExitSeconds": 2.355869714999926,
+      "phases": {
+        "operations": 172.9162974,
+        "tagged_point": 0.144816,
+        "projection_point_json": 0.0075899,
+        "read_rebuild_snapshot": 3.8475439
+      },
+      "peakRssMiB": 1333.171875,
+      "sqliteVersion": "3.53.4",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 20.8166004,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 9951566,
+      "language": "fsharp",
+      "build": "Release JIT + Dynamic PGO",
+      "store": "sqlite",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b",
+      "databaseValidation": {
+        "events": 163506,
+        "tagRows": 425024,
+        "queryPlan": "(2, 0, 47, 'SEARCH event_tags USING COVERING INDEX tags_match (category=? AND keys_key=? AND position>? AND position<?)')"
+      },
+      "databaseBytes": 213336064,
+      "restart": {
+        "wallSeconds": 11.440958295999963,
+        "inputOpenReplaySeconds": 4.854673654999942,
+        "responseCloseExitSeconds": 1.1628497409999454,
+        "phases": {
+          "operations": 1.2133416,
+          "read_rebuild_snapshot": 4.2027392
+        },
+        "peakRssMiB": 521.57421875,
+        "sqliteVersion": "3.53.4",
+        "codec": {
+          "encoded": 0,
+          "decoded": 327012,
+          "encodedBytes": 0,
+          "decodedBytes": 34932136
+        },
+        "document": {},
+        "inputBytes": 49,
+        "outputBytes": 9951403
+      }
+    },
+    {
+      "wallSeconds": 167.78438298900005,
+      "inputOpenReplaySeconds": 0.21781288900001528,
+      "responseCloseExitSeconds": 1.01311328099996,
+      "phases": {
+        "operations": 148.943317495,
+        "tagged_point": 0.116634062,
+        "projection_point_json": 0.001374917,
+        "read_rebuild_snapshot": 1.9352718009999998
+      },
+      "peakRssMiB": 718.4453125,
+      "sqliteVersion": "3.54.1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 15.556572334,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "rust",
+      "build": "Release optimized",
+      "store": "sqlite",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b",
+      "databaseValidation": {
+        "events": 163506,
+        "tagRows": 425024,
+        "queryPlan": "(2, 0, 47, 'SEARCH event_tags USING COVERING INDEX tags_match (category=? AND keys_key=? AND position>? AND position<?)')"
+      },
+      "databaseBytes": 213336064,
+      "restart": {
+        "wallSeconds": 5.677531656999918,
+        "inputOpenReplaySeconds": 2.6333265099999608,
+        "responseCloseExitSeconds": 0.7712444399999185,
+        "phases": {
+          "operations": 0.108406294,
+          "read_rebuild_snapshot": 2.164202981
+        },
+        "peakRssMiB": 471.55078125,
+        "sqliteVersion": "3.54.1",
+        "codec": {
+          "encoded": 0,
+          "decoded": 327012,
+          "encodedBytes": 0,
+          "decodedBytes": 34932136
+        },
+        "document": {},
+        "inputBytes": 49,
+        "outputBytes": 10139183
+      }
+    },
+    {
+      "wallSeconds": 274.24014360399997,
+      "inputOpenReplaySeconds": 1.0110751389997858,
+      "responseCloseExitSeconds": 3.126399343999992,
+      "phases": {
+        "operations": 228.112987909,
+        "tagged_point": 0.30128442599999833,
+        "projection_point_json": 0.010985207999998237,
+        "read_rebuild_snapshot": 9.500183619999996
+      },
+      "peakRssMiB": 1505.078125,
+      "sqliteVersion": "3.53.3",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 32.169855754999965,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "typescript",
+      "build": "Node + Zod",
+      "store": "sqlite",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b",
+      "databaseValidation": {
+        "events": 163506,
+        "tagRows": 425024,
+        "queryPlan": "(2, 0, 47, 'SEARCH event_tags USING COVERING INDEX tags_match (category=? AND keys_key=? AND position>? AND position<?)')"
+      },
+      "databaseBytes": 213336064,
+      "restart": {
+        "wallSeconds": 15.813245939999888,
+        "inputOpenReplaySeconds": 6.954008993999878,
+        "responseCloseExitSeconds": 0.7016294400000334,
+        "phases": {
+          "operations": 0.8585219560000005,
+          "read_rebuild_snapshot": 7.298033747
+        },
+        "peakRssMiB": 959.05078125,
+        "sqliteVersion": "3.53.3",
+        "codec": {
+          "encoded": 0,
+          "decoded": 327012,
+          "encodedBytes": 0,
+          "decodedBytes": 34932136
+        },
+        "document": {},
+        "inputBytes": 49,
+        "outputBytes": 10139183
+      }
+    },
+    {
+      "wallSeconds": 176.82640031200003,
+      "inputOpenReplaySeconds": 3.29285264300006,
+      "responseCloseExitSeconds": 0.6827484989998993,
+      "phases": {
+        "operations": 155.563356075,
+        "tagged_point": 0.161400564,
+        "projection_point_json": 0.01795776,
+        "read_rebuild_snapshot": 1.275950149
+      },
+      "peakRssMiB": 1305.38671875,
+      "sqliteVersion": "3.54.1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 15.803256105,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "java",
+      "build": "JVM defaults",
+      "store": "sqlite",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b",
+      "databaseValidation": {
+        "events": 163506,
+        "tagRows": 425024,
+        "queryPlan": "(2, 0, 47, 'SEARCH event_tags USING COVERING INDEX tags_match (category=? AND keys_key=? AND position>? AND position<?)')"
+      },
+      "databaseBytes": 213336064,
+      "restart": {
+        "wallSeconds": 5.710859991999996,
+        "inputOpenReplaySeconds": 3.126133179999897,
+        "responseCloseExitSeconds": 0.7654616199999964,
+        "phases": {
+          "operations": 0.254055479,
+          "read_rebuild_snapshot": 1.558317666
+        },
+        "peakRssMiB": 1372.01171875,
+        "sqliteVersion": "3.54.1",
+        "codec": {
+          "encoded": 0,
+          "decoded": 327012,
+          "encodedBytes": 0,
+          "decodedBytes": 34932136
+        },
+        "document": {},
+        "inputBytes": 49,
+        "outputBytes": 10139183
+      }
+    },
+    {
+      "wallSeconds": 196.9826614819999,
+      "inputOpenReplaySeconds": 3.129206849999946,
+      "responseCloseExitSeconds": 0.6015587539998251,
+      "phases": {
+        "operations": 165.599472692,
+        "tagged_point": 0.213663011,
+        "projection_point_json": 0.003297819,
+        "read_rebuild_snapshot": 4.02296954
+      },
+      "peakRssMiB": 836.01953125,
+      "sqliteVersion": "3.54.1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 23.412090558,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "go",
+      "build": "go build",
+      "store": "sqlite",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b",
+      "databaseValidation": {
+        "events": 163506,
+        "tagRows": 425024,
+        "queryPlan": "(2, 0, 47, 'SEARCH event_tags USING COVERING INDEX tags_match (category=? AND keys_key=? AND position>? AND position<?)')"
+      },
+      "databaseBytes": 213336064,
+      "restart": {
+        "wallSeconds": 7.9921704529999715,
+        "inputOpenReplaySeconds": 3.7573899859999074,
+        "responseCloseExitSeconds": 0.5790441149999879,
+        "phases": {
+          "operations": 0.056931194,
+          "read_rebuild_snapshot": 3.598650156
+        },
+        "peakRssMiB": 468.32421875,
+        "sqliteVersion": "3.54.1",
+        "codec": {
+          "encoded": 0,
+          "decoded": 327012,
+          "encodedBytes": 0,
+          "decodedBytes": 34932136
+        },
+        "document": {},
+        "inputBytes": 49,
+        "outputBytes": 10139183
+      }
+    },
+    {
+      "wallSeconds": 479.55016184399983,
+      "inputOpenReplaySeconds": 1.0720175789999757,
+      "responseCloseExitSeconds": 4.1667223019999255,
+      "phases": {
+        "operations": 424.1816429300002,
+        "tagged_point": 0.48475882299999284,
+        "projection_point_json": 0.030967486000008648,
+        "read_rebuild_snapshot": 10.04289208399996
+      },
+      "peakRssMiB": 809.046875,
+      "sqliteVersion": "3.43.2",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 39.48919661700029,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "swift",
+      "build": "swiftc -O",
+      "store": "sqlite",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b",
+      "databaseValidation": {
+        "events": 163506,
+        "tagRows": 425024,
+        "queryPlan": "(2, 0, 47, 'SEARCH event_tags USING COVERING INDEX tags_match (category=? AND keys_key=? AND position>? AND position<?)')"
+      },
+      "databaseBytes": 213336064,
+      "restart": {
+        "wallSeconds": 22.33306663700023,
+        "inputOpenReplaySeconds": 9.313532656999996,
+        "responseCloseExitSeconds": 3.6653613240000595,
+        "phases": {
+          "operations": 0.3535220809999373,
+          "read_rebuild_snapshot": 9.000137866999921
+        },
+        "peakRssMiB": 451.0625,
+        "sqliteVersion": "3.43.2",
+        "codec": {
+          "encoded": 0,
+          "decoded": 327012,
+          "encodedBytes": 0,
+          "decodedBytes": 34932136
+        },
+        "document": {},
+        "inputBytes": 49,
+        "outputBytes": 10139183
+      }
+    },
+    {
+      "wallSeconds": 37.70107373699966,
+      "inputOpenReplaySeconds": 1.7676636289997987,
+      "responseCloseExitSeconds": 0.7353230639996582,
+      "phases": {
+        "operations": 29.8538548,
+        "tagged_point": 0.073906,
+        "projection_point_json": 0.004124,
+        "read_rebuild_snapshot": 2.2613037
+      },
+      "peakRssMiB": 946.109375,
+      "sqliteVersion": "memory-json-v1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 3.0000261,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "csharp",
+      "build": "Release JIT + Dynamic PGO",
+      "store": "memory-json",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b"
+    },
+    {
+      "wallSeconds": 37.26494253200008,
+      "inputOpenReplaySeconds": 1.6846390350001457,
+      "responseCloseExitSeconds": 1.8849608430000444,
+      "phases": {
+        "operations": 27.4931569,
+        "tagged_point": 0.0432958,
+        "projection_point_json": 0.0057387,
+        "read_rebuild_snapshot": 4.2078893
+      },
+      "peakRssMiB": 1074.93359375,
+      "sqliteVersion": "memory-json-v1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 1.9328336,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 9951566,
+      "language": "fsharp",
+      "build": "Release JIT + Dynamic PGO",
+      "store": "memory-json",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b"
+    },
+    {
+      "wallSeconds": 28.75128255599975,
+      "inputOpenReplaySeconds": 0.17694903899973724,
+      "responseCloseExitSeconds": 0.6526549800000794,
+      "phases": {
+        "operations": 25.810997509,
+        "tagged_point": 0.038428104,
+        "projection_point_json": 0.00099973,
+        "read_rebuild_snapshot": 1.027099027
+      },
+      "peakRssMiB": 773.51953125,
+      "sqliteVersion": "memory-json-v1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 1.043421769,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "rust",
+      "build": "Release optimized",
+      "store": "memory-json",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b"
+    },
+    {
+      "wallSeconds": 109.21865489799984,
+      "inputOpenReplaySeconds": 0.6795307739998862,
+      "responseCloseExitSeconds": 1.00263318899988,
+      "phases": {
+        "operations": 99.77315647100001,
+        "tagged_point": 0.21112513299999408,
+        "projection_point_json": 0.011296740999998292,
+        "read_rebuild_snapshot": 4.703634671000007
+      },
+      "peakRssMiB": 1203.03515625,
+      "sqliteVersion": "memory-json-v1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 2.836013011999996,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "typescript",
+      "build": "Node + Zod",
+      "store": "memory-json",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b"
+    },
+    {
+      "wallSeconds": 35.26586247200021,
+      "inputOpenReplaySeconds": 1.129188797000097,
+      "responseCloseExitSeconds": 0.7752596069999527,
+      "phases": {
+        "operations": 29.765341787,
+        "tagged_point": 0.07657206,
+        "projection_point_json": 0.02008232,
+        "read_rebuild_snapshot": 1.167272998
+      },
+      "peakRssMiB": 1368.9609375,
+      "sqliteVersion": "memory-json-v1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 2.307916793,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "java",
+      "build": "JVM defaults",
+      "store": "memory-json",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b"
+    },
+    {
+      "wallSeconds": 90.322911363,
+      "inputOpenReplaySeconds": 3.9198462950002977,
+      "responseCloseExitSeconds": 0.6160119149999446,
+      "phases": {
+        "operations": 77.465947102,
+        "tagged_point": 0.091418243,
+        "projection_point_json": 0.00298456,
+        "read_rebuild_snapshot": 2.982631263
+      },
+      "peakRssMiB": 866.82421875,
+      "sqliteVersion": "memory-json-v1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 5.244302347,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "go",
+      "build": "go build",
+      "store": "memory-json",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b"
+    },
+    {
+      "wallSeconds": 232.44616463700004,
+      "inputOpenReplaySeconds": 0.9553084179997313,
+      "responseCloseExitSeconds": 3.3107014130000607,
+      "phases": {
+        "operations": 210.00561683199976,
+        "tagged_point": 0.37276139200002945,
+        "projection_point_json": 0.028934990000379912,
+        "read_rebuild_snapshot": 9.079789722999976
+      },
+      "peakRssMiB": 706.27734375,
+      "sqliteVersion": "memory-json-v1",
+      "codec": {
+        "encoded": 163735,
+        "decoded": 3882983,
+        "encodedBytes": 17489087,
+        "decodedBytes": 384854924
+      },
+      "document": {
+        "seconds": 8.672325562999958,
+        "documents": 1145,
+        "events": 18320,
+        "encoded": 18320,
+        "decoded": 192360
+      },
+      "inputBytes": 21302817,
+      "outputBytes": 10139346,
+      "language": "swift",
+      "build": "swiftc -O",
+      "store": "memory-json",
+      "students": 22900,
+      "expected": {
+        "students": 23358,
+        "classes": 4809,
+        "enrollments": 39159,
+        "events": 163506,
+        "committed": 140606,
+        "rejected": 11679,
+        "conflicts": 229,
+        "passed": 16030,
+        "failed": 6870
+      },
+      "stateSha256": "3a2725bf77d1d020a24d2562f05f03ee45e3c764810ef4c669f6dd7300210f9b"
+    }
+  ],
+  "drivers": {
+    "csharp": "Microsoft.Data.Sqlite 11.0.0",
+    "fsharp": "Microsoft.Data.Sqlite 11.0.0",
+    "rust": "rusqlite 0.42.0 / bundled",
+    "typescript": "node:sqlite / built-in",
+    "java": [
+      "sqlite-jdbc-3.54.1.0.jar"
+    ],
+    "go": "github.com/mattn/go-sqlite3 v1.14.53 / CGO",
+    "swift": "system SQLite3"
+  },
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz",
+    "memoryBytes": "15032385536"
+  },
+  "workloadSha256": "a166e0d44e509b37704d3e957cff869c90b72c8eebe6e2e88d002d0319e1e381",
+  "students": 22900,
+  "workload": {
+    "formatVersion": 1,
+    "targetSeconds": 90,
+    "studentsPerClass": 10,
+    "attendancePerStudent": 2,
+    "passStudentsPerClass": 7,
+    "documentStudentsRatio": 20,
+    "documentRevisions": 16,
+    "documentBodyBytes": 4096,
+    "pointQueries": 1000,
+    "fullQueries": 3,
+    "sqlite": {
+      "journalMode": "WAL",
+      "synchronous": "FULL",
+      "busyTimeoutMs": 5000,
+      "cacheSizeKiB": 2048,
+      "walAutocheckpointPages": 1000,
+      "foreignKeys": true
+    }
+  },
+  "actions": {
+    "repository": "tomohisa/CSharpUnionPlayground",
+    "runId": "43160423918",
+    "attempt": "1",
+    "runUrl": "https://github.com/tomohisa/CSharpUnionPlayground/actions/runs/43160423918",
+    "runnerLabel": "macos-15-intel",
+    "runnerImage": "macos15",
+    "runnerImageVersion": "20260824.0482.1"
+  }
+}
