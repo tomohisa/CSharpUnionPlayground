@@ -1,6 +1,6 @@
 # Level4 ローカルHTTPベンチマーク
 
-[Linux x64 Actionsの結果](linux-x64-actions/README.md)は別ページです。以下はローカルの独立した測定です。
+[Linux x64 Actionsの結果](linux-x64-actions/README.md)は別ページです。以下はローカルの独立した測定です。Rustは測定ソース20fc802のtiny_http版で、Linuxで採用したAxum/Tokio版とはHTTPホストが異なります。
 
 Apple M4 Max / RAM 128 GiB / `macOS-27.2.1-arm64-arm-64bit`。
 

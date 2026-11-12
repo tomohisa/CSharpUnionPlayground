@@ -64,7 +64,7 @@ HTTPのJSON構造・型・enum違反は400、メディア型違反は415、本�
 |---|---|
 | [C#](csharp) | ASP.NET Core。JSON Source Generationとclosed階層をそのまま再利用 |
 | [F#](fsharp) | ASP.NET Core。DUとHandlerを再利用し、fieldless DUのwire表現を合わせる |
-| [Rust](rust) | tiny_http＋8ワーカースレッド。所有権を持つ準備チケットを共通ライブラリに追加 |
+| [Rust](rust) | Axum/Tokio＋8枠のblocking処理。所有権を持つ準備チケットを共通ライブラリに追加 |
 | [TypeScript＋Zod](typescript) | Node HTTP。Zodでコマンドとイベントを検証。同期SQLiteがイベントループを占有 |
 | [Java](java) | JDK HttpServer＋virtual threads、Jackson |
 | [Go](go) | net/http。既存のinterface union用JSONとHandlerを利用 |
@@ -86,7 +86,7 @@ Level3を再利用するソースも含めた、このHTTPアプリに必要な�
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | C# | 126 | 127 | 67 | 35 | 172 | 52 | 51 | 214 | 181 | 1,025 | 454 |
 | F# | 122 | 99 | 40 | 31 | 154 | 77 | 84 | 189 | 181 | 977 | 381 |
-| Rust | 132 | 113 | 42 | 31 | 109 | 129 | 177 | 158 | 181 | 1,072 | 293 |
+| Rust | 132 | 113 | 42 | 31 | 109 | 115 | 205 | 158 | 181 | 1,086 | 293 |
 | TypeScript＋Zod | 95 | 102 | 49 | 38 | 119 | 37 | 35 | 174 | 181 | 830 | 221 |
 | Java | 244 | 126 | 101 | 31 | 131 | 70 | 45 | 165 | 181 | 1,094 | 217 |
 | Go | 324 | 293 | 155 | 71 | 450 | 156 | 870 | 310 | 181 | 2,810 | 915 |
@@ -98,7 +98,7 @@ Level3を再利用するソースも含めた、このHTTPアプリに必要な�
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | C# | 5,663 | 5,542 | 4,625 | 1,696 | 10,146 | 3,842 | 3,820 | 18,977 | 12,301 | 66,612 | 21,467 |
 | F# | 4,881 | 5,068 | 2,137 | 1,965 | 8,714 | 3,723 | 4,360 | 17,455 | 12,301 | 60,604 | 18,619 |
-| Rust | 5,143 | 5,707 | 2,216 | 2,308 | 10,240 | 3,269 | 4,187 | 27,133 | 12,301 | 72,504 | 25,430 |
+| Rust | 5,143 | 5,707 | 2,216 | 2,308 | 10,240 | 2,975 | 4,951 | 27,133 | 12,301 | 72,974 | 25,430 |
 | TypeScript＋Zod | 5,592 | 5,286 | 2,490 | 2,547 | 9,114 | 2,920 | 2,933 | 22,824 | 12,301 | 66,007 | 19,727 |
 | Java | 8,304 | 6,106 | 3,673 | 2,241 | 10,997 | 4,171 | 3,718 | 19,311 | 12,301 | 70,822 | 21,719 |
 | Go | 6,114 | 5,449 | 3,333 | 2,620 | 10,121 | 3,254 | 18,764 | 23,095 | 12,301 | 85,051 | 20,214 |
@@ -133,8 +133,8 @@ Level3を再利用するソースも含めた、このHTTPアプリに必要な�
 | Rust | コマンド・Handler・検証 | [../decider_level3/rust/src/handlers.rs:1–14](../decider_level3/rust/src/handlers.rs#L1-L14) / [../decider_level3/rust/src/models.rs:105–117](../decider_level3/rust/src/models.rs#L105-L117) / [../decider_level3/rust/src/value_objects.rs:30–44](../decider_level3/rust/src/value_objects.rs#L30-L44) |
 | Rust | DCB接続・メタ情報 | [../decider_level3/rust/src/routing.rs:1–31](../decider_level3/rust/src/routing.rs#L1-L31) |
 | Rust | ドメイン投影 | [../decider_level3/rust/src/models.rs:59–66](../decider_level3/rust/src/models.rs#L59-L66) / [../decider_level3/rust/src/projection.rs:1–38](../decider_level3/rust/src/projection.rs#L1-L38) / [../decider_level3/rust/src/school_projection.rs:1–63](../decider_level3/rust/src/school_projection.rs#L1-L63) |
-| Rust | ユースケース | [../decider_level3/rust/src/models.rs:68–77](../decider_level3/rust/src/models.rs#L68-L77) / [../decider_level3/rust/src/models.rs:141–150](../decider_level3/rust/src/models.rs#L141-L150) / [rust/src/main.rs:116–224](rust/src/main.rs#L116-L224) |
-| Rust | HTTP設定・JSON・プロトコル | [rust/src/main.rs:1–115](rust/src/main.rs#L1-L115) / [rust/src/main.rs:225–286](rust/src/main.rs#L225-L286) |
+| Rust | ユースケース | [../decider_level3/rust/src/models.rs:68–77](../decider_level3/rust/src/models.rs#L68-L77) / [../decider_level3/rust/src/models.rs:141–150](../decider_level3/rust/src/models.rs#L141-L150) / [rust/src/main.rs:116–210](rust/src/main.rs#L116-L210) |
+| Rust | HTTP設定・JSON・プロトコル | [rust/src/main.rs:1–115](rust/src/main.rs#L1-L115) / [rust/src/main.rs:211–300](rust/src/main.rs#L211-L300) |
 | Rust | ドメインテスト | [../decider_level3/rust/src/domain_tests.rs:1–131](../decider_level3/rust/src/domain_tests.rs#L1-L131) / [../decider_level3/rust/src/projection_tests.rs:1–27](../decider_level3/rust/src/projection_tests.rs#L1-L27) |
 | Rust | 共通HTTPテスト | [tests/http_tests.py:1–181](tests/http_tests.py#L1-L181) |
 | Rust | 共通ライブラリ（別枠） | [../decider_level3/rust/src/dcb.rs:1–185](../decider_level3/rust/src/dcb.rs#L1-L185) / [../decider_level3/rust/src/json_store.rs:1–59](../decider_level3/rust/src/json_store.rs#L1-L59) / [../decider_level3/rust/src/sqlite_journal.rs:1–49](../decider_level3/rust/src/sqlite_journal.rs#L1-L49) |
